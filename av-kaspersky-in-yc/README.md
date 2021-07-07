@@ -1,5 +1,6 @@
 #
 Подготовка:
+
 -установить yc client (ссылка на инструкцию по установке и настройке https://cloud.yandex.ru/docs/cli/quickstart)
 -настроить авторизацию в YC для Terraform:
 
