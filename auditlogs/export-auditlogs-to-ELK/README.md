@@ -15,7 +15,7 @@
 - ECS-mapping.docx - содержит описание мапинга полей json в Elastic Common Schema (ECS) (вставить ссылку)
 - Описание объектов.docx - содержит подробное описание контента
 
-Dashboards:
+## Dashboards:
 
 ![image](https://user-images.githubusercontent.com/85429798/125829594-3fab4999-e010-4bd8-86b0-20acdcfb69c9.png)
 
