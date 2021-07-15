@@ -1,3 +1,9 @@
+Описание всего:>>>
+
+
+Описание загрузки данных в ELK нашим python>>
+
+
 
 Описание файлов:
 -Папка object - содержит все объекты (dashboards, index_pattern, ingest_pipeline, searche_querys, detection_rules)
