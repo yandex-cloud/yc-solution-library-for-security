@@ -1,3 +1,4 @@
+# _Название
 Описание всего:>>>
 
 
@@ -10,9 +11,9 @@
 
 
 Описание файлов:
--Папка object - содержит все объекты (dashboards, index_pattern, ingest_pipeline, searche_querys, detection_rules)
--ECS-mapping.docx - содержит описание мапинга полей json в Elastic Common Schema (ECS) (вставить ссылку)
--Описание объектов.docx - содержит подробное описание контента
+- Папка object - содержит все объекты (dashboards, index_pattern, ingest_pipeline, searche_querys, detection_rules)
+- ECS-mapping.docx - содержит описание мапинга полей json в Elastic Common Schema (ECS) (вставить ссылку)
+- Описание объектов.docx - содержит подробное описание контента
 
 Dashboards:
 
