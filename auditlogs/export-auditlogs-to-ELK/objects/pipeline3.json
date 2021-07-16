@@ -227,7 +227,6 @@
   {
     "set": {
       "if": "ctx.request_metadata.remote_address != 'cloud.yandex'",
-      "if": "ctx.request_metadata.remote_address != '::'",
       "field": "source.ip",
       "value": "{{{request_metadata.remote_address}}}",
       "ignore_failure": true
@@ -240,6 +239,20 @@
         "ignore_failure": true
       }
     },
+    {
+      "geoip" : {
+        "field" : "source.ip",
+        "ignore_failure": true
+      }
+    },
+    {
+      "convert" : {
+        "field" : "source.ip",
+        "type": "ip",
+        "ignore_failure": true
+      }
+    },
+  
   {
     "set": {
       "field": "cloud.service.name",
