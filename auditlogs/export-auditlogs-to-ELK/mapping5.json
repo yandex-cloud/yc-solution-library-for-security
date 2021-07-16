@@ -8,6 +8,9 @@
         "authorization" : {
           "type" : "object"
         },
+        "@timestamp": {
+          "type": "date"
+        },
         "geoip.location": {
           "type": "geo_point"
         },

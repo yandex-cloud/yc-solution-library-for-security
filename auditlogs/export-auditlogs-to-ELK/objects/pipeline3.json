@@ -252,6 +252,13 @@
         "ignore_failure": true
       }
     },
+    {
+      "set": {
+        "field": "@timestamp",
+        "value": "{{{event_time}}}",
+        "ignore_failure": true
+      }
+    },
   
   {
     "set": {
