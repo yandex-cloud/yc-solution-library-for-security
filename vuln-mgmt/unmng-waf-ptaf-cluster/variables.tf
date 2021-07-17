@@ -15,23 +15,36 @@ variable "cloud_id" {
   default     = "<Ваш cloud>" #yc config get cloud-id
 }
 
-variable "public_key_path" {
-  description = "Path to ssh public key, which would be used to access workers"
-  default     = "./kasp_key.pub"
-}
 
 //------------
-variable "network_cidrs" {
-  description = "Cidrs for networks"
 
-  type    = list(string)
-  default = ["192.168.10.0/24", "192.168.20.0/24", "192.168.30.0/24"]
-}
 
-variable "network_naames" {
+variable "zones" {
   description = "Yandex Cloud default Zone for provisoned resources"
   type        = list(string)
-  default     = ["mgmt-subnet", "win-subnet", "lin-subnet"]
+  default     = ["ru-central1-a", "ru-central1-b"]
 }
+
+variable "network_names" {
+  description = "Yandex Cloud default Zone for provisoned resources"
+  type        = list(string)
+  default     = ["a", "b"]
+}
+
+variable "mgmt_cidrs" {
+  type        = list(string)
+  default = ["192.168.0.0/24", "172.16.0.0/24"]
+}
+
+variable "app_cidrs" {
+  type        = list(string)
+  default = ["192.168.1.0/24", "172.17.0.0/24"]
+}
+
+variable "ext_cidrs" {
+  type        = list(string)
+  default = ["192.168.2.0/24", "172.18.0.0/24"]
+}
+
 
 
