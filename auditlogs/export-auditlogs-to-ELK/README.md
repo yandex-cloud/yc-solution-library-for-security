@@ -36,7 +36,8 @@ curl --user beats:beats123 --cacert ~/.elasticsearch/root.crt  -X POST "https://
 
 python пример ( https://elasticsearch-py.readthedocs.io/en/master/helpers.html ) (https://gist.github.com/icamys/4287ae49d20ff2add3db86e2b2053977#file-elastic_import_data_bulk-py-L51)
 
-9) загрузка detections, reports, и тд
+9) загрузка detections
+curl --user beats:beats123 --cacert ~/.elasticsearch/root.crt -X POST https://c-c9qfr7e8e470ghr1lanf.rw.mdb.yandexcloud.net/api/detection_engine/rules/_import --form file=@./detections.ndjson -H 'kbn-xsrf: true'
 
 
 
