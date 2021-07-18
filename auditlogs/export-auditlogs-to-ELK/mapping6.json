@@ -1,6 +1,5 @@
 {
     "mappings" : {
-      "logs": {
       "properties" : {
         "authentication" : {
           "type" : "object"
@@ -1259,6 +1258,5 @@
           }
         }
       }
-    }
 }
 }
