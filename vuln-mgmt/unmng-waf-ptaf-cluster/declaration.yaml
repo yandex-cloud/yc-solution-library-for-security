@@ -1,7 +1,0 @@
-spec:
-  containers:
-  - image: sagikazarmark/dvwa
-    securityContext:
-      privileged: false
-    stdin: false
-    tty: false
