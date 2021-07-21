@@ -1,6 +1,6 @@
 spec:
   containers:
-  - image: sagikazarmark/dvwa
+  - image: nginx
     securityContext:
       privileged: false
     stdin: false

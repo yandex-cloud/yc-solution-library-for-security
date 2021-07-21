@@ -22,10 +22,19 @@ variable "public_key_path" {
 
 variable "vpc_id" {
   description = "Yandex Cloud ID where resources will be created"
-  default     = "enptlqi0e05qqni9h5jo" #yc vpc network list --format=json | jq '.[].id'
+  default     = "enp5319ctfe47kh2q4jp" #yc vpc network list --format=json | jq '.[].id'
 }
 
+variable "extlb_id" {
+  description = "Yandex Cloud ID where resources will be created"
+  default     = "b7rdq3npia795es5k24n" #yc load-balancer network-load-balancer list --format=json | jq '.[].id'
+}
+//terraform import yandex_lb_network_load_balancer.ext-lb ${yc load-balancer network-load-balancer list --format=json | jq '.[].id' | sed 's/"//g'} (первым делом выполнить команду) 
 
+variable "app_target_group_id" {
+  description = "Yandex Cloud ID where resources will be created"
+  default     = "enpbgla6ga7b8v8bjek0" #yc load-balancer target-group list --format=json | jq '.[].id'
+}
 
 //------------
 

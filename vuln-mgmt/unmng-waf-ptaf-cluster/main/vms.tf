@@ -57,7 +57,7 @@ resource "yandex_compute_instance" "ptaf" {
   }
   boot_disk {
     initialize_params {
-      image_id = "fd82o4hrthjatcgr16t8"
+      image_id = "fd8p1mmcim8jllgd7vuc"
       type     = "network-ssd"
       size     = 80
     }
@@ -66,8 +66,8 @@ resource "yandex_compute_instance" "ptaf" {
 
   network_interface {
     subnet_id  = yandex_vpc_subnet.ext-subnet[count.index].id
-    ip_address = cidrhost(var.ext_cidrs[count.index], 15) 
-    nat = true
+    ip_address = cidrhost(var.ext_cidrs[count.index], 10) 
+    nat = false
     security_group_ids = [yandex_vpc_security_group.ptaf-sg.id]
 }
 
