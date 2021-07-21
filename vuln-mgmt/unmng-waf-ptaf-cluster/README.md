@@ -26,6 +26,9 @@
 - скачать архив с файлами "..zip"
 
 
+
+![1200px-Cloud_icon_128x128px svg](https://user-images.githubusercontent.com/85429798/126518741-7207edb2-665c-433b-914f-5a926546666f.png)
+
 ## Развертывание terraform:
 - перейти в папку с файлами
 - вставить необходимые параметры в файле variables.tf (в комментариях указаны необходимые команды yc для получения значений)
@@ -53,7 +56,7 @@ terraform apply
 
 
 
-
+![medium_b56c0eed735f17fb99c3a39771c54eb8](https://user-images.githubusercontent.com/85429798/126518684-88bb3262-401e-4179-8a13-52a17d619a63.png)
 
 ## Описание шагов работы с PTAF:
 
