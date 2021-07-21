@@ -11,11 +11,12 @@
 
 
 ## Схема до:
-
+![ha-proxy-До](https://user-images.githubusercontent.com/85429798/126472644-005bc453-95c4-4f50-8a01-adcd0ece75d0.jpg)
 
 
 
 ## Схема после:
+![ha-proxy-после](https://user-images.githubusercontent.com/85429798/126472688-daa34151-9e3a-413e-a087-22bf0c18952f.jpg)
 
 
 
