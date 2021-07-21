@@ -56,7 +56,7 @@ terraform apply
 
 
 
-![medium_b56c0eed735f17fb99c3a39771c54eb8](https://user-images.githubusercontent.com/85429798/126518684-88bb3262-401e-4179-8a13-52a17d619a63.png =250x250)
+![medium_b56c0eed735f17fb99c3a39771c54eb8](https://user-images.githubusercontent.com/85429798/126518684-88bb3262-401e-4179-8a13-52a17d619a63.png width="100" height="100")
 
 ## Описание шагов работы с PTAF:
 
