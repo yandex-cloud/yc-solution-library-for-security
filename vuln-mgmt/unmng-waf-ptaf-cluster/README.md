@@ -26,8 +26,7 @@
 - скачать архив с файлами "..zip"
 
 
-
-![yandex](https://user-images.githubusercontent.com/85429798/126519707-70e404bd-2a44-4900-9c1f-11f646983e7f.png)
+##
 
 ## Развертывание terraform:
 - перейти в папку с файлами
@@ -56,7 +55,7 @@ terraform apply
 
 
 
-![medium_b56c0eed735f17fb99c3a39771c54eb8](https://user-images.githubusercontent.com/85429798/126518684-88bb3262-401e-4179-8a13-52a17d619a63.png)
+##
 
 ## Описание шагов работы с PTAF:
 
