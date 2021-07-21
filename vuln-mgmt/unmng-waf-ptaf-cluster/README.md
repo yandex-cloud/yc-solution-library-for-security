@@ -1,7 +1,7 @@
 # Пример установки cluster WAF PTAF (Positive Tech. WAF) в Yandex.Cloud 
 
 
-## Описание:
+### Описание:
 В рамках workshop будут выполнены:
 - установка инфраструктуры с помощью terraform (infrastructure as a code)
 - инсталяция и базовая конфигурация PTAF cluster в 2-х зонах доступности Yandex.Cloud
