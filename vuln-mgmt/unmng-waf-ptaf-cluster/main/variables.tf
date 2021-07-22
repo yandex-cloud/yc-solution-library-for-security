@@ -20,6 +20,11 @@ variable "public_key_path" {
   default     = "./pt_key.pub"
 }
 
+variable "private_key_path" {
+  description = "Path to ssh public key, which would be used to access workers"
+  default     = "./pt_key"
+}
+
 variable "vpc_id" {
   description = "Yandex Cloud ID where resources will be created"
   default     = "enp5319ctfe47kh2q4jp" #yc vpc network list --format=json | jq '.[].id'
@@ -27,13 +32,13 @@ variable "vpc_id" {
 
 variable "extlb_id" {
   description = "Yandex Cloud ID where resources will be created"
-  default     = "b7r20m3afb04183rf2oc" #yc load-balancer network-load-balancer list --format=json | jq '.[].id'
+  default     = "b7r0fumb6qsha7mfmvsb" #yc load-balancer network-load-balancer list --format=json | jq '.[].id'
 }
 //terraform import yandex_lb_network_load_balancer.ext-lb ${yc load-balancer network-load-balancer list --format=json | jq '.[].id' | sed 's/"//g'} (первым делом выполнить команду) 
 
 variable "app_target_group_id" {
   description = "Yandex Cloud ID where resources will be created"
-  default     = "enpbgla6ga7b8v8bjek0" #yc load-balancer target-group list --format=json | jq '.[].id'
+  default     = "enp1m10vm5jpog9ugc5f" #yc load-balancer target-group list --format=json | jq '.[].id'
 }
 
 //------------

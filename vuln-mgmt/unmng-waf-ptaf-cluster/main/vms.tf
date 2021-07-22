@@ -2,7 +2,7 @@ data "template_file" "cloud_init_lin" {
   template = file("./cloud-init_lin.tpl.yaml")
    vars =  {
         ssh_key = "${file(var.public_key_path)}"
-
+        ssh_private = "${file(var.private_key_path)}"
     }
 }
 
@@ -52,8 +52,8 @@ resource "yandex_compute_instance" "ptaf" {
   zone        = element(var.zones, count.index)
   hostname    = "ptaf-${element(var.network_names, count.index)}"
   resources {
-    cores  = 2
-    memory = 4
+    cores  = 4
+    memory = 8
   }
   boot_disk {
     initialize_params {
