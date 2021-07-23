@@ -54,6 +54,12 @@ resource "yandex_vpc_security_group" "ptaf-sg" {
     from_port      = 0
     to_port        = 65535
   }
+  ingress {
+    protocol       = "TCP"
+    predefined_target = "self_security_group"
+    from_port      = 0
+    to_port        = 65535
+  }
   egress {
     protocol       = "ANY"
     v4_cidr_blocks = ["0.0.0.0/0"]
