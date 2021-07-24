@@ -152,7 +152,7 @@ resource "yandex_lb_network_load_balancer" "ext-lb" {
     healthcheck {
       name = "tcp"
       tcp_options {
-        port = 80
+        port = 22013
       }
     }
   }

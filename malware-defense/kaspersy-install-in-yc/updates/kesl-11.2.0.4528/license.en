@@ -1,0 +1,371 @@
+Kaspersky Endpoint Security for Linux END USER LICENSE AGREEMENT AND Products and Services PRIVACY POLICY
+ 
+KASPERSKY END USER LICENSE AGREEMENT ("LICENSE AGREEMENT")
+ 
+IMPORTANT LEGAL NOTICE TO ALL USERS: CAREFULLY READ THE FOLLOWING LEGAL AGREEMENT BEFORE YOU START USING THE SOFTWARE.
+ 
+CLICKING THE BUTTON INDICATING YOUR ACCEPTANCE IN THE WINDOW CONTAINING THE LICENSE AGREEMENT, OR BY ENTERING CORRESPONDING SYMBOL(-S), YOU CONFIRM IN A LEGALLY BINDING WAY THAT YOU AS THE ORGANIZATION FOR WHICH THE SOFTWARE IS DOWNLOADED OR ACQUIRED HAVE AUTHORIZED THE NATURAL PERSON ACCEPTING THIS LICENSE AGREEMENT TO ENTER INTO THIS LICENSE AGREEMENT FOR AND ON BEHALF OF YOU. FURTHERMORE, YOU CONSENT TO BE BOUND BY THE TERMS AND CONDITIONS OF THIS LICENSE AGREEMENT. SUCH ACTION IS A SYMBOL OF YOUR SIGNATURE AND YOU ARE CONSENTING TO BE BOUND BY AND ARE BECOMING A PARTY TO THIS LICENSE AGREEMENT AND AGREE THAT THIS LICENSE AGREEMENT IS ENFORCEABLE LIKE ANY WRITTEN NEGOTIATED AGREEMENT SIGNED BY YOU. IF YOU DO NOT AGREE TO ALL OF THE TERMS AND CONDITIONS OF THIS LICENSE AGREEMENT, CANCEL THE INSTALLATION OF THE SOFTWARE AND DO NOT INSTALL THE SOFTWARE.
+ 
+IF LICENSE CONTRACT OR SIMILAR DOCUMENT ACCOMPANIES SOFTWARE, TERMS OF THE SOFTWARE USE DEFINED IN SUCH DOCUMENT PREVAIL OVER THE CURRENT LICENSE AGREEMENT.
+ 
+AFTER CLICKING THE ACCEPT BUTTON IN THE WINDOW CONTAINING THE LICENSE AGREEMENT OR AFTER ENTERING CORRESPONDING SYMBOL(-S), YOU HAVE THE RIGHT TO USE THE SOFTWARE IN ACCORDANCE WITH THE TERMS AND CONDITIONS OF THIS LICENSE AGREEMENT.
+ 
+1. Definitions
+1.1. Software means software including any Updates and related materials.
+1.2. Rightholder (owner of all rights, whether exclusive or otherwise, to the Software) means AO Kaspersky Lab, a company incorporated according to the laws of the Russian Federation.
+1.3. Computer(s) means combination of hardware(s), including personal computers, laptops, workstations, personal digital assistants, "smart phones", hand-held devices, or other electronic devices, and operating system(s) (including system virtual machines) for which the Software was designed where the Software will be installed and/or used.
+1.4. End User (You/Your) - means the organization for which the Software is downloaded or acquired and it is represented hereby that such organization has authorized the person accepting this agreement to do so on its behalf. For purposes hereof the term "organization", without limitation, includes any partnership, limited liability company, corporation, association, joint stock company, trust, joint venture, labor organization, unincorporated organization, or governmental authority.
+1.5. Partner(s) means organizations or individual(s) who distributes the Software based on an agreement and license with the Rightholder.
+1.6. Update(s) means all upgrades, revisions, patches, enhancements, fixes, modifications, copies, additions, or maintenance packs, etc.
+1.7. User Manual means user manual, administrator guide, reference book and related explanatory or other materials.
+The on-line version of the User Manual is available on the Rightholder website: https://support.kaspersky.com/help/ and may be updated when necessary.
+1.8. Activation Code is a unique set of characters which can be used to activate the Software.
+1.9. Key File - means a file with the extension ".key" which can be used to activate the Software.
+1.10. License Certificate means a document that is given to the End User which is accompanied by a Key File and Activation Code as well as further information about the license.
+ 
+2. Grant of license
+2.1. You are granted a non-exclusive license to use the Software within the scope of the functionality described in the User Manual or on the Rightholder's Technical Support website, provided You comply with all technical requirements described in the User Manual, as well as restrictions and terms of use specified in this License Agreement.
+Trial Version. If You have received, downloaded and/or installed a trial version of the Software and are hereby granted an evaluation license for the Software, You may use the Software only for evaluation purposes and only during the single applicable evaluation period, unless otherwise indicated, from the date of the initial installation. Any use of the Software for other purposes or beyond the applicable evaluation period is strictly prohibited.
+Multiple Environment Software; Multiple Language Software; Dual Media Software; Multiple Copies; Bundles. If You use different versions of the Software or different language editions of the Software, if You receive the Software on multiple media, if You otherwise receive multiple copies of the Software, or if You received the Software bundled with other software, the total permitted number of Your Computers on which all versions of the Software are installed shall correspond to the number of Computers specified in licenses You have obtained provided that unless the licensing terms provide otherwise, each acquired license entitles You to install and use the Software on such a number of Computer(s) as is specified in Clause 2.2.
+2.2. You have the right to use the Software for protection of such a number of Computer(s) as is specified on the License Certificate.
+2.3. You have the right to make a copy of the Software solely for back-up purposes and only to replace the legally owned copy if such copy is lost, destroyed or becomes unusable. This back-up copy cannot be used for other purposes and must be destroyed when You lose the right to use the Software or when Your license expires or is terminated for any other reason according to the legislation in force in the country of Your principal residence or in the country where You are using the Software.
+2.4. From the time of the Software activation or after license Key File installation (with the exception of a trial version of the Software) You have the right to receive the following services from the Rightholder or its Partners for the period specified in the License Certificate:
+- Updates of the Software via the Internet when and as the Rightholder publishes them on its website or through other online services. Any Updates that You may receive become part of the Software and the terms and conditions of this Agreement apply to them;
+- Technical Support via the Internet and Technical Support telephone hotline;
+- Access to information and auxiliary resources of the Rightholder.
+ 
+3. Activation and Term
+3.1. If You modify Your Computer or make changes to other vendors' software installed on it, You may be required by the Rightholder to repeat activation of the Software or license Key File installation.
+3.2. You have the right to use a trial version of the Software as provided in Clause 2.1 without any charge for the single applicable evaluation period (30 days) from the time of the Software activation according to this Agreement provided that the trial version does not entitle You Updates and Technical support via the Internet and Technical support telephone hotline. If Rightholder sets another duration for the single applicable evaluation period You will be informed via notification.
+3.3. Your license to Use the Software is limited to the period of time as specified in the License Certificate, the remaining period can be viewed via means described in the User Manual.
+3.4. Software functionality depends on the type of license being used, which is specified in the License Certificate. Software functionality corresponds to the description in the User Manual.
+3.5. The Rightholder reserves the right to use any means and verification procedures to verify the validity of the license and/or legality of a copy of the Software installed and/or used on Your Computer. If there is no appropriate license or verification of the license cannot be performed in a reasonable amount of time, the Software will work with limited functionality.
+3.6. You agree that in using the Software and in using any report or information derived as a result of using this Software, You will comply with all applicable international, national, state, regional and local laws and regulations, including, without limitation, privacy, copyright, export control and obscenity law.
+3.7. Except as otherwise specifically provided herein, You may not transfer or assign any of the rights granted to You under this Agreement or any of Your obligations pursuant hereto.
+ 
+4. Technical Support
+4.1. The Technical Support described in Clause 2.4 of this Agreement is provided to You (except for a trial version of the Software) in accordance with Technical Support rules.
+Technical support service and its rules are located at: https://support.kaspersky.com.
+ 
+5. Conditions regarding Data Processing
+5.1. Under this Section additional definitions are introduced:
+Data Subject - means a natural person who is a representative of the End User and/or who uses the Software directly or indirectly, including a worker, contractor, employee, or client of the End User in respect of whom the data is transmitted and processed in the context of the End User's activities, including data which could be determined as personal data under the laws of some countries. Data Subject may also include any individual who communicates and transmits his or her data to the End User.
+5.2. Where the Activation Code is used to activate the Software, to verify legitimate use of the Software, the End User agrees to periodically provide the Rightholder the following information: the activation code, the unique identifier of activation of the current license, license activation time, packing parameters of the confirmation of license key status, the Software key creation date and time, the type, version and localization of the installed Software, versions of the installed Updates, the identifier of the Computer and the identifier of the Software installed on the Computer, and identifiers of the Software components that are active at the time the information is provided.
+The Rightholder can also use such information for gathering statistical information about the distribution and use of the Rightholder's Software.
+By using the Activation Code, the End User gives its consent to transmit the data specified in this Paragraph automatically. In case the End User does not agree to provide this information to the Rightholder, the Key File should be used to activate the Software.
+5.3. The Rightholder undertakes the processing of all data received from the End User in accordance with the License Agreement, in particular the provisions of Section 5 "Conditions regarding Data Processing", as well as in accordance with functionality of the Software that the End User may use, unless otherwise specified in a separate written agreement between the End User and the Rightholder or its Partners.
+5.4. The End User is solely responsible for acquainting itself with the User Manual, particularly in regards to data processing, with the Rightholder's Privacy Policy, which describes data handling (https://www.kaspersky.com/Products-and-Services-Privacy-Policy) and independently determining whether they comply with the End User's requirements.
+5.5. The End User must comply with laws that apply to use of the Software, including laws on confidential information, personal data, data protection. The End User is responsible for implementing and maintaining confidentiality and security measures in respect of data when using Software components that process data without the participation of the Rightholder. The End User must determine the appropriate technical and organizational measures for the protection and confidentiality of the data during use of such components of the Software in accordance with the End User's purposes (for example, generating reports).
+5.6. In view of a clear determination of the respective responsibilities with respect to personal data of third parties, in particular natural persons, whose personal data is processed when the End User uses the Software, the Rightholder and the End User agree as follows:
+The End User undertakes all necessary steps in order to enable the Data Subject to exercise his or her rights and to provide the Data Subject with the information required under applicable law, such as Article 13 and 14 of Regulation (EU) 2016/679 (General Data Protection Regulation, "GDPR") (if Data Subject is in the European Union), or other applicable laws on confidential information, personal data, data protection, or similar thereto.
+5.7. During use of the Software, especially where the End User configures the Software to use the Kaspersky Security Network, the End User is fully responsible for ensuring that the processing of personal data of Data Subjects is lawful, particularly, within the meaning of Article 6 (1) (a) to (f) of Regulation (EU) 2016/679 (General Data Protection Regulation, "GDPR") (if Data Subject is in the European Union) or applicable laws on confidential information, personal data, data protection, or similar thereto.
+5.8. In reference to the legal bases for data processing, in case that the End User wants to base the lawfulness of the processing on the consent of its Data Subjects, the End User must ensure that the consent which meets all requirements of the applicable laws, especially where the Data Subject is in the European Union and Article 6 (1) (a) GDPR applies, was given by each Data Subject of the End User prior to using the Software. The End User guarantees that consent of each Data Subject of the End User was obtained prior to the processing of personal data.
+5.9. It is agreed between the Rightholder and End User that, in case of item 5.8 of this License Agreement, the End User is responsible for proving the existence of effective consent to the processing of personal data, especially according to Article 7 (1) GDPR where Data Subject is in the European Union. The End User guarantees that it is able to and will prove the existence of each Data Subject's consent at any time upon request by the Rightholder within 5 business days starting with the request of the Rightholder.
+5.10. Furthermore, in case of item 5.8 of this License Agreement, the End User is obliged and has the full and sole responsibility to provide each individual Data Subject with all information required by applicable law to obtain consent, especially under Article 13 GDPR (if Data Subject is in the European Union), prior to using the Software. In particular, the End User is obliged to provide each Data Subject in the European Union, or where applicable law requires, with the Rightholder's Privacy Policy (https://www.kaspersky.com/Products-and-Services-Privacy-Policy)) prior to using the Software.
+5.11. The End User shall be fully liable in relation to the Rightholder for any damage resulting from a breach of this License Agreement, in particular the End User's failure to obtain effective consent of Data Subject, where applicable, and/or from a failure to obtain sufficient effective consent and/or from the lack of proof and/or belated proof of effective consent of Data Subject and/or from any other violation of an obligation under this agreement. 
+5.12. The End User shall indemnify the Rightholder in relation to third parties from the claims arising from the failure of End User to fulfill obligations under Section 5 "Conditions regarding Data Processing" which third parties, especially the supervisory data protection authorities assert against the Rightholder.
+5.13. If You use the Rightholder's update servers to download the Updates, the End User, to increase the efficiency of the update procedure, agrees to periodically provide the Rightholder the following information: the version and localization of the installed Software, identifiers of the Software components to be updated, the identifier of the Software installed on the computer, the type, version and bit count of the operating system.
+The Rightholder can also use such information for receiving statistical information about the distribution and use of the Rightholder's Software.
+By downloading the Updates from the Rightholder's update servers, the End User gives its consent to transmit the data specified in this Clause automatically. In case the End User does not agree to provide this information to the Rightholder, the End User must obtain the Updates from a local shared folder as described in the User Manual.
+
+6. Limitations
+6.1. You shall not emulate, clone, rent, lend, lease, sell, modify, decompile, or reverse engineer the Software or disassemble or create derivative works based on the Software or any portion thereof with the sole exception of a non-waivable right granted to You by applicable legislation, and You shall not otherwise reduce any part of the Software to human readable form or transfer the licensed Software, or any subset of the licensed Software, nor permit any third party to do so, except to the extent the foregoing restriction is expressly prohibited by applicable law. Neither Software's binary code nor source may be used or reverse engineered to re-create the program algorithm, which is proprietary. All rights not expressly granted herein are reserved by Rightholder and/or its suppliers, as applicable. Any such unauthorized use of the Software shall result in immediate and automatic termination of this Agreement and the license granted hereunder and may result in criminal and/or civil prosecution against You.
+6.2. You shall not transfer the rights to use the Software to any third party.
+6.3. You shall not provide the Activation Code and/or Key File to third parties or allow third parties access to the Activation Code and/or Key File, which are deemed confidential data of Rightholder.
+6.4. You shall not rent, lease or lend the Software to any third party.
+6.5. You shall not use the Software in the creation of data or Software used for detection, blocking or treating threats described in the User Manual.
+6.6. Your Key File can be blocked in case You breach any of the terms and conditions of this Agreement.
+6.7. If You are using the trial version of the Software You do not have the right to receive the Technical Support specified in Paragraph 4 of this Agreement and You don't have the right to transfer the license or the rights to use the Software to any third party.
+6.8. Violation of the intellectual rights to the Software shall result in civil, administrative or criminal liability in accordance with the law.
+ 
+7. Limited Warranty and Disclaimer
+7.1. The Rightholder guarantees that the Software will substantially perform according to the specifications and descriptions set forth in the User Manual provided however that such limited warranty shall not apply to the following: (w) Your Computer's deficiencies and related infringement for which Rightholder's expressly disclaims any warranty responsibility; (x) malfunctions, defects, or failures resulting from misuse; abuse; accident; neglect; improper installation, operation or maintenance; theft; vandalism; acts of God; acts of terrorism; power failures or surges; casualty; alteration, non-permitted modification, or repairs by any party other than Rightholder; or any other third parties' or Your actions or causes beyond Rightholder's reasonable control; (y) any defect not made known by You to Rightholder as soon as practical after the defect first appears; and (z) incompatibility caused by hardware and/or Software components installed on Your Computer.
+7.2. You acknowledge, accept and agree that no software is error free and You are advised to back-up the Computer, with frequency and reliability suitable for You.
+7.3. The Rightholder does not provide any guarantee that the Software will work correctly in case of violations of the terms described in the User Manual or in this Agreement.
+7.4. The Rightholder does not guarantee that the Software will work correctly if You do not regularly download Updates specified in Clause 2.4 of this Agreement.
+7.5. The Rightholder does not guarantee protection from the threats described in the User Manual after the expiration of the period specified in the License Certificate or after the license to use the Software is terminated for any reason.
+7.6. You acknowledge that the Software will be provisioned with Rightholder standard settings applied by default and that it is Your sole responsibility to configure the Software to satisfy Your own requirements.
+7.7. THE SOFTWARE IS PROVIDED "AS IS" AND THE RIGHTHOLDER MAKES NO REPRESENTATION AND GIVES NO WARRANTY AS TO ITS USE OR PERFORMANCE. EXCEPT FOR ANY WARRANTY, CONDITION, REPRESENTATION OR TERM THE EXTENT TO WHICH CANNOT BE EXCLUDED OR LIMITED BY APPLICABLE LAW THE RIGHTHOLDER AND ITS PARTNERS MAKE NO WARRANTY, CONDITION, REPRESENTATION, OR TERM (EXPRESSED OR IMPLIED, WHETHER BY STATUTE, COMMON LAW, CUSTOM, USAGE OR OTHERWISE) AS TO ANY MATTER INCLUDING, WITHOUT LIMITATION, NONINFRINGEMENT OF THIRD PARTY RIGHTS, MERCHANTABILITY, SATISFACTORY QUALITY, INTEGRATION, OR APPLICABILITY FOR A PARTICULAR PURPOSE. YOU ASSUME ALL FAULTS, AND THE ENTIRE RISK AS TO PERFORMANCE AND RESPONSIBILITY FOR SELECTING THE SOFTWARE TO ACHIEVE YOUR INTENDED RESULTS, AND FOR THE INSTALLATION OF, USE OF, AND RESULTS OBTAINED FROM THE SOFTWARE. WITHOUT LIMITING THE FOREGOING PROVISIONS, THE RIGHTHOLDER MAKES NO REPRESENTATION AND GIVES NO WARRANTY THAT THE SOFTWARE WILL BE ERROR-FREE OR FREE FROM INTERRUPTIONS OR OTHER FAILURES OR THAT THE SOFTWARE WILL MEET ANY OR ALL YOUR REQUIREMENTS WHETHER OR NOT DISCLOSED TO THE RIGHTHOLDER.
+ 
+8. Interaction with iptables subsystem
+8.1. You acknowledge that the management of iptables, when firewall control functionality or protection against encryption is activated in the Software, is transferred to the Software according to the specified settings. The settings and rules specified in iptables are not transferred to the Software. All settings and rules in iptables are deleted after the firewall management functionality or protection against encryption is activated. All changes to the settings and rules are made only through the Software.
+ 
+9. Exclusion and Limitation of Liability
+9.1. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL THE RIGHTHOLDER OR ITS PARTNERS BE LIABLE FOR ANY SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, OR CONSEQUENTIAL DAMAGES WHATSOEVER (INCLUDING, BUT NOT LIMITED TO, DAMAGES FOR LOSS OF PROFITS OR CONFIDENTIAL OR OTHER INFORMATION, FOR BUSINESS INTERRUPTION, FOR LOSS OF PRIVACY, FOR CORRUPTION, DAMAGE AND LOSS OF DATA OR PROGRAMS, FOR FAILURE TO MEET ANY DUTY INCLUDING ANY STATUTORY DUTY, DUTY OF GOOD FAITH OR DUTY OF REASONABLE CARE, FOR NEGLIGENCE, FOR ECONOMIC LOSS, AND FOR ANY OTHER PECUNIARY OR OTHER LOSS WHATSOEVER) ARISING OUT OF OR IN ANY WAY RELATED TO THE USE OF OR INABILITY TO USE THE SOFTWARE, THE PROVISION OF OR FAILURE TO PROVIDE SUPPORT OR OTHER SERVICES, INFORMATION, SOFTWARE, AND RELATED CONTENT THROUGH THE SOFTWARE OR OTHERWISE ARISING OUT OF THE USE OF THE SOFTWARE, OR OTHERWISE UNDER OR IN CONNECTION WITH ANY PROVISION OF THIS AGREEMENT, OR ARISING OUT OF ANY BREACH OF CONTRACT OR ANY TORT (INCLUDING NEGLIGENCE, MISREPRESENTATION, ANY STRICT LIABILITY OBLIGATION OR DUTY), OR ANY BREACH OF STATUTORY DUTY, OR ANY BREACH OF WARRANTY OF THE RIGHTHOLDER AND/OR ANY OF ITS PARTNERS, EVEN IF THE RIGHTHOLDER AND/OR ANY PARTNER HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+ 
+YOU AGREE THAT IN THE EVENT THE RIGHTHOLDER AND/OR ITS PARTNERS ARE FOUND LIABLE, THE LIABILITY OF THE RIGHTHOLDER AND/OR ITS PARTNERS SHALL BE LIMITED BY THE COSTS OF THE SOFTWARE. IN NO CASE SHALL THE LIABILITY OF THE RIGHTHOLDER AND/OR ITS PARTNERS EXCEED THE FEES PAID FOR THE SOFTWARE TO THE RIGHTHOLDER OR THE PARTNER (AS MAY BE APPLICABLE).
+ 
+NOTHING IN THIS AGREEMENT EXCLUDES OR LIMITS ANY CLAIM FOR DEATH AND PERSONAL INJURY. FURTHER IN THE EVENT ANY DISCLAIMER, EXCLUSION OR LIMITATION IN THIS AGREEMENT CANNOT BE EXCLUDED OR LIMITED ACCORDING TO APPLICABLE LAW THEN ONLY SUCH DISCLAIMER, EXCLUSION OR LIMITATION SHALL NOT APPLY TO YOU AND YOU CONTINUE TO BE BOUND BY ALL THE REMAINING DISCLAIMERS, EXCLUSIONS AND LIMITATIONS.
+ 
+10. GNU and Other Third Party licenses
+10.1. The Software may include some software programs that are licensed (or sublicensed) to the user under the GNU General Public License (GPL) or other similar free software licenses which, among other rights, permit the user to copy, modify and redistribute certain programs, or portions thereof, and have access to the source code ("Open Source Software"). If such licenses require that for any Software, which is distributed to someone in an executable binary format, that the source code also be made available to those users, then the source code should be made available by sending the request to source@kaspersky.com or the source code is supplied with the Software. If any Open Source Software licenses require that the Rightholder provide rights to use, copy or modify an Open Source Software program that are broader than the rights granted in this Agreement, then such rights shall take precedence over the rights and restrictions herein.
+ 
+11. Intellectual Property Ownership
+11.1. You agree that the Software and the authorship, systems, ideas, methods of operation, documentation and other information contained in the Software, are proprietary intellectual property and/or the valuable trade secrets of the Rightholder or its Partners and that the Rightholder and its Partners, as applicable, are protected by civil and criminal law, and by the law of copyright, trade secret, trademark and patent of the Russian Federation, European Union and the United States, as well as other countries and international treaties. This Agreement does not grant to You any rights to the intellectual property including any the Trademarks or Service Marks of the Rightholder and/or its Partners ("Trademarks"). You may use the Trademarks only insofar as to identify printed output produced by the Software in accordance with accepted trademark practice, including identification of the Trademark owner's name. Such use of any Trademark does not give You any rights of ownership in that Trademark. The Rightholder and/or its Partners own and retain all right, title, and interest in and to the Software, including without limitation any error corrections, enhancements, Updates or other modifications to the Software, whether made by the Rightholder or any third party, and all copyrights, patents, trade secret rights, trademarks, and other intellectual property rights therein. Your possession, installation or use of the Software does not transfer to You any title to the intellectual property in the Software, and You will not acquire any rights to the Software except as expressly set forth in this Agreement. All copies of the Software made hereunder must contain the same proprietary notices that appear on and in the Software. Except as stated herein, this Agreement does not grant You any intellectual property rights in the Software and You acknowledge that the license, as further defined herein, granted under this Agreement only provides You with a right of limited use under the terms and conditions of this Agreement. Rightholder reserves all rights not expressly granted to You in this Agreement.
+11.2. You agree not to modify or alter the Software in any way. You may not remove or alter any copyright notices or other proprietary notices on any copies of the Software.
+ 
+12. Governing Law; Arbitration
+12.1. This Agreement will be governed by and construed in accordance with the laws of the Russian Federation without reference to conflicts of law rules and principles. This Agreement shall not be governed by the United Nations Convention on Contracts for the International Sale of Goods, the application of which is expressly excluded. Any dispute arising out of the interpretation or application of the terms of this Agreement or any breach thereof shall, unless it is settled by direct negotiation, be settled by in the International Commercial Arbitration Court at the Russian Federation Chamber of Commerce and Industry in Moscow, the Russian Federation. Any award rendered by the arbitrator shall be final and binding on the parties and any judgment on such arbitration award may be enforced in any court of competent jurisdiction. Nothing in this Section 12 shall prevent a Party from seeking or obtaining equitable relief from a court of competent jurisdiction, whether before, during or after arbitration proceedings.
+ 
+13. Period for Bringing Actions
+13.1. No action, regardless of form, arising out of the transactions under this Agreement, may be brought by either party hereto more than one (1) year after the cause of action has occurred, or was discovered to have occurred, except that an action for infringement of intellectual property rights may be brought within the maximum applicable statutory period.
+ 
+14. Entire Agreement; Severability; No Waiver
+14.1. This Agreement is the entire agreement between You and Rightholder and supersedes any other prior agreements, proposals, communications or advertising, oral or written, with respect to the Software or to subject matter of this Agreement. You acknowledge that You have read this Agreement, understand it and agree to be bound by its terms. If any provision of this Agreement is found by a court of competent jurisdiction to be invalid, void, or unenforceable for any reason, in whole or in part, such provision will be more narrowly construed so that it becomes legal and enforceable, and the entire Agreement will not fail on account thereof and the balance of the Agreement will continue in full force and effect to the maximum extent permitted by law or equity while preserving, to the fullest extent possible, its original intent. No waiver of any provision or condition herein shall be valid unless in writing and signed by You and an authorized representative of Rightholder provided that no waiver of any breach of any provisions of this Agreement will constitute a waiver of any prior, concurrent or subsequent breach. Rightholder's failure to insist upon or enforce strict performance of any provision of this Agreement or any right shall not be construed as a waiver of any such provision or right.
+ 
+15. Rightholder Contact Information
+Should You have any questions concerning this Agreement, or if You desire to contact the Rightholder for any reason, please contact our Customer Service Department at:
+ 
+AO Kaspersky Lab, Bldg. 3, 39A, Leningradskoe Shosse
+Moscow, 125212
+Russian Federation
+E-mail: info@kaspersky.com
+Web site: https://www.kaspersky.com
+ 
+(c) 2021 AO Kaspersky Lab
+
+
+KASPERSKY LAB - PRODUCTS AND SERVICES PRIVACY POLICY
+
+Introduction
+AO Kaspersky Lab, located at bldg. 3, 39A, Leningradskoe Shosse, Moscow, 125212, Russian Federation and all companies belonging to the group "Kaspersky Lab" respect your privacy. Our representative in the EU for data protection is: Kaspersky Labs GmbH, Despag-Strasse 3, 85055, Ingolstadt, Germany, info@kaspersky.de, +49 (0) 841 98 18 90, according to Article 27 (1) of Regulation (EU) 2016/679 (General Data Protection Regulation, "GDPR"). Our Data Protection Officer in the EU, according to Article 37 (1) of GDPR, as well as for the other countries, may be contacted via dpo@kaspersky.com.
+This Products and Services Privacy Policy (Privacy Policy) describes how we use the information you provide when you use our products and services, and the choices you can make about our use of the information. We also describe the measures we take to protect the information and how you can contact us about our privacy practices.
+In connection with specific products or services offered by Kaspersky Lab, you are provided with the agreements, terms of use, and statements that supplement this policy relating to data handling.
+This policy may be changed because of changes in legislation, the requirements of the authorities or to reflect changes in our practices concerning the processing of personal data. The revised policy will be posted on our website and will be effective immediately upon being posted. You can read at any time the policy currently in effect on our website: https://www.kaspersky.com/Products-and-Services-Privacy-Policy).
+This version of the policy is effective as of June 10, 2020.
+
+The Sources of Information
+Kaspersky Lab may obtain information about you from various sources, namely:
+* products and services;
+* by your signing up for a Kaspersky Lab products or services;
+* in response to technical support or other communication in order to ensure the required performance of products and services; 
+* on our websites;
+* in response to marketing or other communications;
+* through participation in an offer, program or promotion.
+If you provide us with any information or material relating to another individual, you should make sure that this sharing with us and our further use as described to you from time to time are in line with applicable laws; thus, for example, you should duly inform that individual about the processing of her/his personal data and obtain her/his consent, as may be necessary under applicable laws.
+You may also choose to consent to third parties disclosing information about you to us that those third parties have received.
+
+Information Provided by Users and How We Use Information
+Personal data processing by Kaspersky Lab is always carried out in a legal and fair manner.
+You will always know what kind of information you provide to Kaspersky Lab before you start to use the products and services. The data which you provide depends on the services, products, and features you use. For more information about data you provide, please refer to End User License Agreement, Kaspersky Security Network Statement and other documentation of product and services that you use, especially:
+
+FOR HOME USERS (B2C):
+* SECTION "B" OF THE EULA, WHICH DESCRIBES THE DATA THAT NEED TO BE PROCESSED IN ORDER TO PERFORM OBLIGATIONS UNDER THE CONTRACT;
+* KASPERSKY SECURITY NETWORK STATEMENT, WHICH DESCRIBES THE DATA THE PROCESSING OF WHICH MAY INCREASE THE REACTION SPEED OF PRODUCTS AND SERVICES IN THE EVENT OF THREATS TO INFORMATION SECURITY;
+* MARKETING STATEMENT, WHICH DESCRIBES THE DATA THE PROCESSING OF WHICH MAY IMPROVE THE PERFORMANCE OF PRODUCTS AND WILL ENABLE AN ASSESSMENT OF USER SATISFACTION REGARDING PRODUCT USE;
+* SEPARATE STATEMENTS RELATING TO SPECIFIC PRODUCT FEATURES, WHICH DESCRIBE THE DATA PROCESSED DURING THEIR USE, FOR EXAMPLE, ANTI-SPAM STATEMENT, PURCHASE STATEMENT, WEB-PORTAL STATEMENT, AND TECHNICAL SUPPORT STATEMENT. YOU CAN FAMILIARIZE YOURSELF WITH SUCH STATEMENTS WHEN YOU TURN ON THE FEATURES IN THE PRODUCT.
+
+FOR BUSINESS USERS (B2B):
+* SECTION "CONDITIONS REGARDING DATA PROCESSING" OF THE EULA, WHICH DESCRIBES THE DATA THAT NEED TO BE PROCESSED IN ORDER TO PERFORM OBLIGATIONS UNDER THE CONTRACT;
+* KASPERSKY SECURITY NETWORK STATEMENT, WHICH DESCRIBES THE DATA THE PROCESSING OF WHICH MAY INCREASE THE REACTION SPEED OF PRODUCTS AND SERVICES IN THE EVENT OF THREATS TO INFORMATION SECURITY. FOR SOME PRODUCTS, THE IT ADMINISTRATOR OR ANY OTHER EMPLOYEE RESPONSIBLE FOR SETTING UP THE PRODUCT CAN CHOOSE THE VOLUME OF DATA TO BE PROCESSED;
+* SEPARATE STATEMENTS RELATING TO SPECIFIC PRODUCT FEATURES, WHICH DESCRIBE THE DATA PROCESSED DURING THEIR USE, FOR EXAMPLE, MARKETING STATEMENT, ANTI-SPAM STATEMENT, SUPPLEMENTAL STATEMENT, STATEMENT REGARDING DATA PROCESSING FOR KASPERSKY MANAGED PROTECTION, WEB PROTECTION STATEMENT, AND TECHNICAL SUPPORT STATEMENT. YOU CAN FAMILIARIZE YOURSELF WITH SUCH STATEMENTS WHEN YOU TURN ON THE FEATURES IN THE PRODUCT.
+
+The data obtained for processing depends on the product or service, and it is recommended that users carefully read the agreements and related statements accepted during installation or usage of software or service.
+Some data are non-personal, according to laws of certain countries. Regardless of the type of data and territory where data was received or processed, we use the highest standards of data protection and apply various legal, organizational, and technical measures in order to protect user data, guarantee safety and confidentiality, as well as ensure users' rights guaranteed under applicable law.
+
+The data depends on the products and services you use, and could include the following:
+
+* License/ subscription information
+It is processed in order to recognize legitimate users. This data is needed to maintain communication between the product and Kaspersky Lab services - sending and receiving product databases, updates, etc.
+
+* Product information
+Data on the product's operation and its interaction with the user is also analyzed. For example, how long does threat scanning take? Which features are used more often than others? Answers to these and other questions help developers to improve products, making them faster and easier to use.
+
+* Device data
+Data such as device type, operating system, etc. may be needed so the user doesn't have to buy a new license for the security product after reinstalling the operating system. This information also helps us to analyze cyberthreats, because it shows how many devices are affected by any specific threat.
+
+* Threats detected
+If a threat (new or known) is found on a device, information about that threat is sent to Kaspersky Lab. This enables us to analyze threats, their sources, principles of infection, etc., resulting in a higher quality of protection for every user.
+
+* Information on installed applications
+This information helps to create lists of harmless applications and prevents security products from mistakenly identifying such applications as malicious. This data is also used to update and extend program categories for features like Parental Control and Application Startup Control. In addition, this information helps us to offer users security solutions that best match their needs.
+
+* URLs visited
+URLs can be sent to be checked whether they are malicious. This information also helps to create lists of harmless websites and prevents security products from mistakenly identifying such websites as malicious. This data is also used to update and extend website categories for solutions like Kaspersky Safe Kids and provide better protection for financial transactions in such products as Kaspersky Fraud Prevention. In addition, this information helps us to offer users security solutions that best match their needs. Information about logins and passwords, if contained in the initial browser request from the user, is removed from the visited URL addresses up to the hostname or IP address. In any case, it is not Kaspersky Lab's purpose to process user logins and passwords, and Kaspersky Lab takes all reasonable and sufficient measures to avoid processing these data.
+
+* Operating System events
+New malware can often be identified only by its suspicious behavior. Because of this, the product analyzes data on processes running on the device. This makes it possible to identify early on processes that indicate malicious activity and to prevent any damaging consequences, such as the destruction of user data.
+
+* Suspicious files and files that could be exploited by intruders
+If an (as yet) unknown file, exhibiting suspicious behavior is detected on a device, it can be automatically sent for a more thorough analysis by machine learning-based technologies and, in rare cases, by a malware analyst. The "suspicious" category includes mainly executable files (.exe). For the purpose of reducing the likelihood of false positives, executable and non-executable files or their parts may be sent.
+
+* Wi-Fi connection data
+This information is analyzed in order to warn users of insecure (i.e., poorly protected) Wi-Fi access points, helping to prevent personal data from being inadvertently intercepted.
+
+* User contact data
+Email addresses are used for authorization on the Kaspersky Lab web portals (My Kaspersky, Kaspersky CompanyAccount, Kaspersky Endpoint Security Cloud, etc.), which enables users to manage their protection remotely. Email addresses are used to send security messages to (e.g., containing important alerts) to users of Kaspersky Lab products. Users can also choose to specify the names (or nicknames) by which they would like to be addressed on the My Kaspersky portal and in emails. Contact information is provided by users at their own discretion.
+
+* Dump and trace files
+By checking the special box in the product settings, users can also share error reports with Kaspersky Lab servers. This information helps (1) during analysis of errors that occurred in the product and to modify it accordingly so that it will function more effectively moving forward, and (2) in the investigation of infection of a user's computer in order to mitigate threats to a user's system.
+
+* Emails
+During your use of the anti-spam functionality, Kaspersky Lab scans emails and uses information about them to protect you from spam and fraud. When you indicate to Kaspersky that an email is spam or has been incorrectly identified by the software as spam, you help us analyze it and enable a higher quality of protection for users.
+
+* Data about stolen device
+The Anti-theft feature provides certain remote access and control functions designed to protect data on your mobile phone in case of theft, as well allows you to receive information about the location of the stolen device. Anti-theft has to store data about your phone and approved users for these functions to work.
+
+* Data for child protection feature
+If a parent or holder of parental responsibility wants to use the child protection feature like Kaspersky Safe Kids, he or she can receive information about the child's device and information about the child's location. Additionally, the parent or holder of parental responsibility can configure parameters in order to block or permit specific websites and/or allow or prevent certain applications from running on the child's device. Kaspersky Lab does not collect children's data beyond the framework of such feature.
+
+* Unique identifier of the mobile device
+This device identifier is generated on user device on Android 8 and higher, using the Advertising ID of the device. We do not process the Advertising ID in clear text; we process only its hash sum. In case user has reset the value of the Advertising ID, the new value of the unique identifier of the mobile device will be associated with the old value, which is necessary for the correct use of the device with services.
+
+KASPERSKY LAB WILL ONLY PROCESS PERSONAL DATA FOR PARTICULAR, PRE-DETERMINED PURPOSES THAT ARE LEGITIMATE WITH REGARD TO APPLICABLE LAW, AND THAT ARE RELEVANT TO KASPERSKY LAB'S BUSINESS.
+* To ensure the performance of a contract with users and to ensure the required performance of products and services for customers.
+* To protect the user from known threats to information security.
+* To verify that the license is legal.
+* To update the anti-virus databases.
+* To increase the effectiveness of the protection of devices, networks, and information systems, in particular to provide a faster response to new information and network security threats, to increase the effectiveness of the performance of the software's protection component, to decrease the probability of false positive.
+* To improve user interaction and experience with our products and services, in particular changing interfaces and providing the desired content and advertisement, related to Marketing purpose.
+* To provide technical support of products and services for customers and to improve the quality of products and services.
+* To conduct statistical and other studies based on anonymous data.
+
+Threat Intelligence for Protection of Cyber Space
+New generations of malware appear all the time, many using new, sophisticated techniques to bypass existing security solutions. In this constantly shifting environment, protection is only as effective as the ability to closely analyze the threat landscape and distill data into actionable intelligence for our users. To achieve this, security solutions must apply a cloud approach that combines the widest possible scope of threat data handling with the most intelligent data processing technologies.
+Our infrastructure is designed to receive and process complex global cyberthreat data, transforming it into the actionable threat intelligence that powers our products. A key source of threat-related data comes from our users. By sharing their data and allowing it to be stored and analyzed by artificial intelligence and experts, they help us to ensure that users around the world are protected against the newest cyberthreats. In particular, KSN helps us to respond rapidly to emerging cyberthreats while delivering the highest possible effectiveness of protection and helping reduce the number of false positives.
+The amount of data you allow our infrastructure to receive depends on the product used, its configuration settings and preferences.
+This approach offers numerous benefits for users and cyber space overall, including:
+* Detection of advanced and previously unknown malware;
+* Reduced detection errors (false positives);
+* Significant reduction in response times to new threats.
+
+Legal Bases for Data Processing
+The legal basis we use depends on the purpose of processing personal data, which may be the following:
+* Contract - according to point (b) of Article 6 (1) GDPR, in cases where we have to process certain data necessary to perform a contract, such as when a user accepts the EULA to use the software;
+* Consent - according to point (a) of Article 6 (1) GDPR, in cases where a user chooses to send us data relating to the KSN Statement, Marketing Statement, Antispam Statement, Supplemental Statement, Statement regarding Data Processing for Kaspersky Managed Protection, Statement regarding Data Processing for Web Control (previously called Statement regarding Data Processing for Parental Control), Statement regarding Data Processing for Call Filter, Protect a Friend Statement, or Technical Support Statement;
+* Legal obligation - according to point (c) of Article 6 (1) GDPR, in cases where we have to process data to meet legal requirements, such as for tax purposes;
+* Legitimate interest - according to point (f) of Article 6 (1) GDPR, in cases where we have legitimate interests as a cybersecurity company, except where such interests are overridden by the interests or fundamental rights and freedoms of the user. In such cases, for example, where personal data is stored in our infrastructure and analyzed for recent and potential cyberthreats by using artificial intelligence and/or relying on the expertise of our specialists. Recital 49 of the GDPR acknowledges that it is a legitimate interest of a company to process personal data to the extent necessary and proportionate in order to ensure network and information security.
+Under certain local laws, you may be entitled to exercise rights in respect of your personal data, such as those described in the section Your Rights and Options. If you wish to exercise such right, please contact us via https://support.kaspersky.com/general/privacy.
+
+LIMITATION OR RESTRICTION DATA PROCESSING
+IF YOU CHOOSE NOT TO PROVIDE DATA THAT IS NECESSARY IN ORDER FOR A PRODUCT OR FEATURE TO WORK, YOU MAY NOT BE ABLE TO USE THAT PRODUCT OR FEATURE. THIS OBLIGATORY DATA IS LISTED IN THE END USER LICENSE AGREEMENT. THE KASPERSKY SECURITY NETWORK STATEMENT OR MARKETING STATEMENT CONTAINS A LIST OF DATA THAT USERS CAN DECIDE TO PROVIDE TO US AT ANY TIME BY CHECKING THE CORRESPONDING BOX IN THE PRODUCT SETTINGS (THEY CAN ALSO REVERSE THIS DECISION WHENEVER THEY CHOOSE).
+
+What we aren't going to process
+Through its products and services, Kaspersky Lab never process "sensitive" personal data such as religion, political views, sexual preference, or health, or other special categories of personal data. We do not wish to receive any such data and will not request it from you.
+Kaspersky Lab's products must be installed and used by an adult. Children may use the device where Kaspersky Lab's product was installed only with permission from their parents or holder of parental responsibility. Except for "Data for child protection feature", we do not intend to process personal data of children, nor do we want to receive such personal information of children.
+
+Provision of Information
+We never provide personal data of our users or access to them for state organization or third parties. We may only disclose the Information as follows:
+* Within the Group of Companies Kaspersky Lab. Data can be shared.
+* Service Providers. We also may share your information with vendors that provide services to us, including companies that provide web analytics, data processing, advertising, e-mail distribution, payment processing, order fulfillment, and other services.
+Please note that some of our products, for example Kaspersky Secure Connection, use services of third parties whose privacy practices differ from Kaspersky Lab's. If you provide personal data to any of those services, your data is governed by their privacy statements. You are responsible for acquainting yourself with the data processing rules and procedures described in the relevant privacy statements.
+
+Where we process Information
+The personal data provided by users to Kaspersky Lab can be processed in the following countries, including countries outside European Union (EU) or the European Economic Area (EEA):
+Within the EU or EEA:
+* Germany
+* Netherlands
+* France
+* United Kingdom
+* Sweden
+* Italy
+* Spain
+* Romania
+Outside of the EU or EEA:
+* Switzerland
+* Canada
+* Singapore
+* Russia
+* Japan
+* USA
+* Mexico
+* China
+* Azerbaijan
+* Brazil
+* Argentina
+* Israel
+* UAE
+* South Korea
+* Australia
+* Belarus
+
+The list of countries where the data provided by the user may be processed can change. You can acquaint yourself with the current list of countries in the version of the Privacy Policy on the website https://www.kaspersky.com/Products-and-Services-Privacy-Policy.
+According to our general business practice, the data received from users in the EU are processed on servers located in the EU and Russia.
+The personal data may be processed at destinations outside the EU or EEA some of which have not been determined by the European Commission to have an adequate level of data protection. It may also be processed by staff operating outside EU or EEA who work for us or for one of our service providers. In the absence of adequacy decisions or appropriate safeguards recognized by the European Commission, there may be risks for the user if the personal data is transmitted outside of the EU or EEA. 
+Whenever data is processed, we use the highest level of standards for data protection and apply a variety of legal measures in order to protect user data, guarantee safety and confidentiality, and ensure users' rights. To learn more about the European Commission's decisions on the adequacy of the protection of personal data in the countries where Kaspersky Lab processes data, please visit: https://ec.europa.eu/info/law/law-topic/data-protection/international-dimension-data-protection/adequacy-decisions_en.
+
+Your Rights and Options
+You have certain rights regarding your personal data. We also offer you certain options about what personal data you provide to us, how we use that information, and how we communicate with you.
+In most cases you can choose not to provide personal data to us when you use Kaspersky Lab's products, services, and websites. You may also refrain from submitting information directly to us. However, if you do not provide personal data when requested, you may not be able to benefit from the full range of Kaspersky Lab products and services and we may not be able to provide you with information about products, services, and promotions.
+You can at any time choose not to receive marketing communications by e-mail, if you have previously subscribed to receive them, by clicking on the unsubscribe link within the marketing e-mails you receive from us.
+If your employer provides your personal data to Kaspersky Lab, you may have certain options with respect to Kaspersky Lab's use or disclosure of the information. Please contact your employer to learn about and to exercise your options.
+To the extent provided by applicable law, you may withdraw any consent you previously provided to us, or object at any time on legitimate grounds, to the processing of your personal data. We will apply your preferences going forward. In some circumstances, withdrawing your consent to Kaspersky Lab's use or disclosure of your personal data will mean that you cannot take advantage of certain Kaspersky Lab products or services.
+Subject to applicable law, you may have the following rights:
+* To obtain confirmation that we hold personal data about you;
+* To request access to and receive information about your personal data;
+* To receive copies of your personal data that you provided to us, also in a machine-readable format and have it sent to another data controller, where technically possible;
+* To update and correct inaccuracies in your personal data;
+* To object to the processing of your personal data;
+* To have the information blocked, anonymized or deleted, as appropriate; as well as
+* To lodge a complaint with a supervisory authority.
+The right to access personal data may be limited in some circumstances by the requirements of local law or technological measures, including where the data has been anonymized and therefore does not relate to an identified or identifiable natural person. If you wish to exercise these rights, you may at any time directly contact us at https://support.kaspersky.com/general/privacy.
+If you wish to object to data processing or withdraw your consent in cases where you use our free products, you must stop using and/or uninstall the product. If you wish to exercise your right to remove the already sent data, please contact us directly to request deletion via https://support.kaspersky.com/general/privacy.
+If we fall short of your expectations in processing your personal data or you wish to make a complaint about our privacy practices, please relate this to us, as it gives us an opportunity to fix the problem. You may contact us by using the contact details provided in the "How to Contact Us" section below. To assist us in responding to your request, please give full details of the issue. We attempt to review and respond to all complaints within a reasonable time.
+
+The Privacy Principles
+Personal data processing at Kaspersky Lab is based on the following principles:
+
+Consent and choice
+* Presenting to the users the choice whether or not to send their personal data except where the users cannot freely withhold consent or where applicable law specifically allows the processing of personal data without the natural person's consent. The user's election must be freely given, specific and made on a knowledgeable basis;
+* Informing users, before obtaining consent, about their rights under the individual participation and access principle;
+* Providing users, before obtaining consent, with the information indicated by the openness, transparency and notice principle; and
+* Explaining to users the implications of granting or withholding consent.
+
+Purpose legitimacy and specification
+* Ensuring that the purpose(s) complies with applicable law and relies on a permissible legal basis;
+* Communicating the purpose(s) to users before the information is used for the first time for a new purpose;
+* Using language for this specification which is both clear and appropriately adapted to the circumstances.
+
+Data processing limitation
+* Gathering of personal data to that which is within the bounds of applicable law and strictly necessary for the specified purpose(s).
+* Deleting and disposing or anonymizing of personal data whenever the purpose for personal data processing has expired, there are no legal requirements to keep the personal data, or whenever it is practical to do so.
+
+Use, retention and disclosure limitation
+* Limiting the use, retention and disclosure of personal data to that which is necessary in order to fulfil specific, explicit and legitimate purposes;
+* Limiting the use of personal data to the purposes specified by Kaspersky Lab prior to receiving the data, unless a different purpose is explicitly required by applicable law;
+* Retaining personal data only as long as necessary to fulfill the stated purposes (e.g. retaining personal data required for the license for the period of the relevant license agreement between you and Kaspersky Lab, normally 1 year plus, if applicable, any renewal period, depending on the product's license terms), and thereafter securely destroying or anonymizing it;
+* Retaining personal data for as long as necessary in order to fulfill legal obligations, comply with laws, resolve disputes, including in cases of litigation, proceedings, or investigations;
+* Retaining personal data for as long as necessary in order to fulfill legitimate interests; and
+* Locking (i.e. archiving, securing and exempting the personal data from further processing) any personal data when and for as long as the stated purposes have expired, but where retention is required in order to comply with applicable laws.
+
+Accuracy and quality
+* Ensuring that the personal data processed is accurate, complete, up-to-date (unless there is a legitimate basis for keeping outdated data), adequate and relevant for the purpose of use;
+* Ensuring the reliability of personal data provided from a source other than from users before it is processed;
+* Verifying, through appropriate means, the validity and correctness of the claims made by the user prior to making any changes to the personal data (in order to ensure that the changes are properly authorized), where it is appropriate to do so;
+* Establishing personal data processing procedures to help ensure accuracy and quality; and
+* Establishing control mechanisms to periodically check the accuracy and quality of personal data processing.
+
+Openness, transparency and notice
+* Providing users with clear and easily accessible information about Kaspersky Lab's policies;
+* Establishing procedures and practices with respect to the processing of personal data;
+* Including in notices the fact that personal data is being processed, the purpose for which this is done, the types of privacy stakeholders to whom the personal data might be disclosed, and the identity of the entity which determines the above and on how to contact;
+* Disclosing the options and means offered by Kaspersky Lab to users for the purposes of limiting the processing of, and for accessing, correcting and removing their information;
+* Giving notice to users when major changes in the personal data handling procedures occur.
+
+Individual participation and access
+* Giving users the ability to contact us (by using the contact details provided in the "How to Contact Us") and review their personal data, provided their identity is first authenticated with an appropriate level of assurance and such access is not prohibited by applicable law;
+* Allowing users (by using the contact details provided in the "How to Contact Us" or by using interface of our products and services) to challenge the accuracy and completeness of the personal data and have it amended, corrected or removed as appropriate and possible in the specific context;
+* Providing any amendment, correction or removal to personal data processors and third parties to whom personal data had been disclosed, where they are known; and
+* Establishing procedures to enable users to exercise these rights in a simple, fast and efficient way, which does not entail undue delay or cost.
+
+Information Security: How We Protect Your Privacy
+Information security is Kaspersky Lab's core business. All data and all information provided by you is confidential by default. Kaspersky Lab will therefore always apply technical and organizational data security measures for the protection of personal data that are adequate and appropriate, taking into account the concrete risks resulting from the processing of personal data as well as up-to-date security standards and procedures. In order to, among other reasons, identify and fulfill the appropriate level of protection, Kaspersky Lab classifies processing systems with personal data and implements cascading sets of protective measures.
+Kaspersky Lab also maintains physical, electronic and procedural safeguards to protect the information against loss, misuse, damage or modification and unauthorized access or disclosure. Some of the other central features of our information security program are:
+* The Information Security Department, which designs, implements and provides oversight to our information security program;
+* A determination of personal data safety hazards in the course of processing in a Kaspersky Lab processing system;
+* Application of appropriate information security tools;
+* Performance evaluation of applied personal data security measures before commissioning processing systems;
+* Implementing controls to identify, authenticate and authorize access to various services or websites;
+* Discovering the facts surrounding unauthorized access to personal data and adopting corresponding measures;
+* Recovery of personal data that was modified or destructed;
+* Establishing access rules to personal data processed in Kaspersky Lab processing systems and also recording and accounting for all actions undertaken with personal data in these systems;
+* Encryption between our clients and servers (and between our various data centers);
+* We restrict access of our employees and contractors who need to know the information in order to process it for us and who are subject to strict contractual confidentiality obligations, to personal information. They may be disciplined or their contract terminated if they fail to meet these obligations;
+* Monitoring of our systems infrastructure to detect weaknesses and potential intrusions;
+* Monitoring measures taken to ensure the security of personal data;
+* Providing Kaspersky Lab personnel with relevant training and continually updating our security practices in light of new risks and developments in technology.
+
+How to Contact Us
+If you have any questions or comments about this Privacy Policy, Kaspersky Lab's privacy practices or if you would like us to update or remove information or preferences you provided to us, please visit https://www.kaspersky.com/global-privacy-policy, or you may contact our Kaspersky Lab EU representative via e-mail or phone: Kaspersky Labs GmbH, Ingolstadt, Germany, info@kaspersky.de, +49 (0) 841 98 18 90, according to point (a) of Article 13 (1) and Article 27 (1) of GDPR, or you may contact our Data Protection Officer in the EU, according to point (b) of Article 13 (1) and Article 37 (1) of GDPR, as well as for the other countries, via dpo@kaspersky.com.
+
+(c) 2020 AO Kaspersky Lab
