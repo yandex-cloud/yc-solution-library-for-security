@@ -65,7 +65,7 @@ terraform apply
 
 - пробрасываем порты по SSH для подключения к серверам PT AF (ВЫПОЛНЯЕМ В 2 РАЗНЫХ ОКНАХ ТЕРМИНАЛА):
 ```
-ssh -L 22001:192.168.2.10:22013 -L 22002:172.18.0.10:22013 -L 8443:192.168.2.10:8443 -L 8444:172.18.0.10:8443 -i ./pt_key yc-user@$(yc compute instance list --format=json | jq '.[] | select( .name == "ssh-a")| .network_interfaces[0].primary_v4_address.one_to_one_nat.address '| sed 's/"//g') 
+ssh -L 22001:192.168.2.10:22013 -L 22002:172.18.0.10:22013 -L 8443:192.168.2.10:8443 -L 8444:172.18.0.10:8443 -i ./pt_key.pem yc-user@$(yc compute instance list --format=json | jq '.[] | select( .name == "ssh-a")| .network_interfaces[0].primary_v4_address.one_to_one_nat.address '| sed 's/"//g') 
 ```
 после этого вы окажитесь в терминале ssh-a (брокер машина)
 
