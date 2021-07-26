@@ -7,7 +7,7 @@ variable "token" {
 
 variable "folder_id" {
   description = "Yandex Cloud Folder ID where resources will be created"
-  default     = "b1g5dha51t4h3463lm9q" #yc config get folder-id
+  default     = "b1ghen4foi7mbm59jb7f" #yc config get folder-id
 }
 
 variable "cloud_id" {
