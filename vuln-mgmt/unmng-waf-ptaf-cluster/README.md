@@ -17,12 +17,14 @@
 *для установки целой схемы снуля необходимо использовать playbook из папки "from-scratch"
 
 #### Схема до:
-![ha-proxy-До](https://user-images.githubusercontent.com/85429798/126472644-005bc453-95c4-4f50-8a01-adcd0ece75d0.jpg)
+![ha-proxy-До](https://user-images.githubusercontent.com/85429798/127031869-5be84785-0566-4cc5-a1f6-d041d051feb4.png)
+
 
 
 
 #### Схема после:
-![ha-proxy-после](https://user-images.githubusercontent.com/85429798/126472688-daa34151-9e3a-413e-a087-22bf0c18952f.jpg)
+![ha-proxy-после](https://user-images.githubusercontent.com/85429798/127031876-bed5eed2-4218-4dea-986d-4bebc1b2f5c5.png)
+
 
 
 
@@ -201,4 +203,6 @@ upstream - internal
 - отключим app-a и убедимся, что траффик проходит
 - отклюим ptaf-b и убедимся, что BYPASS сработает и траффик переключится напрямую на внутренний балансировщик
 - включите ptaf-a, ptaf-b обратно и убедитесь то, что траффик снова идет через ptaf
+
+[![image](https://user-images.githubusercontent.com/85429798/127031813-f9460c50-2765-40d4-aa16-f66fc7fd70b7.png)](https://www.youtube.com/watch?v=DQYzXVKVVjg)
 
