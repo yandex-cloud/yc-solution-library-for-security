@@ -20,7 +20,7 @@ s3_folder           = os.environ['S3_FOLDER']
 s3_local            = './temp'
 
 # Configuration - Sleep time
-if(os.environ['SLEEP_TIME']):
+if(os.getenv('SLEEP_TIME') is not None):
     sleep_time = int(os.environ['SLEEP_TIME'])
 else:
     sleep_time = 240
