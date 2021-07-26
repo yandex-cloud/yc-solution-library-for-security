@@ -184,3 +184,9 @@ net interface alias - wan
 listen port - 80
 upstream - internal
 
+- Configuration -> Security -> Web Applications:
+указать имя сервиса
+указать созданный ранее service
+указать protection mode "detection"
+locations "/"
+
