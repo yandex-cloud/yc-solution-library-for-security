@@ -15,16 +15,6 @@ variable "cloud_id" {
   default     = "b1gkmtuljp4d2k3g5aph" #yc config get cloud-id
 }
 
-variable "public_key_path" {
-  description = "Path to ssh public key, which would be used to access workers"
-  default     = "./pt_key.pub"
-}
-
-variable "private_key_path" {
-  description = "Path to ssh public key, which would be used to access workers"
-  default     = "./pt_key"
-}
-
 variable "vpc_id" {
   description = "Yandex Cloud ID where resources will be created"
   default     = "enp5319ctfe47kh2q4jp" #yc vpc network list --format=json | jq '.[].id'
