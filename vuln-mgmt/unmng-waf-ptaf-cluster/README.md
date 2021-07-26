@@ -188,10 +188,10 @@ listen port - 80
 upstream - internal
 
 - Configuration -> Security -> Web Applications:
-указать имя сервиса
-указать созданный ранее service
-указать protection mode "detection"
-locations "/"
+- указать имя сервиса
+- указать созданный ранее service
+- указать protection mode "detection"
+- locations "/"
 
 #### Проверка прохождения траффика и отказоустойчивости
 - па
