@@ -24,7 +24,6 @@
 ## Подготовка/Пререквизиты:
 - установить и настроить [yc client](https://cloud.yandex.ru/docs/cli/quickstart)
 - установить [terraform](https://www.terraform.io/downloads.html)
-- скачать архив с файлами "..zip"
 
 ## Развертывание
 
