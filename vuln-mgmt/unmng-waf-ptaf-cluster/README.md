@@ -190,3 +190,6 @@ upstream - internal
 указать protection mode "detection"
 locations "/"
 
+#### Проверка прохождения траффика и отказоустойчивости
+- па
+
