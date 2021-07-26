@@ -160,6 +160,9 @@ config sync
 mongo --authenticationDatabase admin -u root -p $(cat /opt/waf/conf/master_password) waf --eval 'c = db.sentinel; l = c.findOne({_id: "license"}); Object.keys(l).forEach(function(k) { if (l[k].ip) { delete l[k].ip; l[k].hostname = "yclicense.ptsecurity.ru" }}); c.update({_id: l._id}, l)'
 ```
 
+[<img width="1041" alt="image" src="https://user-images.githubusercontent.com/85429798/127007705-3a727cec-07c9-4071-80ca-1631070f83f2.png">](https://www.youtube.com/watch?v=zuTxyEeM7Vg)
+
+
 #### Настройка обработки траффика
 Видеоинструкция этапа:
 
