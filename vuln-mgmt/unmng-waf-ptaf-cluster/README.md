@@ -33,7 +33,6 @@
 ## Развертывание
 
 #### Развертывание terraform:
-Видеоинструкция этапа:
 
 - скачать архив с файлами [pt_archive.zip](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/vuln-mgmt/unmng-waf-ptaf-cluster/main/pt_archive.zip)
 - перейти в папку с файлами
@@ -54,12 +53,10 @@ terraform import yandex_lb_network_load_balancer.ext-lb $(yc load-balancer netwo
 ```
 terraform apply
 ```
-
-#### Развертывание ручные действия:
-Видеоинструкция этапа:
-
 - включить NAT на subnet: ext-subnet-a, ext-subnet-b (для того, чтобы PTAF мог выходить в интернет за обновлениями и активировать лицензию)
 - назначить Security Group "app-sg" на ВМ: app-a, app-b
+
+[<img width="1135" alt="image" src="https://user-images.githubusercontent.com/85429798/126979165-eb4c9e6b-806d-401c-bec1-53f54cbecef1.png">](https://www.youtube.com/watch?v=IOYw4fdn69A)
 
 ##
 
