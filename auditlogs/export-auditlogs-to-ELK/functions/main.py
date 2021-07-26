@@ -2,21 +2,28 @@ import requests
 import json
 import os
 import boto3
+import time
 
 # Configuration - Setting up variables for ElasticSearch
 elastic_server      = os.environ['ELASTIC_SERVER']
-elastic_cert        = os.environ['ELASTIC_CERT']
 elastic_auth_user   = os.environ['ELASTIC_AUTH_USER']
 elastic_auth_pw     = os.environ['ELASTIC_AUTH_PW']
 elastic_index_name  = os.environ['ELASTIC_INDEX_NAME']
 kibana_server       = os.environ['KIBANA_SERVER']
+elastic_cert        = 'include/ca.pem'
 
 # Configuration - Setting up variables for S3
 s3_key              = os.environ['S3_KEY']
 s3_secret           = os.environ['S3_SECRET']
 s3_bucket           = os.environ['S3_BUCKET']
 s3_folder           = os.environ['S3_FOLDER']
-s3_local            = os.environ['S3_LOCAL']
+s3_local            = './temp'
+
+# Configuration - Sleep time
+if(os.environ['SLEEP_TIME']):
+    sleep_time = int(os.environ['SLEEP_TIME'])
+else:
+    sleep_time = 240
 
 # State - Setting up S3 client
 s3 = boto3.resource('s3',
@@ -35,7 +42,7 @@ def create_config_index():
             "is_configured": true
         }"""
         response = requests.post(elastic_server+request_suffix, data=request_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
-        print('Config index created successfully.')
+        print('Config index has been created successfully.')
     else:
         print('Config index already exist.')
 
@@ -56,7 +63,7 @@ def create_ingest_pipeline():
     data_file.close()
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
-        print('Ingest pipeline created successfully.')
+        print('Ingest pipeline has been created successfully.')
 
 # Function - Create an index with mapping
 def create_index_with_map():
@@ -66,15 +73,13 @@ def create_index_with_map():
     data_file.close()
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
-        print('Index with mapping created successfully.')
+        print('Index with mapping has been created successfully.')
 
 # Function - Refresh index
 def refresh_index():
     request_suffix = '/'+elastic_index_name+'/_refresh'
     response = requests.post(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
-    print(response)
-    print(response.text)
-    print('Index refreshed.')
+    print('Index has been refreshed.')
 
 # Function - Preconfigure Kibana
 def configure_kibana():
@@ -172,6 +177,7 @@ def upload_docs_bulk():
 # Process - Upload data
 def upload_logs():
     if(get_config_index_state()):
+        print("Configuration already exists.")
         download_s3_folder(s3_bucket, s3_folder, s3_local)
         upload_docs_bulk()
         print("Data has been uploaded successfully.")
@@ -195,3 +201,4 @@ upload_logs()
 # download_s3_folder(s3_bucket, s3_folder, s3_local)
 # upload_docs_bulk()
 # refresh_index()
+time.sleep(sleep_time)
