@@ -192,6 +192,9 @@ upstream - internal
 - указать protection mode "detection"
 - locations "/"
 
+[![image](https://user-images.githubusercontent.com/85429798/127023351-f0731361-5ba5-429a-82e9-5cc3c14a6355.png)](https://www.youtube.com/watch?v=lCFnHanCSSE)
+
+
 #### Проверка прохождения траффика и отказоустойчивости
 - посмотрите внешний ip адреса внешнего балансировщика нагрузки
 - отклюим ptaf-a и убедимся, что траффик проходит
