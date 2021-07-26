@@ -16,7 +16,7 @@ function ptaf() {
                         varX=$(yc lb network-load-balancer detach-target-group --folder-id $folderid --target-group-id $ilbtg --name $elb)
                         varX=$(yc lb network-load-balancer detach-target-group --folder-id $folderid --target-group-id $ilbtg --name $ilb)
                         varX=$(yc lb network-load-balancer detach-target-group --folder-id $folderid --target-group-id $elbtg --name $ilb)
-                        varX=$(yc lb network-load-balancer attach-target-group --folder-id $folderid $elb --target-group target-group-id=$tgwafid,healthcheck-tcp-port=22013,healthcheck-name=ilbcheck)
+                        varX=$(yc lb network-load-balancer attach-target-group --folder-id $folderid $elb --target-group target-group-id=$tgwafid,healthcheck-tcp-port=80,healthcheck-name=ilbcheck)
                         varX=$(yc lb network-load-balancer attach-target-group --folder-id $folderid $ilb --target-group target-group-id=$tgvmid,healthcheck-tcp-port=80,healthcheck-name=elbcheck)
                 fi
         fi
@@ -30,7 +30,7 @@ function ptaf() {
                         varX=$(yc lb network-load-balancer detach-target-group --folder-id $folderid --target-group-id $elbtg --name $ilb)
                         varX=$(yc lb network-load-balancer detach-target-group --folder-id $folderid --target-group-id $ilbtg --name $elb)
                         varX=$(yc lb network-load-balancer attach-target-group --folder-id $folderid $elb --target-group target-group-id=$tgvmid,healthcheck-tcp-port=80,healthcheck-name=ilbcheck)
-                        varX=$(yc lb network-load-balancer attach-target-group --folder-id $folderid $ilb --target-group target-group-id=$tgwafid,healthcheck-tcp-port=22013,healthcheck-name=elbcheck)
+                        varX=$(yc lb network-load-balancer attach-target-group --folder-id $folderid $ilb --target-group target-group-id=$tgwafid,healthcheck-tcp-port=80,healthcheck-name=elbcheck)
                 fi
         fi
         #echo 'done.'
