@@ -3,20 +3,20 @@ import json
 import os
 import boto3
 
-# State - Setting up variables for ElasticSearch
-elastic_server = 'https://c-c9q5sg9avnf2foe7gtqr.rw.mdb.yandexcloud.net:9200'
-elastic_cert = 'auditlogs/export-auditlogs-to-ELK/include/ca.pem'
-elastic_auth_user = 'admin'
-elastic_auth_pw = 'elasticsearch'
-elastic_index_name = 'audit-trails-index'
-kibana_server = 'https://c-c9q5sg9avnf2foe7gtqr.rw.mdb.yandexcloud.net'
+# Configuration - Setting up variables for ElasticSearch
+elastic_server      = os.environ['ELASTIC_SERVER']
+elastic_cert        = os.environ['ELASTIC_CERT']
+elastic_auth_user   = os.environ['ELASTIC_AUTH_USER']
+elastic_auth_pw     = os.environ['ELASTIC_AUTH_PW']
+elastic_index_name  = os.environ['ELASTIC_INDEX_NAME']
+kibana_server       = os.environ['KIBANA_SERVER']
 
-# State - Setting up variables for S3
-s3_key = 'qlcr3TERjc6ZBeP4Mveq'
-s3_secret = 'PWkhhZy5tZYY5W3jd-gpxTQ4VuoUrvAg_dyIzTtI'
-s3_bucket = 'audittrail8'
-s3_folder = 'audit-logs'
-s3_local = "auditlogs/export-auditlogs-to-ELK/temp"
+# Configuration - Setting up variables for S3
+s3_key              = os.environ['S3_KEY']
+s3_secret           = os.environ['S3_SECRET']
+s3_bucket           = os.environ['S3_BUCKET']
+s3_folder           = os.environ['S3_FOLDER']
+s3_local            = os.environ['S3_LOCAL']
 
 # State - Setting up S3 client
 s3 = boto3.resource('s3',
@@ -32,7 +32,7 @@ def create_config_index():
     if(response.status_code == 404):
         request_suffix = '/.state-'+elastic_index_name+'/_doc/1'
         request_json = """{
-            "first_run": true
+            "is_configured": true
         }"""
         response = requests.post(elastic_server+request_suffix, data=request_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
         print('Config index created successfully.')
@@ -43,34 +43,15 @@ def create_config_index():
 def get_config_index_state():
     request_suffix = '/.state-'+elastic_index_name+'/_doc/1/_source'
     response = requests.get(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
-    print(response.json()['first_run'])
-    return response.json()['first_run']
+    if(response.status_code != 200):
+        return False
+    print(response.json()['is_configured'])
+    return response.json()['is_configured']
 
-# Function - Switch config index state
-def update_config_index_state():
-    if(get_config_index_state()):
-        request_suffix = '/.state-'+elastic_index_name+'/_update/1'
-        request_json = """{
-            "doc": {
-                "first_run": false
-            }
-        }"""
-        requests.post(elastic_server+request_suffix, data=request_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
-        print('Config index: first_run is updated to <false>.')
-    else:
-        request_suffix = '/.state-'+elastic_index_name+'/_update/1'
-        request_json = """{
-            "doc": {
-                "first_run": true
-            }
-        }"""
-        requests.post(elastic_server+request_suffix, data=request_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
-        print('Config index: first_run is updated to <true>.')
-
-# Function create ingest pipeline
+# Function - Create ingest pipeline
 def create_ingest_pipeline():
     request_suffix = '/_ingest/pipeline/audit-trails-pipeline'
-    data_file = open('auditlogs/export-auditlogs-to-ELK/include/elasticsearch/pipeline.json')
+    data_file = open('include/elasticsearch/pipeline.json')
     data_json = json.load(data_file)
     data_file.close()
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
@@ -80,7 +61,7 @@ def create_ingest_pipeline():
 # Function - Create an index with mapping
 def create_index_with_map():
     request_suffix = '/audit-trails-index'
-    data_file = open('auditlogs/export-auditlogs-to-ELK/include/elasticsearch/mapping.json')
+    data_file = open('include/elasticsearch/mapping.json')
     data_json = json.load(data_file)
     data_file.close()
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
@@ -99,7 +80,7 @@ def refresh_index():
 def configure_kibana():
     # Index pattern
     data_file = {
-        'file': open('auditlogs/export-auditlogs-to-ELK/include/kibana/index_pattern.ndjson', 'rb')
+        'file': open('include/kibana/index_pattern.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -107,7 +88,7 @@ def configure_kibana():
 
     # Filters
     data_file = {
-        'file': open('auditlogs/export-auditlogs-to-ELK/include/kibana/filters.ndjson', 'rb')
+        'file': open('include/kibana/filters.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -115,7 +96,7 @@ def configure_kibana():
 
     # Search
     data_file = {
-        'file': open('auditlogs/export-auditlogs-to-ELK/include/kibana/search.ndjson', 'rb')
+        'file': open('include/kibana/search.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -123,7 +104,7 @@ def configure_kibana():
 
     # Dashboard
     data_file = {
-        'file': open('auditlogs/export-auditlogs-to-ELK/include/kibana/dashboard.ndjson', 'rb')
+        'file': open('include/kibana/dashboard.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -131,7 +112,7 @@ def configure_kibana():
 
     # Detections (not stable, throws error 400 from time to time)
     data_file = {
-        'file': open('auditlogs/export-auditlogs-to-ELK/include/kibana/detections.ndjson', 'rb')
+        'file': open('include/kibana/detections.ndjson', 'rb')
     }
     request_suffix = '/api/detection_engine/rules/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -152,6 +133,18 @@ def download_s3_folder(s3_bucket, s3_folder, local_folder=None):
             continue
         # Downloading JSON logs in a flat-structured way
         bucket.download_file(obj.key, local_folder+'/'+target.rsplit('/')[-1])
+    # Deleting files in a bucket
+    for obj in bucket.objects.filter(Prefix=s3_folder):
+        if(obj.key != s3_folder+'/'):
+            bucket.delete_objects(
+                Delete={
+                    'Objects': [
+                        {
+                            'Key': obj.key
+                        },
+                    ]
+                }
+            )
     print('JSON download has completed successfully.')
 
 # Function - Upload logs to ElasticSearch
@@ -171,28 +164,30 @@ def upload_docs_bulk():
             data_file = open(s3_local+'/nd-temp.json', 'rb').read()
             requests.post(elastic_server+request_suffix, data=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/x-ndjson"})
             os.remove(s3_local+"/"+f)
-    os.remove(s3_local+'/nd-temp.json')
-    os.rmdir(s3_local)
+    #os.remove(s3_local+'/nd-temp.json')
+    #os.rmdir(s3_local)
     print('Bulk upload has completed successfully.')
     refresh_index()
 
-# Process - Upload initial data
-def upload_logs_initial():
+# Process - Upload data
+def upload_logs():
     if(get_config_index_state()):
         download_s3_folder(s3_bucket, s3_folder, s3_local)
         upload_docs_bulk()
-        update_config_index_state()
-        print("Initial log upload has completed successfully.")
+        print("Data has been uploaded successfully.")
     else:
-        print("Initial log upload has already been done. Please proceed with the log sync.")
-
+        create_index_with_map()
+        create_ingest_pipeline()
+        configure_kibana()
+        create_config_index()
+        print("Configuration has been completed successfully.")
+        download_s3_folder(s3_bucket, s3_folder, s3_local)
+        upload_docs_bulk()
+        print("Data has been uploaded successfully.")
 
 ### MAIN CONTROL PANEL
-create_config_index()
-create_index_with_map()
-create_ingest_pipeline()
-configure_kibana()
-upload_logs_initial()
+
+upload_logs()
 # get_config_index_state()
 # update_config_index_state()
 # get_config_index_state()
@@ -200,4 +195,3 @@ upload_logs_initial()
 # download_s3_folder(s3_bucket, s3_folder, s3_local)
 # upload_docs_bulk()
 # refresh_index()
-
