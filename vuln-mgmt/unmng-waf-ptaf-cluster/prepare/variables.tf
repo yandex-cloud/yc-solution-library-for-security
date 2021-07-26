@@ -2,17 +2,17 @@
 
 variable "token" {
   description = "Yandex Cloud security OAuth token"
-  default     = "AQAAAAAH6dWxAATuwV69XK6GAUwpkuEVDVDmqgw" #generate yours by this https://cloud.yandex.ru/docs/iam/concepts/authorization/oauth-token
+  default     = "" #generate yours by this https://cloud.yandex.ru/docs/iam/concepts/authorization/oauth-token
 }
 
 variable "folder_id" {
   description = "Yandex Cloud Folder ID where resources will be created"
-  default     = "b1ghen4foi7mbm59jb7f" #yc config get folder-id
+  default     = "" #yc config get folder-id
 }
 
 variable "cloud_id" {
   description = "Yandex Cloud ID where resources will be created"
-  default     = "b1gkmtuljp4d2k3g5aph" #yc config get cloud-id
+  default     = "" #yc config get cloud-id
 }
 
 

@@ -2,22 +2,22 @@
 
 variable "token" {
   description = "Yandex Cloud security OAuth token"
-  default     = "AQAAAAAH6dWxAATuwV69XK6GAUwpkuEVDVDmqgw" #generate yours by this https://cloud.yandex.ru/docs/iam/concepts/authorization/oauth-token
+  default     = "" #generate yours by this https://cloud.yandex.ru/docs/iam/concepts/authorization/oauth-token
 }
 
 variable "folder_id" {
   description = "Yandex Cloud Folder ID where resources will be created"
-  default     = "b1g5dha51t4h3463lm9q" #yc config get folder-id
+  default     = "" #yc config get folder-id
 }
 
 variable "cloud_id" {
   description = "Yandex Cloud ID where resources will be created"
-  default     = "b1gkmtuljp4d2k3g5aph" #yc config get cloud-id
+  default     = "" #yc config get cloud-id
 }
 
 variable "vpc_id" {
   description = "Yandex Cloud ID where resources will be created"
-  default     = "enp5319ctfe47kh2q4jp" #yc vpc network list --format=json | jq '.[].id'
+  default     = "" #yc vpc network list --format=json | jq '.[].id'
 }
 
 variable "extlb_id" {
@@ -28,7 +28,7 @@ variable "extlb_id" {
 
 variable "app_target_group_id" {
   description = "Yandex Cloud ID where resources will be created"
-  default     = "enp1m10vm5jpog9ugc5f" #yc load-balancer target-group list --format=json | jq '.[].id'
+  default     = "" #yc load-balancer target-group list --format=json | jq '.[].id'
 }
 
 //------------
