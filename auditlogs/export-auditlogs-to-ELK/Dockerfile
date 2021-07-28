@@ -1,4 +1,4 @@
-FROM python:3.9.1
+FROM python:3.9.1-slim
 ENV ELASTIC_SERVER="https://c-c9q5sg9avnf2foe7gtqr.rw.mdb.yandexcloud.net:9200"
 ENV KIBANA_SERVER="https://c-c9q5sg9avnf2foe7gtqr.rw.mdb.yandexcloud.net"
 ENV ELASTIC_AUTH_USER="admin"

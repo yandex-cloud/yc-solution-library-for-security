@@ -21,6 +21,8 @@ spec:
       value: ${S3_FOLDER}
     - name: SLEEP_TIME
       value: ${SLEEP_TIME}
+    - name: PYTHONUNBUFFERED
+      value: 1
     image: cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest
     name: my-container
     securityContext:
