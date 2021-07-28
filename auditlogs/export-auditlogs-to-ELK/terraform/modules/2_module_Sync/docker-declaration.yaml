@@ -1,0 +1,30 @@
+spec:
+  containers:
+  - env:
+    - name: ELASTIC_SERVER
+      value: ${ELASTIC_SERVER}
+    - name: KIBANA_SERVER
+      value: ${KIBANA_SERVER}
+    - name: ELASTIC_AUTH_USER
+      value: ${ELASTIC_AUTH_USER}
+    - name: ELASTIC_AUTH_PW
+      value: ${ELASTIC_AUTH_PW}
+    - name: ELASTIC_INDEX_NAME
+      value: ${ELASTIC_INDEX_NAME}
+    - name: S3_KEY
+      value: ${S3_KEY}
+    - name: S3_SECRET
+      value: ${S3_SECRET}
+    - name: S3_BUCKET
+      value: ${S3_BUCKET}
+    - name: S3_FOLDER
+      value: ${S3_FOLDER}
+    - name: SLEEP_TIME
+      value: ${SLEEP_TIME}
+    image: cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest
+    name: my-container
+    securityContext:
+      privileged: false
+    stdin: false
+    tty: false
+  restartPolicy: Always
