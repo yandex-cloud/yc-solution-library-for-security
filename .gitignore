@@ -5,6 +5,7 @@ auditlogs/.DS_Store
 .DS_Store
 auditlogs/export-auditlogs-to-ELK/terraform/.terraform/providers/registry.terraform.io
 auditlogs/export-auditlogs-to-ELK/terraform/.terraform.lock.hcl
+*.terraform*
 
 # Word temporary
 ~$*.doc*
