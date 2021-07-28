@@ -2,5 +2,9 @@
 auditlogs/.DS_Store
 .DS_Store
 
+.DS_Store
+/terraform/.terraform/providers/registry.terraform.io
+.terraform.lock.hcl
+
 # Word temporary
 ~$*.doc*
