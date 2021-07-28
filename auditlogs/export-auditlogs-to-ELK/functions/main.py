@@ -164,7 +164,8 @@ def delete_objects_s3(s3_bucket, s3_folder):
 def upload_docs_bulk(s3_bucket, s3_folder):
     print('JSON upload -- STARTED')
     request_suffix = '/'+elastic_index_name+'/_bulk?pipeline=audit-trails-pipeline'
-    
+    error_count = 0
+
     for f in os.listdir(s3_local):
         if f.endswith(".json"):
             with open(s3_local+"/"+f, "r") as read_file:
@@ -176,11 +177,15 @@ def upload_docs_bulk(s3_bucket, s3_folder):
                     obj.write(i+'\n')
             
             data_file = open(s3_local+'/nd-temp.json', 'rb').read()
-            requests.post(elastic_server+request_suffix, data=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/x-ndjson"})
+            response = requests.post(elastic_server+request_suffix, data=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/x-ndjson"})
             os.remove(s3_local+"/"+f)
-    print('JSON upload -- COMPLETE')
+            if(response.status_code != 200):
+                error_count += 1
+                print(response.text)
+    print('JSON upload -- COMPLETE -- %s ERRORS' % error_count)
+    if(error_count == 0):
+        delete_objects_s3(s3_bucket, s3_folder)
     refresh_index()
-    delete_objects_s3(s3_bucket, s3_folder)
 
 # Process - Upload data
 def upload_logs():
