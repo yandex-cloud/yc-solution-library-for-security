@@ -1,21 +1,22 @@
-# Пример установки cluster PTAF в Yandex.Cloud 
-Цель демо: Установка Positive Tech. Web Application Firewall (далее PTAF) в Yandex.Cloud в отказоустойчивой конфигурации.
+# Отказоустойчивая эксплуатация PT Application Firewall на базе Yandex.Cloud
+Цель демо: Установка PT Web Application Firewall (далее PT WAF) в Yandex.Cloud в отказоустойчивой конфигурации.
 
 # Содержание:
 - Описание
 - Развертывание
-- Описание шагов работы с PTAF
+- Описание шагов работы с PT WAF
 - Проверка прохождения траффика и отказоустойчивости
+- Дполнительные материалы: настройка кластеризации PT WAF и настройка Yandex Application LoadBalancer 
 
 ## Описание:
 В рамках workshop будут выполнены:
 - установка инфраструктуры с помощью terraform (infrastructure as a code)
-- инсталяция и базовая конфигурация PTAF cluster в 2-х зонах доступности Yandex.Cloud
+- инсталяция и базовая конфигурация PT WAF cluster в 2-х зонах доступности Yandex.Cloud
 
 Отказоучстойчивость обеспечивается за счет:
-- кластеризации самих PTAF в режиме active-active
+- кластеризации самих PT WAF в режиме active-active
 - балансировки траффика с помощью External-LB Yandex.Cloud
-- cloud-finction Yandex.Cloud, которая отслеживает состояние PTAF и в случаи их падения направляет траффик на приложения напрямую - "BYPASS"
+- cloud-finction Yandex.Cloud, которая отслеживает состояние PT WAF и в случаи их падения направляет траффик на приложения напрямую - "BYPASS"
 
 #### Сценарий окружения:
 Предполагается, что в Yandex.Cloud у Клиента уже развернут небезопасный сценарий публикации ВМ наружу: ВМ с веб приложениями в 2-х зонах доступности. Также внешний сетевой балансировщик нагрузки. 
@@ -61,14 +62,14 @@ terraform import yandex_lb_network_load_balancer.ext-lb $(yc load-balancer netwo
 ```
 terraform apply
 ```
-- включить NAT на subnet: ext-subnet-a, ext-subnet-b (для того, чтобы PTAF мог выходить в интернет за обновлениями и активировать лицензию)
+- включить NAT на subnet: ext-subnet-a, ext-subnet-b (для того, чтобы PT WAF мог выходить в интернет за обновлениями и активировать лицензию)
 - назначить Security Group "app-sg" на ВМ: app-a, app-b
 
 [<img width="1135" alt="image" src="https://user-images.githubusercontent.com/85429798/126979165-eb4c9e6b-806d-401c-bec1-53f54cbecef1.png">](https://www.youtube.com/watch?v=IOYw4fdn69A)
 
 ##
 
-## Описание шагов работы с PTAF:
+## Описание шагов работы с PT WAF:
 Видеоинструкция этапа:
 
 - пробрасываем порты по SSH для подключения к серверам PT AF (ВЫПОЛНЯЕМ В 2 РАЗНЫХ ОКНАХ ТЕРМИНАЛА):
@@ -124,7 +125,7 @@ upstream - internal
 
 ## Дополнительные материалы
 
-## Настройка кластеризации PTAF ------------------
+## Настройка кластеризации PT WAF ------------------
 
 #### Общая настройка двух серверов
 
@@ -221,4 +222,9 @@ mongo --authenticationDatabase admin -u root -p $(cat /opt/waf/conf/master_passw
 
 
 ## Настройка Yandex Application LoadBalancer ------------------
+
+В данной схеме возможно использовать [Application LoadBalancer Yandex.Cloud](https://cloud.yandex.ru/docs/application-load-balancer/)
+
+Существует подробная инструкция по [Организация виртуального хостинга](https://cloud.yandex.ru/docs/application-load-balancer/solutions/virtual-hosting)
+(включая интеграцию с certificate manager для управления SSL сертификатами)
 
