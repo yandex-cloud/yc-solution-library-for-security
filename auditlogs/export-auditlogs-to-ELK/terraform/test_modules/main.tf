@@ -1,3 +1,8 @@
+
+//Пререквизиты: 
+//-наличие сети
+//-наличие подсетей в 3-х зонах
+//-наличие SA
 module "First-module" {
     source = "../modules/1_module_Creator/" #path to module #1 
     
@@ -22,4 +27,12 @@ module "Second-module" {
     coi_subnet_id = "e9boih92qspkol5morvl"
 }
 
+output "elk-pass" {
+      value = module.First-module.elk-pass
+      sensitive = true
+    }
+//Чтобы посмотреть пароль ELK: terraform output elk-pass
 
+output "elk_fqdn" {
+      value = module.First-module.elk_fqdn
+    }
