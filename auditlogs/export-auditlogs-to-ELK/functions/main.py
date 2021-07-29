@@ -182,6 +182,8 @@ def upload_docs_bulk(s3_bucket, s3_folder):
             if(response.status_code != 200):
                 error_count += 1
                 print(response.text)
+    if(os.path.exists(s3_local+'/nd-temp.json')):
+        os.remove(s3_local+'/nd-temp.json')
     print('JSON upload -- COMPLETE -- %s ERRORS' % error_count)
     if(error_count == 0):
         delete_objects_s3(s3_bucket, s3_folder)
