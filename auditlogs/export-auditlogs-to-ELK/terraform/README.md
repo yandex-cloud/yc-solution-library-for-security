@@ -3,11 +3,11 @@
 
 
 ## Пререквизиты
-- [x] Object Storage Bucket для AuditTrails
-- [x] Включенный сервис AuditTrail в UI
-- [x] Сеть VPC
-- [x] Подсети в 3-х зонах доступности
-- [x] ServiceAccount с ролью storage.editor для действий в Object Storage
+:white_check_mark: Object Storage Bucket для AuditTrails
+:white_check_mark: Включенный сервис AuditTrail в UI
+:white_check_mark: Сеть VPC
+:white_check_mark: Подсети в 3-х зонах доступности
+:white_check_mark: ServiceAccount с ролью storage.editor для действий в Object Storage
 
 См. Пример конфигурации пререквизитов в /example/main.tf 
 
@@ -46,6 +46,6 @@ output "elk-pass" {
 output "elk_fqdn" {
       value = module.First-module.elk_fqdn
     }
-    
+
 //Выводит адрес ELK на который можно обращаться, например через браузер 
 ```
