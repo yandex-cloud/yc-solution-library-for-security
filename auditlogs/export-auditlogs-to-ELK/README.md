@@ -49,7 +49,7 @@ Security Content - объекты ELK, которые автоматически
 
 #### Описание 
 
-Решение состоит из 2-х модулей Terraform:
+Решение состоит из 2-х модулей Terraform [/terraform/modules/](ссылка) :
 1) yc-managed-elk:
 - создает cluster [Yandex Managed Service for Elasticsearch](https://cloud.yandex.ru/services/managed-elasticsearch) 
 - с 3 нодами (1 на зону доступности) 
