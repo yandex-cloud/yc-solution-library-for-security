@@ -47,6 +47,10 @@ data "template_file" "docker-declaration" {
         S3_BUCKET = "${var.bucket_name}"
         S3_FOLDER = "${var.bucket_folder}"
         SLEEP_TIME = "300"
+        ELK_PASS_ENCR = "${yandex_kms_secret_ciphertext.encrypted_pass.ciphertext}"
+        S3_KEY_ENCR = "${yandex_kms_secret_ciphertext.encrypted_s3_key.ciphertext}"
+        S3_SECRET_ENCR = "${yandex_kms_secret_ciphertext.encrypted_s3_secret.ciphertext}"
+        KMS_KEY_ID = "${yandex_kms_symmetric_key.key-elk.id}"
     }
 }
 
@@ -60,6 +64,7 @@ resource "yandex_compute_instance" "instance-based-on-coi" {
   name        = "elk-sync"
   hostname    = "elk-sync"
   zone        = "ru-central1-a"
+  service_account_id = data.yandex_iam_service_account.bucket_sa.id
   boot_disk {
     initialize_params {
       image_id = data.yandex_compute_image.container-optimized-image.id
@@ -80,4 +85,37 @@ resource "yandex_compute_instance" "instance-based-on-coi" {
   user-data = "${data.template_file.cloud_init_lin.rendered}"
   docker-container-declaration = "${data.template_file.docker-declaration.rendered}"
 }
+}
+
+//Создание KMS ключа
+resource "yandex_kms_symmetric_key" "key-elk" {
+  name              = "key-elk"
+  description       = "description for key"
+  default_algorithm = "AES_128"
+}
+
+//Назначение роли на sa на расшифровку ключа
+resource "yandex_resourcemanager_folder_iam_binding" "binding" {
+  folder_id = var.folder_id
+
+  role = "kms.keys.encrypterDecrypter"
+
+  members = [
+    "serviceAccount:${data.yandex_iam_service_account.bucket_sa.id}",
+  ]
+}
+
+resource "yandex_kms_secret_ciphertext" "encrypted_pass" {
+  key_id      = yandex_kms_symmetric_key.key-elk.id
+  plaintext   = var.elk_credentials
+}
+
+resource "yandex_kms_secret_ciphertext" "encrypted_s3_key" {
+  key_id      = yandex_kms_symmetric_key.key-elk.id
+  plaintext   = yandex_iam_service_account_static_access_key.sa_static_key.access_key
+}
+
+resource "yandex_kms_secret_ciphertext" "encrypted_s3_secret" {
+  key_id      = yandex_kms_symmetric_key.key-elk.id
+  plaintext   = yandex_iam_service_account_static_access_key.sa_static_key.secret_key
 }
