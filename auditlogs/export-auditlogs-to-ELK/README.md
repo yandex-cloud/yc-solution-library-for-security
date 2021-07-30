@@ -1,5 +1,8 @@
 # Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)
 
+![dashboard](https://user-images.githubusercontent.com/85429798/127686785-27658104-6258-4de8-929f-9cf87624fa27.png)
+
+
 ## Описание решения:
 Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud со следующих источников:
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
