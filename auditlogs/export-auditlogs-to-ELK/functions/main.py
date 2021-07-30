@@ -4,17 +4,36 @@ import os
 import boto3
 import time
 
+# Function - Get token
+def get_token():
+    response = requests.get('http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token', headers={"Metadata-Flavor":"Google"})
+    return response.json().get('access_token')
+
+# Function - Decrypt data with KMS key
+def decrypt_secret_kms(secret):
+    token = get_token()
+    request_suffix = kms_key_id+':decrypt'
+    request_json_data = {'ciphertext': secret}
+    response = requests.post('https://kms.yandex/kms/v1/keys/'+request_suffix, data=json.dumps(request_json_data), headers={"Accept":"application/json", "Authorization": "Bearer "+token})
+    return response.json().get('plaintext')
+
+# Configuration - Keys
+kms_key_id              = os.environ['KMS_KEY_ID']
+elastic_auth_pw_encr    = os.environ['ELK_PASS_ENCR']
+s3_key_encr             = os.environ['S3_KEY_ENCR']
+s3_secret_encr          = os.environ['S3_SECRET_ENCR']
+
 # Configuration - Setting up variables for ElasticSearch
 elastic_server      = os.environ['ELASTIC_SERVER']
 elastic_auth_user   = os.environ['ELASTIC_AUTH_USER']
-elastic_auth_pw     = os.environ['ELASTIC_AUTH_PW']
+elastic_auth_pw     = decrypt_secret_kms(elastic_auth_pw_encr)
 elastic_index_name  = os.environ['ELASTIC_INDEX_NAME']
 kibana_server       = os.environ['KIBANA_SERVER']
 elastic_cert        = 'include/ca.pem'
 
 # Configuration - Setting up variables for S3
-s3_key              = os.environ['S3_KEY']
-s3_secret           = os.environ['S3_SECRET']
+s3_key              = decrypt_secret_kms(s3_key_encr)
+s3_secret           = decrypt_secret_kms(s3_secret_encr)
 s3_bucket           = os.environ['S3_BUCKET']
 s3_folder           = os.environ['S3_FOLDER']
 s3_local            = '/tmp/s3'
