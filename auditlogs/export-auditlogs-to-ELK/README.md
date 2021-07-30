@@ -11,18 +11,15 @@
 Решение является постоянно обновляемым и поддерживаемым Security командой Yandex.Cloud
 
 ## Что делает решение:
-- Разворачивает в инфраструктуре Yandex.Cloud cluster Managed ELK (возможно через Terraform)
-- Загружает Security Content в ELK (Dashboards, Detection Rules (с alerts), etc.)
-- Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в ELK
+- [x] Разворачивает в инфраструктуре Yandex.Cloud cluster Managed ELK (возможно через Terraform)
+- [x] Загружает Security Content в ELK (Dashboards, Detection Rules (с alerts), etc.)
+- [x] Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в ELK
 
 ## Схема решения
 
 
 ## Security Content
 Security Content - объекты ELK, которые автоматически загружаются решением. Весь контент разработан с учетом многолетнего опыта Security команды Yandex.Cloud и на основе опыта Клиентов облака.
-
-Картинка дэшборда
-
 
 Содержит следующий Security Content:
 - Dashboard, на котором отражены все use cases и полезная статистика
