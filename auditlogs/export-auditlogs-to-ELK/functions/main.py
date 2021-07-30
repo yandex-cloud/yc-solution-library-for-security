@@ -3,6 +3,7 @@ import json
 import os
 import boto3
 import time
+import base64
 
 # Function - Get token
 def get_token():
@@ -15,7 +16,8 @@ def decrypt_secret_kms(secret):
     request_suffix = kms_key_id+':decrypt'
     request_json_data = {'ciphertext': secret}
     response = requests.post('https://kms.yandex/kms/v1/keys/'+request_suffix, data=json.dumps(request_json_data), headers={"Accept":"application/json", "Authorization": "Bearer "+token})
-    return response.json().get('plaintext')
+    b64_data = response.json().get('plaintext')
+    return base64.b64decode(b64_data).decode()
 
 # Configuration - Keys
 kms_key_id              = os.environ['KMS_KEY_ID']
