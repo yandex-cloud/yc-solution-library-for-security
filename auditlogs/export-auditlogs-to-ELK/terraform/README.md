@@ -3,17 +3,17 @@
 
 
 ## Пререквизиты
-- Object Storage Bucket для AuditTrails
-- Включенный сервис AuditTrail в UI
-- Сеть VPC
-- Подсети в 3-х зонах доступности
-- ServiceAccount с ролью storage.editor для действий в Object Storage
+- [x] Object Storage Bucket для AuditTrails
+- [x] Включенный сервис AuditTrail в UI
+- [x] Сеть VPC
+- [x] Подсети в 3-х зонах доступности
+- [x] ServiceAccount с ролью storage.editor для действий в Object Storage
 
-* См. Пример конфигурации пререквизитов в /example/main.tf 
+См. Пример конфигурации пререквизитов в /example/main.tf 
 
 
 ## Пример вызова модулей:
-
+```Python
 module "yc-managed-elk" {
     source = "../modules/yc-managed-elk" #path to module yc-managed-elk
     
@@ -46,5 +46,6 @@ output "elk-pass" {
 output "elk_fqdn" {
       value = module.First-module.elk_fqdn
     }
-
+    
 //Выводит адрес ELK на который можно обращаться, например через браузер 
+```
