@@ -1,76 +1,115 @@
-# _Название
-Описание всего:>>>
+# Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)
+
+## Описание решения:
+Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud со следующих источников:
+- [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
+- Скоро: [Yandex Managed Service for Kubernetes](https://cloud.yandex.ru/services/managed-kubernetes)
+
+Решение является постоянно обновляемым и поддерживаемым Security командой Yandex.Cloud
+
+## Что делает решение:
+- Разворачивает в инфраструктуре Yandex.Cloud cluster Managed ELK (возможно через Terraform)
+- Загружает Security Content в ELK (Dashboards, Detection Rules (с alerts), etc.)
+- Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в ELK
+
+## Схема решения
 
 
-Описание разовой загрузки объектов данных в ELK (bash скрипт либо питон) >>>
-1) Создаем сам индекс
+## Security Content
+Security Content - объекты ELK, которые автоматически загружаются решением. Весь контент разработан с учетом многолетнего опыта Security команды Yandex.Cloud и на основе опыта Клиентов облака.
 
-curl --user beats:beats123 --cacert ~/.elasticsearch/root.crt -X PUT "https://c-c9qfr7e8e470ghr1lanf.rw.mdb.yandexcloud.net:9200/audit-trails-index/?pretty" -H 'Content-Type: application/json' -d @/Users/mirtov8/Documents/CloudTrail/ELK-new-clean/mapping6.json 
-
-2) загрузка  ingest pipeline
-curl --user beats:beats123 --cacert ~/.elasticsearch/root.crt -X PUT "https://c-c9qfr7e8e470ghr1lanf.rw.mdb.yandexcloud.net:9200/_ingest/pipeline/audit-trails-pipeline?pretty" -H 'Content-Type: application/json' -d @/Users/mirtov8/Documents/CloudTrail/ELK-new-clean/pipeline3.json
-
-3) import kibana index pattern с нужным нашим id
-
-curl --user beats:beats123 --cacert ~/.elasticsearch/root.crt -X POST https://c-c9qfr7e8e470ghr1lanf.rw.mdb.yandexcloud.net/api/saved_objects/_import --form file=@/Users/mirtov8/Documents/CloudTrail/ELK-new-clean/kibana_index_pattern.ndjson -H 'kbn-xsrf: true'
-
-4) загрузка filters
-curl --user beats:beats123 --cacert ~/.elasticsearch/root.crt -X POST https://c-c9qfr7e8e470ghr1lanf.rw.mdb.yandexcloud.net/api/saved_objects/_import --form file=@/Users/mirtov8/Documents/CloudTrail/ELK-new-clean/filters.ndjson -H 'kbn-xsrf: true'
-
-5) загрузка search
-curl --user beats:beats123 --cacert ~/.elasticsearch/root.crt -X POST https://c-c9qfr7e8e470ghr1lanf.rw.mdb.yandexcloud.net/api/saved_objects/_import --form file=@/Users/mirtov8/Documents/CloudTrail/ELK-new-clean/kibana_search2.ndjson -H 'kbn-xsrf: true'
+Картинка дэшборда
 
 
-6) загрузка dashboards 
-curl --user beats:beats123 --cacert ~/.elasticsearch/root.crt -X POST https://c-c9qfr7e8e470ghr1lanf.rw.mdb.yandexcloud.net/api/saved_objects/_import --form file=@/Users/mirtov8/Documents/CloudTrail/ELK-new-clean/dashboard_very_new.ndjson -H 'kbn-xsrf: true'
+Содержит следующий Security Content:
+- Dashboard, на котором отражены все use cases и полезная статистика
+- Набор Saved query для удобного поиска Security событий
+- Набор Detection rules (правила корреляции) на которые настроены оповещения (Клиенту самостоятельно необходимо указать назначение уведомлений)
+- Все интересные поля событий преобразованы в формат [Elastic Common Schema (ECS)](https://www.elastic.co/guide/en/ecs/current/index.html), полная табличка маппинга в файле [/papers/Описание объектов.pdf](ссылка)
 
-7) Файл json необходимо преобразовать перед загрузкой в качестве bulk в elk
-
-jq -c -r ".[]" /Users/mirtov8/Documents/CloudTrail/ArcSight\ Connector/gg/155732665.json | while read line; do echo '{"index":{}}'; echo $line; done > bulk.json 
-
-python пример ( пример - https://gist.github.com/icamys/4287ae49d20ff2add3db86e2b2053977#file-elastic_import_data_bulk-py-L51 )
-
-8) Отправка bulk
-
-curl --user beats:beats123 --cacert ~/.elasticsearch/root.crt  -X POST "https://c-c9qfr7e8e470ghr1lanf.rw.mdb.yandexcloud.net:9200/audit-trails-index/_bulk?pipeline=audit-trails-pipeline" -H 'Content-Type: application/json' --data-binary "@./bulk3.json"
-
-python пример ( https://elasticsearch-py.readthedocs.io/en/master/helpers.html ) (https://gist.github.com/icamys/4287ae49d20ff2add3db86e2b2053977#file-elastic_import_data_bulk-py-L51)
-
-9) загрузка detections
-curl --user beats:beats123 --cacert ~/.elasticsearch/root.crt -X POST https://c-c9qfr7e8e470ghr1lanf.rw.mdb.yandexcloud.net/api/detection_engine/rules/_import --form file=@./detections.ndjson -H 'kbn-xsrf: true'
+подробное описание в файле [/papers/ECS-mapping.docx](ссылка)
 
 
+## Лицензионные ограничения
+Ссылка на elk subscr.
+Картинка из нашей доки по лицухам
+и моя картинка по лицухам
+
+
+## Процесс обновления контента
+Описать процесс обновления контента.
+
+Предположительно:
+
+Рекомендуется подписаться на обновления в данном репозитории для оповещений о наличии новом обновлении.
+Обновление Security Content возможно выполнять с помощью скрипта обновления - файл [update_script/script.py](ссылка)
+
+
+## Развертывание с помощью Terraform
+
+#### Описание 
+
+Решение состоит из 2-х модулей Terraform:
+1) yc-managed-elk:
+- создает cluster [Yandex Managed Service for Elasticsearch](https://cloud.yandex.ru/services/managed-elasticsearch) 
+- с 3 нодами (1 на зону доступности) 
+- с лицензией Gold
+- характеристики: s2-medium (8vCPU, 32Gb Memory)
+- HDD: 1TB
+- назначает пароль на аккаунт admin в ELK
+
+2) yc-elastic-trail:
+- создает static keys для sa (для работы с объектами JSON в бакете и шифрования/расшифрования секретов)
+- создает ВМ COI со спецификацией Docker Container со скриптом
+- создает ssh пару ключей и сохраняет приватную часть на диск, публичную в ВМ
+- создает KMS ключ
+- назначает права kms.keys.encrypterDecrypter на ключ для sa для шифрование секретов
+- шифрует секреты и передает их в Docker Container
+
+#### Пререквизиты
+- :white_check_mark: Object Storage Bucket для AuditTrails
+- :white_check_mark: Включенный сервис AuditTrail в UI
+- :white_check_mark: Сеть VPC
+- :white_check_mark: Подсети в 3-х зонах доступности
+- :white_check_mark: ServiceAccount с ролью storage.editor для действий в Object Storage
+
+См. Пример конфигурации пререквизитов в /example/main.tf 
+
+
+#### Пример вызова модулей:
+```Python
+module "yc-managed-elk" {
+    source = "../modules/yc-managed-elk" #path to module yc-managed-elk
+    
+    folder_id = var.folder_id
+    subnet_ids = ["e9boih92qspkol5morvl", "e2lbe671uvs0i8u3cr3s", "b0c0ddsip8vkulcqh7k4"]  #subnets в 3-х зонах доступности для развертывания ELK
+    network_id = "enp5t00135hd1mut1to9" # network id в которой будет развернут ELK
+}
 
 
 
-Описание поставки данных из S3 нашим Python в Elastic >>>>
+module "yc-elastic-trail" {
+    source = "../modules/yc-elastic-trail/" #path to module yc-elastic-trail
+    
+    folder_id = var.folder_id
+    cloud_id = var.cloud_id
+    elk_credentials = module.yc-managed-elk.elk-pass
+    elk_address = module.yc-managed-elk.elk_fqdn
+    bucket_name = "bucket-mirtov8"
+    bucket_folder = "folder"
+    sa_id = "aje5h5587p1bffca503j"
+    coi_subnet_id = "e9boih92qspkol5morvl"
+}
 
+output "elk-pass" {
+      value = module.yc-managed-elk.elk-pass
+      sensitive = true
+    }
+//Чтобы посмотреть пароль ELK: terraform output elk-pass
 
-
-
-
-## Описание файлов:
-- Папка object - содержит все объекты (dashboards, index_pattern, ingest_pipeline, searche_querys, detection_rules)
-- ECS-mapping.docx - содержит описание мапинга полей json в Elastic Common Schema (ECS) (вставить ссылку)
-- Описание объектов.docx - содержит подробное описание контента
-
-## Dashboards:
-
-![image](https://user-images.githubusercontent.com/85429798/125829594-3fab4999-e010-4bd8-86b0-20acdcfb69c9.png)
-
-## Saved_querys:
-
-![image](https://user-images.githubusercontent.com/85429798/125829729-15aae7f7-39b8-4aec-8286-357887c22532.png)
-
-## Detection rules
-описание
-
-## ECS mapping:
-
-![image](https://user-images.githubusercontent.com/85429798/125829841-2ba8b617-72fe-469f-afbb-23c123e6a4ba.png)
-![image](https://user-images.githubusercontent.com/85429798/125829855-17e82a95-a9ca-4bc1-b0de-3303792caf25.png)
-
-## Описание объектов:
-
-![image](https://user-images.githubusercontent.com/85429798/125829924-c65013ca-c801-4de8-9aba-7b9da168dcec.png)
-![image](https://user-images.githubusercontent.com/85429798/125829935-c71833c9-0013-4d52-9e66-b96cde65b9a5.png)
+output "elk_fqdn" {
+      value = module.yc-managed-elk.elk_fqdn
+    }
+    
+//Выводит адрес ELK на который можно обращаться, например через браузер 
+```

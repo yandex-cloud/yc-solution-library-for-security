@@ -80,8 +80,8 @@ module "yc-elastic-trail" {
     
     folder_id = var.folder_id
     cloud_id = var.cloud_id
-    elk_credentials = module.First-module.elk-pass
-    elk_address = module.First-module.elk_fqdn
+    elk_credentials = module.yc-managed-elk.elk-pass
+    elk_address = module.yc-managed-elk.elk_fqdn
     bucket_name = "bucket-mirtov8"
     bucket_folder = "folder"
     sa_id = "aje5h5587p1bffca503j"
@@ -89,11 +89,12 @@ module "yc-elastic-trail" {
 }
 
 output "elk-pass" {
-      value = module.First-module.elk-pass
+      value = module.yc-managed-elk.elk-pass
       sensitive = true
     }
 //Чтобы посмотреть пароль ELK: terraform output elk-pass
 
 output "elk_fqdn" {
-      value = module.First-module.elk_fqdn
+      value = module.yc-managed-elk.elk_fqdn
     }
+//Выводит адрес ELK на который можно обращаться, например через браузер 
