@@ -16,6 +16,7 @@
 - [x] Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в ELK
 
 ## Схема решения
+![Схема_решения](https://user-images.githubusercontent.com/85429798/127733565-d455b897-d1ca-4d43-8ee9-195bb7a7d5ab.png)
 
 
 ## Security Content
