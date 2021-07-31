@@ -39,18 +39,25 @@ Security Content - объекты ELK, которые автоматически
 [Описание различий с сайта ELK](https://www.elastic.co/subscriptions)
 
 ## Процесс обновления контента
-Описать процесс обновления контента.
-
-Предположительно:
-
-Рекомендуется подписаться на обновления в данном репозитории для оповещений о наличии новом обновлении.
-Обновление Security Content возможно выполнять с помощью скрипта обновления - файл [update_script/script.py](ссылка)
+Рекомендуется подписаться на обновления в данном репозитории для оповещений о наличии нового обновления.
+Технически обновление контента выполняется за счет обновления версии контейнера cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest
+Для обновления необходимо обеспечить удаления текущией версии image, скачивание новой версии, пересоздание контейнера:
+-либо пересоздать COI Instance
+-либо выполнить вышеуказанные действия вручную 
 
 
 ## Развертывание с помощью Terraform
 
 #### Описание 
 
+#### Пререквизиты
+- :white_check_mark: Object Storage Bucket для AuditTrails
+- :white_check_mark: Включенный сервис AuditTrail в UI
+- :white_check_mark: Сеть VPC
+- :white_check_mark: Подсети в 3-х зонах доступности
+- :white_check_mark: ServiceAccount с ролью storage.editor для действий в Object Storage
+
+См. Пример конфигурации пререквизитов в /example/main.tf 
 Решение состоит из 2-х модулей Terraform [/terraform/modules/](ссылка) :
 1) yc-managed-elk:
 - создает cluster [Yandex Managed Service for Elasticsearch](https://cloud.yandex.ru/services/managed-elasticsearch) 
@@ -67,15 +74,6 @@ Security Content - объекты ELK, которые автоматически
 - создает KMS ключ
 - назначает права kms.keys.encrypterDecrypter на ключ для sa для шифрование секретов
 - шифрует секреты и передает их в Docker Container
-
-#### Пререквизиты
-- :white_check_mark: Object Storage Bucket для AuditTrails
-- :white_check_mark: Включенный сервис AuditTrail в UI
-- :white_check_mark: Сеть VPC
-- :white_check_mark: Подсети в 3-х зонах доступности
-- :white_check_mark: ServiceAccount с ролью storage.editor для действий в Object Storage
-
-См. Пример конфигурации пререквизитов в /example/main.tf 
 
 
 #### Пример вызова модулей:
