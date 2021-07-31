@@ -10,3 +10,8 @@ auditlogs/export-auditlogs-to-ELK/terraform/.terraform.lock.hcl
 ~$*.doc*
 auditlogs/export-auditlogs-to-ELK/terraform/task — копия.txt
 auditlogs/export-auditlogs-to-ELK/terraform/1
+auditlogs/export-auditlogs-to-ELK/backup/ECS-mapping_new.docx
+auditlogs/export-auditlogs-to-ELK/backup/kms_decrypt_cmds.sh
+auditlogs/export-auditlogs-to-ELK/backup/mapping6.json
+auditlogs/export-auditlogs-to-ELK/backup/curl_play with elk.sh
+auditlogs/export-auditlogs-to-ELK/backup/*
