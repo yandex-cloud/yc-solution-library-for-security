@@ -2,7 +2,7 @@
 
 ![dashboard](https://user-images.githubusercontent.com/85429798/127686785-27658104-6258-4de8-929f-9cf87624fa27.png)
 
-
+## Оглавления
 - [Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)](#----------------------------------------yandex-managed-service-for-elasticsearch--elk-)
   * [Описание решения:](#-----------------)
   * [Что делает решение:](#-------------------)
