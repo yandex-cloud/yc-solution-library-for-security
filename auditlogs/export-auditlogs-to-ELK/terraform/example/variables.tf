@@ -33,5 +33,5 @@ variable "network_names" {
 
 variable "app_cidrs" {
   type        = list(string)
-  default = ["192.168.1.0/24", "172.17.0.0/24", "172.18.0.0/24"]
+  default = ["192.168.1.0/24", "192.168.50.0/24", "192.168.70.0/24"]
 }

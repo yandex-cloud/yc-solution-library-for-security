@@ -23,7 +23,7 @@ resource "local_file" "private_key" {
 }
 
 data "template_file" "cloud_init_lin" {
-  template = file("../modules/2_module_Sync//cloud-init_lin.tpl.yaml")
+  template = file("../modules/yc-elastic-trail/cloud-init_lin.tpl.yaml")
    vars =  {
         ssh_key = "${chomp(tls_private_key.ssh.public_key_openssh)}"
     }
@@ -31,15 +31,12 @@ data "template_file" "cloud_init_lin" {
 
 //Создаем docker-declaration
 data "template_file" "docker-declaration" {
-  template = file("../modules/2_module_Sync/docker-declaration.yaml")
+  template = file("../modules/yc-elastic-trail//docker-declaration.yaml")
     vars =  {
         ELASTIC_SERVER = "${var.elk_address}:9200"
         KIBANA_SERVER = "${var.elk_address}"
         ELASTIC_AUTH_USER = "admin"
-        ELASTIC_AUTH_PW = "${var.elk_credentials}"
         ELASTIC_INDEX_NAME = "audit-trails-index"
-        S3_KEY = "${yandex_iam_service_account_static_access_key.sa_static_key.access_key}"
-        S3_SECRET = "${yandex_iam_service_account_static_access_key.sa_static_key.secret_key}"
         S3_BUCKET = "${var.bucket_name}"
         S3_FOLDER = "${var.bucket_folder}"
         SLEEP_TIME = "300"

@@ -1,12 +1,3 @@
-//создать prepare тераформ скрипт
-//readme (если хотите обновить индексы)
-//переименовать модули: yc-managed-elk, yc-elastic-trail
-
-//Пререквизиты: 
-//-наличие сети
-//-наличие подсетей в 3-х зонах
-//-наличие SA
-//-наличие бакета с trail json
 
 //----------------------Подготовка тестовой инфраструктуры-----------------------------------
 //Генерация random-string для имени bucket---------------------------------------------------------
@@ -40,7 +31,7 @@ resource "yandex_iam_service_account_static_access_key" "sa-bucket-creator-sk" {
 }
 //Назначение прав для создания бакета
 resource "yandex_resourcemanager_folder_iam_binding" "storage_admin" {
-  folder_id = var.log_bucket_folder_id
+  folder_id = var.folder_id
 
   role = "storage.admin"
 
@@ -50,15 +41,32 @@ resource "yandex_resourcemanager_folder_iam_binding" "storage_admin" {
 }
 
 //Создание S3 bucket для AuditTrails
-resource "yandex_storage_bucket" "k8s-audit-logs" {
-  bucket = "k8s-audit-log-bucket-${random_string.random.result}"
+resource "yandex_storage_bucket" "trail-bucket" {
+  bucket = "trails-audit-log-bucket-${random_string.random.result}"
 
   access_key = yandex_iam_service_account_static_access_key.sa-bucket-creator-sk.access_key
   secret_key = yandex_iam_service_account_static_access_key.sa-bucket-creator-sk.secret_key
 }
 
-//Обязательно включить AuditTrail в UI на созданный bucket
+//Создание sa storage editor для работы от ELK с Bucket for AuditTrail
+resource "yandex_iam_service_account" "sa-bucket-editor" {
+  name        = "sa-bucket-editor"
+  folder_id = var.folder_id
+}
 
+//Назначение прав для изменения бакета
+resource "yandex_resourcemanager_folder_iam_binding" "storage_editor" {
+  folder_id = var.folder_id
+
+  role = "storage.editor"
+
+  members = [
+    "serviceAccount:${yandex_iam_service_account.sa-bucket-editor.id}",
+  ]
+}
+
+//Обязательно включить AuditTrail в UI на созданный bucket
+//Обязательно включить Egress NAT для подсети COI в UI на созданный bucket
 
 
 
@@ -69,8 +77,8 @@ module "yc-managed-elk" {
     source = "../modules/yc-managed-elk" #path to module yc-managed-elk
     
     folder_id = var.folder_id
-    subnet_ids = ["e9boih92qspkol5morvl", "e2lbe671uvs0i8u3cr3s", "b0c0ddsip8vkulcqh7k4"]  #subnets в 3-х зонах доступности для развертывания ELK
-    network_id = "enp5t00135hd1mut1to9" # network id в которой будет развернут ELK
+    subnet_ids = yandex_vpc_subnet.elk-subnet[*].id  #subnets в 3-х зонах доступности для развертывания ELK
+    network_id = yandex_vpc_network.vpc-elk.id # network id в которой будет развернут ELK
 }
 
 
@@ -79,13 +87,12 @@ module "yc-elastic-trail" {
     source = "../modules/yc-elastic-trail/" #path to module yc-elastic-trail
     
     folder_id = var.folder_id
-    cloud_id = var.cloud_id
     elk_credentials = module.yc-managed-elk.elk-pass
     elk_address = module.yc-managed-elk.elk_fqdn
-    bucket_name = "bucket-mirtov8"
+    bucket_name = yandex_storage_bucket.trail-bucket.bucket
     bucket_folder = "folder"
-    sa_id = "aje5h5587p1bffca503j"
-    coi_subnet_id = "e9boih92qspkol5morvl"
+    sa_id = yandex_iam_service_account.sa-bucket-editor.id
+    coi_subnet_id = yandex_vpc_subnet.elk-subnet[0].id
 }
 
 output "elk-pass" {

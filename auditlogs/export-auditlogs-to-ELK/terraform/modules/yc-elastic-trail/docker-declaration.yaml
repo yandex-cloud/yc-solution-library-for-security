@@ -7,14 +7,8 @@ spec:
       value: ${KIBANA_SERVER}
     - name: ELASTIC_AUTH_USER
       value: ${ELASTIC_AUTH_USER}
-    - name: ELASTIC_AUTH_PW
-      value: ${ELASTIC_AUTH_PW}
     - name: ELASTIC_INDEX_NAME
       value: ${ELASTIC_INDEX_NAME}
-    - name: S3_KEY
-      value: ${S3_KEY}
-    - name: S3_SECRET
-      value: ${S3_SECRET}
     - name: S3_BUCKET
       value: ${S3_BUCKET}
     - name: S3_FOLDER

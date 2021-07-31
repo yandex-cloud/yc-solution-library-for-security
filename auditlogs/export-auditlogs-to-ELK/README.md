@@ -70,6 +70,7 @@ Security Content - объекты ELK, которые автоматически
 - :white_check_mark: Включенный сервис AuditTrail в UI
 - :white_check_mark: Сеть VPC
 - :white_check_mark: Подсети в 3-х зонах доступности
+- :white_check_mark: Наличие доступа в интернет с COI Instance для скачивания образа контейнера
 - :white_check_mark: ServiceAccount с ролью storage.editor для действий в Object Storage
 
 См. Пример конфигурации пререквизитов в [/example/main.tf](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK/terraform/example) 
