@@ -3,6 +3,21 @@
 ![dashboard](https://user-images.githubusercontent.com/85429798/127686785-27658104-6258-4de8-929f-9cf87624fa27.png)
 
 
+- [Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)](#----------------------------------------yandex-managed-service-for-elasticsearch--elk-)
+  * [Описание решения:](#-----------------)
+  * [Что делает решение:](#-------------------)
+  * [Схема решения](#-------------)
+  * [Security Content](#security-content)
+  * [Лицензионные ограничения](#------------------------)
+  * [Процесс обновления контента](#---------------------------)
+  * [Развертывание с помощью Terraform](#------------------------terraform)
+      - [Описание](#--------)
+      - [Пререквизиты](#------------)
+      - [Пример вызова модулей:](#----------------------)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
 ## Описание решения:
 Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud со следующих источников:
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
