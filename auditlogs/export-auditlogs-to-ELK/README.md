@@ -44,7 +44,7 @@ Security Content - объекты ELK, которые автоматически
 - Набор Detection rules (правила корреляции) на которые настроены оповещения (Клиенту самостоятельно необходимо указать назначение уведомлений)
 - Все интересные поля событий преобразованы в формат [Elastic Common Schema (ECS)](https://www.elastic.co/guide/en/ecs/current/index.html), полная табличка маппинга в файле [/papers/Описание объектов.pdf](ссылка)
 
-подробное описание в файле [/papers/ECS-mapping.docx](ссылка)
+подробное описание в файле [/papers/ECS-mapping.docx](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK/papers/ECS-mapping_new.pdf)
 
 
 ## Лицензионные ограничения
@@ -72,8 +72,8 @@ Security Content - объекты ELK, которые автоматически
 - :white_check_mark: Подсети в 3-х зонах доступности
 - :white_check_mark: ServiceAccount с ролью storage.editor для действий в Object Storage
 
-См. Пример конфигурации пререквизитов в /example/main.tf 
-Решение состоит из 2-х модулей Terraform [/terraform/modules/](ссылка) :
+См. Пример конфигурации пререквизитов в [/example/main.tf](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK/terraform/example) 
+Решение состоит из 2-х модулей Terraform [/terraform/modules/](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK/terraform/modules) :
 1) yc-managed-elk:
 - создает cluster [Yandex Managed Service for Elasticsearch](https://cloud.yandex.ru/services/managed-elasticsearch) 
 - с 3 нодами (1 на зону доступности) 
