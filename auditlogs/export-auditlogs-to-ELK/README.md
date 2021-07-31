@@ -12,6 +12,7 @@
 
 ## Что делает решение:
 - [x] Разворачивает в инфраструктуре Yandex.Cloud cluster Managed ELK (возможно через Terraform)
+- [x] Разворачивает COI Instance с контейнером на базе образа s3-elk-importer (cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest)
 - [x] Загружает Security Content в ELK (Dashboards, Detection Rules (с alerts), etc.)
 - [x] Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в ELK
 
@@ -32,10 +33,10 @@ Security Content - объекты ELK, которые автоматически
 
 
 ## Лицензионные ограничения
-Ссылка на elk subscr.
-Картинка из нашей доки по лицухам
-и моя картинка по лицухам
 
+![image](https://user-images.githubusercontent.com/85429798/127733756-1a751356-a0f3-492e-9a85-56d3a73e298f.png)
+![image](https://user-images.githubusercontent.com/85429798/127733769-5ee2f70a-2162-487f-b236-9076c6d9c681.png)
+[Описание различий с сайта ELK](https://www.elastic.co/subscriptions)
 
 ## Процесс обновления контента
 Описать процесс обновления контента.
