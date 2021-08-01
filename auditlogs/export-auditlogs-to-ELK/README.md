@@ -24,7 +24,7 @@
 ## Описание решения:
 Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud со следующих источников:
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
-- [Falco](https://falco.org/) (действия для настройки Falco см. )
+- [Falco](https://falco.org/) ([действия для настройки Falco см.](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK#аудит-логи-falco) )
 - Скоро: [Yandex Managed Service for Kubernetes](https://cloud.yandex.ru/services/managed-kubernetes)
 
 Решение является постоянно обновляемым и поддерживаемым Security командой Yandex.Cloud
