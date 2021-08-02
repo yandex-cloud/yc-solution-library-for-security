@@ -105,3 +105,7 @@ output "elk_fqdn" {
       value = module.yc-managed-elk.elk_fqdn
     }
 //Выводит адрес ELK на который можно обращаться, например через браузер 
+
+output "elk-user" {
+      value = "admin"
+    }
