@@ -44,8 +44,8 @@ Security Content - объекты ELK, которые автоматически
 
 Содержит следующий Security Content:
 - Dashboard, на котором отражены все use cases и полезная статистика
-- Набор Saved query для удобного поиска Security событий
-- Набор Detection rules (правила корреляции) на которые настроены оповещения (Клиенту самостоятельно необходимо указать назначение уведомлений)
+- Набор Saved Queries для удобного поиска Security событий
+- Набор Detection Rules (правила корреляции) на которые настроены оповещения (Клиенту самостоятельно необходимо указать назначение уведомлений)
 - Все интересные поля событий преобразованы в формат [Elastic Common Schema (ECS)](https://www.elastic.co/guide/en/ecs/current/index.html), полная табличка маппинга в файле [/papers/Описание объектов.pdf](ссылка)
 
 Подробное описание в файле [/papers/ECS-mapping.docx](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK/papers/ECS-mapping_new.pdf)
