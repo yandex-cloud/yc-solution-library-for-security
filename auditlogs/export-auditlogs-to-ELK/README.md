@@ -5,8 +5,8 @@
 ## Оглавление
 - [Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)](#----------------------------------------yandex-managed-service-for-elasticsearch--elk-)
   * [Оглавление](#----------)
-  * [Описание решения:](#-----------------)
-  * [Что делает решение:](#-------------------)
+  * [Описание решения](#-----------------)
+  * [Что делает решение](#-------------------)
   * [Схема решения](#-------------)
   * [Security Content](#security-content)
   * [Лицензионные ограничения](#------------------------)
@@ -21,7 +21,7 @@
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 
-## Описание решения:
+## Описание решения
 Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud со следующих источников:
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
 - [Falco](https://falco.org/) ([действия для настройки Falco см.](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK#аудит-логи-falco) )
@@ -29,7 +29,7 @@
 
 Решение является постоянно обновляемым и поддерживаемым Security командой Yandex.Cloud
 
-## Что делает решение:
+## Что делает решение
 - [x] Разворачивает в инфраструктуре Yandex.Cloud cluster Managed ELK (возможно через Terraform)
 - [x] Разворачивает COI Instance с контейнером на базе образа s3-elk-importer (cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest)
 - [x] Загружает Security Content в ELK (Dashboards, Detection Rules (с alerts), etc.)
@@ -48,7 +48,7 @@ Security Content - объекты ELK, которые автоматически
 - Набор Detection rules (правила корреляции) на которые настроены оповещения (Клиенту самостоятельно необходимо указать назначение уведомлений)
 - Все интересные поля событий преобразованы в формат [Elastic Common Schema (ECS)](https://www.elastic.co/guide/en/ecs/current/index.html), полная табличка маппинга в файле [/papers/Описание объектов.pdf](ссылка)
 
-подробное описание в файле [/papers/ECS-mapping.docx](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK/papers/ECS-mapping_new.pdf)
+Подробное описание в файле [/papers/ECS-mapping.docx](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK/papers/ECS-mapping_new.pdf)
 
 
 ## Лицензионные ограничения
