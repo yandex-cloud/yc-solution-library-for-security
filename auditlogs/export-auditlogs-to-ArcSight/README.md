@@ -37,7 +37,7 @@ Security Content - объекты ArcSight, которые загружаютс�
 - Parsing file (+ map file)
 - Dashboard, на котором отражена полезная статистика
 - Набор Filters, Active channels, Active lists
-- Набор Правил корреляции (Rules) (Клиенту самостоятельно необходимо указать назначение уведомлений)
+- Набор Правил корреляции (Rules). [Подробное описание списка правил корреляции](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ArcSight/Use-cases.docx) (Клиенту самостоятельно необходимо указать назначение уведомлений)
 - Все интересные поля событий преобразованы в формат [Common Event Format](https://community.microfocus.com/cyberres/productdocs/w/connector-documentation/38809/arcsight-common-event-format-cef-implementation-standard)
 
 Подробное описание мапинга полей в файле [Поля ArcSight_JSON.docx](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex/blob/master/Поля%20ArcSight_JSON.docx)
