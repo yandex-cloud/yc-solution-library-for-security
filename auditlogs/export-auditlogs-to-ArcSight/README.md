@@ -1,6 +1,8 @@
 # Сбор, мониторинг и анализ аудит логов во внешний SIEM ArcSight
-![Dashboards](https://user-images.githubusercontent.com/85429798/128190422-373fdc8c-a99f-4d91-ab4c-ad5d565c5de1.png)
-![content2](https://user-images.githubusercontent.com/85429798/128190436-4f390e24-cf8e-495e-a565-dc69f7daa8a5.png)
+![dash](https://user-images.githubusercontent.com/85429798/128209194-bc4eb274-1b97-4271-a712-e00a5f3f9b84.png)
+
+![use_cases](https://user-images.githubusercontent.com/85429798/128209212-a705f950-4eea-4305-8f21-decfc2ab7af0.png)
+
 
 
 
@@ -73,7 +75,8 @@ Security Content - объекты ArcSight, которые загружаютс�
 - agents[0].proccessfoldersrecursively=true 
 
 10) Запустите коннектор и убедитесь, что событий поступают
-![убедитесь что события поступают](https://user-images.githubusercontent.com/85429798/128189462-3f86e185-2a68-4563-83da-1d768e781243.png)
+![end](https://user-images.githubusercontent.com/85429798/128209247-c1582fc9-ea2a-4908-9c95-618ac1a097ee.png)
+
 
 
 
