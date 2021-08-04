@@ -1,6 +1,5 @@
 # Сбор, мониторинг и анализ аудит логов во внешний SIEM ArcSight
 ![dash](https://user-images.githubusercontent.com/85429798/128209194-bc4eb274-1b97-4271-a712-e00a5f3f9b84.png)
-
 ![use_cases](https://user-images.githubusercontent.com/85429798/128209212-a705f950-4eea-4305-8f21-decfc2ab7af0.png)
 
 
