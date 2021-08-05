@@ -1,7 +1,9 @@
 # Пример установки в Яндекс Облако ВМ-Межсетевой экран (NGFW): Checkpoint
 
-## Подробный разбор на видео
-[![image](https://user-images.githubusercontent.com/85429798/128352799-3fd11416-dcc1-4f00-b67f-98d63be37580.png)](https://www.youtube.com/watch?v=MeJ8fTS2iGU&t=854s)
+## Вводное видео
+[![image](https://user-images.githubusercontent.com/85429798/128354504-100adaf3-5924-4cc0-b5e5-07c3b493a77d.png)](https://www.youtube.com/watch?v=qvR9G_oDfnE)
+
+
 
 
 ## Материалы
