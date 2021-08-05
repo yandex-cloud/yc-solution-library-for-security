@@ -1,5 +1,6 @@
 # Identity and Access Management (IAM) Terraform module for Yandex.Cloud
 Подробный разбор модуля с примерами по ссылке на вебинар:
+[![image](https://user-images.githubusercontent.com/85429798/128347194-3efd9267-6778-4f15-93b9-39813650fe10.png)](https://www.youtube.com/watch?v=7VwSfPZ6eRM&t=3s)
 
 
 ## Features
