@@ -1,4 +1,7 @@
 # Identity and Access Management (IAM) Terraform module for Yandex.Cloud
+Подробный разбор модуля с примерами по ссылке на вебинар:
+
+
 ## Features
 
 * Create Service accounts and assign them roles in your folder.
