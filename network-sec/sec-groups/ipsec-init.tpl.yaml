@@ -1,0 +1,58 @@
+#cloud-config
+datasource:
+  Ec2:
+    strict_id: false
+write_files:
+- content: |
+        network:
+          version: 2
+          ethernets:
+            eth0:
+              dhcp4: true
+  path: /etc/netplan/eth.yaml
+  permissions: '0755'
+- content: |
+    config setup
+        charondebug="all"
+        uniqueids=yes
+        strictcrlpolicy=no
+    conn remote-to-cloud
+        authby=secret
+        left=%defaultroute
+        leftid="${vpn_addr}"
+        leftsubnet=10.0.0.0/8
+        right="${remote_addr}"
+        rightsubnet=192.168.0.0/24
+        keyingtries=0
+        ikelifetime=28800
+        lifetime=86400
+        auto=start
+        keyexchange=ikev2
+        ike=3des-sha1-modp1536!
+        esp=3des-sha1!
+        forceencaps=yes
+        type=tunnel
+  path: /etc/ipsec.conf
+  owner: root
+  permissions: '0755'
+- content: |
+      "${vpn_addr}" "${remote_addr}" : PSK ${ipsec_pass}
+  path: /etc/ipsec.secrets
+  owner: root
+  permissions: '0755'
+runcmd:
+  - netplan generate /etc/netplan/eth.yaml
+  - netplan apply
+users:
+  - default
+  - name: yc-user
+    groups: wheel
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys:
+      - "${ssh_key}"
+packages:
+  - netplan.io
+  - openssh-server
+package_update: true
+package_reboot_if_required: true

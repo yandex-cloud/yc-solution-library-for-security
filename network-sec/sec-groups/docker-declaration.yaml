@@ -1,0 +1,8 @@
+spec:
+  containers:
+  - name: simple-web
+    image: yeasy/simple-web:latest
+    securityContext:
+      privileged: true
+    tty: false
+    stdin: false

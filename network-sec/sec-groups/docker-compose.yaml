@@ -1,0 +1,15 @@
+version: '3.4'
+services:
+  app2:
+    container_name: mongo
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"
+    restart: always
+    volumes:
+      - /home/ya-user/coi-data:/data
+
+x-yc-disks:
+  - device_name: coi-data
+    fs_type: ext4
+    host_path: /home/ya-user/coi-data
