@@ -45,11 +45,13 @@
 - также скачивается security content из текущего репозитория
 - ArcSight Connector с помощью security content вычитывает файлы, парсит и отправляет на сервер ArcSight 
 
-![Схема_решения](https://user-images.githubusercontent.com/85429798/128419296-7873ef40-e460-47cf-9277-fc93e5fd081a.png)
+![Сценарий1](https://user-images.githubusercontent.com/85429798/128553801-fa5b1970-22a4-475f-85f6-f5c4af744db5.png)
 
 
 
-#### Сценарий № 2
+
+#### Сценарий № 2 Загрузка лог файлов в ArcSight с помощью ВМ, которая находится в Yandex Cloud 
+![arcsight_2](https://user-images.githubusercontent.com/85429798/128553811-2d25dcc7-0500-446b-96ea-35a8fe8959ba.png)
 
 
 
