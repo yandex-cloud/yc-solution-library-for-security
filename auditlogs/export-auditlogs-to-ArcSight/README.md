@@ -45,7 +45,8 @@
 - также скачивается security content из текущего репозитория
 - ArcSight Connector с помощью security content вычитывает файлы, парсит и отправляет на сервер ArcSight 
 
-![Сценарий1](https://user-images.githubusercontent.com/85429798/128553801-fa5b1970-22a4-475f-85f6-f5c4af744db5.png)
+![Схема_решения](https://user-images.githubusercontent.com/85429798/128553857-a6837742-8e63-4d8c-967a-be92454a0cb0.png)
+
 
 
 
