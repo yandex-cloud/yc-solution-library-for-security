@@ -6,7 +6,7 @@ Yandex Cloud Solution Library for Security — это набор примеро�
 - [Сетевая безопасность](#па)
   - [Пример настройки Security Groups (dev/stage/prod): Terraform]()
   - [Пример установки в Яндекс Облако ВМ-Межсетевой экран (NGFW): Checkpoint](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/network-sec/checkpoint-1VM)
-  - [Пример создания site-to-site VPN соединения с Yandex Cloud: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/network-sec/sec-groups)
+  - [Пример создания site-to-site VPN соединения с Yandex Cloud: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/network-sec/vpn)
 - [Аутентификация и управление доступом](#па)
   - [IAM модуль (с примерами использования)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auth_and_access/iam#identity-and-access-management-iam-terraform-module-for-yandexcloud)
 - [Защита от вредоносного кода](#па)
