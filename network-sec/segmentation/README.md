@@ -1,6 +1,10 @@
 # Terraform and Security Groups Example 2
 Mock dev/stage/prod environment with sample security groups to provide isolation
 
+## Подбробный разбор на видео
+[![image](https://user-images.githubusercontent.com/85429798/128601756-b790bab4-0be5-4843-bc79-b15187023955.png)](https://www.youtube.com/watch?v=MeJ8fTS2iGU&t=854s)
+
+
 ## Предварительная настройка
 Заполняем файл terraform.tfvars_example и переименовываем его в terraform.tfvars
 В файл вносим свои значения cloud_id; folder_id (для всех 4 каталогов); token;
