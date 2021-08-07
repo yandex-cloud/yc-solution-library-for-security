@@ -1,0 +1,6 @@
+token = ""
+cloud_id = ""
+folder_id = ""
+dev_folder_id = ""
+stage_folder_id = ""
+prod_folder_id = ""

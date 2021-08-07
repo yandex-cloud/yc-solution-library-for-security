@@ -1,0 +1,23 @@
+#cloud-config
+datasource:
+  Ec2:
+    strict_id: false
+ssh_pwauth: no
+users:
+  - name: yc-user
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    groups: wheel
+    ssh_authorized_keys:
+      - "${ssh_key}"
+packages:
+  - awscli
+package_update: true
+package_reboot_if_required: true
+runcmd:
+  - sleep 5
+  - aws configure set aws_access_key_id "${aws_key}"
+  - aws configure set aws_secret_access_key "${aws_sec}"
+  - aws configure set default.region ru-central1
+  - sleep 1
+  - reboot
