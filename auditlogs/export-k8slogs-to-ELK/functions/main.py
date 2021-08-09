@@ -105,64 +105,12 @@ def refresh_index():
 def configure_kibana():
     # Index pattern
     data_file = {
-        'file': open('include/kibana/index_pattern.ndjson', 'rb')
+        'file': open('include/index-pattern.ndjson', 'rb')
     }
     request_suffix  = '/api/saved_objects/_import'
     response        = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
     if(response.status_code == 200):
-        print('Index patterns -- IMPORTED')
-        print(response.status_code)
-        print(response.text)
-    print(response.status_code)
-    print(response.text)
-
-    # Filters
-    data_file = {
-        'file': open('include/kibana/filters.ndjson', 'rb')
-    }
-    request_suffix  = '/api/saved_objects/_import'
-    response        = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
-    if(response.status_code == 200):
-        print('Filters -- IMPORTED')
-        print(response.status_code)
-        print(response.text)
-    print(response.status_code)
-    print(response.text)
-
-    # Search
-    data_file = {
-        'file': open('include/kibana/search.ndjson', 'rb')
-    }
-    request_suffix  = '/api/saved_objects/_import'
-    response        = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
-    if(response.status_code == 200):
-        print('Searches -- IMPORTED')
-        print(response.status_code)
-        print(response.text)
-    print(response.status_code)
-    print(response.text)
-
-    # Dashboard
-    data_file = {
-        'file': open('include/kibana/dashboard.ndjson', 'rb')
-    }
-    request_suffix  = '/api/saved_objects/_import'
-    response        = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
-    if(response.status_code == 200):
-        print('Dashboard -- IMPORTED')
-        print(response.status_code)
-        print(response.text)
-    print(response.status_code)
-    print(response.text)
-
-    # Detections (not stable, throws error 400 from time to time)
-    data_file = {
-        'file': open('include/kibana/detections.ndjson', 'rb')
-    }
-    request_suffix  = '/api/detection_engine/rules/_import'
-    response        = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
-    if(response.status_code == 200):
-        print('Detections -- IMPORTED')
+        print('Index pattern -- IMPORTED')
         print(response.status_code)
         print(response.text)
     print(response.status_code)
@@ -237,7 +185,7 @@ def upload_logs():
     else:
         create_index_with_map()
         create_ingest_pipeline()
-        # configure_kibana()
+        configure_kibana()
         create_config_index()
         download_s3_folder(s3_bucket, s3_folder, s3_local)
         upload_docs_bulk()
