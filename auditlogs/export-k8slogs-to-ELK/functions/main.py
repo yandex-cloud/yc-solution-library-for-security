@@ -2,6 +2,7 @@ import requests
 import json
 import os
 import boto3
+import time
 
 # Function - Get token
 def get_token():
@@ -23,17 +24,17 @@ s3_key_encr             = "xxx"
 s3_secret_encr          = "xxx"
 
 # Configuration - Setting up variables for ElasticSearch
-elastic_server      = "https://c-c9q5sg9avnf2foe7gtqr.rw.mdb.yandexcloud.net:9200"
-elastic_auth_user   = "admin"
-elastic_auth_pw     = "elasticsearch123"
+elastic_server      = os.environ['ELASTIC_SERVER']
+elastic_auth_user   = os.environ['ELASTIC_AUTH_USER']
+elastic_auth_pw     = os.environ['ELASTIC_AUTH_PW']
 elastic_index_name  = "k8s-audit"
-kibana_server       = "https://c-c9q5sg9avnf2foe7gtqr.rw.mdb.yandexcloud.net"
+kibana_server       = os.environ['KIBANA_SERVER']
 elastic_cert        = 'include/ca.pem'
 
 # Configuration - Setting up variables for S3
-s3_key              = "IyQPihPnSW6bL1wnVtZf"
-s3_secret           = "cX7JEHf-GrWJElzDm7KExzr2NXY-8SwiFwvGgko1"
-s3_bucket           = "k8s-ewjif"
+s3_key              = os.environ['S3_KEY']
+s3_secret           = os.environ['S3_SECRET']
+s3_bucket           = os.environ['S3_BUCKET']
 s3_folder           = "AUDIT"
 s3_local            = '/tmp/data/AUDIT'
 
@@ -254,5 +255,5 @@ upload_logs()
 # upload_docs_bulk()
 # upload_docs_bulk()
 # refresh_index()
-# print("Sleep -- STARTED")
-# time.sleep(sleep_time)
+print("Sleep -- STARTED")
+time.sleep(sleep_time)
