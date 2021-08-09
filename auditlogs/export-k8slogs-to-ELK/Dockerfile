@@ -11,6 +11,6 @@ ENV S3_KEY="IyQPihPnSW6bL1wnVtZf"
 ENV S3_SECRET="cX7JEHf-GrWJElzDm7KExzr2NXY-8SwiFwvGgko1"
 ENV S3_BUCKET="k8s-ewjif"
 ENV SLEEP_TIME=60
-RUN pip install --upgrade pip
+RUN python3 -m pip install --upgrade pip
 RUN pip install -r /functions/requirements.txt
 CMD ["python3", "functions/main.py"]
