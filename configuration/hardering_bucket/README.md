@@ -2,11 +2,11 @@
 
 #### Описание 
 Terraform скрипт выполняет следующее:
-- [x] Создает [Bucket](https://cloud.yandex.ru/docs/storage/concepts/bucket)
-- [x] Выполняет разграничение доступа ([IAM](https://cloud.yandex.ru/docs/storage/security/), [BucketPolicy](https://cloud.yandex.ru/docs/storage/concepts/policy)) для групп: администраторы, read-only, write-only
-- [x] Включает [версионирование](https://cloud.yandex.ru/docs/storage/concepts/versioning) и [жизненный цикл](https://cloud.yandex.ru/docs/storage/concepts/lifecycles) так, чтобы: хранить текущие версии файлов 365 дней, НЕтекущие версии файлов (удаленные/измененные) 150 дней
-- [x] Включает [логирование](https://cloud.yandex.ru/docs/storage/operations/buckets/enable-logging) действий над Bucket в отдельный Bucket
-- [x] Включает [шифрование](https://cloud.yandex.ru/docs/storage/operations/buckets/encrypt) (Server-Side) объектов в Bucket 
+- :white_check_mark: Создает [Bucket](https://cloud.yandex.ru/docs/storage/concepts/bucket)
+- :white_check_mark: Выполняет разграничение доступа ([IAM](https://cloud.yandex.ru/docs/storage/security/), [BucketPolicy](https://cloud.yandex.ru/docs/storage/concepts/policy)) для групп: администраторы, read-only, write-only
+- :white_check_mark: Включает [версионирование](https://cloud.yandex.ru/docs/storage/concepts/versioning) и [жизненный цикл](https://cloud.yandex.ru/docs/storage/concepts/lifecycles) так, чтобы: хранить текущие версии файлов 365 дней, НЕтекущие версии файлов (удаленные/измененные) 150 дней
+- :white_check_mark: Включает [логирование](https://cloud.yandex.ru/docs/storage/operations/buckets/enable-logging) действий над Bucket в отдельный Bucket
+- :white_check_mark: Включает [шифрование](https://cloud.yandex.ru/docs/storage/operations/buckets/encrypt) (Server-Side) объектов в Bucket 
 
 #### Terraform детали 
 Решение принимает на вход (variables):
