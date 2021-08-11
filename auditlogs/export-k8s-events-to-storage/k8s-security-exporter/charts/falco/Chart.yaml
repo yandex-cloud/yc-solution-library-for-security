@@ -1,0 +1,19 @@
+apiVersion: v2
+name: falco
+version: 1.15.7
+appVersion: 0.29.1
+description: Falco
+keywords:
+  - monitoring
+  - security
+  - alerting
+  - metric
+  - troubleshooting
+  - run-time
+home: https://falco.org
+icon: https://raw.githubusercontent.com/cncf/artwork/master/projects/falco/horizontal/color/falco-horizontal-color.svg
+sources:
+  - https://github.com/falcosecurity/falco
+maintainers:
+  - name: The Falco Authors
+    email: cncf-falco-dev@lists.cncf.io

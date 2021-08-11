@@ -1,0 +1,384 @@
+# Default values for falcosidekick.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+
+image:
+  registry: docker.io
+  repository: falcosecurity/falcosidekick
+  tag: 2.23.1
+  pullPolicy: IfNotPresent
+
+podSecurityContext:
+  runAsUser: 1234
+  fsGroup: 1234
+
+# One or more secrets to be used when pulling images
+imagePullSecrets: []
+# - registrySecretName
+
+nameOverride: ""
+fullnameOverride: ""
+
+podSecurityPolicy:
+  create: false
+
+priorityClassName: ""
+
+podAnnotations: {}
+
+config:
+  existingSecret: ""
+  extraEnv: []
+  debug: false
+  ##
+  ## a list of escaped comma separated custom fields to add to falco events, syntax is "key:value\,key:value"
+  customfields: ""
+  mutualtlsfilespath: "/etc/certs"  # folder which will used to store client.crt, client.key and ca.crt files for mutual tls (default: "/etc/certs")
+
+  slack:
+    webhookurl: ""
+    footer: ""
+    icon: ""
+    username: ""
+    outputformat: "all"
+    minimumpriority: ""
+    messageformat: ""
+
+  rocketchat:
+    webhookurl: ""
+    icon: ""
+    username: ""
+    outputformat: "all"
+    minimumpriority: ""
+    messageformat: ""
+    mutualtls: false
+    checkcert: true
+
+  mattermost:
+    webhookurl: ""
+    footer: ""
+    icon: ""
+    username: ""
+    outputformat: "all"
+    minimumpriority: ""
+    messageformat: ""
+    mutualtls: false
+    checkcert: true
+
+  teams:
+    webhookurl: ""
+    activityimage: ""
+    outputformat: "all"
+    minimumpriority: ""
+
+  datadog:
+    apikey: ""
+    minimumpriority: ""
+    host: ""
+
+  alertmanager:
+    hostport: ""
+    minimumpriority: ""
+    mutualtls: false
+    checkcert: true
+
+  elasticsearch:
+    hostport: ""
+    index: "falco"
+    type: "event"
+    minimumpriority: ""
+    mutualtls: false
+    checkcert: true
+    username: ""
+    password: ""
+
+  influxdb:
+    hostport: ""
+    database: "falco"
+    user: ""
+    password: ""
+    minimumpriority: ""
+    mutualtls: false
+    checkcert: true
+
+  loki:
+    hostport: ""
+    minimumpriority: ""
+    mutualtls: false
+    checkcert: true
+
+  nats:
+    hostport: ""
+    minimumpriority: ""
+    mutualtls: false
+    checkcert: true
+
+  stan:
+    hostport: ""
+    clusterid: ""
+    clientid: ""
+    minimumpriority: ""
+    mutualtls: false
+    checkcert: true
+
+  aws:
+    rolearn: ""
+    accesskeyid: ""
+    secretaccesskey: ""
+    region: ""
+    cloudwatchlogs:
+      loggroup: ""
+      logstream: ""
+      minimumpriority: ""
+    lambda:
+      functionname: ""
+      minimumpriority: ""
+    sns:
+      topicarn: ""
+      rawjson: false
+      minimumpriority: ""
+    sqs:
+      url: ""
+      minimumpriority: ""
+    s3:
+      bucket: ""
+      prefix: ""
+      minimumpriority: ""
+
+  smtp:
+    hostport: ""
+    user: ""
+    password: ""
+    from: ""
+    to: ""
+    outputformat: "html"
+    minimumpriority: ""
+
+  opsgenie:
+    apikey: ""
+    region: ""
+    minimumpriority: ""
+    mutualtls: false
+    checkcert: true
+
+  statsd:
+    forwarder: ""
+    namespace: "falcosidekick."
+
+  dogstatsd:
+    forwarder: ""
+    namespace: "falcosidekick."
+    tags: ""
+
+  webhook:
+    address: ""
+    customHeaders: ""  # a list of comma separated custom headers to add, syntax is "key:value\,key:value"
+    minimumpriority: ""
+    mutualtls: false
+    checkcert: true
+
+  azure:
+    subscriptionID: ""
+    resourceGroupName: ""
+    podIdentityClientID: ""
+    podIdentityName: ""
+    eventHub:
+      namespace: ""
+      name: ""
+      minimumpriority: ""
+
+  discord:
+    webhookurl: ""
+    icon: ""
+    minimumpriority: ""
+
+  gcp:
+    credentials: ""  # The base64-encoded JSON key file for the GCP service account
+    pubsub:
+      projectid: ""  # The GCP Project ID containing the Pub/Sub Topic
+      topic: ""  # The name of the Pub/Sub topic
+      minimumpriority: ""
+    storage:
+      prefix: ""
+      bucket: ""
+      minimumpriority: "debug"
+    cloudfunctions:
+      name: ""  # The name of the Cloud Function name
+      minimumpriority: ""
+    cloudrun:
+      endpoint: ""  # the URL of the Cloud Run function
+      jwt: ""  # JWT for the private access to Cloud Run function
+      minimumpriority: ""
+
+  googlechat:
+    webhookurl: ""
+    outputformat: "all"
+    minimumpriority: ""
+    messageformat: ""
+
+  kafka:
+    hostport: ""
+    topic: ""
+    partition: "0"
+    messageformat: ""
+    minimumpriority: ""
+
+  pagerduty:
+    routingkey: ""
+    minimumpriority: ""
+
+  kubeless:
+    function: ""
+    namespace: ""
+    port: 8080
+    minimumpriority: ""
+    mutualtls: false
+    checkcert: true
+
+  openfaas:
+    functionname: ""
+    functionnamespace: "openfaas-fn"
+    gatewayservice: "gateway"
+    gatewayport: 8080
+    gatewaynamespace: "openfaas"
+    minimumpriority: ""
+    mutualtls: false
+    checkcert: true
+
+  cloudevents:
+    address: ""
+    extension: ""
+    minimumpriority: ""
+
+  rabbitmq:
+    url: ""
+    queue: ""
+    minimumpriority: "debug"
+
+  wavefront:
+    endpointtype: ""  # Wavefront endpoint type, must be 'direct' or 'proxy'. If not empty, with endpointhost, Wavefront output is enabled
+    endpointhost: ""  # Wavefront endpoint address (only the host). If not empty, with endpointhost, Wavefront output is enabled
+    endpointtoken: ""  # Wavefront token. Must be used only when endpointtype is 'direct'
+    endpointmetricport: 2878  # Wavefront endpoint port when type is 'proxy'
+    metricname: "falco.alert"  # Metric to be created in Wavefront. Defaults to falco.alert
+    batchsize: 10000  # max batch of data sent per flush interval. defaults to 10,000. Used only in direct mode
+    flushintervalseconds: 1  # Time in seconds between flushing metrics to Wavefront. Defaults to 1s
+    minimumpriority: "debug"  # minimum priority of event for using this output, order is emergency|alert|critical|error|warning|notice|informational|debug or "" (default)
+
+service:
+  type: ClusterIP
+  port: 2801
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: falcosidekick.local
+      paths: []
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+# Add extra volumes to Falco UI deployment
+extraVolumes: []
+# - name: optional-mtls-volume
+#   configMap:
+#     name: falco-certs-optional
+#     optional: true
+#     items:
+#       - key: mtlscert.optional.tls
+#         path: mtlscert.optional.tls
+
+# Add extra volumeMounts to Falco container in Falco UI deployment
+extraVolumeMounts: []
+# - mountPath: /etc/certs/mtlscert.optional.tls
+#   name: optional-mtls-volume
+
+webui:
+  enabled: false
+  darkmode: false
+
+  image:
+    registry: docker.io
+    repository: falcosecurity/falcosidekick-ui
+    tag: "v1.1.0"
+    pullPolicy: IfNotPresent
+
+  podSecurityContext:
+    runAsUser: 1234
+    fsGroup: 1234
+
+  retention: 200
+
+  # One or more secrets to be used when pulling images
+  imagePullSecrets: []
+  # - registrySecretName
+
+  podSecurityPolicy:
+    create: false
+
+  priorityClassName: ""
+
+  podAnnotations: {}
+
+  service:
+    # type: NodePort
+    type: ClusterIP
+    port: 2802
+    nodePort: 30282
+
+  ingress:
+    enabled: false
+    annotations: {}
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: falcosidekick-ui.local
+        paths: ["/ui", "/events", "/healthz", "/ws"]
+
+    tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+
+  resources: {}
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}

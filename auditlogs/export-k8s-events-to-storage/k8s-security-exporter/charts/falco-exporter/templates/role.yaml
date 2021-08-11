@@ -1,0 +1,23 @@
+{{- if .Values.podSecurityPolicy.create -}}
+kind: Role
+apiVersion: {{ template "rbac.apiVersion" . }}
+metadata:
+  name: {{ include "falco-exporter.podSecurityPolicyName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "falco-exporter.labels" . | nindent 4 }}
+  {{- with .Values.podSecurityPolicy.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  namespace: {{ .Release.Namespace }}
+rules:
+- apiGroups:
+    - policy
+  resources:
+    - podsecuritypolicies
+  resourceNames:
+    - {{ include "falco-exporter.podSecurityPolicyName" . }}
+  verbs:
+    - use
+{{- end -}}
