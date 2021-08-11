@@ -3,8 +3,8 @@ RUN apt-get update
 COPY /functions /functions
 COPY /include /include
 WORKDIR /
-ENV ELASTIC_SERVER="https://c-c9q5sg9avnf2foe7gtqr.rw.mdb.yandexcloud.net:9200"
-ENV KIBANA_SERVER="https://c-c9q5sg9avnf2foe7gtqr.rw.mdb.yandexcloud.net"
+ENV ELASTIC_SERVER="xxx"
+ENV KIBANA_SERVER="xxx"
 ENV ELASTIC_AUTH_USER="xxx"
 ENV ELASTIC_AUTH_PW="xxx"
 ENV S3_KEY="xxx"
