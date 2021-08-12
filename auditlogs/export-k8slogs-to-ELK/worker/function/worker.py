@@ -2,12 +2,15 @@ import requests
 import json
 import os
 import boto3
+import botocore
 import time
+
 
 # Function - Get token
 def get_token():
     response = requests.get('http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token', headers={"Metadata-Flavor":"Google"})
     return response.json().get('access_token')
+
 
 # Function - Decrypt data with KMS key
 def decrypt_secret_kms(secret):
@@ -17,26 +20,30 @@ def decrypt_secret_kms(secret):
     response            = requests.post('https://kms.yandex/kms/v1/keys/'+request_suffix, data=json.dumps(request_json_data), headers={"Accept":"application/json", "Authorization": "Bearer "+token})
     return response.json().get('plaintext')
 
+
 # Configuration - Keys
-kms_key_id              = "xxx"
 elastic_auth_pw_encr    = "xxx"
+kms_key_id              = "xxx"
 s3_key_encr             = "xxx"
 s3_secret_encr          = "xxx"
 
+
 # Configuration - Setting up variables for ElasticSearch
-elastic_server      = os.environ['ELASTIC_SERVER']
-elastic_auth_user   = os.environ['ELASTIC_AUTH_USER']
-elastic_auth_pw     = os.environ['ELASTIC_AUTH_PW']
-elastic_index_name  = "k8s-audit"
-kibana_server       = os.environ['KIBANA_SERVER']
-elastic_cert        = 'include/ca.pem'
+elastic_auth_pw         = os.environ['ELASTIC_AUTH_PW']
+elastic_auth_user       = os.environ['ELASTIC_AUTH_USER']
+elastic_cert            = '/app/include/ca.pem'
+elastic_index_name      = "k8s-audit"
+elastic_server          = os.environ['ELASTIC_SERVER']
+kibana_server           = os.environ['KIBANA_SERVER']
+
 
 # Configuration - Setting up variables for S3
-s3_key              = os.environ['S3_KEY']
-s3_secret           = os.environ['S3_SECRET']
-s3_bucket           = os.environ['S3_BUCKET']
-s3_folder           = "AUDIT"
-s3_local            = '/tmp/data/AUDIT'
+s3_bucket               = os.environ['S3_BUCKET']
+s3_folder               = "AUDIT"
+s3_key                  = os.environ['S3_KEY']
+s3_local                = '/tmp/data/AUDIT'
+s3_secret               = os.environ['S3_SECRET']
+
 
 # Configuration - Sleep time
 if(os.getenv('SLEEP_TIME') is not None):
@@ -44,12 +51,27 @@ if(os.getenv('SLEEP_TIME') is not None):
 else:
     sleep_time = 240
 
+
 # State - Setting up S3 client
 s3 = boto3.resource('s3',
     endpoint_url            = 'https://storage.yandexcloud.net',
     aws_access_key_id       = s3_key,
     aws_secret_access_key   = s3_secret 
 )
+
+sqs = boto3.client(
+    service_name            = 'sqs',
+    endpoint_url            = 'https://message-queue.api.cloud.yandex.net',
+    region_name             = 'ru-central1',
+    aws_access_key_id       = s3_key,
+    aws_secret_access_key   = s3_secret 
+)
+
+
+# Configuration - YMQ
+sqs_name            = os.environ['SQS_NAME']
+sqs_url             = (sqs.get_queue_url(QueueName=sqs_name))['QueueUrl']
+
 
 # Function - Create config index in ElasticSearch
 def create_config_index():
@@ -65,6 +87,7 @@ def create_config_index():
     else:
         print('Config index -- EXISTS')
 
+
 # Function - Get config index state
 def get_config_index_state():
     request_suffix  = f"/.state-{elastic_index_name}/_doc/1/_source"
@@ -73,25 +96,28 @@ def get_config_index_state():
         return False
     return response.json()['is_configured']
 
+
 # Function - Create ingest pipeline
 def create_ingest_pipeline():
     request_suffix  = '/_ingest/pipeline/k8s-pipeline'
-    data_file       = open('include/pipeline.json')
+    data_file       = open('/app/include/pipeline.json')
     data_json       = json.load(data_file)
     data_file.close()
     response        = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Ingest pipeline -- CREATED')
 
+
 # Function - Create an index with mapping
 def create_index_with_map():
     request_suffix  = f"/{elastic_index_name}"
-    data_file       = open('include/mapping.json')
+    data_file       = open('/app/include/mapping.json')
     data_json       = json.load(data_file)
     data_file.close()
     response        = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Index with mapping -- CREATED')
+
 
 # Function - Refresh index
 def refresh_index():
@@ -101,11 +127,12 @@ def refresh_index():
     print(response.status_code)
     print(response.text)
 
+
 # Function - Preconfigure Kibana
 def configure_kibana():
     # Index pattern
     data_file = {
-        'file': open('include/index-pattern.ndjson', 'rb')
+        'file': open('/app/include/index-pattern.ndjson', 'rb')
     }
     request_suffix  = '/api/saved_objects/_import'
     response        = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -116,21 +143,6 @@ def configure_kibana():
     print(response.status_code)
     print(response.text)
 
-# Function - Download JSON logs to local folder
-def download_s3_folder(bucket, folder, local=None):
-    print('JSON download -- STARTED')
-    b = s3.Bucket(bucket)
-    if not os.path.exists(local):
-            os.makedirs(local)
-    for obj in b.objects.filter(Prefix=folder):
-        target = obj.key if local is None \
-            else os.path.join(local, os.path.relpath(obj.key, folder))
-        if not os.path.exists(os.path.dirname(target)):
-            os.makedirs(os.path.dirname(target))
-        if obj.key[-1] == '/':
-            continue
-        b.download_file(obj.key, target)
-    print('JSON download -- COMPLETE')
 
 # Function - Clean up S3 folder
 def delete_object_s3(s3_bucket, s3_object):
@@ -145,63 +157,96 @@ def delete_object_s3(s3_bucket, s3_object):
         }
     )
 
-# Function - Upload logs to ElasticSearch
-def upload_docs_bulk():
-    print('JSON upload -- STARTED')
-    error_count = 0
-    request_suffix = f"/{elastic_index_name}/_bulk?pipeline=k8s-pipeline"
 
-    for path, subdirs, files in os.walk(s3_local):
-        for name in files:
-            file            = os.path.join(path, name)
-            path_list       = path.split('/')
+# Function - Process JSON logs batch
+def process_s3_batch(bucket, folder, local=None):
+    print('JSON processing -- STARTED')
+
+    count_error         = 0
+    count_success       = 0
+    count_duplicates    = 0
+    count_events        = 0
+    request_suffix      = f"/{elastic_index_name}/_bulk?pipeline=k8s-pipeline"
+    processing          = True
+
+    while processing:
+
+        b = s3.Bucket(bucket)
+
+        messages = sqs.receive_message(
+            QueueUrl=sqs_url,
+            MaxNumberOfMessages=10,
+            VisibilityTimeout=60,
+            WaitTimeSeconds=20
+        ).get('Messages')
+        
+        if(messages == None):
+            processing = False
+            continue
+
+        for msg in messages:
+            source = msg.get('Body')
+            target = source if local is None \
+                else os.path.join(local, os.path.relpath(source, folder))
+            if not os.path.exists(os.path.dirname(target)):
+                os.makedirs(os.path.dirname(target))
+
+            try:
+                b.download_file(source, target)
+            except botocore.exceptions.ClientError as e:
+                count_duplicates += 1
+                sqs.delete_message(
+                    QueueUrl=sqs_url,
+                    ReceiptHandle=msg.get('ReceiptHandle')
+                )
+                continue
+
+            path_list       = source.split('/')
             path_list       = path_list[path_list.index("AUDIT")+1:]
             file_cloud_id   = path_list[0]
 
-            with open(file, "r") as raw_file:
+            with open(target, "r") as raw_file:
                 lines = []
                 for line in raw_file:
                     lines.append('{"index":{}},')
                     lines.append(line.rstrip()[:-1]+', "cloud_id": "'+file_cloud_id+'"},')
+                    count_events += 1
                 lines[-1] = lines[-1][:-1]+"\n"
                 data = "\n".join(lines)
+            
             response = requests.post(elastic_server+request_suffix, data=data, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
+            
             if(response.status_code == 200):
-                delete_object_s3(s3_bucket, s3_folder+file[len(s3_local):])
-                os.remove(file)
+                delete_object_s3(s3_bucket, source)
+                os.remove(target)
+                sqs.delete_message(
+                    QueueUrl=sqs_url,
+                    ReceiptHandle=msg.get('ReceiptHandle')
+                )
+                count_success += 1
             else:
-                error_count += 1
+                count_error += 1
                 print(response.text)
-    
-    print('JSON upload -- COMPLETE -- %s ERRORS' % error_count)
+
+    print(f"JSON processing -- COMPLETE ({count_success} files successful ({count_events} events), {count_duplicates} duplicates, {count_error} errors")
 
 # Process - Upload data
 def upload_logs():
     if(get_config_index_state()):
         print("Config index -- EXISTS")
-        download_s3_folder(s3_bucket, s3_folder, s3_local)
-        upload_docs_bulk()
+        process_s3_batch(s3_bucket, s3_folder, s3_local)
         refresh_index()
     else:
         create_index_with_map()
         create_ingest_pipeline()
         configure_kibana()
         create_config_index()
-        download_s3_folder(s3_bucket, s3_folder, s3_local)
-        upload_docs_bulk()
+        process_s3_batch(s3_bucket, s3_folder, s3_local)
         refresh_index()
+
 
 ### MAIN CONTROL PANEL
 
 upload_logs()
-# create_ingest_pipeline()
-# create_index_with_map()
-# get_config_index_state()
-# update_config_index_state()
-# get_config_index_state()
-# download_s3_folder(s3_bucket, s3_folder, s3_local)
-# upload_docs_bulk()
-# upload_docs_bulk()
-# refresh_index()
 print("Sleep -- STARTED")
 time.sleep(sleep_time)
