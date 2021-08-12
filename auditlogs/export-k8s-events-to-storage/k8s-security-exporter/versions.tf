@@ -7,5 +7,9 @@ terraform {
       source  = "yandex-cloud/yandex"
       version = "~> 0.5"
     }
+    kustomization = {
+      source  = "kbst/kustomization"
+      version = "0.5.0"
+    }
   }
 }

@@ -23,7 +23,7 @@ resource "helm_release" "falcosidekick" {
   namespace = "falco"
 
    values = [
-    "${file("${path.module}/helm-values/sidekick-base.yaml")}"
+    "${file("${path.module}/templates/sidekick-base.yaml")}"
   ]
   set {
   
@@ -44,19 +44,8 @@ resource "helm_release" "falcosidekick" {
 
   set {
   
-    name  = "config.yandex.s3.prefix]"
+    name  = "config.yandex.s3.prefix"
     value = base64encode("FALCO/${data.yandex_resourcemanager_folder.my_folder.cloud_id}/${var.folder_id}/${data.yandex_kubernetes_cluster.my_cluster.id}")
   }
 
 }
-/*
-resource "helm_release" "opa-gatekeeper" {
-  name       = "opa-gatekeeper"
-  repository = "https://open-policy-agent.github.io/gatekeeper/charts"
-  chart      = "gatekeeper"
-  namespace = "gatekeeper"
-  create_namespace = true
-  
-
-}
-*/
