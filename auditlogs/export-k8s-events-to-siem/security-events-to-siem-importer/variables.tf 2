@@ -1,0 +1,20 @@
+variable "sa_name" {
+
+}
+
+variable "folder_id" {
+
+}
+
+variable "storage_log_prefix" {
+    default = "STORAGE"
+}
+
+variable "kubernetes_log_prefix" {
+    default = "KUBERNETES"
+}
+
+variable "trail_log_prefix" {
+    default = "TRAIL"
+}
+

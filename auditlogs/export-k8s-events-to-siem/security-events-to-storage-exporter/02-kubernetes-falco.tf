@@ -45,7 +45,7 @@ resource "helm_release" "falcosidekick" {
   set {
   
     name  = "config.yandex.s3.prefix"
-    value = base64encode("FALCO/${data.yandex_resourcemanager_folder.my_folder.cloud_id}/${var.folder_id}/${data.yandex_kubernetes_cluster.my_cluster.id}")
+    value = "FALCO/${data.yandex_resourcemanager_folder.my_folder.cloud_id}/${var.folder_id}/${data.yandex_kubernetes_cluster.my_cluster.id}"
   }
 
 }

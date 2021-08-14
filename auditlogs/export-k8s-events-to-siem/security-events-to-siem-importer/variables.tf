@@ -4,13 +4,30 @@ variable "folder_id" {
 }
 
 
-
 variable "log_bucket_name" {
 
 }
 
-variable "auditlogsprefix" {
+variable "service_account_id" {
+ #functions.invoker, storage.editor, ymq.editor
+}
+
+
+
+variable "auditlog_enabled" {
+    default = true
+}
+
+variable "auditlogs_prefix" {
     default = "AUDIT/"
+}
+
+
+variable "falco_enabled" {
+    default = true
+}
+variable "falco_prefix" {
+    default = "FALCO/"
 }
 
 /*
@@ -27,12 +44,6 @@ cat4g7pouq1bbhhgjii9
 /
 */
 
-variable "falcoprefix" {
-    default = "falco/"
-}
 
 
 
-variable "service_account_id" {
- #functions.invoker, storage.editor, ymq.editor
-}

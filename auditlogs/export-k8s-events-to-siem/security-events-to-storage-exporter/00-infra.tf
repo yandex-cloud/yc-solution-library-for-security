@@ -28,7 +28,7 @@ provider "helm" {
 
   }
 }
-
+/*
 data "local_file" "yc-mk8s-ca" {
     filename = "${path.module}/templates/yc-mk8s.ca"
 }
