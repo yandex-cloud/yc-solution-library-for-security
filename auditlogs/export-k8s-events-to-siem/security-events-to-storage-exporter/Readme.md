@@ -1,5 +1,4 @@
-# Kubernetes security log exporter
-
+# security-events-to-storage-exporter
 Описание: Модуль для включения логирования кластера k8s. На текущий момент он настраивает отправку audit логов в s3 и логов 
 
 
