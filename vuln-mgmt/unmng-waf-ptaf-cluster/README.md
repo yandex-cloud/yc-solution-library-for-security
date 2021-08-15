@@ -1,7 +1,11 @@
 # Отказоустойчивая эксплуатация PT Application Firewall на базе Yandex.Cloud
 Цель демо: Установка PT Web Application Firewall (далее PT WAF) в Yandex.Cloud в отказоустойчивой конфигурации.
 
-# Содержание:
+## Подробный разбор workshop на видео:
+[![image](https://user-images.githubusercontent.com/85429798/129480863-ef468a52-1191-4a23-9801-5e09c0de0cad.png)](https://www.youtube.com/watch?v=tnGuyIXNL6o)
+
+
+## Содержание:
 - Описание
 - Развертывание
 - Описание шагов работы с PT WAF
