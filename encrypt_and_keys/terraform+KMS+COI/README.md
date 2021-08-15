@@ -5,7 +5,8 @@
 Из UI консоли в данном случае, в свойствах ВМ будут видны передарнные ENV в открытом виде.
 Возникает риск компрометации приватной информации.
 
-ссылка!!!!
+![image](https://user-images.githubusercontent.com/85429798/129485817-b7ed7651-0933-4b08-aa50-ee0ee7489594.png)
+
 
 ## Пример безопасной передачи приватной информации в контейнер COI
 Yandex Cloud KMS имеет возможность [шифрования секретов в Terraform](https://cloud.yandex.ru/docs/kms/solutions/terraform-secret)
