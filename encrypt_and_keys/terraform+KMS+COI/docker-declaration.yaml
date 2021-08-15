@@ -1,0 +1,21 @@
+spec:
+  containers:
+  - env:
+    - name: PYTHONUNBUFFERED
+      value: 1
+    - name: SLEEP_TIME
+      value: ${SLEEP_TIME}
+    - name: S3_KEY_ENCR
+      value: ${S3_KEY_ENCR}
+    - name: S3_SECRET_ENCR
+      value: ${S3_SECRET_ENCR}
+    - name: KMS_KEY_ID
+      value: ${KMS_KEY_ID}
+    image: alexweee/kms-secret-py
+    name: my-container
+    securityContext:
+      privileged: false
+    stdin: false
+    tty: false
+  restartPolicy: Always
+

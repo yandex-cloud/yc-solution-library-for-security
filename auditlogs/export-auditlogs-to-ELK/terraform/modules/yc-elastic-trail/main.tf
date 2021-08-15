@@ -31,7 +31,7 @@ data "template_file" "cloud_init_lin" {
 
 //Создаем docker-declaration
 data "template_file" "docker-declaration" {
-  template = file("../modules/yc-elastic-trail//docker-declaration.yaml")
+  template = file("../modules/yc-elastic-trail/docker-declaration.yaml")
     vars =  {
         ELASTIC_SERVER = "${var.elk_address}:9200"
         KIBANA_SERVER = "${var.elk_address}"
