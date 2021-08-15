@@ -1,0 +1,21 @@
+#cloud-config
+#ssh_pwauth: no
+users:
+  - name: yc-user
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: sudo
+    shell: /bin/bash
+    ssh_authorized_keys:
+      - "${ssh_key}"
+write_files:
+-   content: |
+        #!/bin/bash
+        sudo wsc -c 'host add 192.168.2.10 ptaf-a'
+        sudo wsc -c 'host add 172.18.0.10 ptaf-b'
+        sudo wsc -c 'timezone Europe/Moscow'
+        sudo wsc -c 'ntp add ru.pool.ntp.org'
+        sudo wsc -c 'cluster set mongo replset waf'
+        sudo wsc -c 'cluster set elastic replset waf'
+        sudo wsc -c 'cluster set elastic nodes ptaf-b ptaf-a'
+    path: /home/pt/cluster.sh
+    permissions: '0777'      

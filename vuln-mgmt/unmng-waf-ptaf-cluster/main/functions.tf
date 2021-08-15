@@ -1,6 +1,6 @@
 //Создание sa для функции и тригера
 resource "yandex_iam_service_account" "sa-ptaf" {
-  name        = "sa-ptaf"
+  name        = "sa-ptaf-${var.folder_id}"
   description = "service account for ptaf func"
   folder_id = var.folder_id
 }

@@ -39,11 +39,6 @@ resource "yandex_vpc_security_group" "ptaf-sg" {
   }
   ingress {
     protocol       = "TCP"
-    v4_cidr_blocks = ["0.0.0.0/0"]
-    port      = 443
-  }
-  ingress {
-    protocol       = "TCP"
     security_group_id = yandex_vpc_security_group.ssh-broker.id
     from_port      = 0
     to_port        = 65535
@@ -80,8 +75,8 @@ resource "yandex_vpc_security_group" "app-sg" {
   }
   ingress {
     protocol       = "TCP"
-    security_group_id = yandex_vpc_security_group.ptaf-sg.id
-    port      = 443
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port      = 80
   }
   ingress {
     protocol       = "TCP"
@@ -122,12 +117,12 @@ resource "yandex_lb_target_group" "ptaf_group" {
 
   target {
     subnet_id = yandex_vpc_subnet.ext-subnet[0].id
-    address   = yandex_compute_instance.ptaf[0].network_interface.0.ip_address
+    address   = yandex_compute_instance.ptaf-a.network_interface.0.ip_address
   }
 
   target {
     subnet_id = yandex_vpc_subnet.ext-subnet[1].id
-    address   = yandex_compute_instance.ptaf[1].network_interface.0.ip_address
+    address   = yandex_compute_instance.ptaf-b.network_interface.0.ip_address
   }
 }
 

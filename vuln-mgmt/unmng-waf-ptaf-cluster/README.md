@@ -24,13 +24,17 @@
 *для установки целой схемы снуля необходимо использовать playbook из папки "from-scratch"
 
 #### Схема до:
-![ha-proxy-До](https://user-images.githubusercontent.com/85429798/127031869-5be84785-0566-4cc5-a1f6-d041d051feb4.png)
+![image](https://user-images.githubusercontent.com/85429798/127995744-e9213d79-6fca-49cd-a2bf-3cf7bead0c75.png)
+
 
 
 
 
 #### Схема после:
-![ha-proxy-после](https://user-images.githubusercontent.com/85429798/127031876-bed5eed2-4218-4dea-986d-4bebc1b2f5c5.png)
+![image](https://user-images.githubusercontent.com/85429798/127995787-9d547d0c-390c-4df7-8577-928607fb3d08.png)
+
+![image](https://user-images.githubusercontent.com/85429798/127995819-fdc647d8-9125-4acf-8708-4088b8c28826.png)
+
 
 
 
@@ -38,6 +42,7 @@
 ## Подготовка/Пререквизиты:
 - установить и настроить [yc client](https://cloud.yandex.ru/docs/cli/quickstart)
 - установить [terraform](https://www.terraform.io/downloads.html)
+- установить [jq](https://macappstore.org/jq/)
 
 ## Развертывание
 
@@ -69,45 +74,103 @@ terraform apply
 
 ##
 
-## Описание шагов работы с PT WAF:
+## Описание шагов работы с PT AF
 Видеоинструкция этапа:
 
 - пробрасываем порты по SSH для подключения к серверам PT AF (ВЫПОЛНЯЕМ В 2 РАЗНЫХ ОКНАХ ТЕРМИНАЛА):
 ```
-ssh -L 22001:192.168.2.10:22013 -L 22002:172.18.0.10:22013 -L 8443:192.168.2.10:8443 -L 8444:172.18.0.10:8443 -i ./pt_key.pem yc-user@$(yc compute instance list --format=json | jq '.[] | select( .name == "ssh-a")| .network_interfaces[0].primary_v4_address.one_to_one_nat.address '| sed 's/"//g') 
+ssh -L 22001:192.168.2.10:22013 -L 22002:172.18.0.10:22013 -L 8443:192.168.2.10:8443 -L 127.0.0.2:8443:172.18.0.10:8443 -i ./pt_key.pem yc-user@$(yc compute instance list --format=json | jq '.[] | select( .name == "ssh-a")| .network_interfaces[0].primary_v4_address.one_to_one_nat.address '| sed 's/"//g') 
 ```
-после этого вы окажитесь в терминале ssh-a (брокер машина)
+после этого вы окажитесь в терминале ssh-a (брокер машина) оставте его открытым
 
+## Настройка кластеризации PT AF 
+
+### Настройка master-сервера
+- подключитесь к ptaf-a: 
+```
+ssh -p 22001 -i pt_key.pem yc-user@localhost -o StrictHostKeyChecking=no
+```
+- выпишите текущий пароль БД:
+```
+sudo wsc -c 'password list'  
+```
+- выполните скрипт автоконфигурации кластера: 
+```
+/home/pt/cluster.sh
+```
+### Настройка slave-сервера
+- подключитесь к ptaf-b: 
+```
+ssh -p 22002 -i pt_key.pem yc-user@localhost -o StrictHostKeyChecking=no
+```
+- задайте пароль БД из прошлого этапа
+```
+sudo wsc -c 'password set <мастер-пароль>' (должен совпадать с тем, который задан на узле master). 
+```
+- выполните скрипт автоконфигурации кластера: 
+```
+/home/pt/cluster.sh
+```
+#### Создание кластера
+
+- сначала запустим синхронизацию на SLAVE-сервере использовав команду:
+```
+ssh -p 22002 -i pt_key.pem yc-user@localhost -o StrictHostKeyChecking=no
+sudo wsc
+Enter 0 
+config commit
+```
+- дождитесь когда на SLAVE-сервере появится сообщение: "TASK: [mongo | please configure all other nodes of your cluster]". после этого  переключитесь на MASTER-сервер и начните синхронизацию той же командой:
+```
+ssh -p 22001 -i pt_key.pem yc-user@localhost -o StrictHostKeyChecking=no
+sudo wsc
+Enter 0 
+config commit
+```
+*в случае, если на MASTER config commit завершится неуспешно, применть команду еще раз
+
+- далее конфигурация на узле master остановилась на сообщении TASK: [mongo | wait config sync on secondary nodes], просто вручную выполните команду config sync на узле SLAVE.
+
+- на SLAVE выполнить:
+```
+config sync 
+```
+- на Master выполнить:
+```
+config sync
+```
+- на Master выполнить:
+```
+mongo --authenticationDatabase admin -u root -p $(cat /opt/waf/conf/master_password) waf --eval 'c = db.sentinel; l = c.findOne({_id: "license"}); Object.keys(l).forEach(function(k) { if (l[k].ip) { delete l[k].ip; l[k].hostname = "yclicense.ptsecurity.ru" }}); c.update({_id: l._id}, l)'
+```
+
+[<img width="1041" alt="image" src="https://user-images.githubusercontent.com/85429798/127007705-3a727cec-07c9-4071-80ca-1631070f83f2.png">](https://www.youtube.com/watch?v=zuTxyEeM7Vg)
 
 
 #### Настройка обработки траффика
 
-- подключаемся на локальной машине по 127.0.0.1:8443 
+- Открываем в браузере https://127.0.0.1:8443 
 
-- логин пароль: admin/positive (меняем)
+- Вводим стандартные логин и пароль, admin/positive ,меняем пароль, например на P@ssw0rd
 
-- configuration - upstreams - create
+- Открываем вкладку Configuration->Network->Gateways, кликая на иконку карандаша(Edit) 
+- в каждом из шлюзе устанавливаем галочку Active
+- в каждом из шлюзе на вкладке Network определяем для интерфейса eth-ext1 алиасы mgmt,wan,lan
 
-- ip (смотрим в yc) и порт
+- Создаем апстрим на вкладке Configuration->Network->Upstreams
+- Name: internal-lb
+- Backend Host: впишите адрес внутреннего балансировщика яндекс облако
+- Backend port: 80
 
-- мапим интерфейсы
-configuration - network - gateways 
+- Создаем сервис на вкладке Configuration->Network->Services
+- Name: app
+- Net interface alias: wan
+- Listen port: 80
+- Upstream: internal-lb
 
-в каждом редактировать: activate - галочка, network-aliases: mgmt, wan
+- Редактуируем существующее веб приложение 'Any' на вкладке Configuration -> Security -> Web Applications:
+- Service: app
 
-- заводим сервис
-configuration - network - services
-
-name - application
-net interface alias - wan
-listen port - 80
-upstream - internal
-
-- Configuration -> Security -> Web Applications:
-- указать имя сервиса
-- указать созданный ранее service
-- указать protection mode "detection"
-- locations "/"
 
 [![image](https://user-images.githubusercontent.com/85429798/127023351-f0731361-5ba5-429a-82e9-5cc3c14a6355.png)](https://www.youtube.com/watch?v=lCFnHanCSSE)
 
@@ -125,103 +188,8 @@ upstream - internal
 
 ## Дополнительные материалы
 
-## Настройка кластеризации PT WAF ------------------
 
-#### Общая настройка двух серверов
-
-- настройте на каждом из серверов пароль пользователя pt. пароль по умолчанию - positive.
-для этого подключаемся к серверам PT AF (В 2 РАЗНЫХ ОКНАХ ТЕРМИНАЛА):
-```
-ssh pt@192.168.2.10 -p 22013 
-ssh pt@172.18.0.10 -p 22013
-```
-- выберите вариант 0 - Exit to WSC и нажмите Enter.
-- скопируйтие и вставьте команды:
-```
-host add 192.168.2.10 ptaf-a
-host add 172.18.0.10 ptaf-b
-timezone Europe/Moscow
-ntp add ru.pool.ntp.org
-
-config commit
-```
-- дождитесь окончания записи новой конфигурации:
-
-██████████████████████████████████████████████████ 100 %                                                                            
-
-
-#### Настройка slave-сервера
-- подключитесь к ptaf-b: 
-```
-ssh pt@172.18.0.10 -p 22013
-```
-
-- введите команду
-```
-password set <мастер-пароль> (должен совпадать с тем, который задан на узле master). 
-```
-
--  выйдет сообщение: "It doesn't look like this password is autogenerated. Use it anyway? (y/n)". нажмите Y.
-
-- скопируйте и вставьте команды:
-```
-cluster set mongo replset waf
-cluster set elastic replset waf
-cluster set elastic nodes ptaf-b ptaf-a
-```
-
-#### Настройка master-сервера
-- подключитесь к ptaf-a: 
-```
-ssh pt@192.168.2.10 -p 22013 
-```
-- выполните команду:
-```
-password set <мастер-пароль> (должен совпадать с тем, который задан на узле slave).  
-```
-
-- выйдет сообщение: "It doesn't look like this password is autogenerated. Use it anyway? (y/n)". нажмите Y.
-
-- скопируйте и вставьте команды: 
-```
-cluster set mongo replset waf
-cluster set mongo nodes ptaf-b
-cluster set elastic replset waf
-cluster set elastic nodes  ptaf-a ptaf-b
-```
-
-#### Создание кластера
-
-- сначала запустим синхронизацию на SLAVE-сервере использовав команду:
-```
-config commit
-```
-- дождитесь когда на SLAVE-сервере появится сообщение: "TASK: [mongo | please configure all other nodes of your cluster]". после этого  переключитесь на MASTER-сервер и начните синхронизацию той же командой:
-```
-config commit
-```
-*в случае, если на MASTER сервере загрузка вылетит то применить config commit
-
-- далее конфигурация на узле master остановилась на сообщении TASK: [mongo | please configure all other nodes of your cluster], просто вручную выполните команду config sync на узле SLAVE.
-
-- на SLAVE выполнить:
-```
-config sync 
-```
-- на Master выполнить:
-```
-config sync
-```
-
-- на Master выполнить:
-```
-mongo --authenticationDatabase admin -u root -p $(cat /opt/waf/conf/master_password) waf --eval 'c = db.sentinel; l = c.findOne({_id: "license"}); Object.keys(l).forEach(function(k) { if (l[k].ip) { delete l[k].ip; l[k].hostname = "yclicense.ptsecurity.ru" }}); c.update({_id: l._id}, l)'
-```
-
-[<img width="1041" alt="image" src="https://user-images.githubusercontent.com/85429798/127007705-3a727cec-07c9-4071-80ca-1631070f83f2.png">](https://www.youtube.com/watch?v=zuTxyEeM7Vg)
-
-
-## Настройка Yandex Application LoadBalancer ------------------
+## Настройка Yandex Application LoadBalancer 
 
 В данной схеме возможно использовать [Application LoadBalancer Yandex.Cloud](https://cloud.yandex.ru/docs/application-load-balancer/)
 
