@@ -84,6 +84,13 @@
         "ignore_failure": true
       }
     },
+    {
+      "set": {
+        "field": "@timestamp",
+        "value": "{{{stageTimestamp}}}",
+        "ignore_failure": true
+      }
+    },
   {
     "set": {
       "field": "cloud.service.name",
