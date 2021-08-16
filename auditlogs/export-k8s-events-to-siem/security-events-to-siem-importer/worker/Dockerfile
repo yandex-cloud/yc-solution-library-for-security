@@ -4,7 +4,7 @@ RUN apt-get update
 # пример docker build команды: 
 # docker build -t k8s-events-siem-worker:latest -f ./export-k8s-events-to-siem/security-events-to-siem-importer/worker/Dockerfile .
 COPY /export-k8s-events-to-siem/security-events-to-siem-importer/worker/function /app/function
-COPY /export-auditlogs-to-ELK/include /app/include
+COPY /export-auditlogs-to-ELK/update-elk-scheme/include /app/include
 WORKDIR /app
 RUN python3 -m pip install --upgrade pip
 RUN pip install -r /app/function/requirements.txt
