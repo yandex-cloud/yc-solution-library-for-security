@@ -104,12 +104,12 @@ def get_config_index_state():
 def create_ingest_pipeline():
     if elastic_index_name == "k8s-audit":
         request_suffix  = '/_ingest/pipeline/k8s-pipeline'
-        data_file       = open('include/auditlog/pipeline.json') # заменить на прямую ссылку github когда репо станет публичным
+        data_file       = open(f"include/{elastic_index_name}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
         data_json       = json.load(data_file)
         data_file.close()
     elif elastic_index_name == "k8s-falco":
         request_suffix  = '/_ingest/pipeline/falco-pipeline'
-        data_file       = open('include/falco/pipeline.json') # заменить на прямую ссылку github когда репо станет публичным
+        data_file       = open(f"include/{elastic_index_name}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
         data_json       = json.load(data_file)
         data_file.close()
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=False, auth=(elastic_auth_user, elastic_auth_pw))
@@ -119,16 +119,10 @@ def create_ingest_pipeline():
 
 # Function - Create an index with mapping
 def create_index_with_map():
-    if elastic_index_name == "k8s-audit":
-        request_suffix  = f"/{elastic_index_name}"
-        data_file       = open('include/auditlog/mapping.json') # заменить на прямую ссылку github когда репо станет публичным
-        data_json       = json.load(data_file)
-        data_file.close()
-    elif elastic_index_name == "k8s-falco":
-        request_suffix  = f"/{elastic_index_name}"
-        data_file       = open('include/falco/mapping.json') # заменить на прямую ссылку github когда репо станет публичным
-        data_json       = json.load(data_file)
-        data_file.close()
+    request_suffix  = f"/{elastic_index_name}"
+    data_file       = open(f"include/{elastic_index_name}/mapping.json") # заменить на прямую ссылку github когда репо станет публичным
+    data_json       = json.load(data_file)
+    data_file.close()
     response        = requests.put(elastic_server+request_suffix, json=data_json, verify=False, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Index with mapping -- CREATED')
@@ -145,19 +139,59 @@ def refresh_index():
 # Function - Preconfigure Kibana
 def configure_kibana():
     # Index pattern
-    if elastic_index_name == "k8s-audit":
+    file = f"include/{elastic_index_name}/index-pattern.ndjson"
+    if os.path.isfile(file):
         data_file = {
-            'file': open('include/auditlog/index-pattern.ndjson', 'rb')
+            'file': open(file, 'rb')
         }
-    elif elastic_index_name == "k8s-falco":
-        data_file = {
-            'file': open('include/falco/index-pattern.ndjson', 'rb')
-        }
-    request_suffix  = '/api/saved_objects/_import'
-    response        = requests.post(kibana_server+request_suffix, files=data_file, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
-    if(response.status_code == 200):
-        print('Index pattern -- IMPORTED')
+        request_suffix  = '/api/saved_objects/_import'
+        response        = requests.post(kibana_server+request_suffix, files=data_file, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+        if(response.status_code == 200):
+            print('Index pattern -- IMPORTED')
 
+     # Filters
+    file = f"include/{elastic_index_name}/filters.ndjson"
+    if os.path.isfile(file):
+        data_file = {
+            'file': open(file, 'rb')
+        }
+        request_suffix = '/api/saved_objects/_import'
+        response = requests.post(kibana_server+request_suffix, files=data_file, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+        if(response.status_code == 200):
+            print('Filters -- IMPORTED')
+
+    # Search
+    file = f"include/{elastic_index_name}/search.ndjson"
+    if os.path.isfile(file):
+        data_file = {
+            'file': open(file, 'rb')
+        }
+        request_suffix = '/api/saved_objects/_import'
+        response = requests.post(kibana_server+request_suffix, files=data_file, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+        if(response.status_code == 200):
+            print('Searches -- IMPORTED')
+
+    # Dashboard
+    file = f"include/{elastic_index_name}/dashboard.ndjson"
+    if os.path.isfile(file):
+        data_file = {
+            'file': open(file, 'rb')
+        }
+        request_suffix = '/api/saved_objects/_import'
+        response = requests.post(kibana_server+request_suffix, files=data_file, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+        if(response.status_code == 200):
+            print('Dashboard -- IMPORTED')
+
+    # Detections (not stable, throws error 400 from time to time)
+    file = f"include/{elastic_index_name}/detections.ndjson"
+    if os.path.isfile(file):
+        data_file = {
+            'file': open(file, 'rb')
+        }
+        request_suffix = '/api/detection_engine/rules/_import'
+        response = requests.post(kibana_server+request_suffix, files=data_file, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+        if(response.status_code == 200):
+            print('Detections -- IMPORTED')
 
 # Function - Clean up S3 folder
 def delete_object_s3(s3_bucket, s3_object):
