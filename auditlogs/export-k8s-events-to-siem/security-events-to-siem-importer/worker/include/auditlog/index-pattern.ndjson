@@ -1,2 +1,0 @@
-{"attributes":{"fieldAttrs":"{}","fields":"[]","runtimeFieldMap":"{}","timeFieldName":"stageTimestamp","title":"k8s-audit*"},"coreMigrationVersion":"7.13.2","id":"0c4550b0-f8f4-11eb-bf38-9dbfd3ede2c5","migrationVersion":{"index-pattern":"7.11.0"},"references":[],"type":"index-pattern","updated_at":"2021-08-09T09:27:42.659Z","version":"WzMwODI4OCwyXQ=="}
-{"exportedCount":1,"missingRefCount":0,"missingReferences":[]}

@@ -26,18 +26,6 @@ variable "falco_prefix" {
     default = "FALCO/"
 }
 
-variable "elastic_pw" {
-
-}
-
-variable "elastic_user" {
-
-}
-
-variable "elastic_server" {
-    default = "https://c-xxx.rw.mdb.yandexcloud.net"
-}
-
 /*
 https://storage.yandexcloud.net/etalon-bucket-elk-k8s/
 AUDIT
