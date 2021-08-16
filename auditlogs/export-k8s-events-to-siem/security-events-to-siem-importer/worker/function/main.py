@@ -1,8 +1,9 @@
-import requests
-import json
-import os
+import base64
 import boto3
 import botocore
+import json
+import os
+import requests
 import time
 
 
@@ -18,7 +19,7 @@ def decrypt_secret_kms(secret):
     request_suffix      = kms_key_id+':decrypt'
     request_json_data   = {'ciphertext': secret}
     response            = requests.post('https://kms.yandex/kms/v1/keys/'+request_suffix, data=json.dumps(request_json_data), headers={"Accept":"application/json", "Authorization": "Bearer "+token})
-    return response.json().get('plaintext')
+    return base64.b64decode(response.json().get('plaintext'))
 
 
 # Configuration - Keys
