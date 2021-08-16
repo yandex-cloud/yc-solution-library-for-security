@@ -5,8 +5,8 @@ resource "yandex_iam_service_account_static_access_key" "sa_static_key" {
 
 data "archive_file" "function" {
   type        = "zip"
-  source_dir  = "${path.module}/function"
-  output_path = "${path.module}/sync.zip"
+  source_dir  = "${path.module}/pusher"
+  output_path = "${path.module}/pusher.zip"
 }
 
 resource "random_string" "project_suffix" {

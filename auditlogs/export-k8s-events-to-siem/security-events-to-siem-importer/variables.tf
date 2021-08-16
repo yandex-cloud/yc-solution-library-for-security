@@ -26,6 +26,23 @@ variable "falco_prefix" {
     default = "FALCO/"
 }
 
+variable "elastic_pw" {
+
+}
+
+variable "elastic_user" {
+
+}
+
+variable "elastic_server" {
+    default = "https://c-xxx.rw.mdb.yandexcloud.net"
+}
+
+variable "coi_subnet_id" {
+  description = "subnet id for COI instance"
+  default = ""
+}
+
 /*
 https://storage.yandexcloud.net/etalon-bucket-elk-k8s/
 AUDIT
