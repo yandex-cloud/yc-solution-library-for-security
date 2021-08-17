@@ -19,6 +19,18 @@ def decrypt_secret_kms(secret):
     b64_data = response.json().get('plaintext')
     return base64.b64decode(b64_data).decode()
 
+# Configuration - Get ElasticSearch CA.pem
+def get_elastic_cert():
+    file = 'include/CA.pem'
+    if os.path.isfile(file):
+        return file
+    else:
+        url = 'https://storage.yandexcloud.net/cloud-certs/CA.pem'
+        response = requests.get(url)
+        with open('include/CA.pem', 'wb') as f:
+            f.write(response.content)
+        return file
+
 # Configuration - Keys
 kms_key_id              = os.environ['KMS_KEY_ID']
 elastic_auth_pw_encr    = os.environ['ELK_PASS_ENCR']
@@ -31,7 +43,7 @@ elastic_auth_user   = os.environ['ELASTIC_AUTH_USER']
 elastic_auth_pw     = decrypt_secret_kms(elastic_auth_pw_encr)
 elastic_index_name  = os.environ['ELASTIC_INDEX_NAME']
 kibana_server       = os.environ['KIBANA_SERVER']
-elastic_cert        = 'include/ca.pem'
+elastic_cert        = get_elastic_cert()
 
 # Configuration - Setting up variables for S3
 s3_key              = decrypt_secret_kms(s3_key_encr)
@@ -55,10 +67,10 @@ s3 = boto3.resource('s3',
 
 # Function - Create config index in ElasticSearch
 def create_config_index():
-    request_suffix = '/.state-'+elastic_index_name
+    request_suffix = f"/.state-{elastic_index_name}"
     response = requests.get(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 404):
-        request_suffix = '/.state-'+elastic_index_name+'/_doc/1'
+        request_suffix = f"/.state-{elastic_index_name}/_doc/1"
         request_json = """{
             "is_configured": true
         }"""
@@ -69,7 +81,7 @@ def create_config_index():
 
 # Function - Get config index state
 def get_config_index_state():
-    request_suffix = '/.state-'+elastic_index_name+'/_doc/1/_source'
+    request_suffix = f"/.state-{elastic_index_name}/_doc/1/_source"
     response = requests.get(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code != 200):
         return False
@@ -78,7 +90,7 @@ def get_config_index_state():
 # Function - Create ingest pipeline
 def create_ingest_pipeline():
     request_suffix = '/_ingest/pipeline/audit-trails-pipeline'
-    data_file = open('include/elasticsearch/pipeline.json')
+    data_file = open('include/audit-trail/pipeline.json')
     data_json = json.load(data_file)
     data_file.close()
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
@@ -87,8 +99,8 @@ def create_ingest_pipeline():
 
 # Function - Create an index with mapping
 def create_index_with_map():
-    request_suffix = '/audit-trails-index'
-    data_file = open('include/elasticsearch/mapping.json')
+    request_suffix = f"{elastic_index_name}"
+    data_file = open('include/audit-trail/mapping.json')
     data_json = json.load(data_file)
     data_file.close()
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
@@ -97,15 +109,16 @@ def create_index_with_map():
 
 # Function - Refresh index
 def refresh_index():
-    request_suffix = '/'+elastic_index_name+'/_refresh'
+    request_suffix = f"/{elastic_index_name}/_refresh"
     response = requests.post(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
-    print('Index -- REFRESHED')
+    if(response.status_code == 200):
+        print('Index -- REFRESHED')
 
 # Function - Preconfigure Kibana
 def configure_kibana():
     # Index pattern
     data_file = {
-        'file': open('include/kibana/index_pattern.ndjson', 'rb')
+        'file': open('include/audit-trail/index_pattern.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -114,7 +127,7 @@ def configure_kibana():
 
     # Filters
     data_file = {
-        'file': open('include/kibana/filters.ndjson', 'rb')
+        'file': open('include/audit-trail/filters.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -123,7 +136,7 @@ def configure_kibana():
 
     # Search
     data_file = {
-        'file': open('include/kibana/search.ndjson', 'rb')
+        'file': open('include/audit-trail/search.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -132,7 +145,7 @@ def configure_kibana():
 
     # Dashboard
     data_file = {
-        'file': open('include/kibana/dashboard.ndjson', 'rb')
+        'file': open('include/audit-trail/dashboard.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -141,7 +154,7 @@ def configure_kibana():
 
     # Detections (not stable, throws error 400 from time to time)
     data_file = {
-        'file': open('include/kibana/detections.ndjson', 'rb')
+        'file': open('include/audit-trail/detections.ndjson', 'rb')
     }
     request_suffix = '/api/detection_engine/rules/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -184,28 +197,28 @@ def delete_objects_s3(s3_bucket, s3_folder):
 # Function - Upload logs to ElasticSearch
 def upload_docs_bulk(s3_bucket, s3_folder):
     print('JSON upload -- STARTED')
-    request_suffix = '/'+elastic_index_name+'/_bulk?pipeline=audit-trails-pipeline'
+    request_suffix = f"/{elastic_index_name}/_bulk?pipeline=audit-trails-pipeline"
     error_count = 0
 
     for f in os.listdir(s3_local):
         if f.endswith(".json"):
-            with open(s3_local+"/"+f, "r") as read_file:
+            with open(f"{s3_local}/{f}", "r") as read_file:
                 data = json.load(read_file)
             result = [json.dumps(record) for record in data]
-            with open(s3_local+'/nd-temp.json', 'w') as obj:
+            with open(f"{s3_local}/nd-temp.json", 'w') as obj:
                 for i in result:
                     obj.write('{"index":{}}\n')
                     obj.write(i+'\n')
             
-            data_file = open(s3_local+'/nd-temp.json', 'rb').read()
+            data_file = open(f"{s3_local}/nd-temp.json", 'rb').read()
             response = requests.post(elastic_server+request_suffix, data=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/x-ndjson"})
             os.remove(s3_local+"/"+f)
             if(response.status_code != 200):
                 error_count += 1
                 print(response.text)
-    if(os.path.exists(s3_local+'/nd-temp.json')):
-        os.remove(s3_local+'/nd-temp.json')
-    print('JSON upload -- COMPLETE -- %s ERRORS' % error_count)
+    if(os.path.exists(f"{s3_local}/nd-temp.json")):
+        os.remove(f"{s3_local}/nd-temp.json")
+    print(f"JSON upload -- COMPLETE -- {error_count} ERRORS")
     if(error_count == 0):
         delete_objects_s3(s3_bucket, s3_folder)
     refresh_index()
@@ -227,12 +240,5 @@ def upload_logs():
 ### MAIN CONTROL PANEL
 
 upload_logs()
-# get_config_index_state()
-# update_config_index_state()
-# get_config_index_state()
-# upload_docs_bulk()
-# download_s3_folder(s3_bucket, s3_folder, s3_local)
-# upload_docs_bulk()
-# refresh_index()
 print("Sleep -- STARTED")
 time.sleep(sleep_time)
