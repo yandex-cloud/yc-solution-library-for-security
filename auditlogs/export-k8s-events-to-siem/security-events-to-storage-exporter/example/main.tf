@@ -2,10 +2,10 @@
 
 //Вызов модуля
 module "cilium_cluster_1_export" {
-    source = "../k8s-security-exporter/" # путь до модуля
+    source = "../../security-events-to-storage-exporter/" # путь до модуля
     folder_id = "b1g1v8cu6isid0ms9va4" // folder-id кластера k8s yc managed-kubernetes cluster get --id <ID кластера> --format=json | jq  .folder_id
 
-    cluster_name = "cilium-cluster-1" //bucket id выданный администратором
+    cluster_name = "cilium-cluster-1" //имя кластера
 
     log_bucket_service_account_id = "aje5p941ebl0p8qrh7tr" //id выданный администратором
     

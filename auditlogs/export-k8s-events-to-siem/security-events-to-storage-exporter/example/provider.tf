@@ -5,7 +5,7 @@ terraform {
     }
   }
 }
-/*
+
 provider "yandex" {
   service_account_key_file = "./key.json"
   #or you can use: token = var.token for user account not sa
@@ -13,4 +13,3 @@ provider "yandex" {
   folder_id = "b1g30dckl1ctvpjqdudf"
 }
 
-*/
