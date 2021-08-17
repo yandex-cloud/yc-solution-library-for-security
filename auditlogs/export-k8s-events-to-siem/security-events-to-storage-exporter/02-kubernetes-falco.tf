@@ -19,10 +19,12 @@ resource "helm_release" "falco" {
 resource "helm_release" "falcosidekick" {
   depends_on = [helm_release.falco]
   name       = "falcosidekick"
-  repository = "https://falcosecurity.github.io/charts"
-  chart = "falcosidekick"
+  chart      = "${path.module}/charts/falcosidekick"
   namespace = "falco"
 
+   values = [
+    "${file("${path.module}/templates/sidekick-base.yaml")}"
+  ]
   set {
   
     name  = "config.yandex.accesskeyid"
