@@ -22,6 +22,18 @@ def decrypt_secret_kms(secret):
     b64_data            = response.json().get('plaintext')
     return base64.b64decode(b64_data).decode()
 
+# Configuration - Get ElasticSearch CA.pem
+def get_elastic_cert():
+    file = 'include/CA.pem'
+    if os.path.isfile(file):
+        return file
+    else:
+        url = 'https://storage.yandexcloud.net/cloud-certs/CA.pem'
+        response = requests.get(url)
+        with open('include/CA.pem', 'wb') as f:
+            f.write(response.content)
+        return file
+
 
 # Configuration - Keys
 elastic_auth_pw_encr    = os.environ['ELK_PASS_ENCR']
@@ -35,13 +47,13 @@ elastic_auth_pw         = decrypt_secret_kms(elastic_auth_pw_encr)
 elastic_auth_user       = os.environ['ELASTIC_AUTH_USER']
 elastic_server          = os.environ['ELASTIC_SERVER']
 kibana_server           = os.environ['KIBANA_SERVER']
+elastic_cert            = get_elastic_cert()
 
 # Configuration - Setting up variables for S3
 s3_bucket               = os.environ['S3_BUCKET']
 s3_key                  = decrypt_secret_kms(s3_key_encr)
 s3_local                = '/tmp/data'
 s3_secret               = decrypt_secret_kms(s3_secret_encr)
-
 
 # Configuration - Sleep time
 if(os.getenv('SLEEP_TIME') is not None):
@@ -79,13 +91,13 @@ sqs_url             = os.environ['YMQ_URL']
 # Function - Create config index in ElasticSearch
 def create_config_index():
     request_suffix  = f"/.state-{elastic_index_name}"
-    response        = requests.get(elastic_server+request_suffix, verify=False, auth=(elastic_auth_user, elastic_auth_pw))
+    response        = requests.get(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 404):
         request_suffix = f"/.state-{elastic_index_name}/_doc/1"
         request_json = """{
             "is_configured": true
         }"""
-        response = requests.post(elastic_server+request_suffix, data=request_json, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
+        response = requests.post(elastic_server+request_suffix, data=request_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
         print('Config index -- CREATED')
     else:
         print('Config index -- EXISTS')
@@ -94,7 +106,7 @@ def create_config_index():
 # Function - Get config index state
 def get_config_index_state():
     request_suffix  = f"/.state-{elastic_index_name}/_doc/1/_source"
-    response        = requests.get(elastic_server+request_suffix, verify=False, auth=(elastic_auth_user, elastic_auth_pw))
+    response        = requests.get(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code != 200):
         return False
     return response.json()['is_configured']
@@ -112,7 +124,7 @@ def create_ingest_pipeline():
         data_file       = open(f"include/{elastic_index_name}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
         data_json       = json.load(data_file)
         data_file.close()
-    response = requests.put(elastic_server+request_suffix, json=data_json, verify=False, auth=(elastic_auth_user, elastic_auth_pw))
+    response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Ingest pipeline -- CREATED')
 
@@ -123,7 +135,7 @@ def create_index_with_map():
     data_file       = open(f"include/{elastic_index_name}/mapping.json") # заменить на прямую ссылку github когда репо станет публичным
     data_json       = json.load(data_file)
     data_file.close()
-    response        = requests.put(elastic_server+request_suffix, json=data_json, verify=False, auth=(elastic_auth_user, elastic_auth_pw))
+    response        = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Index with mapping -- CREATED')
 
@@ -131,7 +143,7 @@ def create_index_with_map():
 # Function - Refresh index
 def refresh_index():
     request_suffix  = f"/{elastic_index_name}/_refresh"
-    response        = requests.post(elastic_server+request_suffix, verify=False, auth=(elastic_auth_user, elastic_auth_pw))
+    response        = requests.post(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Index -- REFRESHED')
 
@@ -145,7 +157,7 @@ def configure_kibana():
             'file': open(file, 'rb')
         }
         request_suffix  = '/api/saved_objects/_import'
-        response        = requests.post(kibana_server+request_suffix, files=data_file, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+        response        = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
         if(response.status_code == 200):
             print('Index pattern -- IMPORTED')
 
@@ -156,7 +168,7 @@ def configure_kibana():
             'file': open(file, 'rb')
         }
         request_suffix = '/api/saved_objects/_import'
-        response = requests.post(kibana_server+request_suffix, files=data_file, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+        response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
         if(response.status_code == 200):
             print('Filters -- IMPORTED')
 
@@ -167,7 +179,7 @@ def configure_kibana():
             'file': open(file, 'rb')
         }
         request_suffix = '/api/saved_objects/_import'
-        response = requests.post(kibana_server+request_suffix, files=data_file, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+        response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
         if(response.status_code == 200):
             print('Searches -- IMPORTED')
 
@@ -178,7 +190,7 @@ def configure_kibana():
             'file': open(file, 'rb')
         }
         request_suffix = '/api/saved_objects/_import'
-        response = requests.post(kibana_server+request_suffix, files=data_file, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+        response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
         if(response.status_code == 200):
             print('Dashboard -- IMPORTED')
 
@@ -189,7 +201,7 @@ def configure_kibana():
             'file': open(file, 'rb')
         }
         request_suffix = '/api/detection_engine/rules/_import'
-        response = requests.post(kibana_server+request_suffix, files=data_file, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+        response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
         if(response.status_code == 200):
             print('Detections -- IMPORTED')
 
@@ -271,7 +283,7 @@ def process_s3_batch(bucket, folder, local=None):
                 lines[-1] = lines[-1][:-1]+"\n"
                 data = "\n".join(lines)
             
-            response = requests.post(elastic_server+request_suffix, data=data, verify=False, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
+            response = requests.post(elastic_server+request_suffix, data=data, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
             
             if(response.status_code == 200):
                 delete_object_s3(s3_bucket, source)
