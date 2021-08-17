@@ -7,5 +7,5 @@ COPY /functions /app/functions
 COPY /update-elk-scheme/include /app/include
 WORKDIR /app
 RUN pip install --upgrade pip
-RUN pip install -r /functions/requirements.txt
+RUN pip install -r functions/requirements.txt
 CMD ["python3", "functions/main.py"]
