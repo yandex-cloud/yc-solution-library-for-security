@@ -99,8 +99,10 @@ def create_config_index():
         }"""
         response = requests.post(elastic_server+request_suffix, data=request_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
         print('Config index -- CREATED')
+        print(f"{response.status_code} -- {response.text}")
     else:
         print('Config index -- EXISTS')
+        print(f"{response.status_code} -- {response.text}")
 
 
 # Function - Get config index state
@@ -127,6 +129,7 @@ def create_ingest_pipeline():
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Ingest pipeline -- CREATED')
+    print(f"{response.status_code} -- {response.text}")
 
 
 # Function - Create an index with mapping
@@ -138,6 +141,7 @@ def create_index_with_map():
     response        = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Index with mapping -- CREATED')
+    print(f"{response.status_code} -- {response.text}")
 
 
 # Function - Refresh index
@@ -146,6 +150,7 @@ def refresh_index():
     response        = requests.post(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Index -- REFRESHED')
+    print(f"{response.status_code} -- {response.text}")
 
 
 # Function - Preconfigure Kibana
@@ -160,6 +165,7 @@ def configure_kibana():
         response        = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
         if(response.status_code == 200):
             print('Index pattern -- IMPORTED')
+        print(f"{response.status_code} -- {response.text}")
 
      # Filters
     file = f"include/{elastic_index_name}/filters.ndjson"
@@ -171,6 +177,7 @@ def configure_kibana():
         response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
         if(response.status_code == 200):
             print('Filters -- IMPORTED')
+        print(f"{response.status_code} -- {response.text}")
 
     # Search
     file = f"include/{elastic_index_name}/search.ndjson"
@@ -182,6 +189,7 @@ def configure_kibana():
         response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
         if(response.status_code == 200):
             print('Searches -- IMPORTED')
+        print(f"{response.status_code} -- {response.text}")
 
     # Dashboard
     file = f"include/{elastic_index_name}/dashboard.ndjson"
@@ -193,6 +201,7 @@ def configure_kibana():
         response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
         if(response.status_code == 200):
             print('Dashboard -- IMPORTED')
+        print(f"{response.status_code} -- {response.text}")
 
     # Detections (not stable, throws error 400 from time to time)
     file = f"include/{elastic_index_name}/detections.ndjson"
@@ -204,6 +213,7 @@ def configure_kibana():
         response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
         if(response.status_code == 200):
             print('Detections -- IMPORTED')
+        print(f"{response.status_code} -- {response.text}")
 
 # Function - Clean up S3 folder
 def delete_object_s3(s3_bucket, s3_object):
@@ -231,6 +241,8 @@ def delete_sqs_message(msg):
 def process_s3_batch(bucket, folder, local=None):
     print('JSON processing -- STARTED')
 
+    parse_substring = '".": {}, '
+
     processing          = True
 
     if elastic_index_name == "k8s-audit":
@@ -254,8 +266,12 @@ def process_s3_batch(bucket, folder, local=None):
             continue
 
         for msg in messages:
-            msg_body = json.loads(msg.get('Body'))
-            source = msg_body['object_id']
+            msg_body    = json.loads(msg.get('Body'))
+            source      = msg_body['object_id']
+            cloud_id    = msg_body['cloud_id']
+            folder_id   = msg_body['folder_id']
+            cluster_id  = msg_body['cluster_id']
+            cluster_url = msg_body['cluster_url']
 
             if source[-1] == '/':
                 delete_sqs_message(msg)
@@ -279,11 +295,14 @@ def process_s3_batch(bucket, folder, local=None):
                 lines = []
                 for line in raw_file:
                     lines.append('{"index":{}},')
-                    lines.append(line.rstrip()+",")
+                    line = line.replace(parse_substring, "")
+                    lines.append(f"{line.rstrip()[:-1]}, \"cloud_id\": \"{cloud_id}\", \"folder_id\": \"{folder_id}\", \"cluster_id\": \"{cluster_id}\", \"cluster_url\": \"{cluster_url}\"}},")
                 lines[-1] = lines[-1][:-1]+"\n"
                 data = "\n".join(lines)
             
-            response = requests.post(elastic_server+request_suffix, data=data, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
+            response = requests.post(elastic_server+request_suffix, \
+                data=data, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), \
+                    headers={"Content-Type":"application/json"})
             
             if(response.status_code == 200):
                 delete_object_s3(s3_bucket, source)
