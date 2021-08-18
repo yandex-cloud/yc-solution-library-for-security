@@ -13,7 +13,7 @@ def get_token():
 # Function - Decrypt data with KMS key
 def decrypt_secret_kms(secret):
     token = get_token()
-    request_suffix = kms_key_id+':decrypt'
+    request_suffix = f"{kms_key_id}:decrypt"
     request_json_data = {'ciphertext': secret}
     response = requests.post('https://kms.yandex/kms/v1/keys/'+request_suffix, data=json.dumps(request_json_data), headers={"Accept":"application/json", "Authorization": "Bearer "+token})
     b64_data = response.json().get('plaintext')
@@ -99,7 +99,7 @@ def create_ingest_pipeline():
 
 # Function - Create an index with mapping
 def create_index_with_map():
-    request_suffix = f"{elastic_index_name}"
+    request_suffix = f"/{elastic_index_name}"
     data_file = open('include/audit-trail/mapping.json')
     data_json = json.load(data_file)
     data_file.close()
