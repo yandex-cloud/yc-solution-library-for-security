@@ -1,0 +1,3929 @@
+{     
+  "settings" : {
+    "number_of_replicas" : 2
+  },
+  "mappings": {
+      "properties": {
+        "@timestamp": {
+          "type": "date"
+        },
+        "annotations": {
+          "properties": {
+            "authentication": {
+              "properties": {
+                "k8s": {
+                  "properties": {
+                    "io/legacy-token": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "io/stale-token": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "authorization": {
+              "properties": {
+                "k8s": {
+                  "properties": {
+                    "io/decision": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "io/reason": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "k8s": {
+              "properties": {
+                "io/deprecated": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "io/removed-release": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "mutation": {
+              "properties": {
+                "webhook": {
+                  "properties": {
+                    "admission": {
+                      "properties": {
+                        "k8s": {
+                          "properties": {
+                            "io/round_0_index_0": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            },
+                            "io/round_0_index_1": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            },
+                            "io/round_0_index_2": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "auditID": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "cloud": {
+          "properties": {
+            "provider": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "service": {
+              "properties": {
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "cloud_id": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "cluster_id": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "cluster_url": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "event": {
+          "properties": {
+            "category": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "dataset": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "kind": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "status": {
+              "type": "long"
+            }
+          }
+        },
+        "folder_id": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "geoip": {
+          "properties": {
+            "city_name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "continent_name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "country_iso_code": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "country_name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "location": {
+              "type": "geo_point"
+            },
+            "region_iso_code": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "region_name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "level": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "objectRef": {
+          "properties": {
+            "apiGroup": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "apiVersion": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "namespace": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "resource": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "resourceVersion": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "subresource": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "uid": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "requestObject": {
+          "properties": {
+            "allowVolumeExpansion": {
+              "type": "boolean"
+            },
+            "apiVersion": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "kind": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "metadata": {
+              "properties": {
+                "annotations": {
+                  "properties": {
+                    "control-plane": {
+                      "properties": {
+                        "alpha": {
+                          "properties": {
+                            "kubernetes": {
+                              "properties": {
+                                "io/leader": {
+                                  "type": "text",
+                                  "fields": {
+                                    "keyword": {
+                                      "type": "keyword",
+                                      "ignore_above": 256
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "deployment": {
+                      "properties": {
+                        "kubernetes": {
+                          "properties": {
+                            "io/revision": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "endpoints": {
+                      "properties": {
+                        "kubernetes": {
+                          "properties": {
+                            "io/last-change-trigger-time": {
+                              "type": "date"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "kubectl": {
+                      "properties": {
+                        "kubernetes": {
+                          "properties": {
+                            "io/last-applied-configuration": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "rbac": {
+                      "properties": {
+                        "authorization": {
+                          "properties": {
+                            "kubernetes": {
+                              "properties": {
+                                "io/autoupdate": {
+                                  "type": "text",
+                                  "fields": {
+                                    "keyword": {
+                                      "type": "keyword",
+                                      "ignore_above": 256
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "seccomp": {
+                      "properties": {
+                        "security": {
+                          "properties": {
+                            "alpha": {
+                              "properties": {
+                                "kubernetes": {
+                                  "properties": {
+                                    "io/allowedProfileNames": {
+                                      "type": "text",
+                                      "fields": {
+                                        "keyword": {
+                                          "type": "keyword",
+                                          "ignore_above": 256
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "storageclass": {
+                      "properties": {
+                        "kubernetes": {
+                          "properties": {
+                            "io/is-default-class": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "creationTimestamp": {
+                  "type": "date"
+                },
+                "generation": {
+                  "type": "long"
+                },
+                "labels": {
+                  "properties": {
+                    "addonmanager": {
+                      "properties": {
+                        "kubernetes": {
+                          "properties": {
+                            "io/mode": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "app": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "gatekeeper": {
+                      "properties": {
+                        "sh/system": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "kube-aggregator": {
+                      "properties": {
+                        "kubernetes": {
+                          "properties": {
+                            "io/automanaged": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "kubernetes": {
+                      "properties": {
+                        "io/bootstrapping": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "managedFields": {
+                  "properties": {
+                    "apiVersion": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "fieldsType": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "fieldsV1": {
+                      "properties": {
+                        "f:metadata": {
+                          "properties": {
+                            "f:annotations": {
+                              "properties": {
+                                "f:control-plane": {
+                                  "properties": {
+                                    "alpha": {
+                                      "properties": {
+                                        "kubernetes": {
+                                          "properties": {
+                                            "io/leader": {
+                                              "type": "object"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "f:kubectl": {
+                                  "properties": {
+                                    "kubernetes": {
+                                      "properties": {
+                                        "io/last-applied-configuration": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "f:labels": {
+                              "properties": {
+                                "f:app": {
+                                  "type": "object"
+                                },
+                                "f:gatekeeper": {
+                                  "properties": {
+                                    "sh/system": {
+                                      "type": "object"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "f:spec": {
+                          "properties": {
+                            "f:progressDeadlineSeconds": {
+                              "type": "object"
+                            },
+                            "f:replicas": {
+                              "type": "object"
+                            },
+                            "f:revisionHistoryLimit": {
+                              "type": "object"
+                            },
+                            "f:selector": {
+                              "type": "object"
+                            },
+                            "f:strategy": {
+                              "properties": {
+                                "f:rollingUpdate": {
+                                  "properties": {
+                                    "f:maxSurge": {
+                                      "type": "object"
+                                    },
+                                    "f:maxUnavailable": {
+                                      "type": "object"
+                                    }
+                                  }
+                                },
+                                "f:type": {
+                                  "type": "object"
+                                }
+                              }
+                            },
+                            "f:template": {
+                              "properties": {
+                                "f:metadata": {
+                                  "properties": {
+                                    "f:labels": {
+                                      "properties": {
+                                        "f:app": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "f:spec": {
+                                  "properties": {
+                                    "f:containers": {
+                                      "properties": {
+                                        "k:{\"name\":\"nginx\"}": {
+                                          "properties": {
+                                            "f:image": {
+                                              "type": "object"
+                                            },
+                                            "f:imagePullPolicy": {
+                                              "type": "object"
+                                            },
+                                            "f:name": {
+                                              "type": "object"
+                                            },
+                                            "f:resources": {
+                                              "type": "object"
+                                            },
+                                            "f:terminationMessagePath": {
+                                              "type": "object"
+                                            },
+                                            "f:terminationMessagePolicy": {
+                                              "type": "object"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "f:dnsPolicy": {
+                                      "type": "object"
+                                    },
+                                    "f:restartPolicy": {
+                                      "type": "object"
+                                    },
+                                    "f:schedulerName": {
+                                      "type": "object"
+                                    },
+                                    "f:securityContext": {
+                                      "type": "object"
+                                    },
+                                    "f:terminationGracePeriodSeconds": {
+                                      "type": "object"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "f:webhooks": {
+                          "properties": {
+                            "k:{\"name\":\"check-ignore-label": {
+                              "properties": {
+                                "gatekeeper": {
+                                  "properties": {
+                                    "sh\"}": {
+                                      "properties": {
+                                        "f:admissionReviewVersions": {
+                                          "type": "object"
+                                        },
+                                        "f:clientConfig": {
+                                          "properties": {
+                                            "f:caBundle": {
+                                              "type": "object"
+                                            },
+                                            "f:service": {
+                                              "properties": {
+                                                "f:name": {
+                                                  "type": "object"
+                                                },
+                                                "f:namespace": {
+                                                  "type": "object"
+                                                },
+                                                "f:path": {
+                                                  "type": "object"
+                                                },
+                                                "f:port": {
+                                                  "type": "object"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "f:failurePolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:matchPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:name": {
+                                          "type": "object"
+                                        },
+                                        "f:namespaceSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:objectSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:rules": {
+                                          "type": "object"
+                                        },
+                                        "f:sideEffects": {
+                                          "type": "object"
+                                        },
+                                        "f:timeoutSeconds": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "k:{\"name\":\"mutate": {
+                              "properties": {
+                                "kyverno": {
+                                  "properties": {
+                                    "svc\"}": {
+                                      "properties": {
+                                        "f:admissionReviewVersions": {
+                                          "type": "object"
+                                        },
+                                        "f:clientConfig": {
+                                          "properties": {
+                                            "f:caBundle": {
+                                              "type": "object"
+                                            },
+                                            "f:service": {
+                                              "properties": {
+                                                "f:name": {
+                                                  "type": "object"
+                                                },
+                                                "f:namespace": {
+                                                  "type": "object"
+                                                },
+                                                "f:path": {
+                                                  "type": "object"
+                                                },
+                                                "f:port": {
+                                                  "type": "object"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "f:failurePolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:matchPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:name": {
+                                          "type": "object"
+                                        },
+                                        "f:namespaceSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:objectSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:reinvocationPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:rules": {
+                                          "type": "object"
+                                        },
+                                        "f:sideEffects": {
+                                          "type": "object"
+                                        },
+                                        "f:timeoutSeconds": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "k:{\"name\":\"validate": {
+                              "properties": {
+                                "kyverno": {
+                                  "properties": {
+                                    "svc\"}": {
+                                      "properties": {
+                                        "f:admissionReviewVersions": {
+                                          "type": "object"
+                                        },
+                                        "f:clientConfig": {
+                                          "properties": {
+                                            "f:caBundle": {
+                                              "type": "object"
+                                            },
+                                            "f:service": {
+                                              "properties": {
+                                                "f:name": {
+                                                  "type": "object"
+                                                },
+                                                "f:namespace": {
+                                                  "type": "object"
+                                                },
+                                                "f:path": {
+                                                  "type": "object"
+                                                },
+                                                "f:port": {
+                                                  "type": "object"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "f:failurePolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:matchPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:name": {
+                                          "type": "object"
+                                        },
+                                        "f:namespaceSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:objectSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:rules": {
+                                          "type": "object"
+                                        },
+                                        "f:sideEffects": {
+                                          "type": "object"
+                                        },
+                                        "f:timeoutSeconds": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "k:{\"name\":\"validation": {
+                              "properties": {
+                                "gatekeeper": {
+                                  "properties": {
+                                    "sh\"}": {
+                                      "properties": {
+                                        "f:admissionReviewVersions": {
+                                          "type": "object"
+                                        },
+                                        "f:clientConfig": {
+                                          "properties": {
+                                            "f:caBundle": {
+                                              "type": "object"
+                                            },
+                                            "f:service": {
+                                              "properties": {
+                                                "f:name": {
+                                                  "type": "object"
+                                                },
+                                                "f:namespace": {
+                                                  "type": "object"
+                                                },
+                                                "f:path": {
+                                                  "type": "object"
+                                                },
+                                                "f:port": {
+                                                  "type": "object"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "f:failurePolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:matchPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:name": {
+                                          "type": "object"
+                                        },
+                                        "f:namespaceSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:objectSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:rules": {
+                                          "type": "object"
+                                        },
+                                        "f:sideEffects": {
+                                          "type": "object"
+                                        },
+                                        "f:timeoutSeconds": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "manager": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "operation": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "time": {
+                      "type": "date"
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "namespace": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "resourceVersion": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "selfLink": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "uid": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "parameters": {
+              "properties": {
+                "csi": {
+                  "properties": {
+                    "storage": {
+                      "properties": {
+                        "k8s": {
+                          "properties": {
+                            "io/fstype": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "type": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "preconditions": {
+              "properties": {
+                "uid": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "propagationPolicy": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "provisioner": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "reclaimPolicy": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "roleRef": {
+              "properties": {
+                "apiGroup": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "kind": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "rules": {
+              "properties": {
+                "apiGroups": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "resourceNames": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "resources": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "verbs": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "secrets": {
+              "properties": {
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "spec": {
+              "properties": {
+                "allowPrivilegeEscalation": {
+                  "type": "boolean"
+                },
+                "fsGroup": {
+                  "properties": {
+                    "ranges": {
+                      "properties": {
+                        "max": {
+                          "type": "long"
+                        },
+                        "min": {
+                          "type": "long"
+                        }
+                      }
+                    },
+                    "rule": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "group": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "groupPriorityMinimum": {
+                  "type": "long"
+                },
+                "progressDeadlineSeconds": {
+                  "type": "long"
+                },
+                "replicas": {
+                  "type": "long"
+                },
+                "requiredDropCapabilities": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "revisionHistoryLimit": {
+                  "type": "long"
+                },
+                "runAsUser": {
+                  "properties": {
+                    "rule": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "seLinux": {
+                  "properties": {
+                    "rule": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "selector": {
+                  "properties": {
+                    "matchLabels": {
+                      "properties": {
+                        "app": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "strategy": {
+                  "properties": {
+                    "rollingUpdate": {
+                      "properties": {
+                        "maxSurge": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "maxUnavailable": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "type": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "supplementalGroups": {
+                  "properties": {
+                    "ranges": {
+                      "properties": {
+                        "max": {
+                          "type": "long"
+                        },
+                        "min": {
+                          "type": "long"
+                        }
+                      }
+                    },
+                    "rule": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "template": {
+                  "properties": {
+                    "metadata": {
+                      "properties": {
+                        "labels": {
+                          "properties": {
+                            "app": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "spec": {
+                      "properties": {
+                        "containers": {
+                          "properties": {
+                            "image": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            },
+                            "imagePullPolicy": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            },
+                            "name": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            },
+                            "resources": {
+                              "type": "object"
+                            },
+                            "terminationMessagePath": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            },
+                            "terminationMessagePolicy": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "dnsPolicy": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "restartPolicy": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "schedulerName": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "securityContext": {
+                          "type": "object"
+                        },
+                        "terminationGracePeriodSeconds": {
+                          "type": "long"
+                        }
+                      }
+                    }
+                  }
+                },
+                "version": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "versionPriority": {
+                  "type": "long"
+                },
+                "volumes": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "status": {
+              "properties": {
+                "$setElementOrder/conditions": {
+                  "properties": {
+                    "type": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "conditions": {
+                  "properties": {
+                    "lastHeartbeatTime": {
+                      "type": "date"
+                    },
+                    "lastTransitionTime": {
+                      "type": "date"
+                    },
+                    "lastUpdateTime": {
+                      "type": "date"
+                    },
+                    "message": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "reason": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "status": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "type": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "containerStatuses": {
+                  "properties": {
+                    "containerID": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "image": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "imageID": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "lastState": {
+                      "properties": {
+                        "terminated": {
+                          "properties": {
+                            "exitCode": {
+                              "type": "long"
+                            },
+                            "message": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            },
+                            "reason": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "name": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "ready": {
+                      "type": "boolean"
+                    },
+                    "restartCount": {
+                      "type": "long"
+                    },
+                    "started": {
+                      "type": "boolean"
+                    },
+                    "state": {
+                      "properties": {
+                        "running": {
+                          "properties": {
+                            "startedAt": {
+                              "type": "date"
+                            }
+                          }
+                        },
+                        "terminated": {
+                          "properties": {
+                            "containerID": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            },
+                            "exitCode": {
+                              "type": "long"
+                            },
+                            "finishedAt": {
+                              "type": "date"
+                            },
+                            "reason": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            },
+                            "startedAt": {
+                              "type": "date"
+                            }
+                          }
+                        },
+                        "waiting": {
+                          "properties": {
+                            "reason": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "hostIP": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "images": {
+                  "properties": {
+                    "names": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "sizeBytes": {
+                      "type": "long"
+                    }
+                  }
+                },
+                "initContainerStatuses": {
+                  "properties": {
+                    "containerID": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "image": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "imageID": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "lastState": {
+                      "type": "object"
+                    },
+                    "name": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "ready": {
+                      "type": "boolean"
+                    },
+                    "restartCount": {
+                      "type": "long"
+                    },
+                    "state": {
+                      "properties": {
+                        "running": {
+                          "properties": {
+                            "startedAt": {
+                              "type": "date"
+                            }
+                          }
+                        },
+                        "terminated": {
+                          "properties": {
+                            "containerID": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            },
+                            "exitCode": {
+                              "type": "long"
+                            },
+                            "finishedAt": {
+                              "type": "date"
+                            },
+                            "reason": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            },
+                            "startedAt": {
+                              "type": "date"
+                            }
+                          }
+                        },
+                        "waiting": {
+                          "properties": {
+                            "reason": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "message": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "observedGeneration": {
+                  "type": "long"
+                },
+                "phase": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "podIP": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "podIPs": {
+                  "properties": {
+                    "ip": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "reason": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "startTime": {
+                  "type": "date"
+                },
+                "unavailableReplicas": {
+                  "type": "long"
+                }
+              }
+            },
+            "subjects": {
+              "properties": {
+                "apiGroup": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "kind": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "namespace": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "target": {
+              "properties": {
+                "kind": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "volumeBindingMode": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "webhooks": {
+              "properties": {
+                "admissionReviewVersions": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "clientConfig": {
+                  "properties": {
+                    "caBundle": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "service": {
+                      "properties": {
+                        "name": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "namespace": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "path": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "port": {
+                          "type": "long"
+                        }
+                      }
+                    }
+                  }
+                },
+                "failurePolicy": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "matchPolicy": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "namespaceSelector": {
+                  "properties": {
+                    "matchExpressions": {
+                      "properties": {
+                        "key": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "operator": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "objectSelector": {
+                  "type": "object"
+                },
+                "reinvocationPolicy": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "rules": {
+                  "properties": {
+                    "apiGroups": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "apiVersions": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "operations": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "resources": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "scope": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "sideEffects": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "timeoutSeconds": {
+                  "type": "long"
+                }
+              }
+            }
+          }
+        },
+        "requestReceivedTimestamp": {
+          "type": "date"
+        },
+        "requestURI": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "responseObject": {
+          "properties": {
+            "aggregationRule": {
+              "properties": {
+                "clusterRoleSelectors": {
+                  "properties": {
+                    "matchLabels": {
+                      "properties": {
+                        "rbac": {
+                          "properties": {
+                            "authorization": {
+                              "properties": {
+                                "k8s": {
+                                  "properties": {
+                                    "io/aggregate-to-admin": {
+                                      "type": "text",
+                                      "fields": {
+                                        "keyword": {
+                                          "type": "keyword",
+                                          "ignore_above": 256
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "apiVersion": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "code": {
+              "type": "long"
+            },
+            "details": {
+              "properties": {
+                "group": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "kind": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "uid": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "kind": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "message": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "metadata": {
+              "properties": {
+                "annotations": {
+                  "properties": {
+                    "control-plane": {
+                      "properties": {
+                        "alpha": {
+                          "properties": {
+                            "kubernetes": {
+                              "properties": {
+                                "io/leader": {
+                                  "type": "text",
+                                  "fields": {
+                                    "keyword": {
+                                      "type": "keyword",
+                                      "ignore_above": 256
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "endpoints": {
+                      "properties": {
+                        "kubernetes": {
+                          "properties": {
+                            "io/last-change-trigger-time": {
+                              "type": "date"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "kubectl": {
+                      "properties": {
+                        "kubernetes": {
+                          "properties": {
+                            "io/last-applied-configuration": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "rbac": {
+                      "properties": {
+                        "authorization": {
+                          "properties": {
+                            "kubernetes": {
+                              "properties": {
+                                "io/autoupdate": {
+                                  "type": "text",
+                                  "fields": {
+                                    "keyword": {
+                                      "type": "keyword",
+                                      "ignore_above": 256
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "seccomp": {
+                      "properties": {
+                        "security": {
+                          "properties": {
+                            "alpha": {
+                              "properties": {
+                                "kubernetes": {
+                                  "properties": {
+                                    "io/allowedProfileNames": {
+                                      "type": "text",
+                                      "fields": {
+                                        "keyword": {
+                                          "type": "keyword",
+                                          "ignore_above": 256
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "creationTimestamp": {
+                  "type": "date"
+                },
+                "deletionGracePeriodSeconds": {
+                  "type": "long"
+                },
+                "deletionTimestamp": {
+                  "type": "date"
+                },
+                "generation": {
+                  "type": "long"
+                },
+                "labels": {
+                  "properties": {
+                    "addonmanager": {
+                      "properties": {
+                        "kubernetes": {
+                          "properties": {
+                            "io/mode": {
+                              "type": "text",
+                              "fields": {
+                                "keyword": {
+                                  "type": "keyword",
+                                  "ignore_above": 256
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "gatekeeper": {
+                      "properties": {
+                        "sh/system": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "k8s-addon": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "k8s-app": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "kubernetes": {
+                      "properties": {
+                        "io/bootstrapping": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "managedFields": {
+                  "properties": {
+                    "apiVersion": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "fieldsType": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "fieldsV1": {
+                      "properties": {
+                        "f:aggregationRule": {
+                          "properties": {
+                            "f:clusterRoleSelectors": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "f:metadata": {
+                          "properties": {
+                            "f:annotations": {
+                              "properties": {
+                                "f:control-plane": {
+                                  "properties": {
+                                    "alpha": {
+                                      "properties": {
+                                        "kubernetes": {
+                                          "properties": {
+                                            "io/leader": {
+                                              "type": "object"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "f:endpoints": {
+                                  "properties": {
+                                    "kubernetes": {
+                                      "properties": {
+                                        "io/last-change-trigger-time": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "f:kubectl": {
+                                  "properties": {
+                                    "kubernetes": {
+                                      "properties": {
+                                        "io/last-applied-configuration": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "f:rbac": {
+                                  "properties": {
+                                    "authorization": {
+                                      "properties": {
+                                        "kubernetes": {
+                                          "properties": {
+                                            "io/autoupdate": {
+                                              "type": "object"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "f:seccomp": {
+                                  "properties": {
+                                    "security": {
+                                      "properties": {
+                                        "alpha": {
+                                          "properties": {
+                                            "kubernetes": {
+                                              "properties": {
+                                                "io/allowedProfileNames": {
+                                                  "type": "object"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "f:labels": {
+                              "properties": {
+                                "f:addonmanager": {
+                                  "properties": {
+                                    "kubernetes": {
+                                      "properties": {
+                                        "io/mode": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "f:gatekeeper": {
+                                  "properties": {
+                                    "sh/system": {
+                                      "type": "object"
+                                    }
+                                  }
+                                },
+                                "f:k8s-addon": {
+                                  "type": "object"
+                                },
+                                "f:k8s-app": {
+                                  "type": "object"
+                                },
+                                "f:kubernetes": {
+                                  "properties": {
+                                    "io/bootstrapping": {
+                                      "type": "object"
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "f:roleRef": {
+                          "properties": {
+                            "f:apiGroup": {
+                              "type": "object"
+                            },
+                            "f:kind": {
+                              "type": "object"
+                            },
+                            "f:name": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "f:rules": {
+                          "type": "object"
+                        },
+                        "f:secrets": {
+                          "properties": {
+                            "k:{\"name\":\"gatekeeper-admin-token-kj54b\"}": {
+                              "properties": {
+                                "f:name": {
+                                  "type": "object"
+                                }
+                              }
+                            },
+                            "k:{\"name\":\"gatekeeper-admin-token-pvj75\"}": {
+                              "properties": {
+                                "f:name": {
+                                  "type": "object"
+                                }
+                              }
+                            }
+                          }
+                        },
+                        "f:spec": {
+                          "properties": {
+                            "f:allowPrivilegeEscalation": {
+                              "type": "object"
+                            },
+                            "f:backoffLimit": {
+                              "type": "object"
+                            },
+                            "f:completions": {
+                              "type": "object"
+                            },
+                            "f:fsGroup": {
+                              "properties": {
+                                "f:ranges": {
+                                  "type": "object"
+                                },
+                                "f:rule": {
+                                  "type": "object"
+                                }
+                              }
+                            },
+                            "f:parallelism": {
+                              "type": "object"
+                            },
+                            "f:requiredDropCapabilities": {
+                              "type": "object"
+                            },
+                            "f:runAsUser": {
+                              "properties": {
+                                "f:rule": {
+                                  "type": "object"
+                                }
+                              }
+                            },
+                            "f:seLinux": {
+                              "properties": {
+                                "f:rule": {
+                                  "type": "object"
+                                }
+                              }
+                            },
+                            "f:supplementalGroups": {
+                              "properties": {
+                                "f:ranges": {
+                                  "type": "object"
+                                },
+                                "f:rule": {
+                                  "type": "object"
+                                }
+                              }
+                            },
+                            "f:template": {
+                              "properties": {
+                                "f:metadata": {
+                                  "properties": {
+                                    "f:labels": {
+                                      "properties": {
+                                        "f:k8s-app": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                },
+                                "f:spec": {
+                                  "properties": {
+                                    "f:containers": {
+                                      "properties": {
+                                        "k:{\"name\":\"certgen\"}": {
+                                          "properties": {
+                                            "f:args": {
+                                              "type": "object"
+                                            },
+                                            "f:command": {
+                                              "type": "object"
+                                            },
+                                            "f:image": {
+                                              "type": "object"
+                                            },
+                                            "f:imagePullPolicy": {
+                                              "type": "object"
+                                            },
+                                            "f:name": {
+                                              "type": "object"
+                                            },
+                                            "f:resources": {
+                                              "type": "object"
+                                            },
+                                            "f:terminationMessagePath": {
+                                              "type": "object"
+                                            },
+                                            "f:terminationMessagePolicy": {
+                                              "type": "object"
+                                            }
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "f:dnsPolicy": {
+                                      "type": "object"
+                                    },
+                                    "f:hostNetwork": {
+                                      "type": "object"
+                                    },
+                                    "f:restartPolicy": {
+                                      "type": "object"
+                                    },
+                                    "f:schedulerName": {
+                                      "type": "object"
+                                    },
+                                    "f:securityContext": {
+                                      "type": "object"
+                                    },
+                                    "f:serviceAccount": {
+                                      "type": "object"
+                                    },
+                                    "f:serviceAccountName": {
+                                      "type": "object"
+                                    },
+                                    "f:terminationGracePeriodSeconds": {
+                                      "type": "object"
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "f:ttlSecondsAfterFinished": {
+                              "type": "object"
+                            },
+                            "f:volumes": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "f:status": {
+                          "properties": {
+                            "f:completionTime": {
+                              "type": "object"
+                            },
+                            "f:conditions": {
+                              "type": "object"
+                            },
+                            "f:startTime": {
+                              "type": "object"
+                            },
+                            "f:succeeded": {
+                              "type": "object"
+                            }
+                          }
+                        },
+                        "f:subjects": {
+                          "type": "object"
+                        },
+                        "f:webhooks": {
+                          "properties": {
+                            "k:{\"name\":\"check-ignore-label": {
+                              "properties": {
+                                "gatekeeper": {
+                                  "properties": {
+                                    "sh\"}": {
+                                      "properties": {
+                                        "f:admissionReviewVersions": {
+                                          "type": "object"
+                                        },
+                                        "f:clientConfig": {
+                                          "properties": {
+                                            "f:caBundle": {
+                                              "type": "object"
+                                            },
+                                            "f:service": {
+                                              "properties": {
+                                                "f:name": {
+                                                  "type": "object"
+                                                },
+                                                "f:namespace": {
+                                                  "type": "object"
+                                                },
+                                                "f:path": {
+                                                  "type": "object"
+                                                },
+                                                "f:port": {
+                                                  "type": "object"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "f:failurePolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:matchPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:name": {
+                                          "type": "object"
+                                        },
+                                        "f:namespaceSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:objectSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:rules": {
+                                          "type": "object"
+                                        },
+                                        "f:sideEffects": {
+                                          "type": "object"
+                                        },
+                                        "f:timeoutSeconds": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "k:{\"name\":\"monitor-webhooks": {
+                              "properties": {
+                                "kyverno": {
+                                  "properties": {
+                                    "svc\"}": {
+                                      "properties": {
+                                        "f:admissionReviewVersions": {
+                                          "type": "object"
+                                        },
+                                        "f:clientConfig": {
+                                          "properties": {
+                                            "f:caBundle": {
+                                              "type": "object"
+                                            },
+                                            "f:service": {
+                                              "properties": {
+                                                "f:name": {
+                                                  "type": "object"
+                                                },
+                                                "f:namespace": {
+                                                  "type": "object"
+                                                },
+                                                "f:path": {
+                                                  "type": "object"
+                                                },
+                                                "f:port": {
+                                                  "type": "object"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "f:failurePolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:matchPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:name": {
+                                          "type": "object"
+                                        },
+                                        "f:namespaceSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:objectSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:reinvocationPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:rules": {
+                                          "type": "object"
+                                        },
+                                        "f:sideEffects": {
+                                          "type": "object"
+                                        },
+                                        "f:timeoutSeconds": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "k:{\"name\":\"mutate": {
+                              "properties": {
+                                "kyverno": {
+                                  "properties": {
+                                    "svc\"}": {
+                                      "properties": {
+                                        "f:admissionReviewVersions": {
+                                          "type": "object"
+                                        },
+                                        "f:clientConfig": {
+                                          "properties": {
+                                            "f:caBundle": {
+                                              "type": "object"
+                                            },
+                                            "f:service": {
+                                              "properties": {
+                                                "f:name": {
+                                                  "type": "object"
+                                                },
+                                                "f:namespace": {
+                                                  "type": "object"
+                                                },
+                                                "f:path": {
+                                                  "type": "object"
+                                                },
+                                                "f:port": {
+                                                  "type": "object"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "f:failurePolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:matchPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:name": {
+                                          "type": "object"
+                                        },
+                                        "f:namespaceSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:objectSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:reinvocationPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:rules": {
+                                          "type": "object"
+                                        },
+                                        "f:sideEffects": {
+                                          "type": "object"
+                                        },
+                                        "f:timeoutSeconds": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "k:{\"name\":\"mutate-policy": {
+                              "properties": {
+                                "kyverno": {
+                                  "properties": {
+                                    "svc\"}": {
+                                      "properties": {
+                                        "f:admissionReviewVersions": {
+                                          "type": "object"
+                                        },
+                                        "f:clientConfig": {
+                                          "properties": {
+                                            "f:caBundle": {
+                                              "type": "object"
+                                            },
+                                            "f:service": {
+                                              "properties": {
+                                                "f:name": {
+                                                  "type": "object"
+                                                },
+                                                "f:namespace": {
+                                                  "type": "object"
+                                                },
+                                                "f:path": {
+                                                  "type": "object"
+                                                },
+                                                "f:port": {
+                                                  "type": "object"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "f:failurePolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:matchPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:name": {
+                                          "type": "object"
+                                        },
+                                        "f:namespaceSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:objectSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:reinvocationPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:rules": {
+                                          "type": "object"
+                                        },
+                                        "f:sideEffects": {
+                                          "type": "object"
+                                        },
+                                        "f:timeoutSeconds": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "k:{\"name\":\"validate": {
+                              "properties": {
+                                "kyverno": {
+                                  "properties": {
+                                    "svc\"}": {
+                                      "properties": {
+                                        "f:admissionReviewVersions": {
+                                          "type": "object"
+                                        },
+                                        "f:clientConfig": {
+                                          "properties": {
+                                            "f:caBundle": {
+                                              "type": "object"
+                                            },
+                                            "f:service": {
+                                              "properties": {
+                                                "f:name": {
+                                                  "type": "object"
+                                                },
+                                                "f:namespace": {
+                                                  "type": "object"
+                                                },
+                                                "f:path": {
+                                                  "type": "object"
+                                                },
+                                                "f:port": {
+                                                  "type": "object"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "f:failurePolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:matchPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:name": {
+                                          "type": "object"
+                                        },
+                                        "f:namespaceSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:objectSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:rules": {
+                                          "type": "object"
+                                        },
+                                        "f:sideEffects": {
+                                          "type": "object"
+                                        },
+                                        "f:timeoutSeconds": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "k:{\"name\":\"validate-policy": {
+                              "properties": {
+                                "kyverno": {
+                                  "properties": {
+                                    "svc\"}": {
+                                      "properties": {
+                                        "f:admissionReviewVersions": {
+                                          "type": "object"
+                                        },
+                                        "f:clientConfig": {
+                                          "properties": {
+                                            "f:caBundle": {
+                                              "type": "object"
+                                            },
+                                            "f:service": {
+                                              "properties": {
+                                                "f:name": {
+                                                  "type": "object"
+                                                },
+                                                "f:namespace": {
+                                                  "type": "object"
+                                                },
+                                                "f:path": {
+                                                  "type": "object"
+                                                },
+                                                "f:port": {
+                                                  "type": "object"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "f:failurePolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:matchPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:name": {
+                                          "type": "object"
+                                        },
+                                        "f:namespaceSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:objectSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:rules": {
+                                          "type": "object"
+                                        },
+                                        "f:sideEffects": {
+                                          "type": "object"
+                                        },
+                                        "f:timeoutSeconds": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            },
+                            "k:{\"name\":\"validation": {
+                              "properties": {
+                                "gatekeeper": {
+                                  "properties": {
+                                    "sh\"}": {
+                                      "properties": {
+                                        "f:admissionReviewVersions": {
+                                          "type": "object"
+                                        },
+                                        "f:clientConfig": {
+                                          "properties": {
+                                            "f:caBundle": {
+                                              "type": "object"
+                                            },
+                                            "f:service": {
+                                              "properties": {
+                                                "f:name": {
+                                                  "type": "object"
+                                                },
+                                                "f:namespace": {
+                                                  "type": "object"
+                                                },
+                                                "f:path": {
+                                                  "type": "object"
+                                                },
+                                                "f:port": {
+                                                  "type": "object"
+                                                }
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "f:failurePolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:matchPolicy": {
+                                          "type": "object"
+                                        },
+                                        "f:name": {
+                                          "type": "object"
+                                        },
+                                        "f:namespaceSelector": {
+                                          "properties": {
+                                            "f:matchExpressions": {
+                                              "type": "object"
+                                            }
+                                          }
+                                        },
+                                        "f:objectSelector": {
+                                          "type": "object"
+                                        },
+                                        "f:rules": {
+                                          "type": "object"
+                                        },
+                                        "f:sideEffects": {
+                                          "type": "object"
+                                        },
+                                        "f:timeoutSeconds": {
+                                          "type": "object"
+                                        }
+                                      }
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "manager": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "operation": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "time": {
+                      "type": "date"
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "namespace": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "resourceVersion": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "selfLink": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "uid": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "reason": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "roleRef": {
+              "properties": {
+                "apiGroup": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "kind": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "rules": {
+              "properties": {
+                "apiGroups": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "resourceNames": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "resources": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "verbs": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "secrets": {
+              "properties": {
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "spec": {
+              "properties": {
+                "allowPrivilegeEscalation": {
+                  "type": "boolean"
+                },
+                "fsGroup": {
+                  "properties": {
+                    "ranges": {
+                      "properties": {
+                        "max": {
+                          "type": "long"
+                        },
+                        "min": {
+                          "type": "long"
+                        }
+                      }
+                    },
+                    "rule": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "requiredDropCapabilities": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "runAsUser": {
+                  "properties": {
+                    "rule": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "seLinux": {
+                  "properties": {
+                    "rule": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "supplementalGroups": {
+                  "properties": {
+                    "ranges": {
+                      "properties": {
+                        "max": {
+                          "type": "long"
+                        },
+                        "min": {
+                          "type": "long"
+                        }
+                      }
+                    },
+                    "rule": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "volumes": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "status": {
+              "type": "object",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "subjects": {
+              "properties": {
+                "apiGroup": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "kind": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "namespace": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                }
+              }
+            },
+            "webhooks": {
+              "properties": {
+                "admissionReviewVersions": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "clientConfig": {
+                  "properties": {
+                    "caBundle": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "service": {
+                      "properties": {
+                        "name": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "namespace": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "path": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "port": {
+                          "type": "long"
+                        }
+                      }
+                    }
+                  }
+                },
+                "failurePolicy": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "matchPolicy": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "name": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "namespaceSelector": {
+                  "properties": {
+                    "matchExpressions": {
+                      "properties": {
+                        "key": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "operator": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "objectSelector": {
+                  "type": "object"
+                },
+                "reinvocationPolicy": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "rules": {
+                  "properties": {
+                    "apiGroups": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "apiVersions": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "operations": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "resources": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    },
+                    "scope": {
+                      "type": "text",
+                      "fields": {
+                        "keyword": {
+                          "type": "keyword",
+                          "ignore_above": 256
+                        }
+                      }
+                    }
+                  }
+                },
+                "sideEffects": {
+                  "type": "text",
+                  "fields": {
+                    "keyword": {
+                      "type": "keyword",
+                      "ignore_above": 256
+                    }
+                  }
+                },
+                "timeoutSeconds": {
+                  "type": "long"
+                }
+              }
+            }
+          }
+        },
+        "responseStatus": {
+          "properties": {
+            "message": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "metadata": {
+              "type": "object"
+            },
+            "reason": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "status": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "source": {
+          "properties": {
+            "address": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "ip": {
+              "type": "ip"
+            }
+          }
+        },
+        "sourceIPs": {
+          "type": "ip"
+        },
+        "stage": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "stageTimestamp": {
+          "type": "date"
+        },
+        "user": {
+          "properties": {
+            "extra": {
+              "properties": {
+                "authentication": {
+                  "properties": {
+                    "kubernetes": {
+                      "properties": {
+                        "io/pod-name": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        },
+                        "io/pod-uid": {
+                          "type": "text",
+                          "fields": {
+                            "keyword": {
+                              "type": "keyword",
+                              "ignore_above": 256
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "groups": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "name": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            },
+            "uid": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "user_agent": {
+          "properties": {
+            "original": {
+              "type": "text",
+              "fields": {
+                "keyword": {
+                  "type": "keyword",
+                  "ignore_above": 256
+                }
+              }
+            }
+          }
+        },
+        "verb": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        }
+      }
+    }
+}
