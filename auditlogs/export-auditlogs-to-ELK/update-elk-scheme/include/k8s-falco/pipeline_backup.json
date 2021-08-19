@@ -42,21 +42,6 @@
       "value": "falco",
       "ignore_failure": true
     }
-  },
-  {
-      "dot_expander": {
-        "field": "k8s.ns.name",
-        "path": "output_fields",
-        "ignore_failure": true
-      }
-    },
-    {
-      "rename": {
-        "field": "output_fields.k8s.ns.name",
-        "target_field": "objectRef.namespace",
-        "ignore_missing": true,
-        "ignore_failure": true
-      }
-    }
+  }
 ]
 }
