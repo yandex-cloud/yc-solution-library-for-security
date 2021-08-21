@@ -37,6 +37,7 @@
 ## Схема решения
 ![Схема_решения](https://user-images.githubusercontent.com/85429798/129480037-cef97473-bba2-4589-b291-0578163d09fd.png)
 
+[Схема решения для поставки логов k8s](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(k8s))
 
 
 ## Security Content
@@ -139,4 +140,4 @@ output "elk-user" {
     }
     
 ```
-
+[Развертывание решения для поставки логов k8s](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(k8s))
