@@ -1,7 +1,9 @@
+
 resource "yandex_iam_service_account_static_access_key" "sa_static_key" {
   service_account_id = var.service_account_id
   description        = "static access key for object storage and s3 "
 }
+
 
 data "archive_file" "function" {
   type        = "zip"
@@ -18,7 +20,7 @@ resource "random_string" "project_suffix" {
 }
 
 resource "yandex_message_queue" "log_queue_for_auditlog" {
-  count                       = var.auditlog_enabled ? 1 : 0 
+  count                       = var.auditlog_enabled ? 1 : 0
   access_key                  = yandex_iam_service_account_static_access_key.sa_static_key.access_key
   secret_key                  = yandex_iam_service_account_static_access_key.sa_static_key.secret_key
   name                        = "log-queue-auditlog-${random_string.project_suffix.result}"

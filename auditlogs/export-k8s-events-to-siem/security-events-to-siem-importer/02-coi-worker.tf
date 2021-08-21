@@ -10,16 +10,16 @@ resource "local_file" "private_key" {
 }
 
 data "template_file" "cloud_init" {
-    template = file("worker/cloud-init.tpl.yaml")
+    template = file("../security-events-to-siem-importer/worker/cloud-init.tpl.yaml")
     vars =  {
         ssh_key = "${chomp(tls_private_key.ssh.public_key_openssh)}"
     }
 }
 
 data "template_file" "docker-declaration-auditlog" {
-    template = file("worker/docker-declaration-auditlog.yaml")
+    template = file("../security-events-to-siem-importer/worker/docker-declaration-auditlog.yaml")
     vars =  {
-        ELASTIC_AUTH_USER   = "admin"
+        ELASTIC_AUTH_USER   = "${var.elastic_user}"
         ELASTIC_SERVER      = "${var.elastic_server}:9200"
         ELK_PASS_ENCR       = "${yandex_kms_secret_ciphertext.encrypted_pass.ciphertext}"
         KIBANA_SERVER       = "${var.elastic_server}"
@@ -34,9 +34,9 @@ data "template_file" "docker-declaration-auditlog" {
 }
 
 data "template_file" "docker-declaration-falco" {
-    template = file("worker/docker-declaration-falco.yaml")
+    template = file("../security-events-to-siem-importer/worker/docker-declaration-falco.yaml")
     vars =  {
-        ELASTIC_AUTH_USER   = "admin"
+        ELASTIC_AUTH_USER   = "${var.elastic_user}"
         ELASTIC_SERVER      = "${var.elastic_server}:9200"
         ELK_PASS_ENCR       = "${yandex_kms_secret_ciphertext.encrypted_pass.ciphertext}"
         KIBANA_SERVER       = "${var.elastic_server}"

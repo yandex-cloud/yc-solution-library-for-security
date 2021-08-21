@@ -5,7 +5,7 @@
 ### Принимает на вход: 
 	- folder_id (id каталога в котором лежит кластер)
 	- cluster_name (имя кластера k8s)
-	- log_bucket_service_account_id - id сервис аккаунта который может писать в бакет
+	- log_bucket_service_account_id - id сервис аккаунта который может писать в бакет 
 	- log_bucket_name - имя бакета куда писать лог
 	- function_service_account_id - ( опционально) id сервисного аккаунта который будет запускать фукнцию , если не указан то используется log_bucket_service_account_id
   

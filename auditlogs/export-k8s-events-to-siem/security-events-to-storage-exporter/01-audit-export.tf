@@ -9,6 +9,8 @@ resource "yandex_resourcemanager_folder_iam_binding" "create_funct" {
     "serviceAccount:${data.yandex_iam_service_account.bucket_sa.id}",
   ]
 }
+
+
 //--------
 data "archive_file" "function" {
   type        = "zip"
