@@ -24,7 +24,7 @@
 ## Описание решения
 Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud со следующих источников:
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
-- k8s: аудит логи, алерты falco и Policy Engine (OPA Gatekeeper) [ссылка на установку](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(k8s))
+- Yandex Managed Service for Kubernetes: аудит логи, алерты falco и Policy Engine (OPA Gatekeeper) [описание настройки](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(k8s))
 
 Решение является постоянно обновляемым и поддерживаемым Security командой Yandex.Cloud
 
