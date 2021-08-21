@@ -24,8 +24,7 @@
 ## Описание решения
 Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud со следующих источников:
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
-- [Falco](https://falco.org/) ([действия для настройки Falco см.](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK#аудит-логи-falco) )
-- Скоро: [Yandex Managed Service for Kubernetes](https://cloud.yandex.ru/services/managed-kubernetes)
+- k8s: аудит логи, алерты falco и Policy Engine (OPA Gatekeeper) [ссылка на установку](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(k8s))
 
 Решение является постоянно обновляемым и поддерживаемым Security командой Yandex.Cloud
 
@@ -141,23 +140,3 @@ output "elk-user" {
     
 ```
 
-## Аудит логи Falco
-Экспорт событий Falco выполняется с помощью [Falco Sidekick](https://github.com/falcosecurity/falcosidekick)
-
-Для установки Falco и Falco Sidekick используйте следующие команды (замените значения falcosidekick.config.elasticsearch.hostport, username, password на ваши):
-
-```Python
-helm repo add falcosecurity https://falcosecurity.github.io/charts
-helm repo update
-
-helm install falco falcosecurity/falco \
---set falcosidekick.enabled=true \
---set falcosidekick.config.elasticsearch.hostport=https://c-c9qps9eabd0ok4haehjq.rw.mdb.yandexcloud.net:9200 \
---set falcosidekick.config.elasticsearch.username=beat \
---set falcosidekick.config.elasticsearch.password=beat1234 \
---set falcosidekick.config.elasticsearch.checkcert=false \
---set falcosidekick.config.debug=true
-```
-
-## Аудит логи k8s
-Скоро
