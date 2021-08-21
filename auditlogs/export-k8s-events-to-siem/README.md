@@ -12,7 +12,7 @@
 
 #### Общая схема 
 
-Схема сбора
+![Tech_scheme](https://user-images.githubusercontent.com/85429798/130331922-3ca923cd-f1a1-4555-87fb-71160e925b82.png)
 
 
 #### Описание импортируемых объектов ELK (security content)
