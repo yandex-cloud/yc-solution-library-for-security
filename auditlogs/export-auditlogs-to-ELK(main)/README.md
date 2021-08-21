@@ -22,7 +22,7 @@
 
 
 ## Описание решения
-Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud со следующих источников:
+Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud Managed Service for Elasticsearch (ELK) со следующих источников:
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
 - Yandex Managed Service for Kubernetes: аудит логи, алерты falco и Policy Engine (OPA Gatekeeper) [описание настройки](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(k8s))
 
