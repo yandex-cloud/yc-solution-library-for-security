@@ -1,8 +1,11 @@
 ## Анализ логов безопасности k8s в ELK: аудит-логи, policy engine, falco 
 
-Общая лого схема
+![Logo-scheme](https://user-images.githubusercontent.com/85429798/130331398-27cc1d8f-0b2c-4c1d-9be5-b1186116b618.png)
 
-Пара картинок dashboards
+![Снимок экрана 2021-08-20 в 12 05 25](https://user-images.githubusercontent.com/85429798/130331405-26a909ae-0171-47b2-93a2-c656632d262c.png)
+
+![Снимок экрана 2021-08-20 в 12 05 48](https://user-images.githubusercontent.com/85429798/130331411-cf016471-ad7b-49d6-870a-f13f07ba79b5.png)
+
 
 #### Описание 
 Решение устанавливает falco и импортирует аудит-логи k8s, алерты falco в Managed ELK SIEM. Также импортирует security content (dashboards, detection rules и др.) в ELK для анализа и реагирования на события ИБ. В том числе "из коробки" анализирует срабатывания Policy Engine (OPA Gatekeeper).
