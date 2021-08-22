@@ -1,9 +1,8 @@
 # Пример настройки ролевых моделей и политик в Managed Service for Kubernetes®
 
 # Подробный разбор на видео
-[![image]](https://user-images.githubusercontent.com/85429798/130356018-0840545a-da13-4faa-b15d-2858e3a9e369.png)
+[![image](https://user-images.githubusercontent.com/85429798/130356018-0840545a-da13-4faa-b15d-2858e3a9e369.png)](https://www.youtube.com/watch?v=ot6I_wmkLr4&t=1597s)
 
-https://www.youtube.com/watch?v=ot6I_wmkLr4&t=1597s
 
 # Стенд для для практического вебинара по Kubernetes
 
