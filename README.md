@@ -13,6 +13,7 @@ Yandex Cloud Solution Library for Security — это набор примеро�
   - [Развертывание Kaspersky Antivirus в Yandex.Cloud (Compute Instance, COI)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/malware-defense/kaspersy-install-in-yc)
 - [Управление уязвимостями](#па)
   - [Отказоустойчивая эксплуатация PT Application Firewall на базе Yandex.Cloud](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/vuln-mgmt/unmng-waf-ptaf-cluster)
+  - [Установка уязвимого веб приложения (dvwa) в Яндекс Облаке (с помощью terraform) для тестирования managed WAF](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/vuln-mgmt/vulnerable-web-app-waf-test)
 - [Шифрование данных и управление ключами ](#па)
   - [Шифрование секретов средствами KMS при передачи их в контейнер ВМ COI Yandex.Cloud:Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/encrypt_and_keys/terraform%2BKMS%2BCOI)
 - [Сбор, мониторинг и анализ аудит логов](#па)
@@ -22,7 +23,8 @@ Yandex Cloud Solution Library for Security — это набор примеро�
 - [Безопасная конфигурация](#па)
   - [Пример безопасной конфигурации Yandex Cloud Object Storage: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/configuration/hardering_bucket)
 
+
+
 ![Стэнд_архитектура](https://user-images.githubusercontent.com/85429798/128418857-f8062cdd-5eee-466f-85f0-931fd1c190cf.png)
 
 
-https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/encrypt_and_keys/terraform%2BKMS%2BCOI
