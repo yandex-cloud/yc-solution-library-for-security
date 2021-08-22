@@ -2,6 +2,8 @@
 Yandex Cloud Solution Library for Security — это набор примеров и рекомендаций, собранных в публичном репозитории на GitHub. Они помогут компаниям, которые хотят построить безопасную инфруструктуру в Облаке и соответствовать требованиям различных регуляторов и стандартов.
 Команда Yandex.Cloud проработала самые распространённые задачи, которые возникают при построении безопасности в облаке, протестировала и подробно описала необходимые сценарии.
 
+<<!!Вставить!Здесь перекрестную ссылку на security guide текстовый>>
+
 ## Домены безопасности
 - [Сетевая безопасность](#па)
   - [Пример настройки Security Groups (dev/stage/prod): Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/network-sec/segmentation)
@@ -22,8 +24,12 @@ Yandex Cloud Solution Library for Security — это набор примеро�
   - [Use cases и важные события безопасности в аудит логах](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/_use_cases_and_searches)
 - [Безопасная конфигурация](#па)
   - [Пример безопасной конфигурации Yandex Cloud Object Storage: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/configuration/hardering_bucket)
-
-
+##
+- [Безопасность Kubernetes](#)
+  - Аутентификация и управление доступом Managed Kubernetes:
+    - [Пример настройки ролевых моделей и политик в Managed Service for Kubernetes](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/auth_and_access/role-model-example)
+  - Сбор, мониторинг и анализ аудит логов:
+    - [Анализ логов безопасности k8s в ELK: аудит-логи, policy engine, falco](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(k8s))
 
 ![Стэнд_архитектура](https://user-images.githubusercontent.com/85429798/128418857-f8062cdd-5eee-466f-85f0-931fd1c190cf.png)
 
