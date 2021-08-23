@@ -116,21 +116,12 @@ def upload_docs_bulk(s3_bucket, s3_folder):
     print(f"JSON upload -- COMPLETE -- {error_count} ERRORS")
     if(error_count == 0):
         delete_objects_s3(s3_bucket, s3_folder)
-    refresh_index()
+
 
 # Process - Upload data
 def upload_logs():
-    if(get_config_index_state()):
-        print("Config index -- EXISTS")
-        download_s3_folder(s3_bucket, s3_folder, s3_local)
-        upload_docs_bulk(s3_bucket, s3_folder)
-    else:
-        create_index_with_map()
-        create_ingest_pipeline()
-        configure_kibana()
-        create_config_index()
-        download_s3_folder(s3_bucket, s3_folder, s3_local)
-        upload_docs_bulk(s3_bucket, s3_folder)
+    download_s3_folder(s3_bucket, s3_folder, s3_local)
+    upload_docs_bulk(s3_bucket, s3_folder)
 
 ### MAIN CONTROL PANEL
 

@@ -7,22 +7,22 @@ resource "random_string" "random" {
   upper            = false 
 }
 //Создание сети
-resource "yandex_vpc_network" "vpc-elk" {
-  name = "vpc-elk"
+resource "yandex_vpc_network" "vpc-splunk" {
+  name = "vpc-splunk"
 }
 //Создание подсетей
-resource "yandex_vpc_subnet" "elk-subnet" {
+resource "yandex_vpc_subnet" "splunk-subnet" {
   folder_id = var.folder_id
 
   count          = 3
-  name           = "app-elk-${element(var.network_names, count.index)}"
+  name           = "app-splunk-${element(var.network_names, count.index)}"
   zone           = element(var.zones, count.index)
-  network_id     = yandex_vpc_network.vpc-elk.id
+  network_id     = yandex_vpc_network.vpc-splunk.id
   v4_cidr_blocks = [element(var.app_cidrs, count.index)]
 }
 //Создание sa storage admin для создания Bucket for AuditTrail
 resource "yandex_iam_service_account" "sa-bucket-creator" {
-  name        = "sa-bucket-creator"
+  name        = "sa-bucket-creator-${random_string.random.result}"
   folder_id = var.folder_id
 }
 //Создание стат ключа
@@ -50,7 +50,7 @@ resource "yandex_storage_bucket" "trail-bucket" {
 
 //Создание sa storage editor для работы от ELK с Bucket for AuditTrail
 resource "yandex_iam_service_account" "sa-bucket-editor" {
-  name        = "sa-bucket-editor"
+  name        = "sa-bucket-editor-${random_string.random.result}"
   folder_id = var.folder_id
 }
 
@@ -78,11 +78,10 @@ module "yc-splunk-trail" {
     
     folder_id = var.folder_id
     splunk_token = var.splunk_token //выполнить команду: export TF_VAR_splunk_token=<SPLUNK TOKEB> (заменить SPLUNK TOKEN на ваше значение)
-    splunk_server = "https://84.252.128.64:8088" //формат "https://<your hostname or address>:8088"
+    splunk_server = "https://84.252.128.64" //формат "https://<your hostname or address>"
     bucket_name = yandex_storage_bucket.trail-bucket.bucket // //указать имя bucket с trails если вызов не из example
     bucket_folder = "folder" //указанный при создании Trails
     sa_id = yandex_iam_service_account.sa-bucket-editor.id //указать sa с правами  bucket_editor  если вызов не из example
-    coi_subnet_id = yandex_vpc_subnet.elk-subnet[0].id //указать subnet_id если вызов не из example
+    coi_subnet_id = yandex_vpc_subnet.splunk-subnet[0].id //указать subnet_id если вызов не из example
 }
-
 

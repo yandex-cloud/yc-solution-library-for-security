@@ -1,0 +1,60 @@
+# Сбор, мониторинг и анализ аудит логов во внешний SIEM Splunk
+
+картинки
+
+## Описание решения
+Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud со следующих источников:
+- [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
+- (скоро) Yandex Managed Service for Kubernetes 
+
+## Что делает решение (через Terraform)
+- [x] Разворачивает COI Instance с контейнером на базе образа s3-splunk-importer (cr.yandex/crpjfmfou6gflobbfvfv/s3-splunk-importer:1.0)
+- [x] Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в Splunk
+
+## Схема решения
+картинка схемы 
+
+
+## Развертывание с помощью Terraform
+
+## Описание 
+
+#### Пререквизиты Yandex Cloud
+- :white_check_mark: Object Storage Bucket для AuditTrails
+- :white_check_mark: Включенный сервис AuditTrail в UI
+- :white_check_mark: Сеть VPC
+- :white_check_mark: Наличие доступа в интернет с COI Instance для скачивания образа контейнера (например source NAT на подсеть)
+- :white_check_mark: ServiceAccount с ролью storage.editor для действий в Object Storage
+
+См. Пример конфигурации пререквизитов в /example/main.tf
+
+#### Пререквизиты Splunk
+- :white_check_mark: Настроенный [HTTP Event Collector](https://docs.splunk.com/Documentation/SplunkCloud/8.2.2105/Data/UsetheHTTPEventCollector#Configure_HTTP_Event_Collector_on_Splunk_Enterprise)
+- :white_check_mark: Токен для отправки событий в HEC
+
+
+Модуль Terraform /modules/yc-splunk-trail:
+
+- создает static keys для sa (для работы с объектами JSON в бакете и шифрования/расшифрования секретов)
+- создает ВМ COI со спецификацией Docker Container со скриптом
+- создает ssh пару ключей и сохраняет приватную часть на диск, публичную в ВМ
+- создает KMS ключ
+- назначает права kms.keys.encrypterDecrypter на ключ для sa для шифрование секретов
+- шифрует секреты и передает их в Docker Container
+
+
+#### Пример вызова модуля:
+```Python
+module "yc-splunk-trail" {
+    source = "../modules/yc-splunk-trail/" #path to module yc-elastic-trail
+    
+    folder_id = var.folder_id
+    splunk_token = var.splunk_token //выполнить команду: export TF_VAR_splunk_token=<SPLUNK TOKEB> (заменить SPLUNK TOKEN на ваше значение)
+    splunk_server = "https://84.252.128.64" //формат "https://<your hostname or address>"
+    bucket_name = yandex_storage_bucket.trail-bucket.bucket // //указать имя bucket с trails если вызов не из example
+    bucket_folder = "folder" //указанный при создании Trails
+    sa_id = yandex_iam_service_account.sa-bucket-editor.id //указать sa с правами  bucket_editor  если вызов не из example
+    coi_subnet_id = yandex_vpc_subnet.splunk-subnet[0].id //указать subnet_id если вызов не из example
+}
+
+```

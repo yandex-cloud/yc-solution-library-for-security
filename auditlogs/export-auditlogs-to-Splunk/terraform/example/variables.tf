@@ -7,7 +7,7 @@ variable "token" {
 
 variable "folder_id" {
   description = "Yandex Cloud Folder ID where resources will be created"
-  default     = "b1gci8pu7s2seup3mpor" #yc config get folder-id
+  default     = "b1g35l8msdsaf20p5iue" #yc config get folder-id
 }
 
 variable "cloud_id" {
@@ -15,7 +15,8 @@ variable "cloud_id" {
   default     = "b1g3o4minpkuh10pd2rj" #yc config get cloud-id
 }
 
-
+variable "splunk_token" {
+}
 
 //------------
 variable "zones" {
