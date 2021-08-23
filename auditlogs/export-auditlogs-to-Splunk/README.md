@@ -30,7 +30,7 @@
 - :white_check_mark: Наличие доступа в интернет с COI Instance для скачивания образа контейнера (например source NAT на подсеть)
 - :white_check_mark: ServiceAccount с ролью storage.editor для действий в Object Storage
 
-См. Пример конфигурации пререквизитов в /example/main.tf
+##### См. Пример конфигурации пререквизитов в /example/main.tf
 
 #### Пререквизиты Splunk
 - :white_check_mark: Настроенный [HTTP Event Collector](https://docs.splunk.com/Documentation/SplunkCloud/8.2.2105/Data/UsetheHTTPEventCollector#Configure_HTTP_Event_Collector_on_Splunk_Enterprise)
