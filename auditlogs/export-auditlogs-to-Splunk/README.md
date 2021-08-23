@@ -10,6 +10,10 @@
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
 - (скоро) Yandex Managed Service for Kubernetes 
 
+## Use cases and searches
+Команда безопасности Yandex Cloud собрала наиболее интересные сценарии use cases в репозитории - /auditlogs/_use_cases_and_searches
+Вы можете воспользоваться ими для реагирования на события ИБ
+
 ## Что делает решение (через Terraform)
 - [x] Разворачивает COI Instance с контейнером на базе образа s3-splunk-importer (cr.yandex/crpjfmfou6gflobbfvfv/s3-splunk-importer:1.0)
 - [x] Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в Splunk
