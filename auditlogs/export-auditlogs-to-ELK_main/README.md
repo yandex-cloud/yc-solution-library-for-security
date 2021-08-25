@@ -60,12 +60,17 @@ Security Content - объекты ELK, которые автоматически
 
 ## Процесс обновления контента
 Рекомендуется подписаться на обновления в данном репозитории для оповещений о наличии нового обновления.
-Технически обновление контента выполняется за счет обновления версии контейнера на новую версию cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest
+Технически, обновление контента выполняется за счет обновления версии контейнера на новую версию cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest
 
 Для обновления необходимо обеспечить удаления текущией версии image, скачивание новой версии, пересоздание контейнера:
 - либо пересоздать COI Instance через terraform (который был использован для его деплоя)
 - либо выполнить вышеуказанные действия вручную (удалить imnage, удалить контейнер, перезагрузить ВМ)
 
+Также, рекомендуется обновить контент Kibana (dashboards, detection rules, searches) - обновление производится при помощи единоразового запуска контейнера Updater.
+
+```
+docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -e KIBANA_SERVER='https://xxx.rw.mdb.yandexcloud.net' --name elk-updater cr.yandex/crpjfmfou6gflobbfvfv/elk-updater:latest
+```
 
 ## Развертывание с помощью Terraform
 
