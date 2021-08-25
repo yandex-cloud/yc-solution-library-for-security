@@ -19,20 +19,13 @@ falco:
     url: http://falcosidekick:2801/
 
 
-#customRules:
-#  { rules-traefik.yaml:  
-#    [ "dassda" ] }
-  # Although Falco comes with a nice default rule set for detecting weird
-  # behavior in containers, our users are going to customize the run-time
-  # security rule sets or policies for the specific container images and
-  # applications they run. This feature can be handled in this section.
-  #
-  # Example:
-  #
-  # rules-traefik.yaml: |-
-  #   [ rule body ]
-
-# certificates used by webserver and grpc server
-# paste certificate content or use helm with --set-file
-# or use existing secret containing key, crt, ca as well as pem bundle
+customRules:
+ rules-cilium.yaml:  |-
+  # disabling cilium false positives
+  - rule: Packet socket created in container
+    desc: Detect new packet socket at the device driver (OSI Layer 2) level in a container. Packet socket could be used for ARP Spoofing and privilege escalation(CVE-2020-14386) by attacker.
+    condition: evt.type=socket and evt.arg[0]=AF_PACKET and consider_packet_socket_communication and container and not proc.name in (user_known_packet_socket_binaries) and not container.image.repository=cr.yandex/crpsjg1coh47p81vh2lc/k8s-addons/cilium/cilium
+    output: Packet socket was created in a container (user=%user.name user_loginuid=%user.loginuid command=%proc.cmdline socket_info=%evt.args container_id=%container.id container_name=%container.name image=%container.image.repository:%container.image.tag)
+    priority: NOTICE
+    tags: [network, mitre_discovery]
 
