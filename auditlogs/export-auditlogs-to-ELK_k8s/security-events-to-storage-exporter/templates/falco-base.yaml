@@ -1,0 +1,38 @@
+image:
+  registry: docker.io
+  repository: falcosecurity/falco
+  pullPolicy: IfNotPresent
+
+docker:
+  enabled: true
+  socket: /var/run/docker.sock
+
+containerd:
+  enabled: true
+  socket: /run/containerd/containerd.sock
+
+falco:
+  jsonOutput: true
+  jsonIncludeOutputProperty: true
+  httpOutput:
+    enabled: true
+    url: http://falcosidekick:2801/
+
+
+#customRules:
+#  { rules-traefik.yaml:  
+#    [ "dassda" ] }
+  # Although Falco comes with a nice default rule set for detecting weird
+  # behavior in containers, our users are going to customize the run-time
+  # security rule sets or policies for the specific container images and
+  # applications they run. This feature can be handled in this section.
+  #
+  # Example:
+  #
+  # rules-traefik.yaml: |-
+  #   [ rule body ]
+
+# certificates used by webserver and grpc server
+# paste certificate content or use helm with --set-file
+# or use existing secret containing key, crt, ca as well as pem bundle
+

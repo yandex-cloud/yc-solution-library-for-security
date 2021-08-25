@@ -1,7 +1,0 @@
-image:
-  registry: cr.yandex
-  repository: crpulu5rrs02qpagqpon/falcotest
-  tag: latest
-  pullPolicy: Always
-webui:
-  enabled: true
