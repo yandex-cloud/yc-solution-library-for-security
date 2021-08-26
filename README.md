@@ -33,6 +33,6 @@ Yandex Cloud Solution Library for Security — это набор примеро�
   - Сбор, мониторинг и анализ аудит логов:
     - [Анализ логов безопасности k8s в ELK: аудит-логи, policy engine, falco](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(k8s))
 
-![Стэнд_архитектура](https://user-images.githubusercontent.com/85429798/128418857-f8062cdd-5eee-466f-85f0-931fd1c190cf.png)
+
 
 
