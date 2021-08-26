@@ -8,7 +8,7 @@
 
 
 #### Описание 
-Решение устанавливает falco и импортирует аудит-логи k8s, алерты falco в Managed ELK SIEM. Также импортирует security content (dashboards, detection rules и др.) в ELK для анализа и реагирования на события ИБ. В том числе "из коробки" анализирует срабатывания Policy Engine (OPA Gatekeeper).
+Решение устанавливает falco и импортирует аудит-логи k8s, алерты falco в Managed ELK SIEM. Также импортирует security content (dashboards, detection rules и др.) в ELK для анализа и реагирования на события ИБ. В том числе "из коробки" импортирует срабатывания Policy Engine (OPA Gatekeeper)(только в режиме enforce).
 
 #### Общая схема 
 
@@ -16,7 +16,7 @@
 
 
 #### Описание импортируемых объектов ELK (security content)
-Подробное описание объектов по ссылке [yc-solution-library-for-security/auditlogs/export-auditlogs-to-ELK(main)/papers/Описание объектов.pdf](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(main)/papers)
+Подробное описание объектов по [ссылке](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(main)/papers)
 
 #### Описание terraform 
 
@@ -33,14 +33,14 @@
 	- создание статического ключа для сервисного аккаунта
 	- создание функции и тригера для записи логов кластера в s3
 	- установку falco и настроенного falcosidekick, который отправит логи в s3
-	- скоро: установку Kyverno в режиме аудит и Policy Reporter (https://github.com/kyverno/policy-reporter)
+	- скоро: установку Kyverno в режиме аудит и [Policy Reporter](https://github.com/kyverno/policy-reporter)
 
 2) security-events-to-siem-importer (импортирует логи в ELK)
 - Принимает на вход: 
     - ряд параметров из модуля (security-events-to-storage-exporter)
     - "auditlog_enabled" true или false (отправлять ли аудит логи k8s в ELK)
     - "falco_enabled" true или false (отправлять ли алерты falco в ELK)
-    - fqdn ELK server
+    - адрес fqdn ELK 
     - id подсети, в которой создается ВМ с контейнером импортера
     - credentials ELK пользователя для импорта событий
 
@@ -54,15 +54,15 @@
 #### Пререквизиты
 - :white_check_mark: Cluster Managed k8s
 - :white_check_mark: Managed ELK
-- :white_check_mark: сервис аккаунт, который может писать в бакет и имеет роль ymq.admin
+- :white_check_mark: Сервисный аккаунт, который может писать в бакет и имеет роль ymq.admin
 - :white_check_mark: Object Storage Bucket 
-- :white_check_mark: subnet для развертывания ВМ с включенным NAT
+- :white_check_mark: Subnet для развертывания ВМ с включенным NAT
 
 
 #### Дополнительное действие: установка OPA Gatekeeper (helm)
-Установите OPA Gatekeeper с помощью helm - https://open-policy-agent.github.io/gatekeeper/website/docs/install/#deploying-via-helm
-Выбрать и установить необходимые contstraint temnplate и constraint из [gatekeeper-library](https://github.com/open-policy-agent/gatekeeper-library/tree/master/library/pod-security-policy) 
-[Пример установки](https://github.com/open-policy-agent/gatekeeper-library#usage)
+- Установите OPA Gatekeeper [с помощью helm](https://open-policy-agent.github.io/gatekeeper/website/docs/install/#deploying-via-helm)
+- Выберите и установить необходимые contstraint template и constraint из [gatekeeper-library](https://github.com/open-policy-agent/gatekeeper-library/tree/master/library/pod-security-policy) 
+- [Пример установки](https://github.com/open-policy-agent/gatekeeper-library#usage)
 
 
 #### Пример вызова модулей:
