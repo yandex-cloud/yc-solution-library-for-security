@@ -57,7 +57,6 @@ write_files:
             close)
               umount ${MOUNT}
               cryptsetup close ${MAPPED_DEVICE}
-              rm "${PLAINTEXT_DEK_FILE}"
               ;;
             #Удаление исходного устройства
             erase)
@@ -82,7 +81,6 @@ write_files:
     path: /etc/systemd/system/test-script.service
     permissions: '664'
 runcmd:
-  - sleep 5
   - export HOME=/root
   - cd /home/yandex-cloud
   - curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash > /home/yandex-cloud/log.log
@@ -92,10 +90,8 @@ runcmd:
   - aws configure set aws_secret_access_key "${aws_sec}"
   - aws configure set default.region ru-central1
   - /home/yandex-cloud/script-enc.sh create 
-  - sleep 100
+  - sleep 20
   - systemctl daemon-reload
   - systemctl start test-script.service
-  - sleep 5
   - systemctl enable test-script.service
   - reboot
-

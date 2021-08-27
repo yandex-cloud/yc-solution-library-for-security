@@ -1,0 +1,6 @@
+.terraform
+.terraform*
+sa1.json
+terraform.tfstate
+terraform.tfstate.backup
+testing.tfvars

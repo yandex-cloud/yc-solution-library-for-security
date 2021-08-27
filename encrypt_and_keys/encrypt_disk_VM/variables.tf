@@ -1,13 +1,13 @@
 variable "folder_id" {
-    default = "b1g35l8msdsaf20p5iue"
+    default = "00000000000000000000" //# Указать ID своей папки
 }
 
 variable "cloud_id" {
-    default = "b1g3o4minpkuh10pd2rj"
+    default = "00000000000000000000" //# Указать ID своего облака
 }
 
 variable "token" {
-    default = "/Users/mirtov8/Documents/terraform-play/enc-test/key.json"
+    default = "000000.json" //# Указать свой JSON для сервисной учетной записи. https://cloud.yandex.ru/docs/cli/quickstart#initialize
 }
 
 variable "device" {
