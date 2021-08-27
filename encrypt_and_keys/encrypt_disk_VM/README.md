@@ -2,7 +2,7 @@
 
 ## Описание
 - Решение позволяет выполнять шифрование диска (кроме загрузочного) [Yandex Compute Cloud ВМ](https://cloud.yandex.ru/services/compute) с помощью [Yandex Key Management Service](https://cloud.yandex.ru/services/kms) и [dm-crypt](https://en.wikipedia.org/wiki/Dm-crypt)+[LUKS](https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup)
-- Развертывание ВМ и пререквизитов выполняется с помощью примера terraform скрипта 
+- Развертывание решения и пререквизитов выполняется с помощью примера terraform скрипта 
 
 ## Схема работы
 ![Схема](https://user-images.githubusercontent.com/85429798/131116794-8dd100e3-c024-4297-a39d-8d1482fc8ead.png)
