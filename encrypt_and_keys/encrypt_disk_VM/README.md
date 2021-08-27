@@ -1,7 +1,7 @@
 # Шифрование диска ВМ в Облаке с помощью YC KMS
 
 ## Описание
-- Решение позволяет выполнять шифрование диска (кроме загрузочного) [Yandex Compute Cloud ВМ](https://cloud.yandex.ru/services/compute) с помощью [Yandex Key Management Service](https://cloud.yandex.ru/services/kms) и [dm-crypt](https://en.wikipedia.org/wiki/Dm-crypt)
+- Решение позволяет выполнять шифрование диска (кроме загрузочного) [Yandex Compute Cloud ВМ](https://cloud.yandex.ru/services/compute) с помощью [Yandex Key Management Service](https://cloud.yandex.ru/services/kms) и [dm-crypt](https://en.wikipedia.org/wiki/Dm-crypt)+[LUKS](https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup)
 - Развертывание ВМ и пререквизитов выполняется с помощью примера terraform скрипта 
 
 ## Описание работы решения
