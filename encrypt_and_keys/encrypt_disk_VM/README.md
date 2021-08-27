@@ -8,7 +8,7 @@
 - В [cloud-init](https://cloud.yandex.ru/docs/compute/concepts/vm-metadata#keys-processed-in-public-images) скрипт при развертывания ВМ передатися необходимые данные
 - Устанавливается ПО: awscli, cryptsetup-bin, curl
 - Передается созданный terraform ssh ключ
-- Выполняется bash скрипт с аргументом create: создается ключ шифрования с высокой энтропией методом KMS [generateDataKey](https://cloud.yandex.ru/docs/kms/api-ref/SymmetricCrypto/generateDataKey) и записывается на диск: в открытом и зашифрованном виде 
+- На ВМ Выполняется bash скрипт с аргументом create: создается ключ шифрования с высокой энтропией методом KMS [generateDataKey](https://cloud.yandex.ru/docs/kms/api-ref/SymmetricCrypto/generateDataKey) и записывается на диск: в открытом и зашифрованном виде 
 - Шифруется и монтируется второй диск ВМ на основе ключа шифрования
 - Ключ в зашифрованном виде копируется в[Yandex Object Storage](https://cloud.yandex.ru/services/storage) и удаляется из файловой системы
 - Скрипт с аргументом open добавляется в автозагрузку ОС (чтобы при перезагрузке автоматически примонтировать шифрованный диск)
