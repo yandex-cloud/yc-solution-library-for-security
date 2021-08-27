@@ -12,7 +12,7 @@ KMS_KEY_ID="abjhdahmqnqfu9ntvc3d" #заменить на свой KMS key id
 ENCRYPTED_DEK_FILE="./encrypted1_dek.enc" # persistent FS
 PLAINTEXT_DEK_FILE="/tmp/encrypted1.dek" # in-memory FS
 MOUNT="/mnt/${MAPPED_DEVICE}"
-BUCKET_NAME="bucket-enc"
+BUCKET_NAME="bucket-enc" #заменить на свой
 
 YC=~/yandex-cloud/bin/yc
 CMD="$1"
