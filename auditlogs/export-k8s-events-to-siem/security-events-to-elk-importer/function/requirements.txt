@@ -1,2 +1,0 @@
-botocore
-boto3

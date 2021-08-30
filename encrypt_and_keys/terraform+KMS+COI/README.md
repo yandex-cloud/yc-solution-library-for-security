@@ -29,6 +29,8 @@ Yandex Cloud Object Storage может выступать в роли terraform 
 ## Подготовка/Пререквизиты:
 - установить и настроить [yc client](https://cloud.yandex.ru/docs/cli/quickstart)
 - установить [terraform](https://www.terraform.io/downloads.html)
+- заполнить файл variables.tf своими данными
+- запустить terraform
 
 ## Итоги развертывания
 
