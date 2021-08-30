@@ -21,13 +21,13 @@ def decrypt_secret_kms(secret):
 
 # Configuration - Get ElasticSearch CA.pem
 def get_elastic_cert():
-    file = 'include/CA.pem'
+    file = '/app/include/CA.pem'
     if os.path.isfile(file):
         return file
     else:
         url = 'https://storage.yandexcloud.net/cloud-certs/CA.pem'
         response = requests.get(url)
-        with open('include/CA.pem', 'wb') as f:
+        with open('/app/include/CA.pem', 'wb') as f:
             f.write(response.content)
         return file
 
@@ -90,7 +90,7 @@ def get_config_index_state():
 # Function - Create ingest pipeline
 def create_ingest_pipeline():
     request_suffix = '/_ingest/pipeline/audit-trails-pipeline'
-    data_file = open('include/audit-trail/pipeline.json')
+    data_file = open('/app/include/audit-trail/pipeline.json')
     data_json = json.load(data_file)
     data_file.close()
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
@@ -100,7 +100,7 @@ def create_ingest_pipeline():
 # Function - Create an index with mapping
 def create_index_with_map():
     request_suffix = f"/{elastic_index_name}"
-    data_file = open('include/audit-trail/mapping.json')
+    data_file = open('/app/include/audit-trail/mapping.json')
     data_json = json.load(data_file)
     data_file.close()
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
@@ -118,7 +118,7 @@ def refresh_index():
 def configure_kibana():
     # Index pattern
     data_file = {
-        'file': open('include/audit-trail/index_pattern.ndjson', 'rb')
+        'file': open('/app/include/audit-trail/index_pattern.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -127,7 +127,7 @@ def configure_kibana():
 
     # Filters
     data_file = {
-        'file': open('include/audit-trail/filters.ndjson', 'rb')
+        'file': open('/app/include/audit-trail/filters.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -136,7 +136,7 @@ def configure_kibana():
 
     # Search
     data_file = {
-        'file': open('include/audit-trail/search.ndjson', 'rb')
+        'file': open('/app/include/audit-trail/search.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -145,7 +145,7 @@ def configure_kibana():
 
     # Dashboard
     data_file = {
-        'file': open('include/audit-trail/dashboard.ndjson', 'rb')
+        'file': open('/app/include/audit-trail/dashboard.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
@@ -154,7 +154,7 @@ def configure_kibana():
 
     # Detections (not stable, throws error 400 from time to time)
     data_file = {
-        'file': open('include/audit-trail/detections.ndjson', 'rb')
+        'file': open('/app/include/audit-trail/detections.ndjson', 'rb')
     }
     request_suffix = '/api/detection_engine/rules/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
