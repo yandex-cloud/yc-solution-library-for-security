@@ -66,7 +66,7 @@ config_states = {
 # function - refresh index patterns
 def refresh_index_pattern(key):
     # get current index-pattern file
-    file = f"include/{key}/index-pattern.ndjson"
+    file = f"/app/include/{key}/index-pattern.ndjson"
     # check ndjson file exists
     if not os.path.isfile(file):
         return 
@@ -83,7 +83,7 @@ def refresh_index_pattern(key):
 
 # function - refresh filters
 def refresh_filters(key):
-    file = f"include/{key}/filters.ndjson"
+    file = f"/app/include/{key}/filters.ndjson"
     # check ndjson file exists
     if not os.path.isfile(file):
         return 
@@ -100,7 +100,7 @@ def refresh_filters(key):
 
 # function - refresh searches
 def refresh_searches(key):
-    file = f"include/{key}/search.ndjson"
+    file = f"/app/include/{key}/search.ndjson"
     # check ndjson file exists
     if not os.path.isfile(file):
         return 
@@ -117,7 +117,7 @@ def refresh_searches(key):
 
 # function - refresh dashboards
 def refresh_dashboards(key):
-    file = f"include/{key}/dashboard.ndjson"
+    file = f"/app/include/{key}/dashboard.ndjson"
     # check ndjson file exists
     if not os.path.isfile(file):
         return 
@@ -134,7 +134,7 @@ def refresh_dashboards(key):
 
 # function - refresh dashboards
 def refresh_detections(key):
-    file = f"include/{key}/detections.ndjson"
+    file = f"/app/include/{key}/detections.ndjson"
     # check ndjson file exists
     if not os.path.isfile(file):
         return 
