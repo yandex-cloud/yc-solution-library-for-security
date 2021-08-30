@@ -24,13 +24,13 @@ def decrypt_secret_kms(secret):
 
 # Configuration - Get ElasticSearch CA.pem
 def get_elastic_cert():
-    file = 'include/CA.pem'
+    file = '/app/include/CA.pem'
     if os.path.isfile(file):
         return file
     else:
         url = 'https://storage.yandexcloud.net/cloud-certs/CA.pem'
         response = requests.get(url)
-        with open('include/CA.pem', 'wb') as f:
+        with open('/app/include/CA.pem', 'wb') as f:
             f.write(response.content)
         return file
 
@@ -118,12 +118,12 @@ def get_config_index_state():
 def create_ingest_pipeline():
     if elastic_index_name == "k8s-audit":
         request_suffix  = '/_ingest/pipeline/k8s-pipeline'
-        data_file       = open(f"include/{elastic_index_name}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
+        data_file       = open(f"/app/include/{elastic_index_name}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
         data_json       = json.load(data_file)
         data_file.close()
     elif elastic_index_name == "k8s-falco":
         request_suffix  = '/_ingest/pipeline/falco-pipeline'
-        data_file       = open(f"include/{elastic_index_name}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
+        data_file       = open(f"/app/include/{elastic_index_name}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
         data_json       = json.load(data_file)
         data_file.close()
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
@@ -135,7 +135,7 @@ def create_ingest_pipeline():
 # Function - Create an index with mapping
 def create_index_with_map():
     request_suffix  = f"/{elastic_index_name}"
-    data_file       = open(f"include/{elastic_index_name}/mapping.json") # заменить на прямую ссылку github когда репо станет публичным
+    data_file       = open(f"/app/include/{elastic_index_name}/mapping.json") # заменить на прямую ссылку github когда репо станет публичным
     data_json       = json.load(data_file)
     data_file.close()
     response        = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
@@ -156,7 +156,7 @@ def refresh_index():
 # Function - Preconfigure Kibana
 def configure_kibana():
     # Index pattern
-    file = f"include/{elastic_index_name}/index-pattern.ndjson"
+    file = f"/app/include/{elastic_index_name}/index-pattern.ndjson"
     if os.path.isfile(file):
         data_file = {
             'file': open(file, 'rb')
@@ -168,7 +168,7 @@ def configure_kibana():
         print(f"{response.status_code} -- {response.text}")
 
      # Filters
-    file = f"include/{elastic_index_name}/filters.ndjson"
+    file = f"/app/include/{elastic_index_name}/filters.ndjson"
     if os.path.isfile(file):
         data_file = {
             'file': open(file, 'rb')
@@ -180,7 +180,7 @@ def configure_kibana():
         print(f"{response.status_code} -- {response.text}")
 
     # Search
-    file = f"include/{elastic_index_name}/search.ndjson"
+    file = f"/app/include/{elastic_index_name}/search.ndjson"
     if os.path.isfile(file):
         data_file = {
             'file': open(file, 'rb')
@@ -192,7 +192,7 @@ def configure_kibana():
         print(f"{response.status_code} -- {response.text}")
 
     # Dashboard
-    file = f"include/{elastic_index_name}/dashboard.ndjson"
+    file = f"/app/include/{elastic_index_name}/dashboard.ndjson"
     if os.path.isfile(file):
         data_file = {
             'file': open(file, 'rb')
@@ -204,7 +204,7 @@ def configure_kibana():
         print(f"{response.status_code} -- {response.text}")
 
     # Detections (not stable, throws error 400 from time to time)
-    file = f"include/{elastic_index_name}/detections.ndjson"
+    file = f"/app/include/{elastic_index_name}/detections.ndjson"
     if os.path.isfile(file):
         data_file = {
             'file': open(file, 'rb')
