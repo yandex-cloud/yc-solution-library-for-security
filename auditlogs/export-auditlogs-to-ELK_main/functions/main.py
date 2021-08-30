@@ -118,7 +118,7 @@ def refresh_index():
 def configure_kibana():
     # Index pattern
     data_file = {
-        'file': open('/app/include/audit-trail/index_pattern.ndjson', 'rb')
+        'file': open('/app/include/audit-trail/index-pattern.ndjson', 'rb')
     }
     request_suffix = '/api/saved_objects/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
