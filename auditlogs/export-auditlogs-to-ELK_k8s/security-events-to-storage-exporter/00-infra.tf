@@ -2,8 +2,6 @@ data "yandex_iam_service_account" "bucket_sa" {
   service_account_id = var.log_bucket_service_account_id
 }
 
-
-
 data "yandex_kubernetes_cluster" "my_cluster" {
   folder_id = var.folder_id
   name = var.cluster_name

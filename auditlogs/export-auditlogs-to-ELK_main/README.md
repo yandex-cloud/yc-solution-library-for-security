@@ -1,6 +1,6 @@
 # Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)
 
-![dashboard](https://user-images.githubusercontent.com/85429798/127686785-27658104-6258-4de8-929f-9cf87624fa27.png)
+![Дашборд](https://user-images.githubusercontent.com/85429798/127686785-27658104-6258-4de8-929f-9cf87624fa27.png)
 
 ## Оглавление
 - [Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)](#сбор-мониторинг-и-анализ-аудит-логов-в-yandex-managed-service-for-elasticsearch-elk)
@@ -24,9 +24,9 @@
 ## Описание решения
 Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud Managed Service for Elasticsearch (ELK) из следующих источников:
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
-- Yandex Managed Service for Kubernetes: аудит логи, алерты falco и Policy Engine (OPA Gatekeeper) [описание настройки](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_k8s)
+- [Yandex Managed Service for Kubernetes](https://cloud.yandex.ru/docs/managed-kubernetes/): аудит логи, алерты falco и Policy Engine (OPA Gatekeeper) ([описание настройки](../export-auditlogs-to-ELK_k8s))
 
-Решение является постоянно обновляемым и поддерживаемым Security-командой Yandex.Cloud
+> Решение является постоянно обновляемым и поддерживаемым Security-командой Yandex.Cloud.
 
 
 ## Что делает решение
@@ -36,7 +36,7 @@
 - [x] Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в ELK
 
 ## Схема решения
-![Схема_решения](https://user-images.githubusercontent.com/85429798/129480037-cef97473-bba2-4589-b291-0578163d09fd.png)
+![Схема решения](https://user-images.githubusercontent.com/85429798/129480037-cef97473-bba2-4589-b291-0578163d09fd.png)
 
 [Схема решения для поставки логов k8s](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_k8s)
 
@@ -61,7 +61,7 @@ Security Content - объекты ELK, которые автоматически
 
 ## Процесс обновления контента
 Рекомендуется подписаться на обновления в данном репозитории для оповещений о наличии нового обновления.
-Технически, обновление контента выполняется за счет обновления версии контейнера на новую версию cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest
+Технически, обновление контента выполняется за счет обновления версии контейнера на новую версию `cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest`
 
 Для обновления необходимо обеспечить удаления текущией версии образа, загрузку новой версии, пересоздание контейнера на основе нового образа:
 - либо пересоздать COI Instance через terraform (который был использован для его деплоя)
@@ -78,12 +78,12 @@ docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -
 #### Описание 
 
 #### Пререквизиты
-- :white_check_mark: Object Storage Bucket для AuditTrails
-- :white_check_mark: Включенный сервис AuditTrail в UI
+- :white_check_mark: Object Storage Bucket для Audit Trails
+- :white_check_mark: Включенный сервис Audit Trails в UI
 - :white_check_mark: Сеть VPC
 - :white_check_mark: Подсети в 3-х зонах доступности
 - :white_check_mark: Наличие доступа в интернет с COI Instance для скачивания образа контейнера
-- :white_check_mark: ServiceAccount с ролью storage.editor для действий в Object Storage
+- :white_check_mark: ServiceAccount с ролью *storage.editor* для действий в Object Storage
 
 См. Пример конфигурации пререквизитов в [/example/main.tf](./terraform/example) 
 Решение состоит из 2-х модулей Terraform [/terraform/modules/](./terraform/modules) :
@@ -146,4 +146,4 @@ output "elk-user" {
     }
     
 ```
-[Развертывание решения для поставки логов k8s](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(k8s))
+[Развертывание решения для поставки логов k8s](../export-auditlogs-to-ELK_k8s)

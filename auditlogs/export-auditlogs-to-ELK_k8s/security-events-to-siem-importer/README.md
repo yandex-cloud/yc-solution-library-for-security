@@ -23,7 +23,7 @@
 	
 
 Пререквизиты:
-1) Сервисная учетная запись с правами ymq.writer, serverless.functions.invoker, storage.editor 
+1) Сервисная учетная запись с правами *ymq.writer*, *serverless.functions.invoker*, *storage.editor* 
 2) ID подсети для создания контейнеров
 3) Включенный NAT на выбранной подсети
 3) Кластер ElasticSearch
@@ -34,12 +34,10 @@
 
 module "bucket_baby" {
     source = "../../../yc-solution-library-for-security/auditlogs/export-k8s-events-to-siem/security-events-to-siem-importer" # путь до модуля
-    folder_id = "b1g1v8cu6isid0ms9va4" // folder-id кластера k8s yc managed-kubernetes cluster get --id <ID кластера> --format=json | jq  .folder_id
+    folder_id = "xxxxxx" // folder-id кластера k8s yc managed-kubernetes cluster get --id <ID кластера> --format=json | jq  .folder_id
 
-
-    
-    log_bucket_name = "logggs" //можно подставить из конфига развертывания
-    service_account_id = "<>" //id выданный администратором
+    log_bucket_name = "lugs-bucket" // можно подставить из конфига развертывания
+    service_account_id = "xxxxxx" // id выданный администратором
 
 }
 

@@ -1,6 +1,6 @@
 # Сбор, мониторинг и анализ аудит логов во внешний SIEM ArcSight
-![dash](https://user-images.githubusercontent.com/85429798/128209194-bc4eb274-1b97-4271-a712-e00a5f3f9b84.png)
-![use_cases](https://user-images.githubusercontent.com/85429798/128209212-a705f950-4eea-4305-8f21-decfc2ab7af0.png)
+![Дашборд](https://user-images.githubusercontent.com/85429798/128209194-bc4eb274-1b97-4271-a712-e00a5f3f9b84.png)
+![Сценарии](https://user-images.githubusercontent.com/85429798/128209212-a705f950-4eea-4305-8f21-decfc2ab7af0.png)
 
 ## Содержание
 
@@ -39,12 +39,12 @@
 - Загруается security content из текущего репозитория
 - ArcSight Connector с помощью security content вычитывает файлы, парсит и отправляет на сервер ArcSight 
 
-![Схема_решения](https://user-images.githubusercontent.com/85429798/128553857-a6837742-8e63-4d8c-967a-be92454a0cb0.png)
+![Схема](https://user-images.githubusercontent.com/85429798/128553857-a6837742-8e63-4d8c-967a-be92454a0cb0.png)
 
 
 #### Сценарий № 2 - Загрузка лог файлов в ArcSight с помощью ВМ, которая находится в Yandex Cloud
  
-![arcsight_2](https://user-images.githubusercontent.com/85429798/128553811-2d25dcc7-0500-446b-96ea-35a8fe8959ba.png)
+![Схема](https://user-images.githubusercontent.com/85429798/128553811-2d25dcc7-0500-446b-96ea-35a8fe8959ba.png)
 
 
 ## Security Content
@@ -97,7 +97,7 @@ Security Content - объекты ArcSight, которые загружаютс�
 - `agents[0].proccessfoldersrecursively=true` 
 
 10) Запустите коннектор и убедитесь, что события поступают
-![end](https://user-images.githubusercontent.com/85429798/128209247-c1582fc9-ea2a-4908-9c95-618ac1a097ee.png)
+![События](https://user-images.githubusercontent.com/85429798/128209247-c1582fc9-ea2a-4908-9c95-618ac1a097ee.png)
 
 
 #### Сценарий № 2 - Загрузка лог файлов в ArcSight с помощью ВМ, которая находится в Yandex.Cloud
@@ -119,10 +119,3 @@ Security Content - объекты ArcSight, которые загружаютс�
 - info@ast-security.ru
 
 ![image](https://user-images.githubusercontent.com/85429798/128419821-aa2a4c85-7c67-4173-b21b-f0ec6b96e9e3.png)
-
-
-
-
-
-
-
