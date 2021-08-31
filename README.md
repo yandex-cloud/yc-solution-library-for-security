@@ -32,7 +32,10 @@
          alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
 </a></br>
 
-- Безопасность Kubernetes
+- <a href="https://kubernetes.io/">
+    <img src="https://github.com/magnologan/awesome-k8s-security/blob/master/logo.png"
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
+</a></br> Безопасность Kubernetes
   - Аутентификация и управление доступом Managed Kubernetes:
     - [Пример настройки ролевых моделей и политик в Managed Service for Kubernetes](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/auth_and_access/role-model-example)
   - Сбор, мониторинг и анализ аудит логов:
