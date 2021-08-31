@@ -104,7 +104,7 @@ module "security-events-to-siem-importer" {
 
     coi_subnet_id = "xxxxxx" // subnet id в которой будет развернута ВМ с контейнером (обязательно включить NAT)
 
-    elastic_pw = "P@ssw0rd" // пароль учетной записи ELK (можно подставить из модуля module.yc-managed-elk.elk-pass)
+    elastic_pw = var.elk_pw // выполнить команду: export TF_VAR_elk_pwn=<ELK PASS> (заменить ELK PASS на ваше значение) // пароль учетной записи ELK (можно подставить из модуля module.yc-managed-elk.elk-pass)
     
     elastic_user = "admin" // имя учетной записи ELK
 }
