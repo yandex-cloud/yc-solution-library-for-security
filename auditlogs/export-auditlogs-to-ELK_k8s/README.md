@@ -58,7 +58,6 @@
 - :white_check_mark: Object Storage Bucket 
 - :white_check_mark: Subnet для развертывания ВМ с включенным NAT
 
-См. Пример конфигурации пререквизитов и вызова модулей в /example/main.tf 
 
 
 #### Дополнительное действие: установка OPA Gatekeeper (helm)
@@ -68,6 +67,8 @@
 
 
 #### Пример вызова модулей:
+См. Пример вызова модулей в /example/main.tf 
+
 ```Python
 
 // Вызов модуля security-events-to-storage-exporter
