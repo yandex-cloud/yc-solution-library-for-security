@@ -7,7 +7,7 @@
 
 Пример небезопасной конфигурации:
 
-![image](https://user-images.githubusercontent.com/85429798/129485848-09fb4847-7ff6-46cd-be4a-990de7e41781.png)
+![Небезопасная конфигурация](https://user-images.githubusercontent.com/85429798/129485848-09fb4847-7ff6-46cd-be4a-990de7e41781.png)
 
 
 ## Пример безопасной передачи приватной информации в контейнер COI
@@ -37,10 +37,9 @@ Terraform пример выполняет:
 
 В UI консоли мы видим секреты только в зашифрованном виде:
 
-![image](https://user-images.githubusercontent.com/85429798/129485922-ceff4208-c562-4021-8cc3-ddf0f0d927ec.png)
+![Безопасная конфигурация](https://user-images.githubusercontent.com/85429798/129485922-ceff4208-c562-4021-8cc3-ddf0f0d927ec.png)
 
 
 В логах контейнера мы видим секреты в расшифрованном виде:
 
-![image](https://user-images.githubusercontent.com/85429798/129485886-ca56bc93-4f86-45b1-ad99-c48de55bde6d.png)
-
+![Безопасная конфигурация](https://user-images.githubusercontent.com/85429798/129485886-ca56bc93-4f86-45b1-ad99-c48de55bde6d.png)

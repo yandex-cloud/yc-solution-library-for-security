@@ -1,13 +1,13 @@
 variable "folder_id" {
-    default = "00000000000000000000" //# Указать ID своей папки
+    default = "xxxxxx" //# Указать ID своей папки
 }
 
 variable "cloud_id" {
-    default = "00000000000000000000" //# Указать ID своего облака
+    default = "xxxxxx" //# Указать ID своего облака
 }
 
 variable "token" {
-    default = "000000.json" //# Указать свой JSON для сервисной учетной записи. https://cloud.yandex.ru/docs/cli/quickstart#initialize
+    default = "key.json" //# Указать свой JSON для сервисной учетной записи. https://cloud.yandex.ru/docs/cli/quickstart#initialize
 }
 
 variable "device" {

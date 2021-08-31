@@ -55,25 +55,25 @@ terraform apply
 lsblk
 ```
 
-![status0](https://user-images.githubusercontent.com/85429798/131117114-d15f733e-8db8-4bdc-a3bf-082554a4e7cc.jpg)
+![Статус](https://user-images.githubusercontent.com/85429798/131117114-d15f733e-8db8-4bdc-a3bf-082554a4e7cc.jpg)
 
 - Проверить статус шифрования диска:
 
 ```
 cryptsetup status encrypted1
 ```
-![status](https://user-images.githubusercontent.com/85429798/131117237-bb081d75-3876-4970-9a2c-b52ae4161c55.jpg)
+![Статус](https://user-images.githubusercontent.com/85429798/131117237-bb081d75-3876-4970-9a2c-b52ae4161c55.jpg)
 
 - Проверить диск на другой ВМ: Создать snapshot диска:
 
-![snap1](https://user-images.githubusercontent.com/85429798/131117342-0ef73d39-890b-49c4-888c-7ca43789356f.jpg)
+![Снапшот](https://user-images.githubusercontent.com/85429798/131117342-0ef73d39-890b-49c4-888c-7ca43789356f.jpg)
 
 - Создать ВМ с диском из snapshot:
-![create_vm](https://user-images.githubusercontent.com/85429798/131117386-e1e9e805-2412-48bd-be9e-41e4ee83eed9.png)
+![Создание ВМ](https://user-images.githubusercontent.com/85429798/131117386-e1e9e805-2412-48bd-be9e-41e4ee83eed9.png)
 
 - Попробовать примонтировать диск:
 
 ```
 sudo mount /dev/vdb /mnt
 ```
-![test_snap](https://user-images.githubusercontent.com/85429798/131117495-c2cc85d4-21c9-4578-9027-907bf6c9d0c2.jpg)
+![Результат теста](https://user-images.githubusercontent.com/85429798/131117495-c2cc85d4-21c9-4578-9027-907bf6c9d0c2.jpg)
