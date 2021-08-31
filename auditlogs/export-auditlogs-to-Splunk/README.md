@@ -1,8 +1,8 @@
 # Сбор, мониторинг и анализ аудит логов во внешний SIEM Splunk
 
-![Снимок экрана 2021-08-23 в 14 58 43](https://user-images.githubusercontent.com/85429798/130447006-c5a604b3-d1ed-4f47-b132-5e83f02494c8.png)
+![Дашборд](https://user-images.githubusercontent.com/85429798/130447006-c5a604b3-d1ed-4f47-b132-5e83f02494c8.png)
 
-![Снимок экрана 2021-08-23 в 14 40 31](https://user-images.githubusercontent.com/85429798/130446967-926e892c-0dcb-4a97-93bc-92fe67b078dd.png)
+![Дашборд](https://user-images.githubusercontent.com/85429798/130446967-926e892c-0dcb-4a97-93bc-92fe67b078dd.png)
 
 
 ## Описание решения
@@ -19,7 +19,7 @@
 - [x] Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в Splunk
 
 ## Схема решения
-![splun](https://user-images.githubusercontent.com/85429798/130447027-efdd1ee7-0c1b-46fb-b0f2-36577bb5e6a4.png)
+![Схема](https://user-images.githubusercontent.com/85429798/130447027-efdd1ee7-0c1b-46fb-b0f2-36577bb5e6a4.png)
 
 
 ## Развертывание с помощью Terraform
@@ -31,7 +31,7 @@
 - :white_check_mark: Включенный сервис Audit Trails в UI
 - :white_check_mark: Сеть VPC
 - :white_check_mark: Наличие доступа в интернет с COI Instance для скачивания образа контейнера (например source NAT на подсеть)
-- :white_check_mark: ServiceAccount с ролью storage.editor для действий в Object Storage
+- :white_check_mark: ServiceAccount с ролью *storage.editor* для действий в Object Storage
 
 ##### См. Пример конфигурации пререквизитов в /example/main.tf
 
@@ -45,7 +45,7 @@
 - создает ВМ COI со спецификацией Docker Container со скриптом
 - создает ssh пару ключей и сохраняет приватную часть на диск, публичную в ВМ
 - создает KMS ключ
-- назначает права kms.keys.encrypterDecrypter на ключ для sa для шифрование секретов
+- назначает права *kms.keys.encrypterDecrypter* на ключ для sa для шифрование секретов
 - шифрует секреты и передает их в Docker Container
 
 
