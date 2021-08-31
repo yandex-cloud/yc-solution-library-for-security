@@ -46,7 +46,7 @@
 - Dashboard, на котором отражены все use cases и полезная статистика
 - Набор Saved Queries для удобного поиска Security событий
 - Набор Detection Rules (правила корреляции) на которые настроены оповещения (Клиенту самостоятельно необходимо указать назначение уведомлений)
-- Все интересные поля событий преобразованы в формат [Elastic Common Schema (ECS)](https://www.elastic.co/guide/en/ecs/current/index.html), полная табличка маппинга в файле [Описание объектов](./papers/Описание-объектов.pdf)
+- Все интересные поля событий преобразованы в формат [Elastic Common Schema (ECS)](https://www.elastic.co/guide/en/ecs/current/index.html), полная табличка маппинга в файле [Описание объектов](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Описание%20объектов.pdf)
 
 Подробное описание в файле [ECS-mapping.docx](./papers/ECS-mapping_new.pdf)
 
