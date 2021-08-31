@@ -58,6 +58,8 @@
 - :white_check_mark: Object Storage Bucket 
 - :white_check_mark: Subnet для развертывания ВМ с включенным NAT
 
+См. Пример конфигурации пререквизитов и вызова модулей в /example/main.tf 
+
 
 #### Дополнительное действие: установка OPA Gatekeeper (helm)
 - Установите OPA Gatekeeper [с помощью helm](https://open-policy-agent.github.io/gatekeeper/website/docs/install/#deploying-via-helm)
