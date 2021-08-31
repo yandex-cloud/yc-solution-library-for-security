@@ -83,7 +83,8 @@ docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -
 - :white_check_mark: Наличие доступа в интернет с COI Instance для скачивания образа контейнера
 - :white_check_mark: ServiceAccount с ролью *storage.editor* для действий в Object Storage
 
-См. Пример конфигурации пререквизитов в [/example/main.tf](./terraform/example) 
+См. Пример конфигурации пререквизитов и вызова модулей в [/example/main.tf](./terraform/example) 
+## 
 Решение состоит из 2-х модулей Terraform [/terraform/modules/](./terraform/modules) :
 1) yc-managed-elk:
 - создает cluster [Yandex Managed Service for Elasticsearch](https://cloud.yandex.ru/services/managed-elasticsearch) 
