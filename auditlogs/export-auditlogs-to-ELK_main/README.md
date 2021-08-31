@@ -18,8 +18,6 @@
   - [Аудит логи Falco](#аудит-логи-falco)
   - [Аудит логи k8s](#аудит-логи-k8s)
 
-<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
-
 
 ## Описание решения
 Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud Managed Service for Elasticsearch (ELK) из следующих источников:
@@ -42,7 +40,7 @@
 
 
 ## Security Content
-Security Content - объекты ELK, которые автоматически загружаются решением. Весь контент разработан с учетом многолетнего опыта Security команды Yandex.Cloud и на основе опыта Клиентов облака.
+**Security Content** - объекты ELK, которые автоматически загружаются решением. Весь контент разработан с учетом многолетнего опыта Security команды Yandex.Cloud и на основе опыта Клиентов облака.
 
 Содержит следующий Security Content:
 - Dashboard, на котором отражены все use cases и полезная статистика

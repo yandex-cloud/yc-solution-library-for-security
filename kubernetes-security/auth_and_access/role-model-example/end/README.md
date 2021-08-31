@@ -1,21 +1,18 @@
-
 # Удаление стенда
 
-Аутентифицируемся на от имени профиля default в терраформ и yc
-
+Аутентифицируемся от имени профиля default в terraform и yc:
 
 ```
 export YC_TOKEN=$(yc iam create-token --profile default)
 ```
-Удалим кластер кубернетиса
+Удалим кластер Kubernetes:
 
 ```
 $ cd ../terraform/staging/
 $ terraform destroy
 ```
 
-Удалим роли
-
+Удалим роли:
 
 ```
 $ cd ../iam
@@ -23,7 +20,7 @@ $ cd ../iam
 terraform destroy
 ```
 
-Удалим сервисные аккаунты 
+Удалим сервисные аккаунты:
 
 ```
 $ yc iam service-account delete --name devops-user1 --folder-id=$STAGING_FOLDER_ID --profile default

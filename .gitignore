@@ -1,21 +1,8 @@
 # Apple temporary
-auditlogs/.DS_Store
 .DS_Store
-
-.DS_Store
-auditlogs/export-auditlogs-to-ELK/terraform/.terraform/providers/registry.terraform.io
-auditlogs/export-auditlogs-to-ELK/terraform/.terraform.lock.hcl
 
 # Word temporary
 ~$*.doc*
-auditlogs/export-auditlogs-to-ELK/terraform/task — копия.txt
-auditlogs/export-auditlogs-to-ELK/terraform/1
-auditlogs/export-auditlogs-to-ELK/backup/ECS-mapping_new.docx
-auditlogs/export-auditlogs-to-ELK/backup/kms_decrypt_cmds.sh
-auditlogs/export-auditlogs-to-ELK/backup/mapping6.json
-auditlogs/export-auditlogs-to-ELK/backup/curl_play with elk.sh
-auditlogs/export-auditlogs-to-ELK/backup/*
-
 
 # Compiled files
 *.tfstate
@@ -23,12 +10,15 @@ auditlogs/export-auditlogs-to-ELK/backup/*
 *.tfstate.lock.info
 *.tfvars
 .terraform.lock.hcl
+
 # logs
 *.log
 *s3cfg
+
 # zip files
 *.zip
 *gatekeeper-library/
+
 # Directories
 .terraform/
 .vagrant/
@@ -41,9 +31,6 @@ auditlogs/export-auditlogs-to-ELK/backup/*
 
 # Ignored Terraform files
 *gitignore*.tf
-
-# Ignore Mac .DS_Store files
-.DS_Store
 
 # Ignored vscode files
 .vscode/

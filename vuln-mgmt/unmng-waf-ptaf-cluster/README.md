@@ -10,7 +10,7 @@
 - Развертывание
 - Описание шагов работы с PT WAF
 - Проверка прохождения траффика и отказоустойчивости
-- Дполнительные материалы: настройка кластеризации PT WAF и настройка Yandex Application LoadBalancer 
+- Дполнительные материалы: настройка кластеризации PT WAF и настройка Yandex Application Load Balancer 
 
 ## Описание:
 В рамках workshop будут выполнены:
@@ -20,27 +20,21 @@
 Отказоучстойчивость обеспечивается за счет:
 - кластеризации самих PT WAF в режиме active-active
 - балансировки траффика с помощью External-LB Yandex.Cloud
-- cloud-finction Yandex.Cloud, которая отслеживает состояние PT WAF и в случаи их падения направляет траффик на приложения напрямую - "BYPASS"
+- cloud-function Yandex.Cloud, которая отслеживает состояние PT WAF и в случаи их падения направляет траффик на приложения напрямую - "BYPASS"
 
 #### Сценарий окружения:
 Предполагается, что в Yandex.Cloud у Клиента уже развернут небезопасный сценарий публикации ВМ наружу: ВМ с веб приложениями в 2-х зонах доступности. Также внешний сетевой балансировщик нагрузки. 
 
-*для установки целой схемы снуля необходимо использовать playbook из папки "from-scratch"
+> Для установки целой схемы снуля необходимо использовать playbook из папки "from-scratch"
 
 #### Схема до:
-![image](https://user-images.githubusercontent.com/85429798/127995744-e9213d79-6fca-49cd-a2bf-3cf7bead0c75.png)
-
-
-
+![Схема](https://user-images.githubusercontent.com/85429798/127995744-e9213d79-6fca-49cd-a2bf-3cf7bead0c75.png)
 
 
 #### Схема после:
-![image](https://user-images.githubusercontent.com/85429798/127995787-9d547d0c-390c-4df7-8577-928607fb3d08.png)
+![Схема](https://user-images.githubusercontent.com/85429798/127995787-9d547d0c-390c-4df7-8577-928607fb3d08.png)
 
-![image](https://user-images.githubusercontent.com/85429798/127995819-fdc647d8-9125-4acf-8708-4088b8c28826.png)
-
-
-
+![Схема](https://user-images.githubusercontent.com/85429798/127995819-fdc647d8-9125-4acf-8708-4088b8c28826.png)
 
 
 ## Подготовка/Пререквизиты:
@@ -189,9 +183,7 @@ mongo --authenticationDatabase admin -u root -p $(cat /opt/waf/conf/master_passw
 [![image](https://user-images.githubusercontent.com/85429798/127031813-f9460c50-2765-40d4-aa16-f66fc7fd70b7.png)](https://www.youtube.com/watch?v=DQYzXVKVVjg)
 
 
-
-## Дополнительные материалы
-
+# Дополнительные материалы
 
 ## Настройка Yandex Application LoadBalancer 
 

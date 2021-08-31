@@ -1,13 +1,11 @@
 # Настройка ролевого доступа - часть вторая, проверка доступов
 
-
-Инициируем терраформ 
+Инициируем терраформ:
 ```
 terraform init
 ```
 
-
-Попробуем создать инфраструктуру от имени developer профиля
+Попробуем создать инфраструктуру от имени developer профиля:
 ```
 YC_TOKEN=$(yc iam create-token --profile demo-developer-user1)
 terraform apply
@@ -27,7 +25,7 @@ terraform apply
 
 
 
-Внимание! если вы используете security группы, то в целях демо разрешите в default sg доступ на 443 порт. Это можно сделать таким способом. Если у нас в облаке нет security групп, то ничего делать не надо
+>Внимание! если вы используете security группы, то в целях демо разрешите в default sg доступ на 443 порт. Это можно сделать таким способом. Если у нас в облаке нет security групп, то ничего делать не нужно.
 
 ```
 yc vpc security-group update-rules --id $(terraform output -json | jq -r .default_sg_id.value) --add-rule "direction=ingress,port=443,protocol=tcp,v4-cidrs=[0.0.0.0/0]" --profile=default

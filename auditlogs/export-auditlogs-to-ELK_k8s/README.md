@@ -49,7 +49,7 @@
     - создание функций для push имен файлов из S3 в YMQ
     - создание тригеров для взаимодействия очередей и функций
     - генерацию и запись в файл и на ВМ ключей SSH
-    - создание ВМ на базе COI (container optimised image) с контейнерами workers, которые импортируют событий из s3 в ELK
+    - создание ВМ на базе COI ([container optimised image](https://cloud.yandex.ru/docs/cos/concepts/)) с контейнерами workers, которые импортируют событий из s3 в ELK
 
 #### Пререквизиты
 - :white_check_mark: Cluster Managed k8s

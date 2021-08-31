@@ -1,10 +1,6 @@
-
-
 # Управление политиками
 
 ## Подготовим окружение
-
-
 
 Для начала рекомендуется изучить [статью](https://labs.bishopfox.com/tech-blog/bad-pods-kubernetes-pod-privilege-escalation) в которой описаны возможные способы экплуатировать кластер с подами, в которых повышены привилегии.
 
@@ -33,7 +29,7 @@ priv-and-hostpid-exec-pod     1/1     Running   0          8s
 priv-exec-pod                 1/1     Running   0          8s
 ```
 
-Удалим поды
+Удалим поды:
 
 ```
 $ kubectl delete -f ./bad-pods/pods
@@ -50,7 +46,7 @@ helm install kyverno kyverno/kyverno --namespace kyverno --create-namespace --se
 kubectl apply -f ./bad-pods/pods
 ```
 
-Посмотрим на созданные политики
+Посмотрим на созданные политики.
 Политики из профиля default доступны [в директории kyverno-policies](./kyverno-policies/)
 
 ```
@@ -67,7 +63,7 @@ restrict-apparmor-profiles       true         enforce
 restrict-sysctls                 true         enforce
 ```
 
-Увидим что создался только nothing-allowed-exec-pod , а остальное поличло ошибки
+Увидим что создался только *nothing-allowed-exec-pod*, а остальное поличло ошибки
 
 ```
 $ kubectl apply -f ./bad-pods/pods
@@ -151,7 +147,7 @@ priv-and-hostpid-exec-deployment     0/2     0            0           28s
 priv-exec-deployment                 0/2     0            0           27s
 ```
 
-Удалим kyverno
+Удалим kyverno:
 
 ```
 $ kubectl delete -f ./bad-pods/deployments/
@@ -160,7 +156,7 @@ $ helm delete kyverno  --namespace kyverno
 ```
 ## Open Policy Agent Gatekeeper
 
-Установим OPA Gatekeeper
+Установим OPA Gatekeeper:
 
 ```
 $ helm repo add gatekeeper https://open-policy-agent.github.io/gatekeeper/charts
@@ -168,8 +164,7 @@ $ helm repo update
 $ helm install gatekeeper gatekeeper/gatekeeper --namespace gatekeeper --create-namespace
 ```
 
-Так библиотеку шаблонов политик, доступных в gatekeper. При помощи kustomize установим все шаблоны в кластер
-
+Так библиотеку шаблонов политик, доступных в gatekeper. При помощи kustomize установим все шаблоны в кластер:
 
 ```
 $ curl -s "https://raw.githubusercontent.com/\
