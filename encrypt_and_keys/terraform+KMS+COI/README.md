@@ -23,8 +23,9 @@ Terraform пример выполняет:
 - приватные данные передаются в зашифрованном виде внутрь контейнера
 - простое python приложение внутри кода расшифровывет приватные данные и делает print в лог
 
-**Важно** Данное решение не отменяет необходимости применения лучших практик защиты terraform конфигурации.
-Yandex Cloud Object Storage может выступать в роли terraform remote state и выполнять функции блокировки с помощью Yandex Database - https://github.com/yandex-cloud/examples/tree/master/terraform-ydb-state 
+**Важно** 
+> Данное решение не отменяет необходимости применения лучших практик защиты terraform конфигурации.
+> Yandex Cloud Object Storage может выступать в роли terraform remote state и выполнять функции блокировки с помощью Yandex Database - https://github.com/yandex-cloud/examples/tree/master/terraform-ydb-state 
 
 ## Подготовка/Пререквизиты:
 - установить и настроить [yc client](https://cloud.yandex.ru/docs/cli/quickstart)
