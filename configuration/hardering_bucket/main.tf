@@ -1,4 +1,4 @@
-//Генерация random-string для имени bucket---------------------------------------------------------
+// Генерация random-string для имени bucket---------------------------------------------------------
 resource "random_string" "random" {
   length           = 8
   special          = false
@@ -6,21 +6,21 @@ resource "random_string" "random" {
 
 }
 
-//---------------------------------------------------------------------------------------------
-//Создание sa storage admin для создания bucket 
+// ---------------------------------------------------------------------------------------------
+// Создание sa storage admin для создания bucket 
 resource "yandex_iam_service_account" "sa-creator" {
   name        = "sa-creator-${random_string.random.result}"
   description = "service account to create bucket for audit-logs"
   folder_id = var.folder_id
 }
 
-//Создание стат ключа
+// Создание стат ключа
 resource "yandex_iam_service_account_static_access_key" "tr-sa-static-key" {
   service_account_id = yandex_iam_service_account.sa-creator.id
   description        = "static access key for object storage"
 }
 
-//Назначение прав 
+// Назначение прав 
 resource "yandex_resourcemanager_folder_iam_binding" "storage_admin" {
   folder_id = var.folder_id
 
@@ -31,7 +31,7 @@ resource "yandex_resourcemanager_folder_iam_binding" "storage_admin" {
   ]
 }
 
-//Назначение прав на KMS ключи для работы с шифрованным бакетом для sa-creator
+// Назначение прав на KMS ключи для работы с шифрованным бакетом для sa-creator
 resource "yandex_resourcemanager_folder_iam_binding" "binding-for-sa-creator" {
   folder_id = var.folder_id
 
@@ -41,7 +41,7 @@ resource "yandex_resourcemanager_folder_iam_binding" "binding-for-sa-creator" {
 }
 
 /*
-//Назначение прав на KMS ключи для работы с шифрованным бакетом для группы all-access
+// Назначение прав на KMS ключи для работы с шифрованным бакетом для группы all-access
 resource "yandex_resourcemanager_folder_iam_binding" "binding-for-all-access" {
   count = length(var.all-access-users)
   folder_id = var.folder_id
@@ -52,7 +52,7 @@ resource "yandex_resourcemanager_folder_iam_binding" "binding-for-all-access" {
 }
 */
 
-//Назначение прав на KMS ключи для работы с шифрованным бакетом для группы read-only-sa
+// Назначение прав на KMS ключи для работы с шифрованным бакетом для группы read-only-sa
 resource "yandex_resourcemanager_folder_iam_binding" "binding-for-read-only-sa" {
   count = length(var.read-only-sa)
   folder_id = var.folder_id
@@ -62,7 +62,7 @@ resource "yandex_resourcemanager_folder_iam_binding" "binding-for-read-only-sa" 
   members = [element(var.read-only-sa, count.index)]
 }
 
-//Назначение прав на KMS ключи для работы с шифрованным бакетом для группы write-only-sa
+// Назначение прав на KMS ключи для работы с шифрованным бакетом для группы write-only-sa
 resource "yandex_resourcemanager_folder_iam_binding" "binding-for-write-only-sa" {
   count = length(var.write-only-sa)
   folder_id = var.folder_id
@@ -72,8 +72,8 @@ resource "yandex_resourcemanager_folder_iam_binding" "binding-for-write-only-sa"
   members = [element(var.write-only-sa, count.index)]
 }
 
-//-------------------------------------------------------------------------------------------------
-//Назначение прав группам УЗ
+// -------------------------------------------------------------------------------------------------
+// Назначение прав группам УЗ
 resource "yandex_resourcemanager_folder_iam_binding" "binding-for-all-access2" {
   count = length(var.all-access-users)
   folder_id = var.folder_id
@@ -101,12 +101,10 @@ resource "yandex_resourcemanager_folder_iam_binding" "binding-for-write-only-sa2
   members = [element(var.write-only-sa, count.index)]
 }
 
+// -------------------------------------------------------------------------------------------------
+// Операции с S3:
 
-
-//-------------------------------------------------------------------------------------------------
-//Операции с S3:
-
-//Создание KMS ключа для server-side encryption
+// Создание KMS ключа для server-side encryption
 resource "yandex_kms_symmetric_key" "key-a" {
   name              = "key-for-bucket-k8s-logs"
   description       = "description for key"
@@ -115,15 +113,15 @@ resource "yandex_kms_symmetric_key" "key-a" {
 }
 
 
-//Cоздание отдельного S3 bucket для логирования действий 
+// Cоздание отдельного S3 bucket для логирования действий 
 resource "yandex_storage_bucket" "log_bucket" {
   bucket = "action-log-${random_string.random.result}"
   access_key = yandex_iam_service_account_static_access_key.tr-sa-static-key.access_key
   secret_key = yandex_iam_service_account_static_access_key.tr-sa-static-key.secret_key
 }
 
-//-------------------------------------------------
-//Создание основного S3 bucket 
+// -------------------------------------------------
+// Создание основного S3 bucket 
 resource "yandex_storage_bucket" "bucket-main" {
   bucket = "bucket-main-${random_string.random.result}"
 
@@ -131,16 +129,16 @@ resource "yandex_storage_bucket" "bucket-main" {
   secret_key = yandex_iam_service_account_static_access_key.tr-sa-static-key.secret_key
 
 
-//Создание BucketPolicy:
+// Создание BucketPolicy:
   policy = <<POLICY
 {"Version":"2012-10-17","Id":"myid","Statement":[{"Sid":"rule-admin-for-terr-admin","Effect":"Allow","Principal":{"CanonicalUser":["${yandex_iam_service_account.sa-creator.id}"]},"Action":"*","Resource":["arn:aws:s3:::bucket-main-${random_string.random.result}/*","arn:aws:s3:::bucket-main-${random_string.random.result}"]}, {"Sid":"rule-all-access-users","Effect":"Allow","Principal":{"CanonicalUser":[${replace("${join(", ", [for s in var.all-access-users : format("%q", s)])}", "federatedUser:", "")}]},"Action":"*","Resource":["arn:aws:s3:::bucket-main-${random_string.random.result}/*","arn:aws:s3:::bucket-main-${random_string.random.result}"]}, {"Sid":"rule-admin-web","Effect":"Allow","Principal":{"CanonicalUser":[${replace("${join(", ", [for s in var.all-access-users : format("%q", s)])}", "federatedUser:", "")}]},"Action":"*","Resource":["arn:aws:s3:::bucket-main-${random_string.random.result}/*","arn:aws:s3:::bucket-main-${random_string.random.result}"], "Condition": {"StringLike": {"aws:referer": "https://console.cloud.yandex.*/folders/*/storage/bucket/bucket-main-${random_string.random.result}*"}}}, {"Sid":"rule-write-only-sa","Effect":"Allow","Principal":{"CanonicalUser":[${replace("${join(", ", [for s in var.write-only-sa : format("%q", s)])}", "serviceAccount:", "")}]},"Action":"s3:PutObject" ,"Resource":["arn:aws:s3:::bucket-main-${random_string.random.result}/*","arn:aws:s3:::bucket-main-${random_string.random.result}"]}, {"Sid":"rule-read-only-sa","Effect":"Allow","Principal":{"CanonicalUser":[${replace("${join(", ", [for s in var.read-only-sa : format("%q", s)])}", "serviceAccount:", "")}]},"Action":["s3:ListBucket", "s3:GetObject"],"Resource":["arn:aws:s3:::bucket-main-${random_string.random.result}/*","arn:aws:s3:::bucket-main-${random_string.random.result}"]}]}
 POLICY
 
- //Включение версионирования
+ // Включение версионирования
   versioning {
     enabled = true
   }
-//Настройка жизненного цикла: удаление НЕтекущих версий и текущих версий 
+// Настройка жизненного цикла: удаление НЕтекущих версий и текущих версий 
   lifecycle_rule {
     id      = "cleanupoldlogs"
     enabled = true
@@ -160,14 +158,14 @@ POLICY
     }
   }
 
-//Включение логирования действий над бакетом
+// Включение логирования действий над бакетом
   logging {
     target_bucket = yandex_storage_bucket.log_bucket.id
     target_prefix = "logs/"
   }
 
 
-//Включение шифрования
+// Включение шифрования
 
   server_side_encryption_configuration {
     rule {
@@ -179,8 +177,3 @@ POLICY
   }
 
   }
-
-//-----------------------------------------------------------------------------------------------------
-
-
-

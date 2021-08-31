@@ -53,7 +53,7 @@ $ yc config set service-account-key developer.json
 ```
 Проверим что в фолдерах для задания ни у кого пока нет никаких ролей
 ```
-$yc resource-manager folder list-access-bindings --id=$STAGING_FOLDER_ID --profile=default
+$ yc resource-manager folder list-access-bindings --id=$STAGING_FOLDER_ID --profile=default
 
 +---------+--------------+------------+
 | ROLE ID | SUBJECT TYPE | SUBJECT ID |

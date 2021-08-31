@@ -27,7 +27,7 @@
 	- cluster_name (имя кластера k8s)
 	- log_bucket_service_account_id - id сервис аккаунта который может писать в бакет и имеет роль ymq.admin
 	- log_bucket_name - имя бакета куда писать лог
-	- function_service_account_id - ( опционально) id сервисного аккаунта который будет запускать фукнцию , если не указан то используется log_bucket_service_account_id
+	- function_service_account_id - (опционально) id сервисного аккаунта который будет запускать фукнцию , если не указан то используется log_bucket_service_account_id
 
 - Выполняет: 
 	- создание статического ключа для сервисного аккаунта
@@ -68,22 +68,22 @@
 #### Пример вызова модулей:
 ```Python
 
-//Вызов модуля security-events-to-storage-exporter
+// Вызов модуля security-events-to-storage-exporter
 module "security-events-to-storage-exporter" {
     source = "../security-events-to-storage-exporter/" # путь до модуля
 
-    folder_id = "b1g30dckl1ctvpjqdudf" // folder-id кластера k8s yc managed-kubernetes cluster get --id <ID кластера> --format=json | jq  .folder_id
+    folder_id = "xxxxxx" // folder-id кластера k8s yc managed-kubernetes cluster get --id <ID кластера> --format=json | jq  .folder_id
 
-    cluster_name = "k8s-exporter1" //имя кластера
+    cluster_name = "k8s-example" // имя кластера
 
-    log_bucket_service_account_id = "ajemr9kufi6si6p778n0" //id sa (должен обладать ролями: ymq.admin, write to bucket)
+    log_bucket_service_account_id = "xxxxxx" // id sa (должен обладать ролями: ymq.admin, write to bucket)
     
-    log_bucket_name = "k8s-exporter1" //можно подставить из конфига развертывания
+    log_bucket_name = "k8s-bucket" // можно подставить из конфига развертывания
     #function_service_account_id = "чч" // опциоанальный id сервисного аккаунта который вызывает функции - если не выставлен то функция вызывается от имени log_bucket_service_account_id
 }
 
 
-//Вызов модуля security-events-to-siem-importer
+// Вызов модуля security-events-to-siem-importer
 module "security-events-to-siem-importer" {
     source = "../security-events-to-siem-importer/" # путь до модуля
 
@@ -97,9 +97,9 @@ module "security-events-to-siem-importer" {
 
     log_bucket_name = module.security-events-to-storage-exporter.log_bucket_name
 
-    elastic_server = "https://c-c9q5s2n6ihabttfdt9r1.rw.mdb.yandexcloud.net" // url ELK "https://c-xxx.rw.mdb.yandexcloud.net" (можно подставить из модуля module.yc-managed-elk.elk_fqdn)
+    elastic_server = "https://c-xxx.rw.mdb.yandexcloud.net" // url ELK "https://c-xxx.rw.mdb.yandexcloud.net" (можно подставить из модуля module.yc-managed-elk.elk_fqdn)
 
-    coi_subnet_id = "e9bifj73ht64lu8g19su" // subnet id в которой будет развернута ВМ с контейнером (обязательно включить NAT)
+    coi_subnet_id = "xxxxxx" // subnet id в которой будет развернута ВМ с контейнером (обязательно включить NAT)
 
     elastic_pw = "P@ssw0rd" // пароль учетной записи ELK (можно подставить из модуля module.yc-managed-elk.elk-pass)
     
