@@ -1,7 +1,7 @@
 # Отказоустойчивая эксплуатация PT Application Firewall на базе Yandex.Cloud
 Цель демо: Установка PT Web Application Firewall (далее PT WAF) в Yandex.Cloud в отказоустойчивой конфигурации.
 
-## Подробный разбор workshop на видео:
+## Подробный workshop-разбор на видео:
 [![image](https://user-images.githubusercontent.com/85429798/129480863-ef468a52-1191-4a23-9801-5e09c0de0cad.png)](https://www.youtube.com/watch?v=tnGuyIXNL6o)
 
 
@@ -10,20 +10,20 @@
 - Развертывание
 - Описание шагов работы с PT WAF
 - Проверка прохождения траффика и отказоустойчивости
-- Дполнительные материалы: настройка кластеризации PT WAF и настройка Yandex Application Load Balancer 
+- Дполнительные материалы: настройка кластеризации PT WAF и настройка Application Load Balancer 
 
 ## Описание:
 В рамках workshop будут выполнены:
 - установка инфраструктуры с помощью terraform (infrastructure as a code)
-- инсталяция и базовая конфигурация PT WAF cluster в 2-х зонах доступности Yandex.Cloud
+- инсталяция и базовая конфигурация PT WAF cluster в двух зонах доступности Yandex.Cloud
 
 Отказоучстойчивость обеспечивается за счет:
-- кластеризации самих PT WAF в режиме active-active
+- кластеризации самих PT WAF в режиме Active-Active
 - балансировки траффика с помощью External-LB Yandex.Cloud
-- cloud-function Yandex.Cloud, которая отслеживает состояние PT WAF и в случаи их падения направляет траффик на приложения напрямую - "BYPASS"
+- использования Cloud Function функции в Yandex.Cloud, которая отслеживает состояние PT WAF и в случаи их падения направляет траффик на приложения напрямую - `BYPASS`
 
 #### Сценарий окружения:
-Предполагается, что в Yandex.Cloud у Клиента уже развернут небезопасный сценарий публикации ВМ наружу: ВМ с веб приложениями в 2-х зонах доступности. Также внешний сетевой балансировщик нагрузки. 
+Предполагается, что в Yandex.Cloud у Клиента уже развернут небезопасный сценарий публикации ВМ наружу: ВМ с веб приложениями в 2-х зонах доступности. Также имеется внешний сетевой балансировщик нагрузки. 
 
 > Для установки целой схемы снуля необходимо использовать playbook из папки "from-scratch"
 
@@ -48,12 +48,11 @@
 
 - скачать архив с файлами [pt_archive.zip](https://github.com/yandex-cloud/yc-architect-solution-library/blob/main/security-solution-library/unmng-waf-ptaf-cluster/main/pt_archive.zip)
 - перейти в папку с файлами
-- вставить необходимые параметры в файле variables.tf (в комментариях указаны необходимые команды yc для получения значений)
+- вставить необходимые параметры в файле `variables.tf` (в комментариях указаны необходимые команды yc для получения значений)
 - выполнить команду инициализации terraform
 
 ```
 terraform init
-
 ```
 - выполнить команду импорта load-balancer
 
@@ -65,8 +64,8 @@ terraform import yandex_lb_network_load_balancer.ext-lb $(yc load-balancer netwo
 ```
 terraform apply
 ```
-- включить NAT на subnet: ext-subnet-a, ext-subnet-b (для того, чтобы PT WAF мог выходить в интернет за обновлениями и активировать лицензию)
-- назначить Security Group "app-sg" на ВМ: app-a, app-b
+- включить NAT на subnet: *ext-subnet-a*, *ext-subnet-b* (для того, чтобы PT WAF мог выходить в интернет за обновлениями и активировать лицензию)
+- назначить Security Group `app-sg` на ВМ: *app-a*, *app-b*
 
 [<img width="1135" alt="image" src="https://user-images.githubusercontent.com/85429798/126979165-eb4c9e6b-806d-401c-bec1-53f54cbecef1.png">](https://www.youtube.com/watch?v=IOYw4fdn69A)
 
@@ -75,11 +74,11 @@ terraform apply
 ## Описание шагов работы с PT AF
 Видеоинструкция этапа:
 
-- пробрасываем порты по SSH для подключения к серверам PT AF (ВЫПОЛНЯЕМ В 2 РАЗНЫХ ОКНАХ ТЕРМИНАЛА):
+- пробрасываем порты по SSH для подключения к серверам PT AF (**нужно выполнять в двух разных окнах терминала**):
 ```
 ssh -L 22001:192.168.2.10:22013 -L 22002:172.18.0.10:22013 -L 8443:192.168.2.10:8443 -L 127.0.0.2:8443:172.18.0.10:8443 -i ./pt_key.pem yc-user@$(yc compute instance list --format=json | jq '.[] | select( .name == "ssh-a")| .network_interfaces[0].primary_v4_address.one_to_one_nat.address '| sed 's/"//g') 
 ```
-после этого вы окажитесь в терминале ssh-a (брокер машина) оставте его открытым
+После этого вы окажитесь в терминале ssh-a (брокер машина) оставте его открытым
 
 ## Настройка кластеризации PT AF 
 
@@ -118,26 +117,26 @@ sudo wsc
 Enter 0 
 config commit
 ```
-- дождитесь когда на SLAVE-сервере появится сообщение: "TASK: [mongo | please configure all other nodes of your cluster]". после этого  переключитесь на MASTER-сервер и начните синхронизацию той же командой:
+- дождитесь когда на SLAVE-сервере появится сообщение: `TASK: [mongo | please configure all other nodes of your cluster]`, после этого  переключитесь на MASTER-сервер и начните синхронизацию той же командой:
 ```
 ssh -p 22001 -i pt_key.pem yc-user@localhost -o StrictHostKeyChecking=no
 sudo wsc
 Enter 0 
 config commit
 ```
-*в случае, если на MASTER config commit завершится неуспешно, применть команду еще раз
+> В случае, если на MASTER команда *config commit* завершится неуспешно, нужно применить команду еще раз.
 
-- далее конфигурация на узле master остановилась на сообщении TASK: [mongo | wait config sync on secondary nodes], просто вручную выполните команду config sync на узле SLAVE.
+- далее конфигурация на узле master остановилась на сообщении `TASK: [mongo | wait config sync on secondary nodes]`, просто вручную выполните команду config sync на узле SLAVE.
 
 - на SLAVE выполнить:
 ```
 config sync 
 ```
-- на Master выполнить:
+- на MASTER выполнить:
 ```
 config sync
 ```
-- на Master выполнить:
+- на MASTER выполнить:
 ```
 mongo --authenticationDatabase admin -u root -p $(cat /opt/waf/conf/master_password) waf --eval 'c = db.sentinel; l = c.findOne({_id: "license"}); Object.keys(l).forEach(function(k) { if (l[k].ip) { delete l[k].ip; l[k].hostname = "yclicense.ptsecurity.ru" }}); c.update({_id: l._id}, l)'
 ```
@@ -149,36 +148,35 @@ mongo --authenticationDatabase admin -u root -p $(cat /opt/waf/conf/master_passw
 
 - Открываем в браузере https://127.0.0.1:8443 
 
-- Вводим стандартные логин и пароль, admin/positive ,меняем пароль, например на P@ssw0rd
+- Вводим стандартные логин и пароль, **admin/positive**, меняем пароль, например на `P@ssw0rd`
 
-- Открываем вкладку Configuration->Network->Gateways, кликая на иконку карандаша(Edit) 
-- в каждом из шлюзе устанавливаем галочку Active
-- в каждом из шлюзе на вкладке Network определяем для интерфейса eth-ext1 алиасы mgmt,wan,lan
+- Открываем вкладку `Configuration -> Network -> Gateways`, кликая на иконку карандаша (Edit) 
+- в каждом из шлюзе устанавливаем галочку `Active`
+- в каждом из шлюзе на вкладке `Network` определяем для интерфейса *eth-ext1* алиасы *mgmt*, *wan*, *lan*
 
-- Создаем апстрим на вкладке Configuration->Network->Upstreams
-- Name: internal-lb
-- Backend Host: впишите адрес внутреннего балансировщика яндекс облако
-- Backend port: 80
+- Создаем апстрим на вкладке `Configuration -> Network -> Upstreams`
+- Name: `internal-lb`
+- Backend Host: *впишите адрес внутреннего балансировщика яндекс облако*
+- Backend port: `80`
 
-- Создаем сервис на вкладке Configuration->Network->Services
-- Name: app
-- Net interface alias: wan
-- Listen port: 80
-- Upstream: internal-lb
+- Создаем сервис на вкладке `Configuration -> Network -> Services`
+- Name: `app`
+- Net interface alias: `wan`
+- Listen port: `80`
+- Upstream: `internal-lb`
 
-- Редактуируем существующее веб приложение 'Any' на вкладке Configuration -> Security -> Web Applications:
-- Service: app
-
+- Редактуируем существующее веб приложение *Any* на вкладке `Configuration -> Security -> Web Applications`:
+- Service: `app`
 
 [![image](https://user-images.githubusercontent.com/85429798/127023351-f0731361-5ba5-429a-82e9-5cc3c14a6355.png)](https://www.youtube.com/watch?v=lCFnHanCSSE)
 
 
 ## Проверка прохождения траффика и отказоустойчивости
 - посмотрите внешний ip адреса внешнего балансировщика нагрузки
-- отклюим ptaf-a и убедимся, что траффик проходит
-- отключим app-a и убедимся, что траффик проходит
-- отклюим ptaf-b и убедимся, что BYPASS сработает и траффик переключится напрямую на внутренний балансировщик
-- включите ptaf-a, ptaf-b обратно и убедитесь то, что траффик снова идет через ptaf
+- отклюим *ptaf-a* и убедимся, что трафик проходит
+- отключим *app-a* и убедимся, что трафик проходит
+- отклюим *ptaf-b* и убедимся, что `BYPASS` сработает и трафик переключится напрямую на внутренний балансировщик
+- включите *ptaf-a*, *ptaf-b* обратно и убедитесь то, что трафик снова идет через *ptaf*
 
 [![image](https://user-images.githubusercontent.com/85429798/127031813-f9460c50-2765-40d4-aa16-f66fc7fd70b7.png)](https://www.youtube.com/watch?v=DQYzXVKVVjg)
 
