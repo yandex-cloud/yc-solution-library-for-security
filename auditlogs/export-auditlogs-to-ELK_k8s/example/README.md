@@ -1,11 +1,11 @@
 ## Тестовый скрипт terraform 
 
 Пререквизиты
-✅ Cluster Managed k8s
-✅ Managed ELK
-✅ Сервисный аккаунт, который может писать в бакет и имеет роль ymq.admin
-✅ Object Storage Bucket
-✅ Subnet для развертывания ВМ с включенным NAT
+- ✅ Cluster Managed k8s
+- ✅ Managed ELK
+- ✅ Сервисный аккаунт, который может писать в бакет и имеет роль ymq.admin
+- ✅ Object Storage Bucket
+- ✅ Subnet для развертывания ВМ с включенным NAT
 
 1) Заполните поля файла main.tf
 2) Запустите:
