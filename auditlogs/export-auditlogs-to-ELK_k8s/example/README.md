@@ -9,6 +9,7 @@ terraform init
 terraform apply
 ```
 
+```
 Пример вызова модулей:
 // Вызов модуля security-events-to-storage-exporter
 module "security-events-to-storage-exporter" {
@@ -45,3 +46,4 @@ module "security-events-to-siem-importer" {
     
     elastic_user = "admin" // имя учетной записи ELK
 }
+```
