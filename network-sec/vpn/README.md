@@ -12,4 +12,3 @@ Mock web-application environment with security groups to provide secure remote-a
 В том-же файле поменяйте значение переменной ipsec_password на желаемый пароль для тестового ipsec соединения
 - запускаем `terraform init`
 - запускаем`terraform apply`
--

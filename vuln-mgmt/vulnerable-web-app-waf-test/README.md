@@ -18,7 +18,7 @@ Terraform playbook создаст:
 git clone https://github.com/mirtov-alexey/dvwa_and_managed_waf.git 
 ```
 - заполнить переменные в файле - "variables.tf" (в поле token необходимо ввести либо oauth token пользователя либо [путь к файлу ключа service account](https://cloud.yandex.ru/docs/cli/operations/authentication/service-account))
-- в файле "provider.tf" указать token = var.token (для аутентификациии пользователя) или service_account_key_file = var.token (для аутентификации от service account)
+- в файле "provider.tf" указать `token = var.token` (для аутентификациии пользователя) или `service_account_key_file = var.token` (для аутентификации от service account)
 - перейти в папку с файлами и запустить terraform init 
 ```
 cd ./dvwa_and_managed_waf/
