@@ -29,7 +29,7 @@
 ##
 <a href="https://kubernetes.io/">
     <img src="https://github.com/magnologan/awesome-k8s-security/blob/master/logo.png"
-         alt="Kubernetes logo" title="Kubernetes" height="100" width="100" />
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
 </a></br>
 
 - Безопасность Kubernetes
