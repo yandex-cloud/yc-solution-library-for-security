@@ -8,7 +8,7 @@
 
 
 #### Описание 
-Решение устанавливает falco и импортирует аудит-логи k8s, алерты falco в Managed ELK SIEM. Также импортирует security content (dashboards, detection rules и др.) в ELK для анализа и реагирования на события ИБ. В том числе "из коробки" импортирует срабатывания Policy Engine (OPA Gatekeeper)(только в режиме enforce).
+Решение устанавливает falco и импортирует аудит-логи k8s, алерты falco в Managed ELK SIEM. Также импортирует security content (dashboards, detection rules и др.) в ELK для анализа и реагирования на события ИБ. В том числе "из коробки" импортирует срабатывания Policy Engine (OPA Gatekeeper) (только в режиме enforce).
 
 #### Общая схема 
 
@@ -21,47 +21,47 @@
 #### Описание terraform 
 
 Решение состоит из 2-х модулей Terraform:
-1) security-events-to-storage-exporter (экспортирует логи в s3)
+1) [security-events-to-storage-exporter](./security-events-to-storage-exporter) (экспортирует логи в s3)
 - Принимает на вход: 
-    - folder_id (id каталога в котором лежит кластер)
-	- cluster_name (имя кластера k8s)
-	- log_bucket_service_account_id - id сервис аккаунта который может писать в бакет и имеет роль ymq.admin
-	- log_bucket_name - имя бакета куда писать лог
-	- function_service_account_id - (опционально) id сервисного аккаунта который будет запускать фукнцию , если не указан то используется log_bucket_service_account_id
+    - `folder_id` - id каталога, в котором расположен кластер
+	- `cluster_name` - имя кластера Kubernetes
+	- `log_bucket_service_account_id` - id сервисного аккаунта, который может писать в бакет и имеет роль *ymq.admin*
+	- `log_bucket_name` - имя бакета, куда нужно сохранять логи
+	- `function_service_account_id` - (опционально) id сервисного аккаунта, который будет запускать фукнцию, если не указан, то используется `log_bucket_service_account_id`
 
 - Выполняет: 
 	- создание статического ключа для сервисного аккаунта
 	- создание функции и тригера для записи логов кластера в s3
 	- установку falco и настроенного falcosidekick, который отправит логи в s3
-	- скоро: установку Kyverno в режиме аудит и [Policy Reporter](https://github.com/kyverno/policy-reporter)
+	- **(скоро)** установку Kyverno в режиме аудит и [Policy Reporter](https://github.com/kyverno/policy-reporter)
 
-2) security-events-to-siem-importer (импортирует логи в ELK)
+2) [security-events-to-siem-importer](./security-events-to-siem-importer) (импортирует логи в ELK)
 - Принимает на вход: 
-    - ряд параметров из модуля (security-events-to-storage-exporter)
-    - "auditlog_enabled" true или false (отправлять ли аудит логи k8s в ELK)
-    - "falco_enabled" true или false (отправлять ли алерты falco в ELK)
-    - адрес fqdn ELK 
+    - ряд параметров из модуля (`security-events-to-storage-exporter`)
+    - `auditlog_enabled` - *true* или *false* (отправлять ли аудит логи k8s в ELK)
+    - `falco_enabled` - *true* или *false* (отправлять ли алерты falco в ELK)
+    - адрес FQDN инсталляции ELK 
     - id подсети, в которой создается ВМ с контейнером импортера
     - credentials ELK пользователя для импорта событий
 
 - Выполняет: 
-	- создание ymq очередей с именами файлов логов в s3
-    - создание функций для push имен файлов из s3 в ymq
+	- создание YMQ очередей с именами файлов логов в S3
+    - создание функций для push имен файлов из S3 в YMQ
     - создание тригеров для взаимодействия очередей и функций
-    - генерацию и запись в файл и на ВМ ssh ключей
-    - создание ВМ на базе COI (container optimised image) с контейнерами workers. Они импортируют событий из s3 в ELK
+    - генерацию и запись в файл и на ВМ ключей SSH
+    - создание ВМ на базе COI (container optimised image) с контейнерами workers, которые импортируют событий из s3 в ELK
 
 #### Пререквизиты
 - :white_check_mark: Cluster Managed k8s
 - :white_check_mark: Managed ELK
-- :white_check_mark: Сервисный аккаунт, который может писать в бакет и имеет роль ymq.admin
+- :white_check_mark: Сервисный аккаунт, который может писать в бакет и имеет роль *ymq.admin*
 - :white_check_mark: Object Storage Bucket 
 - :white_check_mark: Subnet для развертывания ВМ с включенным NAT
 
 
 #### Дополнительное действие: установка OPA Gatekeeper (helm)
 - Установите OPA Gatekeeper [с помощью helm](https://open-policy-agent.github.io/gatekeeper/website/docs/install/#deploying-via-helm)
-- Выберите и установить необходимые contstraint template и constraint из [gatekeeper-library](https://github.com/open-policy-agent/gatekeeper-library/tree/master/library/pod-security-policy) 
+- Выберите и установить необходимые constraint template и constraint из [gatekeeper-library](https://github.com/open-policy-agent/gatekeeper-library/tree/master/library/pod-security-policy) 
 - [Пример установки](https://github.com/open-policy-agent/gatekeeper-library#usage)
 
 
