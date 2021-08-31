@@ -23,8 +23,6 @@ module "security-events-to-storage-exporter" {
     log_bucket_name = "k8s-bucket" // можно подставить из конфига развертывания
     #function_service_account_id = "чч" // опциоанальный id сервисного аккаунта который вызывает функции - если не выставлен то функция вызывается от имени log_bucket_service_account_id
 }
-
-
 // Вызов модуля security-events-to-siem-importer
 module "security-events-to-siem-importer" {
     source = "../security-events-to-siem-importer/" # путь до модуля
