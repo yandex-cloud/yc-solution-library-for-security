@@ -22,22 +22,23 @@
 
 
 ## Описание решения
-Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud Managed Service for Elasticsearch (ELK) со следующих источников:
+Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud Managed Service for Elasticsearch (ELK) из следующих источников:
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
-- Yandex Managed Service for Kubernetes: аудит логи, алерты falco и Policy Engine (OPA Gatekeeper) [описание настройки](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(k8s))
+- Yandex Managed Service for Kubernetes: аудит логи, алерты falco и Policy Engine (OPA Gatekeeper) [описание настройки](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_k8s)
 
-Решение является постоянно обновляемым и поддерживаемым Security командой Yandex.Cloud
+Решение является постоянно обновляемым и поддерживаемым Security-командой Yandex.Cloud
+
 
 ## Что делает решение
-- [x] Разворачивает в инфраструктуре Yandex.Cloud cluster Managed ELK (возможно через Terraform) (в default конфигурации см. п. Terraform)(рассчитать необходимую конфигурацию для вашей инфраструктуры необходимо совместно с Cloud Архитектором)
-- [x] Разворачивает COI Instance с контейнером на базе образа s3-elk-importer (cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest)
+- [x] Разворачивает в инфраструктуре Yandex.Cloud кластер Managed ELK (через Terraform) (в default конфигурации см. п. Terraform)(рассчитать необходимую конфигурацию для вашей инфраструктуры необходимо совместно с Cloud Архитектором)
+- [x] Разворачивает COI Instance с контейнером на базе образа s3-elk-importer (`cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest`)
 - [x] Загружает Security Content в ELK (Dashboards, Detection Rules (с alerts), etc.)
 - [x] Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в ELK
 
 ## Схема решения
 ![Схема_решения](https://user-images.githubusercontent.com/85429798/129480037-cef97473-bba2-4589-b291-0578163d09fd.png)
 
-[Схема решения для поставки логов k8s](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(k8s))
+[Схема решения для поставки логов k8s](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_k8s)
 
 
 ## Security Content
@@ -49,7 +50,7 @@ Security Content - объекты ELK, которые автоматически
 - Набор Detection Rules (правила корреляции) на которые настроены оповещения (Клиенту самостоятельно необходимо указать назначение уведомлений)
 - Все интересные поля событий преобразованы в формат [Elastic Common Schema (ECS)](https://www.elastic.co/guide/en/ecs/current/index.html), полная табличка маппинга в файле [Описание объектов](./papers/Описание-объектов.pdf)
 
-Подробное описание в файле [/papers/ECS-mapping.docx](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK/papers/ECS-mapping_new.pdf)
+Подробное описание в файле [ECS-mapping.docx](./papers/ECS-mapping_new.pdf)
 
 
 ## Лицензионные ограничения
@@ -62,9 +63,9 @@ Security Content - объекты ELK, которые автоматически
 Рекомендуется подписаться на обновления в данном репозитории для оповещений о наличии нового обновления.
 Технически, обновление контента выполняется за счет обновления версии контейнера на новую версию cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest
 
-Для обновления необходимо обеспечить удаления текущией версии image, скачивание новой версии, пересоздание контейнера:
+Для обновления необходимо обеспечить удаления текущией версии образа, загрузку новой версии, пересоздание контейнера на основе нового образа:
 - либо пересоздать COI Instance через terraform (который был использован для его деплоя)
-- либо выполнить вышеуказанные действия вручную (удалить imnage, удалить контейнер, перезагрузить ВМ)
+- либо выполнить вышеуказанные действия вручную (удалить образ, удалить контейнер, перезагрузить ВМ)
 
 Также, рекомендуется обновить контент Kibana (dashboards, detection rules, searches) - обновление производится при помощи единоразового запуска контейнера Updater.
 
@@ -84,13 +85,13 @@ docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -
 - :white_check_mark: Наличие доступа в интернет с COI Instance для скачивания образа контейнера
 - :white_check_mark: ServiceAccount с ролью storage.editor для действий в Object Storage
 
-См. Пример конфигурации пререквизитов в [/example/main.tf](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK/terraform/example) 
-Решение состоит из 2-х модулей Terraform [/terraform/modules/](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK/terraform/modules) :
+См. Пример конфигурации пререквизитов в [/example/main.tf](./terraform/example) 
+Решение состоит из 2-х модулей Terraform [/terraform/modules/](./terraform/modules) :
 1) yc-managed-elk:
 - создает cluster [Yandex Managed Service for Elasticsearch](https://cloud.yandex.ru/services/managed-elasticsearch) 
-- с 3 нодами (1 на зону доступности) 
+- с тремя нодами (по одной на каждую зону доступности) 
 - с лицензией Gold
-- характеристики: s2-medium (8vCPU, 32Gb Memory)
+- характеристики: s2-medium (8 vCPU, 32Gb Memory)
 - HDD: 1TB
 - назначает пароль на аккаунт admin в ELK
 
@@ -109,8 +110,8 @@ module "yc-managed-elk" {
     source = "../modules/yc-managed-elk" #path to module yc-managed-elk
     
     folder_id = var.folder_id
-    subnet_ids = ["e9boih92qspkol5morvl", "e2lbe671uvs0i8u3cr3s", "b0c0ddsip8vkulcqh7k4"]  #subnets в 3-х зонах доступности для развертывания ELK
-    network_id = "enp5t00135hd1mut1to9" # network id в которой будет развернут ELK
+    subnet_ids = ["e9boih92qsxxxxxxxxxx", "e2lbe671uvxxxxxxxxxx", "b0c0ddsip8xxxxxxxxxx"]  #subnets в 3-х зонах доступности для развертывания ELK
+    network_id = "enp5t00135xxxxxxxxxx" # network id в которой будет развернут ELK
 }
 
 
@@ -122,10 +123,10 @@ module "yc-elastic-trail" {
     cloud_id = var.cloud_id
     elk_credentials = module.yc-managed-elk.elk-pass
     elk_address = module.yc-managed-elk.elk_fqdn
-    bucket_name = "bucket-mirtov8"
+    bucket_name = "bucket-example"
     bucket_folder = "folder"
-    sa_id = "aje5h5587p1bffca503j"
-    coi_subnet_id = "e9boih92qspkol5morvl"
+    sa_id = "aje5h5587pxxxxxxxxxx"
+    coi_subnet_id = "e9boih92qsxxxxxxxxxx"
 }
 
 output "elk-pass" {
