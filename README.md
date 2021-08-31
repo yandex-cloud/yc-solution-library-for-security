@@ -27,8 +27,7 @@
 - 👮 Безопасная конфигурация
   - [Пример безопасной конфигурации Yandex Cloud Object Storage: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/configuration/hardering_bucket)
 ##
-![image](https://user-images.githubusercontent.com/85429798/131462975-0406464b-60ba-4ad8-936e-15527089bbe0.png)
-- Безопасность Kubernetes
+- 🚢 Безопасность Kubernetes
   - Аутентификация и управление доступом Managed Kubernetes:
     - [Пример настройки ролевых моделей и политик в Managed Service for Kubernetes](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/auth_and_access/role-model-example)
   - Сбор, мониторинг и анализ аудит логов:
