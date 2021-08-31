@@ -1,4 +1,4 @@
-# _Установка уязвимого веб приложения (dvwa) в Яндекс Облаке (с помощью terraform) для тестирования managed WAF_
+# Установка уязвимого веб приложения (dvwa) в Яндекс Облаке (с помощью terraform) для тестирования managed WAF
 
 Ссылка на видео-обзор на youtube - https://www.youtube.com/watch?v=r7Dxv_as24E
 
@@ -42,7 +42,7 @@ terraform apply
 - в самом низу страницы будет кнопка "create /reset database" - нажмите ее
 - далее внизу нажмите login
 - во вкладке "DVWA Security" поменяйте уровень на "low"
-- перейдите во вкладку "SQL Injection" и введите в поле User ID следующее: %' and 1=0 union select null, concat(user,':',password) from users #
+- перейдите во вкладку "SQL Injection" и введите в поле User ID следующее: `%' and 1=0 union select null, concat(user,':',password) from users #`
 
 ![image](https://user-images.githubusercontent.com/85429798/120918060-252fb680-c6bb-11eb-8398-32c98e2f70ca.png)
 
