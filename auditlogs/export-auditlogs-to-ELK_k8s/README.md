@@ -16,7 +16,7 @@
 
 
 #### Описание импортируемых объектов ELK (security content)
-Подробное описание объектов по [ссылке](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK(main)/papers)
+Подробное описание объектов по [ссылке](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Описание%20объектов.pdf)
 
 #### Описание terraform 
 
