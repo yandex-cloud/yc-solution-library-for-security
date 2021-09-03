@@ -51,7 +51,6 @@ write_files:
               rm ${PLAINTEXT_DEK_FILE} # удаляем расшифрованный ключ
               rm ${ENCRYPTED_DEK_FILE} # удаляем зашифрованный ключ
               mount -t ext4 "/dev/mapper/${MAPPED_DEVICE}" ${MOUNT}
-              mount /dev/mapper/${MAPPED_DEVICE} ${MOUNT}
               ;;
             #Размонтирование зашифрованного устройства
             close)
