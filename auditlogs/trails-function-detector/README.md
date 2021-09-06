@@ -30,6 +30,7 @@
     - 1)"Create danger, ingress ACL in SG (0.0.0.0/0)"
     - 2)"Change Bucket access to public"
     - 3)"Assign rights to the secret (Lockbox) to some account"
+    - Будут добавляться по запросам желающих (из [списка актуальных Use cases](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/_use_cases_and_searches))
 - (Опционально) Активное реагирование:
     - Удаление опасного правила группы безопасности (для правила № 1)
     - Удаление назначенных прав на секрет в Lockbox (для правила № 3)
