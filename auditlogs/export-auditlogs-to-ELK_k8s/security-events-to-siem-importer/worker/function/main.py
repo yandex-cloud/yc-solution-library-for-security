@@ -153,6 +153,17 @@ def refresh_index():
     print(f"{response.status_code} -- {response.text}")
 
 
+# Function - Check detection engine index
+def get_detections_engine():
+    request_suffix  = f"/s/default/api/detection_engine/index"
+    response        = requests.get(kibana_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+    if(response.status_code == 200):
+        return True
+    else:
+        print(f"{response.status_code} - {response.text}")
+        return False
+
+
 # Function - Preconfigure Kibana
 def configure_kibana():
     # Index pattern
@@ -203,7 +214,15 @@ def configure_kibana():
             print('Dashboard -- IMPORTED')
         print(f"{response.status_code} -- {response.text}")
 
-    # Detections (not stable, throws error 400 from time to time)
+    # Detections
+    # Pre-create detections index
+    if not get_detections_engine():
+        request_suffix = '/s/default/api/detection_engine/index'
+        response = requests.post(kibana_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+        if(response.status_code == 200):
+            print('Detections -- SIEM rules index pre-created')
+        print(f"{response.status_code} - {response.text}")
+
     file = f"/app/include/{elastic_index_name}/detections.ndjson"
     if os.path.isfile(file):
         data_file = {
