@@ -1,8 +1,11 @@
-## Yandex Cloud: Анализ логов безопасности k8s в ELK: аудит-логи, policy engine, falco 
+## Yandex Cloud: Trails-function-detector
+Оповещения и реагирование на события ИБ Audit trails с помощью Cloud Logging/Cloud Functions + Telegram
 
-Логотип из значков
+![Logo-scheme](https://user-images.githubusercontent.com/85429798/132173603-0fde1851-2572-404a-82a0-33034e16d0ea.png)
 
-Картинка из телеграма - парочка
+![tele1](https://user-images.githubusercontent.com/85429798/132173624-89b9fc81-aea0-43ac-a30b-fc354ab3659c.png)
+
+![tele2](https://user-images.githubusercontent.com/85429798/132173630-c34a6bd9-7e39-472e-8199-6a334fa0753d.png)
 
 #### Блокеры
 - AuditTrails в UI: вывод логов в CloudLogging
@@ -26,7 +29,7 @@
 
 #### Общая схема 
 
-Схема
+![Tech_scheme](https://user-images.githubusercontent.com/85429798/132173681-8c32b75f-ebf5-4c98-ba5f-bc90ea482d07.png)
 
 #### Пререквизиты
 - :white_check_mark: Созданная custom лог группа в CloudLogging ([инструкция](https://cloud.yandex.ru/docs/logging/operations/create-group))
