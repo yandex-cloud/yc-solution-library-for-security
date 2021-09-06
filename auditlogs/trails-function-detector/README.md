@@ -5,12 +5,12 @@
 
 <a href="https://kubernetes.io/">
     <img src="https://user-images.githubusercontent.com/85429798/132173624-89b9fc81-aea0-43ac-a30b-fc354ab3659c.png"
-         alt="Kubernetes logo" title="Kubernetes" height="200" width="200" />
+         alt="Kubernetes logo" title="Kubernetes" height="500" width="500" />
 </a></br>
 
 <a href="https://kubernetes.io/">
     <img src="https://user-images.githubusercontent.com/85429798/132173630-c34a6bd9-7e39-472e-8199-6a334fa0753d.png"
-         alt="Kubernetes logo" title="Kubernetes" height="200" width="200" />
+         alt="Kubernetes logo" title="Kubernetes" height="500" width="500" />
 </a></br>
 
 
