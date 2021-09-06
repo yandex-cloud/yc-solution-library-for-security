@@ -3,6 +3,17 @@
 
 ![Logo-scheme](https://user-images.githubusercontent.com/85429798/132173603-0fde1851-2572-404a-82a0-33034e16d0ea.png)
 
+<a href="https://kubernetes.io/">
+    <img src="https://user-images.githubusercontent.com/85429798/132173624-89b9fc81-aea0-43ac-a30b-fc354ab3659c.png"
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
+</a></br>
+
+<a href="https://kubernetes.io/">
+    <img src="https://user-images.githubusercontent.com/85429798/132173630-c34a6bd9-7e39-472e-8199-6a334fa0753d.png"
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
+</a></br>
+
+
 ![tele1](https://user-images.githubusercontent.com/85429798/132173624-89b9fc81-aea0-43ac-a30b-fc354ab3659c.png)
 
 ![tele2](https://user-images.githubusercontent.com/85429798/132173630-c34a6bd9-7e39-472e-8199-6a334fa0753d.png)
