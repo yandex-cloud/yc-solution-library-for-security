@@ -76,8 +76,10 @@ def create_config_index():
         }"""
         response = requests.post(elastic_server+request_suffix, data=request_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
         print('Config index -- CREATED')
+        print(response.text)
     else:
         print('Config index -- EXISTS')
+        print(response.text)
 
 # Function - Get config index state
 def get_config_index_state():
@@ -96,6 +98,7 @@ def create_ingest_pipeline():
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Ingest pipeline -- CREATED')
+        print(response.text)
 
 # Function - Create an index with mapping
 def create_index_with_map():
@@ -106,6 +109,7 @@ def create_index_with_map():
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Index with mapping -- CREATED')
+        print(response.text)
 
 # Function - Refresh index
 def refresh_index():
@@ -113,6 +117,7 @@ def refresh_index():
     response = requests.post(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Index -- REFRESHED')
+        print(response.text)
 
 # Function - Preconfigure Kibana
 def configure_kibana():
@@ -124,6 +129,7 @@ def configure_kibana():
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
     if(response.status_code == 200):
         print('Index patterns -- IMPORTED')
+        print(response.text)
 
     # Filters
     data_file = {
@@ -133,6 +139,7 @@ def configure_kibana():
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
     if(response.status_code == 200):
         print('Filters -- IMPORTED')
+        print(response.text)
 
     # Search
     data_file = {
@@ -142,6 +149,7 @@ def configure_kibana():
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
     if(response.status_code == 200):
         print('Searches -- IMPORTED')
+        print(response.text)
 
     # Dashboard
     data_file = {
@@ -151,15 +159,26 @@ def configure_kibana():
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
     if(response.status_code == 200):
         print('Dashboard -- IMPORTED')
+        print(response.text)
 
-    # Detections (not stable, throws error 400 from time to time)
+    # Detections
     data_file = {
         'file': open('/app/include/audit-trail/detections.ndjson', 'rb')
     }
+    # Pre-create index
+    request_suffix = '/s/default/api/detection_engine/index'
+    response = requests.post(kibana_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
+    if(response.status_code == 200):
+        print('Detections -- siem rules index pre-created')
+        print(response.text)
+    else:
+        print(f"{response.status_code} - {response.text}")
+
     request_suffix = '/api/detection_engine/rules/_import'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"kbn-xsrf":"true"})
     if(response.status_code == 200):
         print('Detections -- IMPORTED')
+        print(response.text)
 
 # Function - Download JSON logs to local folder
 def download_s3_folder(s3_bucket, s3_folder, local_folder=None):
