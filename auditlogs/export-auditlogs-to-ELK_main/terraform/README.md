@@ -35,8 +35,8 @@ module "yc-managed-elk" {
     source = "../modules/yc-managed-elk" #path to module yc-managed-elk
     
     folder_id = var.folder_id
-    subnet_ids = ["e9boih92qspkol5morvl", "e2lbe671uvs0i8u3cr3s", "b0c0ddsip8vkulcqh7k4"]  #subnets в 3-х зонах доступности для развертывания ELK
-    network_id = "enp5t00135hd1mut1to9" # network id в которой будет развернут ELK
+    subnet_ids = ["xxxxxx1", "xxxxxx2", "xxxxxx3"]  #subnets в 3-х зонах доступности для развертывания ELK
+    network_id = "xxxxxx" # network id в которой будет развернут ELK
 }
 
 
@@ -48,10 +48,10 @@ module "yc-elastic-trail" {
     cloud_id = var.cloud_id
     elk_credentials = module.yc-managed-elk.elk-pass
     elk_address = module.yc-managed-elk.elk_fqdn
-    bucket_name = "bucket-mirtov8"
+    bucket_name = "bucket"
     bucket_folder = "folder"
-    sa_id = "aje5h5587p1bffca503j"
-    coi_subnet_id = "e9boih92qspkol5morvl"
+    sa_id = "xxxxxx"
+    coi_subnet_id = "xxxxxx"
 }
 
 output "elk-pass" {
