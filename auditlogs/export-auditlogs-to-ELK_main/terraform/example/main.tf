@@ -22,7 +22,7 @@ resource "yandex_vpc_subnet" "elk-subnet" {
 }
 //Создание sa storage admin для создания Bucket for AuditTrail
 resource "yandex_iam_service_account" "sa-bucket-creator" {
-  name        = "sa-bucket-creator"
+  name        = "sa-bucket-creator-${random_string.random.result}"
   folder_id = var.folder_id
 }
 //Создание стат ключа
@@ -50,7 +50,7 @@ resource "yandex_storage_bucket" "trail-bucket" {
 
 //Создание sa storage editor для работы от ELK с Bucket for AuditTrail
 resource "yandex_iam_service_account" "sa-bucket-editor" {
-  name        = "sa-bucket-editor"
+  name        = "sa-bucket-editor-${random_string.random.result}"
   folder_id = var.folder_id
 }
 
