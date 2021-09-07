@@ -1,7 +1,8 @@
 # Управление секретами c SecretManager(Lockbox)
 
 ## Необходимость класса решения Secret Manager
-Картинка необх!!!
+![image](https://user-images.githubusercontent.com/85429798/132330379-77969063-fa22-4cc7-ae94-917efb3c9a53.png)
+
 
 ## Secret Manager в Yandex Cloud
 В облаке "из коробки"" возможно использовании 2-х вариантов Secret Manager:
@@ -11,9 +12,9 @@
 ## Описание интеграции Lockbox и k8s
 Оффициальная нтеграция выполнена с помощью открытого решения External Secrets (https://github.com/external-secrets)
 
-Картинка из Ext secrets!!!!
+![image](https://user-images.githubusercontent.com/85429798/132330677-b33d54ba-8d6a-4897-b419-e46d2111c9ef.png)
 
-Картинка схемы (пока упрощенка)
+![image](https://user-images.githubusercontent.com/85429798/132330706-933ff062-ce71-4263-b5f0-d6f08526ddd7.png)
 
 TBD детальная схема
 
@@ -21,12 +22,10 @@ TBD детальная схема
 
 TBD ссылка на документацию Yandex Cloud
 
-## Сценарии разграничения доступов и объектов
+**Сценарии разграничения доступов и объектов**
 https://external-secrets.io/guides-multi-tenancy/
 
-
-
-## Сложности использования HashiCorp Vault
-Картинка сложностей с hashicorp
+## Инструкция по интеграции HashiCorp Vault с k8s
+https://learn.hashicorp.com/tutorials/vault/kubernetes-minikube?in=vault/kubernetes
 
 
