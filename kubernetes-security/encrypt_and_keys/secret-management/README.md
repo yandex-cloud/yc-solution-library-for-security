@@ -18,11 +18,12 @@
 
 TBD детальная схема
 
+#### Инструкция по настройке
 [Ссылка на официальную документацию](https://external-secrets.io/provider-yandex-lockbox/)
 
 TBD ссылка на документацию Yandex Cloud
 
-**Сценарии разграничения доступов и объектов**
+#### Сценарии разграничения доступов и объектов
 https://external-secrets.io/guides-multi-tenancy/
 
 ## Инструкция по интеграции HashiCorp Vault с k8s
