@@ -1,13 +1,15 @@
-
-### IAM 
 ### Datasource
 data "yandex_client_config" "client" {}
 
 locals {
   folder_id = var.folder_user_role_mapping == [] && var.sa_role_mapping == [] ? data.yandex_client_config.client.folder_id : var.folder_id
   cloud_id  = var.cloud_id == null ? data.yandex_client_config.client.cloud_id : var.cloud_id
+  #org_id    = var.org_id == null ? data.yandex_client_config.client.organization_id : var.org_id
+  org_id = var.org_id
 }
+
 ### SA
+
 resource "yandex_iam_service_account" "sa" {
   for_each  = { for v in var.sa_role_mapping : v.name => v }
   name      = each.key
@@ -22,6 +24,7 @@ locals {
 ###Folder Permissions 
 
 #### Authoritative
+
 data "yandex_iam_policy" "bindings" {
   count = var.folder_binding_authoritative == false ? 0 : 1
   dynamic "binding" {
@@ -67,10 +70,12 @@ resource "yandex_resourcemanager_folder_iam_member" "folder_user_member" {
   member    = element(local.folder_user_mappings, count.index)[0]
   role      = element(local.folder_user_mappings, count.index)[1]
 }
+
 ### Cloud Permissions 
 locals {
   cloud_user_mappings = chunklist(flatten([for v in var.cloud_user_role_mapping : setproduct(v.users, v.roles)]), 2)
 }
+
 #### Authoritative
 
 resource "yandex_resourcemanager_cloud_iam_binding" "cloud_binding" {
@@ -87,4 +92,27 @@ resource "yandex_resourcemanager_cloud_iam_member" "cloud_member" {
   cloud_id = local.cloud_id
   member   = element(local.cloud_user_mappings, count.index)[0]
   role     = element(local.cloud_user_mappings, count.index)[1]
+}
+
+### Organization Permissions 
+locals {
+  org_user_mappings = chunklist(flatten([for v in var.org_user_role_mapping : setproduct(v.users, v.roles)]), 2)
+}
+
+#### Authoritative
+
+resource "yandex_organizationmanager_organization_iam_binding" "org_binding" {
+  for_each        = { for v in local.org_user_mappings : v[1] => v[0]... if var.org_binding_authoritative == true }
+  organization_id = local.org_id
+  members         = each.value
+  role            = each.key
+}
+
+#### NON-Authoritative
+
+resource "yandex_organizationmanager_organization_iam_member" "org_member" {
+  count           = var.org_binding_authoritative == false ? length(local.org_user_mappings) : 0
+  organization_id = local.org_id
+  member          = element(local.org_user_mappings, count.index)[0]
+  role            = element(local.org_user_mappings, count.index)[1]
 }

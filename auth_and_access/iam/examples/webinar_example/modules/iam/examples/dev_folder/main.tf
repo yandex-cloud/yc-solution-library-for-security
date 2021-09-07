@@ -2,7 +2,7 @@
 ### IAM 
 module "iam" {
   source                       = "../.."
-  folder_id                    = "xxxxxx"
+  folder_id                    = "b1g5egku47oq4l7trmmf"
   folder_binding_authoritative = true
 
   sa_role_mapping = [

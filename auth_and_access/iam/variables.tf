@@ -1,3 +1,4 @@
+###Folder
 
 variable "folder_id" {
   default     = null
@@ -9,12 +10,11 @@ variable "folder_binding_authoritative" {
   default     = false
   description = "Authoritative. Sets the IAM policy for the FOLDER and replaces any **existing** policy already attached."
 }
-
 variable "folder_user_role_mapping" {
   default     = []
   type        = any
   description = <<EOT
-Group of IAM User-IDs and it's permissions in FOLDER, where name = JOB Tille
+Group of IAM User-IDs and it's permissions in FOLDER, where name = JOB Tille(aka IAM Group)
 ### Example
 #folder_user_role_mapping = [
   {
@@ -30,7 +30,6 @@ Group of IAM User-IDs and it's permissions in FOLDER, where name = JOB Tille
 ]
 EOT 
 }
-
 variable "sa_role_mapping" {
   default     = []
   type        = any
@@ -50,6 +49,8 @@ sa_role_mapping = [
 EOT
 }
 
+### Cloud
+
 variable "cloud_binding_authoritative" {
   type        = bool
   default     = false
@@ -63,12 +64,11 @@ variable "cloud_id" {
   default     = null
   description = "Cloud-ID where where need to add permissions. Mandatory variable for CLOUD, if omited default CLOUD_ID will be used"
 }
-
 variable "cloud_user_role_mapping" {
   default     = []
   type        = any
   description = <<EOT
-Group of IAM User-IDs and it's permissions in CLOUD, where name = JOB Tille
+Group of IAM User-IDs and it's permissions in CLOUD, where name = JOB Tille(aka IAM Group)
 ### Example
 #cloud_user_role_mapping = [
   {
@@ -80,6 +80,42 @@ Group of IAM User-IDs and it's permissions in CLOUD, where name = JOB Tille
     name  = "developers"
     users = ["userAccount:idxxxxxx3"]
     roles = ["viewer","k8s.editor",]
+  },
+ ]
+EOT 
+}
+
+### Organization-manager
+
+variable "org_binding_authoritative" {
+  type        = bool
+  default     = false
+  description = <<EOT
+  "Authoritative. Sets the IAM policy for the ORGANIZATION and replaces any **existing** policy already attached. 
+  If Authoritative = true : take roles from all objects in  variable "org_user_role_mapping" and make **unique** role as a new key of map with members"
+EOT 
+}
+variable "org_id" {
+  type        = string
+  default     = null
+  description = "ORGANIZATION-ID where where need to add permissions. Mandatory variable for ORGANIZATION, if omited default ORGANIZATION_ID will be used"
+}
+variable "org_user_role_mapping" {
+  default     = []
+  type        = any
+  description = <<EOT
+Group of IAM User-IDs and it's permissions in ORGANIZATION, where name = JOB Tille(aka IAM Group)
+### Example
+#org_user_role_mapping = [
+  {
+    name  = "admins"
+    users = ["userAccount:idxxxxxx1", "federatedUser:idxxxxxx2"]
+    roles = ["admin",]
+  },
+  {
+    name  = "network_admins"
+    users = ["userAccount:idxxxxxx3"]
+    roles = ["vpc.admin",]
   },
  ]
 EOT 
