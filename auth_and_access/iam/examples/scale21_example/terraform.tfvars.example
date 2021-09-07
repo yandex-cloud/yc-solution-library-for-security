@@ -1,0 +1,32 @@
+###IDs
+org_id         = ""
+cloud_id       = ""
+prod_folder_id = ""
+dev_folder_id  = ""
+###Users
+groups = {
+  network_admins     = ["userAccount:idxxxxxx", ]
+  org_admins         = ["userAccount:idxxxxxx", ]
+  sec_ops            = ["userAccount:idxxxxxx", ]
+  cloud_admins       = ["userAccount:idxxxxxx", ]
+  project_admins     = ["userAccount:idxxxxxx", ]
+  project_developers = ["userAccount:idxxxxxx", ]
+}
+###Custom Roles
+role_network_admin          = ["vpc.admin", "viewer", ]
+role_sec_ops                = ["viewer", "kms.admin"]
+role_prod_project_developer = ["viewer", ]
+role_dev_project_developer = [
+  "k8s.admin",
+  "k8s.cluster-api.cluster-admin",
+  "compute.admin",
+  "container-registry.admin",
+  "load-balancer.privateAdmin",
+  "storage.admin",
+  "mdb.admin",
+  "kms.admin",
+  "iam.serviceAccounts.user",
+  "vpc.user",
+  "viewer"
+]
+
