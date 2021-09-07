@@ -39,7 +39,7 @@
   - Сбор, мониторинг и анализ аудит логов:
     - [Анализ логов безопасности k8s в ELK: аудит-логи, policy engine, falco](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_k8s)
   - Шифрование данных и управление ключами/секретами Managed Kubernetes
-    - [Управление секретами c SecretManager(Lockbox)]()
+    - [Управление секретами c SecretManager(Lockbox,Vault)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/encrypt_and_keys/secret-management)
 
 
 #### По вопросам: предложений, замечаний, ошибок просьба обращаться в telegram https://t.me/AlexWee
