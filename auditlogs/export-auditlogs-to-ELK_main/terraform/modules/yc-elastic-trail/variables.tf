@@ -1,34 +1,37 @@
-
 variable "folder_id" {
-  description = "Yandex Cloud Folder ID where resources will be created"
-  default     = "" #yc config get folder-id
+  description = "Yandex.Cloud ID каталога, где будут созданы ресурсы"
+  default     = "" # yc config get folder-id
 }
 
 
 variable "elk_credentials" {
-  default     = "" #yc config get cloud-id
+  description = "Пароль для аутентификации в ElasticSearch"
+  default     = ""
 }
 
 variable "elk_address" {
-  default     = "" #yc config get cloud-id
+  description = "FQDN-адрес инсталляции ElasticSearch вида https://c-xxx.rw.mdb.yandexcloud.net"
+  default     = ""
 }
 
 variable "bucket_name" {
-  default = ""
+  description = "Имя бакета, куда сохраняются логи AuditTrails"
+  default     = ""
 }
 
 variable "bucket_folder" {
-  default = ""
+  description = "Имя каталога, куда сохраняются логи AuditTrails"
+  default     = ""
 }
 
 variable "sa_id" {
-  description = "subnet_ids"
-  default = ""
+  description = "ID сервисной учетной записи для работы с бакетом, с разрешением storage.editor"
+  default     = ""
 }
 
 variable "coi_subnet_id" {
-  description = "subnet_id"
-  default = ""
+  description = "ID подсети, где будет размещен container-инстанс"
+  default     = ""
 }
 
 
