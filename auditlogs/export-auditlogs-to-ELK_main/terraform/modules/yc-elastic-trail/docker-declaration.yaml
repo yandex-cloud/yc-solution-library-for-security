@@ -26,10 +26,9 @@ spec:
     - name: KMS_KEY_ID
       value: ${KMS_KEY_ID}
     image: cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest
-    name: my-container
+    name: audittrails-siem-worker
     securityContext:
       privileged: false
     stdin: false
     tty: false
   restartPolicy: Always
-
