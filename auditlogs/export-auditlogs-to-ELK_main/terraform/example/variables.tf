@@ -1,5 +1,5 @@
 variable "token" {
-  description = "Yandex.Cloud security OAuth token"
+  description = "Yandex.Cloud security OAuth token либо ключ сервисного аккаунта"
   default     = "key.json" # generate yours by this https://cloud.yandex.ru/docs/iam/concepts/authorization/oauth-token
 }
 

@@ -106,43 +106,34 @@ docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -
 #### Пример вызова модулей:
 ```Python
 module "yc-managed-elk" {
-    source = "../modules/yc-managed-elk" #path to module yc-managed-elk
-    
-    folder_id = var.folder_id
-    subnet_ids = ["e9boih92qsxxxxxxxxxx", "e2lbe671uvxxxxxxxxxx", "b0c0ddsip8xxxxxxxxxx"]  #subnets в 3-х зонах доступности для развертывания ELK
-    network_id = "enp5t00135xxxxxxxxxx" # network id в которой будет развернут ELK
+    source     = "../modules/yc-managed-elk" # path to module yc-managed-elk    
+    folder_id  = var.folder_id
+    subnet_ids = yandex_vpc_subnet.elk-subnet[*].id  # subnets в 3-х зонах доступности для развертывания ELK
+    network_id = yandex_vpc_network.vpc-elk.id # network id в которой будет развернут ELK
 }
 
-
-
 module "yc-elastic-trail" {
-    source = "../modules/yc-elastic-trail/" #path to module yc-elastic-trail
-    
-    folder_id = var.folder_id
-    cloud_id = var.cloud_id
+    source          = "../modules/yc-elastic-trail/" # path to module yc-elastic-trail
+    folder_id       = var.folder_id
     elk_credentials = module.yc-managed-elk.elk-pass
-    elk_address = module.yc-managed-elk.elk_fqdn
-    bucket_name = "bucket-example"
-    bucket_folder = "folder"
-    sa_id = "aje5h5587pxxxxxxxxxx"
-    coi_subnet_id = "e9boih92qsxxxxxxxxxx"
+    elk_address     = module.yc-managed-elk.elk_fqdn
+    bucket_name     = yandex_storage_bucket.trail-bucket.bucket
+    bucket_folder   = "" # указать название префикса куда trails пишет логи в бакет, например "prefix-trails", если в корень то оставить по умолчанию пустым
+    sa_id           = yandex_iam_service_account.sa-bucket-editor.id
+    coi_subnet_id   = yandex_vpc_subnet.elk-subnet[0].id
 }
 
 output "elk-pass" {
-      value = module.yc-managed-elk.elk-pass
-      sensitive = true
-    }
-//Чтобы посмотреть пароль ELK: terraform output elk-pass
-
+  value     = module.yc-managed-elk.elk-pass
+  sensitive = true
+} // Чтобы посмотреть пароль ELK: terraform output elk-pass
 output "elk_fqdn" {
-      value = module.yc-managed-elk.elk_fqdn
-    }
-    
-//Выводит адрес ELK на который можно обращаться, например через браузер 
+  value = module.yc-managed-elk.elk_fqdn
+} // Выводит адрес ELK на который можно обращаться, например через браузер 
 
 output "elk-user" {
-      value = "admin"
-    }
+  value = "admin"
+}
     
 ```
 [Развертывание решения для поставки логов k8s](../export-auditlogs-to-ELK_k8s)

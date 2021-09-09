@@ -84,7 +84,7 @@ module "yc-elastic-trail" {
     elk_credentials = module.yc-managed-elk.elk-pass
     elk_address     = module.yc-managed-elk.elk_fqdn
     bucket_name     = yandex_storage_bucket.trail-bucket.bucket
-    bucket_folder   = "folder" # Здесь можно изменить имя папки в бакете с логами
+    bucket_folder   = "" # указать название префикса куда trails пишет логи в бакет, например "prefix-trails", если в корень то оставить по умолчанию пустым
     sa_id           = yandex_iam_service_account.sa-bucket-editor.id
     coi_subnet_id   = yandex_vpc_subnet.elk-subnet[0].id
 }
