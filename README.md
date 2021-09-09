@@ -48,3 +48,7 @@
 
 
 #### По вопросам: предложений, замечаний, ошибок просьба обращаться в telegram https://t.me/AlexWee
+<a href="https://kubernetes.io/">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/1200px-Telegram_2019_Logo.svg.png"
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
+</a></br>
