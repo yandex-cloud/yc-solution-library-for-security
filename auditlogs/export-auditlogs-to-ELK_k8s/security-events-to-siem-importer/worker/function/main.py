@@ -22,6 +22,7 @@ def decrypt_secret_kms(secret):
     b64_data            = response.json().get('plaintext')
     return base64.b64decode(b64_data).decode()
 
+
 # Configuration - Get ElasticSearch CA.pem
 def get_elastic_cert():
     file = '/app/include/CA.pem'
@@ -49,11 +50,13 @@ elastic_server          = os.environ['ELASTIC_SERVER']
 kibana_server           = os.environ['KIBANA_SERVER']
 elastic_cert            = get_elastic_cert()
 
+
 # Configuration - Setting up variables for S3
 s3_bucket               = os.environ['S3_BUCKET']
 s3_key                  = decrypt_secret_kms(s3_key_encr)
 s3_local                = '/tmp/data'
 s3_secret               = decrypt_secret_kms(s3_secret_encr)
+
 
 # Configuration - Sleep time
 if(os.getenv('SLEEP_TIME') is not None):
@@ -61,13 +64,23 @@ if(os.getenv('SLEEP_TIME') is not None):
 else:
     sleep_time = 240
 
+
 # Configuration - Log type
 if os.getenv("AUDIT_LOG_PREFIX") is not None:
     s3_folder               = os.environ['AUDIT_LOG_PREFIX'].rstrip("/")
-    elastic_index_name      = "k8s-audit"
+    elastic_index_alias     = "k8s-audit"
+    elastic_index_name      = f"{elastic_index_alias}-index-000001"
+    elastic_index_template  = f"{elastic_index_alias}-template"
+    elastic_index_ilm       = f"{elastic_index_alias}-ilm"
+    elastic_index_pipeline  = f"{elastic_index_alias}-pipeline"
 elif os.getenv("FALCO_LOG_PREFIX") is not None:
     s3_folder               = os.environ['FALCO_LOG_PREFIX'].rstrip("/")
-    elastic_index_name      = "k8s-falco"
+    elastic_index_alias     = "k8s-falco"
+    elastic_index_name      = f"{elastic_index_alias}-index-000001"
+    elastic_index_template  = f"{elastic_index_alias}-template"
+    elastic_index_ilm       = f"{elastic_index_alias}-ilm"
+    elastic_index_pipeline  = f"{elastic_index_alias}-pipeline"
+
 
 # State - Setting up S3 client
 s3 = boto3.resource('s3',
@@ -84,16 +97,17 @@ sqs = boto3.client(
     aws_secret_access_key   = s3_secret 
 )
 
+
 # Configuration - YMQ
-sqs_url             = os.environ['YMQ_URL']
+sqs_url                     = os.environ['YMQ_URL']
 
 
 # Function - Create config index in ElasticSearch
 def create_config_index():
-    request_suffix  = f"/.state-{elastic_index_name}"
+    request_suffix  = f"/.state-{elastic_index_alias}"
     response        = requests.get(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 404):
-        request_suffix = f"/.state-{elastic_index_name}/_doc/1"
+        request_suffix = f"/.state-{elastic_index_alias}/_doc/1"
         request_json = """{
             "is_configured": true
         }"""
@@ -107,7 +121,7 @@ def create_config_index():
 
 # Function - Get config index state
 def get_config_index_state():
-    request_suffix  = f"/.state-{elastic_index_name}/_doc/1/_source"
+    request_suffix  = f"/.state-{elastic_index_alias}/_doc/1/_source"
     response        = requests.get(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code != 200):
         return False
@@ -116,14 +130,14 @@ def get_config_index_state():
 
 # Function - Create ingest pipeline
 def create_ingest_pipeline():
-    if elastic_index_name == "k8s-audit":
-        request_suffix  = '/_ingest/pipeline/k8s-pipeline'
-        data_file       = open(f"/app/include/{elastic_index_name}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
+    if elastic_index_alias == "k8s-audit":
+        request_suffix  = f"/_ingest/pipeline/{elastic_index_pipeline}"
+        data_file       = open(f"/app/include/{elastic_index_alias}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
         data_json       = json.load(data_file)
         data_file.close()
-    elif elastic_index_name == "k8s-falco":
-        request_suffix  = '/_ingest/pipeline/falco-pipeline'
-        data_file       = open(f"/app/include/{elastic_index_name}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
+    elif elastic_index_alias == "k8s-falco":
+        request_suffix  = f"/_ingest/pipeline/{elastic_index_pipeline}"
+        data_file       = open(f"/app/include/{elastic_index_alias}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
         data_json       = json.load(data_file)
         data_file.close()
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
@@ -132,21 +146,67 @@ def create_ingest_pipeline():
     print(f"{response.status_code} -- {response.text}")
 
 
-# Function - Create an index with mapping
-def create_index_with_map():
-    request_suffix  = f"/{elastic_index_name}"
-    data_file       = open(f"/app/include/{elastic_index_name}/mapping.json") # заменить на прямую ссылку github когда репо станет публичным
+# Function - Create an index template
+def create_index_template():
+    request_suffix  = f"/_index_template/{elastic_index_template}"
+    data_file       = open(f"/app/include/{elastic_index_alias}/index-template.json")
     data_json       = json.load(data_file)
     data_file.close()
-    response        = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
+    response        = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
     if(response.status_code == 200):
-        print('Index with mapping -- CREATED')
-    print(f"{response.status_code} -- {response.text}")
+        print('Index template -- CREATED')
+    print(f"{response.status_code} - {response.text}")
+
+
+def create_lifecycle_policy():
+    request_suffix  = f"/_ilm/policy/{elastic_index_ilm}"
+    request_json    = """{
+        "policy": {
+            "phases": {
+                "hot": {
+                    "min_age": "0ms",
+                    "actions": {
+                        "rollover": {
+                            "max_age": "30d",
+                            "max_primary_shard_size": "50gb"
+                        }
+                    }
+                }
+            }
+        }
+    }"""
+    response = requests.put(elastic_server+request_suffix, data=request_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
+    if(response.status_code == 200):
+        print('Index lifecycle policy -- CREATED')
+    print(f"{response.status_code} - {response.text}")
+
+
+# Function - Create an index
+def create_first_index():
+    request_suffix  = f"/{elastic_index_name}"
+    response        = requests.put(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
+    if(response.status_code == 200):
+        print(f"Index {elastic_index_name} -- CREATED")
+    print(f"{response.status_code} - {response.text}")
+
+
+# Function - Create an index alias
+def create_index_alias():
+    request_suffix  = f"/_aliases"
+    request_json    = """{
+        "actions" : [
+            { "add" : { "index" : "%s", "alias" : "%s" } }
+        ]
+    }""" % (elastic_index_name, elastic_index_alias)
+    response = requests.post(elastic_server+request_suffix, data=request_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
+    if(response.status_code == 200):
+        print('Index alias -- CREATED')
+    print(f"{response.status_code} - {response.text}")
 
 
 # Function - Refresh index
 def refresh_index():
-    request_suffix  = f"/{elastic_index_name}/_refresh"
+    request_suffix  = f"/{elastic_index_alias}/_refresh"
     response        = requests.post(elastic_server+request_suffix, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Index -- REFRESHED')
@@ -167,7 +227,7 @@ def get_detections_engine():
 # Function - Preconfigure Kibana
 def configure_kibana():
     # Index pattern
-    file = f"/app/include/{elastic_index_name}/index-pattern.ndjson"
+    file = f"/app/include/{elastic_index_alias}/index-pattern.ndjson"
     if os.path.isfile(file):
         data_file = {
             'file': open(file, 'rb')
@@ -179,7 +239,7 @@ def configure_kibana():
         print(f"{response.status_code} -- {response.text}")
 
      # Filters
-    file = f"/app/include/{elastic_index_name}/filters.ndjson"
+    file = f"/app/include/{elastic_index_alias}/filters.ndjson"
     if os.path.isfile(file):
         data_file = {
             'file': open(file, 'rb')
@@ -191,7 +251,7 @@ def configure_kibana():
         print(f"{response.status_code} -- {response.text}")
 
     # Search
-    file = f"/app/include/{elastic_index_name}/search.ndjson"
+    file = f"/app/include/{elastic_index_alias}/search.ndjson"
     if os.path.isfile(file):
         data_file = {
             'file': open(file, 'rb')
@@ -203,7 +263,7 @@ def configure_kibana():
         print(f"{response.status_code} -- {response.text}")
 
     # Dashboard
-    file = f"/app/include/{elastic_index_name}/dashboard.ndjson"
+    file = f"/app/include/{elastic_index_alias}/dashboard.ndjson"
     if os.path.isfile(file):
         data_file = {
             'file': open(file, 'rb')
@@ -223,7 +283,7 @@ def configure_kibana():
             print('Detections -- SIEM rules index pre-created')
         print(f"{response.status_code} - {response.text}")
 
-    file = f"/app/include/{elastic_index_name}/detections.ndjson"
+    file = f"/app/include/{elastic_index_alias}/detections.ndjson"
     if os.path.isfile(file):
         data_file = {
             'file': open(file, 'rb')
@@ -233,6 +293,7 @@ def configure_kibana():
         if(response.status_code == 200):
             print('Detections -- IMPORTED')
         print(f"{response.status_code} -- {response.text}")
+
 
 # Function - Clean up S3 folder
 def delete_object_s3(s3_bucket, s3_object):
@@ -260,14 +321,9 @@ def delete_sqs_message(msg):
 def process_s3_batch(bucket, folder, local=None):
     print('JSON processing -- STARTED')
 
-    parse_substring = '".": {}, '
-
+    parse_substring     = '".": {}, '
     processing          = True
-
-    if elastic_index_name == "k8s-audit":
-        request_suffix      = f"/{elastic_index_name}/_bulk?pipeline=k8s-pipeline"
-    elif elastic_index_name == "k8s-falco":
-        request_suffix      = f"/{elastic_index_name}/_bulk?pipeline=falco-pipeline"
+    request_suffix      = f"/{elastic_index_alias}/_bulk?pipeline={elastic_index_pipeline}"
     
     while processing:
 
@@ -340,7 +396,10 @@ def upload_logs():
         process_s3_batch(s3_bucket, s3_folder, s3_local)
         refresh_index()
     else:
-        create_index_with_map()
+        create_lifecycle_policy()
+        create_index_template()
+        create_first_index()
+        create_index_alias()
         create_ingest_pipeline()
         configure_kibana()
         create_config_index()
