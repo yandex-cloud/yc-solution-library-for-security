@@ -117,11 +117,11 @@ def create_ingest_pipeline():
 
 # Function - Create an index template
 def create_index_template():
-    request_suffix  = f"/_template/{elastic_index_template}"
+    request_suffix  = f"/_index_template/{elastic_index_template}"
     data_file       = open('/app/include/audit-trail/index-template.json')
     data_json       = json.load(data_file)
     data_file.close()
-    response        = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
+    response        = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw), headers={"Content-Type":"application/json"})
     if(response.status_code == 200):
         print('Index template -- CREATED')
     print(f"{response.status_code} - {response.text}")
