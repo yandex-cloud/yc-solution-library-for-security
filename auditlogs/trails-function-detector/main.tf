@@ -51,7 +51,7 @@ data "archive_file" "function" {
 resource "yandex_function" "function-for-trails" {
   folder_id = var.folder_id
   name               = "function-for-trails"
-  runtime            = "python39"
+  runtime            = "python38"
   entrypoint         = "main.handler"
   memory             = "128"
   execution_timeout  = "30"

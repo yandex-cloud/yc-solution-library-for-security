@@ -9,11 +9,10 @@ terraform {
 }
 
 provider "yandex" {
-  endpoint                 = "api.cloud-preprod.yandex.net:443" # убрать
   service_account_key_file = "./key.json"
   # or you can use: token = var.token for user account not sa
-  cloud_id = "aoeij54741gkhd4hvrle"
-  folder_id = "aoem46r1onav1soovie4"
+  cloud_id = "XXXXXX" #your cloud_id
+  folder_id = "XXXXXX" yout folder_id
   max_retries              = 10
 }
 
