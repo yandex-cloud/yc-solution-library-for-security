@@ -43,7 +43,7 @@
 #### Пререквизиты
 - :white_check_mark: Созданная custom лог группа в CloudLogging ([инструкция](https://cloud.yandex.ru/docs/logging/operations/create-group))
 - :white_check_mark: Включенный сервис Audit Trails (с выводом логов в лог группу CloudLogging) ([инструкция](https://cloud.yandex.ru/docs/audit-trails/quickstart))
-- :white_check_mark: Сервисный аккаунт
+- :white_check_mark: Сервисный аккаунт (ему будут выданы необходимые права)
 - :white_check_mark: Созданный бот в telegram ([инструкция](https://tlgrm.ru/docs/bots#kak-sozdat-bota))
 - :white_check_mark: ID чата с telegram ботом (для получения chat-id сначала пишем хотябы одно сообщение боту, далее используем https://api.telegram.org/bot<token>/getUpdates для получения id чата)
 - :white_check_mark: После выполнения Terraform скрипта, необходимо в UI включить trigger на CloudLogging (подробности ниже)
@@ -84,7 +84,7 @@ module "trails-function-detector" {
 ```
 
 - Выполняет: 
-	- назначение прав serverless.functions.invoker на указанный сервисный аккаунт (в случае включения реагирования, назначает также права editor)
+	- назначение прав serverless.functions.invoker на указанный сервисный аккаунт (в случае включения реагирования, назначает также права vpc.securityGroups.admin,lockbox.admin)
     - создает функцию на основе python скрипта (функция выполняет описанную выше логику)
 
 - Действия после terraform (будет упаковано в terraform позже):

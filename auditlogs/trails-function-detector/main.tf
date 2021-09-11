@@ -14,26 +14,26 @@ resource "yandex_resourcemanager_folder_iam_binding" "invoker_bind" {
   ]
 }
 
-//выдача прав editor, если var.del_rule_on=True
+//выдача прав , если var.del_rule_on=True
 resource "yandex_resourcemanager_folder_iam_binding" "remediation_bind_1" {
   count = var.del_rule_on != "True" ? 0 : 1
   folder_id = var.folder_id
 
   #role = "serverless.functions.admin"
-  role = "editor" 
+  role = "vpc.securityGroups.admin" 
 
   members = [
     "serviceAccount:${data.yandex_iam_service_account.sa.id}",
   ]
 }
 
-//выдача прав editor, если var.del_perm_secret_on=True
+//выдача прав , если var.del_perm_secret_on=True
 resource "yandex_resourcemanager_folder_iam_binding" "remediation_bind_2" {
   count = var.del_perm_secret_on != "True" ? 0 : 1
   folder_id = var.folder_id
 
   #role = "serverless.functions.admin"
-  role = "editor" 
+  role = "lockbox.admin" 
 
   members = [
     "serviceAccount:${data.yandex_iam_service_account.sa.id}",

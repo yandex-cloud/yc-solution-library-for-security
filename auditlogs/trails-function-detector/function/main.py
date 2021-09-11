@@ -8,7 +8,6 @@ from datetime import datetime
 import requests
 
 # -------------------------Env
-full_log = []
 # Для того, чтобы получить токен https://proglib.io/p/telegram-bot
 bot_token = os.environ['BOT_TOKEN']
 # Для получения chat-id сначала пишем хоть одно сообление боту, далее используем https://api.telegram.org/bot<token>/getUpdates
@@ -23,8 +22,8 @@ rule_secret_on = os.environ['RULE_SECRET_ON']
 
 
 # Active Remediations
-del_rule_on = ['DEL_RUL_ON']
-del_perm_secret_on = ['DEL_PERM_SECRET_ON']
+del_rule_on = os.environ['DEL_RUL_ON']
+del_perm_secret_on = os.environ['DEL_PERM_SECRET_ON']
 
 #--------------Преобразование any_event_dict
 any_event_dict = temp_any_event_dict.split(",")
@@ -41,6 +40,7 @@ def handler(event, context):
 
 
 def main_parse(event):
+    full_log = []
     # Пробегаемся по сообщению и формируем dict с json событий trails
     for item in event['messages']:
         for log_entry in item['details']['messages']:
@@ -50,13 +50,13 @@ def main_parse(event):
     rule_any_event(full_log)  # включено всегда
 
     # Включаем эти правила в зависимости от переменных
-    if (rule_sg_on):
+    if (rule_sg_on == "True"):
         rule_sg(full_log)
 
-    if (rule_bucket_on):
+    if (rule_bucket_on == "True"):
         rule_bucket(full_log)
 
-    if (rule_secret_on):
+    if (rule_secret_on == "True"):
         rule_secret(full_log)
 
 
@@ -68,18 +68,20 @@ def prepare_for_alert(json_dict):
     prep_dict['☁️ cloud_name'] = json_dict['resource_metadata']['path'][0]['resource_name']
     prep_dict['🗂 folder_name'] = json_dict['resource_metadata']['path'][1]['resource_name']
     prep_dict['subject_id'] = json_dict['authentication']['subject_id']
-    prep_dict['subject_type'] = json_dict['authentication']['subject_type']
+    prep_dict['subject_type'] = json_dict['authentication']['subject_type'].replace('_', '') 
     prep_dict['folder_id'] = json_dict['resource_metadata']['path'][1]['resource_id']
     return prep_dict
 
 # -----------------Detection rules
 def rule_sg(g):
+    print('VIZOV KAGDIY RAZ RULE_SG!!!!!!')
     #Правило: "Create danger, ingress ACL in SG (0.0.0.0/0)"
     TUMBLR = False  # Переключатель срабатывания правила
     for json_dict in g:
         if (json_dict['event_type'] in ["yandex.cloud.audit.network.UpdateSecurityGroup", "yandex.cloud.audit.network.CreateSecurityGroup"]
                 and json_dict['event_status'] != "STARTED"):
-            # print(json_dict['event_type'])
+            print('debug infor!!!!!!')
+            print(json_dict['event_type'])
             for item2 in json_dict['details']['rules']:
                 # print(item2['direction'])
                 if (item2['direction'] == "INGRESS" and "cidr_blocks" in item2 and item2['cidr_blocks']['v4_cidr_blocks'] == ['0.0.0.0/0']):
@@ -93,7 +95,7 @@ def rule_sg(g):
             # для добавления в url
             security_group_id = json_dict['details']['security_group_id']
             custom_dict[
-                '🔗 url_to_sec_group'] = f"https://console-preprod.cloud.yandex.ru/folders/{folder_id}/vpc/security-groups/{security_group_id}/overview"
+                '🔗 url_to_sec_group'] = f"https://console.cloud.yandex.ru/folders/{folder_id}/vpc/security-groups/{security_group_id}/overview"
             custom_dict['🕸 network_name'] = json_dict['details']['network_name']
             custom_dict['security_group_id'] = json_dict['details']['security_group_id']
             security_rule_id = json_dict['details']['rules'][0]['id']
@@ -104,16 +106,19 @@ def rule_sg(g):
             # Вызов функции подготовки базовых полей
             result_prep_f = prepare_for_alert(json_dict)
             # Вызов реагирования
-            if (TUMBLR == True and del_rule_on == True):
+            if (TUMBLR == True and del_rule_on == "True"): #and TUMBLR == True and 
+                print('debug infor!!!!!!')
+                print('vizov function reagirovanya!!!!!!')
                 del_rule(security_group_id, security_rule_id)
                 custom_dict['Выполнено реагирование'] = "Опасное правило удалено"
             # Объединение базовых полей и кастомных
             sum_of_dict = {**result_prep_f, **custom_dict}
 
-    # Вызов отправки в телеграм, если есть сработка
-    event_type = json_dict['event_type']
-    if (TUMBLR):
-        send_message(sum_of_dict, event_type)
+            # Вызов отправки в телеграм, если есть сработка
+            event_type = json_dict['event_type']
+            if (TUMBLR):
+                send_message(sum_of_dict, event_type)
+                TUMBLR = False        
 
 
 # ----
@@ -133,7 +138,7 @@ def rule_bucket(g):
             # для добавления в url
             folder_id = json_dict['resource_metadata']['path'][1]['resource_id']
             custom_dict[
-                '🔗 bucket_url'] = f"https://console-preprod.cloud.yandex.ru/folders/{folder_id}/storage/bucket/{bucket_id}?section=settings"
+                '🔗 bucket_url'] = f"https://console.cloud.yandex.ru/folders/{folder_id}/storage/bucket/{bucket_id}?section=settings"
 
             # Вызов функции подготовки базовых полей
             result_prep_f = prepare_for_alert(json_dict)
@@ -141,17 +146,17 @@ def rule_bucket(g):
             # Объединение базовых полей и кастомных
             sum_of_dict = {**result_prep_f, **custom_dict}
 
-    # Вызов отправки в телеграм, если есть сработка
-    event_type = json_dict['event_type']
-    if (TUMBLR):
-        send_message(sum_of_dict, event_type)
+            # Вызов отправки в телеграм, если есть сработка
+            event_type = json_dict['event_type']
+            if (TUMBLR):
+                send_message(sum_of_dict, event_type)
 
 # -------
 def rule_secret(g):
     #Правило: "Assign rights to the secret (LockBox) to some account"
     TUMBLR = False  # Переключатель срабатывания правила
     for json_dict in g:
-        if (json_dict['event_type'] in ["yandex.cloud.audit.lockbox.UpdateSecretAccessBindings"] and json_dict['event_status'] != "STARTED"):
+        if (json_dict['event_type'] in ["yandex.cloud.audit.lockbox.UpdateSecretAccessBindings"] and json_dict['event_status'] != "STARTED" and json_dict['event_status'] == "DONE"):
             for item2 in json_dict['details']['access_binding_deltas']:
                 if (item2['action'] == "ADD"):
                     TUMBLR = True
@@ -169,23 +174,23 @@ def rule_secret(g):
             custom_dict['assigned_subject_type'] = "*" + \
             json_dict['details']['access_binding_deltas'][0]['access_binding']['subject_type'] + "*"
             custom_dict['🔐 secret_name'] = json_dict['details']['secret_name']
-            custom_dict['🔗 url_to_secret'] = f"https://console-preprod.cloud.yandex.ru/folders/{folder_id}/lockbox/secret/{secret_id}/overview"
+            custom_dict['🔗 url_to_secret'] = f"https://console.cloud.yandex.ru/folders/{folder_id}/lockbox/secret/{secret_id}/overview"
 
             # Вызов функции подготовки базовых полей
             result_prep_f = prepare_for_alert(json_dict)
 
             # Вызов реагирования
-            if (TUMBLR == True and del_perm_secret_on == True):
+            if (TUMBLR == True and del_perm_secret_on == "True"):
                 del_perm_secret(secret_id, role_id, sa_id)
                 custom_dict['Выполнено реагирование'] = "Назначенные права удалены"
 
             # Объединение базовых полей и кастомных
             sum_of_dict = {**result_prep_f, **custom_dict}
 
-    # Вызов отправки в телеграм, если есть сработка
-    event_type = json_dict['event_type']
-    if (TUMBLR):
-        send_message(sum_of_dict, event_type)
+            # Вызов отправки в телеграм, если есть сработка
+            event_type = json_dict['event_type']
+            if (TUMBLR):
+                send_message(sum_of_dict, event_type)
 
 
 # --------------------any-event-funct
@@ -199,10 +204,10 @@ def rule_any_event(g):
             # Вызов функции подготовки базовых полей
             result_prep_f = prepare_for_alert(json_dict)
 
-    # Вызов отправки в телеграм, если есть сработка
-    event_type = json_dict['event_type']
-    if (TUMBLR):
-        send_message(result_prep_f, event_type)
+            # Вызов отправки в телеграм, если есть сработка
+            event_type = json_dict['event_type']
+            if (TUMBLR):
+                send_message(result_prep_f, event_type)
 
 
 # --------Telegram
@@ -243,17 +248,16 @@ def get_token():
 def del_rule(sg_id, sg_rule_id):
     token = get_token()
     request_json_data = {"deletionRuleIds": [f"{sg_rule_id}"]}
-    response = requests.patch('https://vpc.api.cloud.yandex.net.yandex.net/vpc/v1/securityGroups/'+sg_id+'/rules',
-                              data=json.dumps(request_json_data), headers={"Accept": "application/json", "Authorization": "Bearer "+token})
+    response = requests.patch('https://vpc.api.cloud.yandex.net/vpc/v1/securityGroups/'+sg_id+'/rules', data=json.dumps(request_json_data), headers={"Accept": "application/json", "Authorization": "Bearer "+token})
 
     print("START DEBUG--------------------------")
-    print(response)
-    print(request_json_data)
-    print(token)
-    print(response.request.url)
-    print(response.request.body)
-    print(response.request.headers)
-    return response
+   #print(response)
+    #print(request_json_data)
+    #print(token)
+    #print(response.request.url)
+    #print(response.request.body)
+    #print(response.request.headers)
+    #return response
     print("STOP DEBUG----------------")
 
 # ----------
@@ -262,7 +266,7 @@ def del_perm_secret(secret_id, role_id, sa_id):
     token = get_token()
     request_json_data = {"accessBindingDeltas": [{"action": "REMOVE", "accessBinding": {
         "roleId": f"{role_id}", "subject": {"id": f"{sa_id}", "type": "serviceAccount"}}}]}
-    response = requests.patch('https://lockbox.api.cloud.yandex.net/lockbox/v1/secrets/'+secret_id+':updateAccessBindings',
+    response = requests.post('https://lockbox.api.cloud.yandex.net/lockbox/v1/secrets/'+secret_id+':updateAccessBindings',
                               data=json.dumps(request_json_data), headers={"Accept": "application/json", "Authorization": "Bearer "+token})
 
     print("START DEBUG--------------------------")
@@ -279,7 +283,7 @@ def del_perm_secret(secret_id, role_id, sa_id):
 # -----------------------------
 # Отладочная загрузка файла json руками, в случае вызова cloud-functions json файл сам передается в handler
 '''
-with open("create_sg_new.json", "r") as read_file:
+with open("test.json", "r") as read_file:
     data = json.load(read_file)
 
 handler(data, "d")
