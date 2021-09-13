@@ -55,14 +55,14 @@
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-2.jpg" width="400px">
 
-Но в продуктивном развертывавнии рекомендуется спланировать, как устаревание данных (перенос на "медленные" ноды), так и их удаление.
+Но в продуктивном развертывании рекомендуется спланировать, как устаревание данных (перенос на "медленные" ноды), так и их удаление.
 
 Удаление данных рекомендуется включить и при отсутствии других фаз, только для горячей фазы.
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-3.jpg" width="600px">
 
 По прошествии определенного времени индексы с устаревшими данными будут удалены.
-Если настроены снимки данных (`snapshots`) - то можно включить опцию удаления только при наличии снимка.
+Если настроены снимки данных (`snapshots`) - можно включить опцию удаления только при наличии снимка.
 В этом случае, необходимо указать имя политики создания снимков (`snapshot policy`).
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-4.jpg" width="600px">
