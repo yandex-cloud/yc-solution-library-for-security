@@ -53,7 +53,7 @@
 
 В нашем примере настроена только горячая фаза (hot phase) и была включена рекомендованная конфигурация для rollover.
 
-<img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-2.jpg" width="600px">
+<img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-2.jpg" width="400px">
 
 Но в продуктивном развертывавнии рекомендуется спланировать, как устаревание данных (перенос на "медленные" ноды), так и их удаление.
 
