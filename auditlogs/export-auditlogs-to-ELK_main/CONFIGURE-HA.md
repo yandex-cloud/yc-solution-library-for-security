@@ -20,11 +20,11 @@
 
 На созданный индекс назначается алиас, чтобы работа скрипта не зависила от суффикса в имени индекса.
 
-![Index Alias](/images/ha-alias.jpg)
+![Index Alias](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-alias.jpg)
 
 ## Шаблон индекса
 
-![Index Template](/images/ha-index-templates.jpg)
+![Index Template](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-templates.jpg)
 
 Шаблон индекса содержит все необходимые параметры для создания нового индекса в результате ротации:
 - Паттерн индекса (index pattern). Новосозданные индексы, подпадающие под паттерн, будут автоматически созданы с параметрами шаблона.
@@ -49,23 +49,23 @@
 Политика ротации (index lifecycle policy) - отслеживает "жизненный путь" наших данных.
 По мере устаревания данных, их можно переносить на менее производительные серверы или диски, а по прошествии определенного времени - и, вовсе, удалить.
 
-![Index Lifecycle Policy](/images/ha-index-policy-1.jpg)
+![Index Lifecycle Policy](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-1.jpg)
 
 В нашем примере настроена только горячая фаза (hot phase) и была включена рекомендованная конфигурация для rollover.
 
-![Index Lifecycle Policy](/images/ha-index-policy-2.jpg)
+![Index Lifecycle Policy](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-2.jpg)
 
 Но в продуктивном развертывавнии рекомендуется спланировать, как устаревание данных (перенос на "медленные" ноды), так и их удаление.
 
 Удаление данных рекомендуется включить и при отсутствии других фаз, только для горячей фазы.
 
-![Index Lifecycle Policy](/images/ha-index-policy-3.jpg)
+![Index Lifecycle Policy](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-3.jpg)
 
 По прошествии определенного времени индексы с устаревшими данными будут удалены.
 Если настроены снимки данных (snapshots) - то можно включить опцию удаления только при наличии снимка.
 В этом случае, необходимо указать имя политики создания снимков (snapshot policy).
 
-![Index Lifecycle Policy](/images/ha-index-policy-4.jpg)
+![Index Lifecycle Policy](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-4.jpg)
 
 Настройка политики создания снимков описана ниже.
 
@@ -85,11 +85,11 @@
 
 Пример созданного репозитория снимков:
 
-![Index Snapshot Policy](/images/ha-snapshots-2.jpg)
+![Index Snapshot Policy](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-2.jpg)
 
 После того, как репозиторий был подключен к ElasticSearch, можно выполнить настройку первой политики для создания снимков.
 
-![Index Snapshot Policy](/images/ha-snapshots-1.jpg)
+![Index Snapshot Policy](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-1.jpg)
 
 Далее, через простой мастер настройки, необходимо указать:
 - Имя политики снимков
@@ -101,20 +101,20 @@
 
 Созданная политика снимков может выглядеть следующим образом:
 
-![Index Snapshot Policy](/images/ha-snapshots-4.jpg)
+![Index Snapshot Policy](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-4.jpg)
 
 После создания политики, она будет видна в общем списке политик, где её можно сразу же запустить и проверить.
 
-![Index Snapshot Policy](/images/ha-snapshots-5.jpg)
+![Index Snapshot Policy](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-5.jpg)
 
 В результате, создан новый снимок, который отображается в списке.
 
-![Index Snapshot Policy](/images/ha-snapshots-6.jpg)
+![Index Snapshot Policy](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-6.jpg)
 
 А также, данные появились в объектном хранилище:
 
-![Index Snapshot Policy](/images/ha-snapshots-7.jpg)
+![Index Snapshot Policy](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-7.jpg)
 
 Созданную политику снимков можно задействовать в политике ротации индексов, которая была создана ранее.
 
-![Index Snapshot Policy](/images/ha-snapshots-8.jpg)
+![Index Snapshot Policy](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-8.jpg)
