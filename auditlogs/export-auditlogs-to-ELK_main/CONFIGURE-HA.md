@@ -20,7 +20,7 @@
 
 На созданный индекс назначается алиас, чтобы работа скрипта не зависила от суффикса в имени индекса.
 
-![Index Alias](https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-alias.jpg)
+<img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-alias.jpg" width="500px">
 
 ## Шаблон индекса
 
