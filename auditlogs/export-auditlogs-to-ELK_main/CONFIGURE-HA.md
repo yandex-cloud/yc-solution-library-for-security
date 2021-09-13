@@ -107,11 +107,11 @@
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-5.jpg" width="600px">
 
-В результате, создан новый снимок, который отображается в списке.
+В результате запуска, создан новый снимок, который отображается в списке.
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-6.jpg" width="600px">
 
-А также, данные появились в объектном хранилище:
+А также, данные появились и в самом объектном хранилище:
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-7.jpg" width="600px">
 
