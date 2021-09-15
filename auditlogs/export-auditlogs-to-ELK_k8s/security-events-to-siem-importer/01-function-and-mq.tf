@@ -19,6 +19,7 @@ resource "random_string" "project_suffix" {
   special = false
 }
 
+#--------AUDIT-----------
 resource "yandex_message_queue" "log_queue_for_auditlog" {
   count                       = var.auditlog_enabled ? 1 : 0
   access_key                  = yandex_iam_service_account_static_access_key.sa_static_key.access_key
@@ -70,6 +71,7 @@ resource "yandex_function_trigger" "s3_ymq_auditlog_trigger" {
   }
 }
 
+#--------FALCO-----------
 resource "yandex_message_queue" "log_queue_for_falco" {
   count                       = var.falco_enabled ? 1 :0 
   access_key                  = yandex_iam_service_account_static_access_key.sa_static_key.access_key
@@ -114,6 +116,57 @@ resource "yandex_function_trigger" "s3_ymq_falco_trigger" {
   object_storage {
     bucket_id = var.log_bucket_name
     prefix    = var.falco_prefix
+    create    = true
+    update    = false
+    delete    = false
+  }
+}
+
+#--------KYVERNO-----------
+resource "yandex_message_queue" "log_queue_for_kyverno" {
+  count                       = var.kyverno_enabled ? 1 :0 
+  access_key                  = yandex_iam_service_account_static_access_key.sa_static_key.access_key
+  secret_key                  = yandex_iam_service_account_static_access_key.sa_static_key.secret_key
+  name                        = "log-queue-kyverno-${random_string.project_suffix.result}"
+  visibility_timeout_seconds  = 600
+  receive_wait_time_seconds   = 20
+  message_retention_seconds   = 1209600
+}
+
+resource "yandex_function" "s3_ymq_for_kyverno" {
+  depends_on        = [yandex_message_queue.log_queue_for_kyverno]
+  folder_id         = var.folder_id
+  name              = "s3-ymq-kyverno-sync-${random_string.project_suffix.result}"
+  runtime           = "python38"
+  entrypoint        = "main.handler"
+  memory            = "256"
+  execution_timeout = "30"
+
+  environment = {
+    YMQ_URL               = yandex_message_queue.log_queue_for_kyverno[0].id
+    AWS_ACCESS_KEY_ID     = yandex_iam_service_account_static_access_key.sa_static_key.access_key
+    AWS_SECRET_ACCESS_KEY = yandex_iam_service_account_static_access_key.sa_static_key.secret_key
+    KYVERNO_LOG_PREFIX      = var.kyverno_prefix
+  }
+  user_hash = data.archive_file.function.output_base64sha256
+  content {
+    zip_filename = data.archive_file.function.output_path
+  }
+}
+
+resource "yandex_function_trigger" "s3_ymq_kyverno_trigger" {
+  depends_on  = [yandex_message_queue.log_queue_for_kyverno,yandex_function.s3_ymq_for_kyverno]
+  folder_id   = var.folder_id
+  name        = "s3-ymq-kyverno-trigger-${random_string.project_suffix.result}"
+  
+  function {
+    id = yandex_function.s3_ymq_for_kyverno.id 
+    service_account_id = var.service_account_id
+  }
+
+  object_storage {
+    bucket_id = var.log_bucket_name
+    prefix    = var.kyverno_prefix
     create    = true
     update    = false
     delete    = false

@@ -23,7 +23,9 @@ module "security-events-to-siem-importer" {
     
     auditlog_enabled = true //отправлять k8s auditlog в elk
     
-    falco_enabled = true // отправлять алерты falco в elk 
+    falco_enabled = true //  установить falco и отправлять его алерты в elk
+
+    kyverno_enabled = true // установить kyverno и отправлять его алерты в elk
 
     log_bucket_name = module.security-events-to-storage-exporter.log_bucket_name
 

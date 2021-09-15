@@ -26,6 +26,14 @@ variable "falco_prefix" {
     default = "FALCO/"
 }
 
+variable "kyverno_enabled" {
+    default = true
+}
+
+variable "kyverno_prefix" {
+    default = "KYVERNO/"
+}
+
 variable "elastic_pw" {
 
 }
