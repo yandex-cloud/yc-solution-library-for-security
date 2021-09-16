@@ -59,7 +59,8 @@ def get_config_index_state(index):
 config_states = {
     "audit-trail": get_config_index_state("audit-trails-index"),
     "k8s-audit": get_config_index_state("k8s-audit"),
-    "k8s-falco": get_config_index_state("k8s-falco")
+    "k8s-falco": get_config_index_state("k8s-falco"),
+    "k8s-kyverno": get_config_index_state("k8s-kyverno")
 }
 
 
