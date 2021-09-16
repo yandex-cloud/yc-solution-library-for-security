@@ -80,6 +80,13 @@ elif os.getenv("FALCO_LOG_PREFIX") is not None:
     elastic_index_template  = f"{elastic_index_alias}-template"
     elastic_index_ilm       = f"{elastic_index_alias}-ilm"
     elastic_index_pipeline  = f"{elastic_index_alias}-pipeline"
+elif os.getenv("KYVERNO_LOG_PREFIX") is not None:
+    s3_folder               = os.environ['KYVERNO_LOG_PREFIX'].rstrip("/")
+    elastic_index_alias     = "k8s-kyverno"
+    elastic_index_name      = f"{elastic_index_alias}-index-000001"
+    elastic_index_template  = f"{elastic_index_alias}-template"
+    elastic_index_ilm       = f"{elastic_index_alias}-ilm"
+    elastic_index_pipeline  = f"{elastic_index_alias}-pipeline"
 
 
 # State - Setting up S3 client
@@ -130,16 +137,10 @@ def get_config_index_state():
 
 # Function - Create ingest pipeline
 def create_ingest_pipeline():
-    if elastic_index_alias == "k8s-audit":
-        request_suffix  = f"/_ingest/pipeline/{elastic_index_pipeline}"
-        data_file       = open(f"/app/include/{elastic_index_alias}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
-        data_json       = json.load(data_file)
-        data_file.close()
-    elif elastic_index_alias == "k8s-falco":
-        request_suffix  = f"/_ingest/pipeline/{elastic_index_pipeline}"
-        data_file       = open(f"/app/include/{elastic_index_alias}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
-        data_json       = json.load(data_file)
-        data_file.close()
+    request_suffix  = f"/_ingest/pipeline/{elastic_index_pipeline}"
+    data_file       = open(f"/app/include/{elastic_index_alias}/pipeline.json") # заменить на прямую ссылку github когда репо станет публичным
+    data_json       = json.load(data_file)
+    data_file.close()
     response = requests.put(elastic_server+request_suffix, json=data_json, verify=elastic_cert, auth=(elastic_auth_user, elastic_auth_pw))
     if(response.status_code == 200):
         print('Ingest pipeline -- CREATED')

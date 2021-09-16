@@ -52,7 +52,7 @@ data "template_file" "docker-declaration-falco" {
 
 #----KYVERNO-----
 data "template_file" "docker-declaration-kyverno" {
-    template = file("../security-events-to-siem-importer/worker/docker-declaration-falco.yaml")
+    template = file("../security-events-to-siem-importer/worker/docker-declaration-kyverno.yaml")
     vars =  {
         ELASTIC_AUTH_USER   = "${var.elastic_user}"
         ELASTIC_SERVER      = "${var.elastic_server}:9200"
