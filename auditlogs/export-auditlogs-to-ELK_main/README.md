@@ -137,9 +137,9 @@ output "elk-user" {
     
 ```
 
-#### Развертывание решения для поставки логов k8s:
+## Развертывание решения для поставки логов k8s:
 [Развертывание решения для поставки логов k8s](../export-auditlogs-to-ELK_k8s)
 
-#### Рекомендации по настройке retention, rollover и snapshots:
+## Рекомендации по настройке retention, rollover и snapshots:
 
 [Рекомендации по настройке retention, rollover и snapshots](./CONFIGURE-HA.md)
