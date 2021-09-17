@@ -73,7 +73,7 @@ resources: {}
 
 # enable policy-report-ui
 ui:
-  enabled: true
+  enabled: false
 
 kyvernoPlugin:
   enabled: true
