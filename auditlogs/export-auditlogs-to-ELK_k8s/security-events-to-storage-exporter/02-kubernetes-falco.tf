@@ -1,4 +1,7 @@
 resource "helm_release" "falco" {
+  depends_on = [
+    helm_release.policy_repoter
+  ]
   name       = "falco"
   chart      = "falco"
   repository = "https://falcosecurity.github.io/charts"
@@ -11,7 +14,7 @@ resource "helm_release" "falco" {
 
   set {
     name  = "fakeEventGenerator.enabled"
-    value = "true"
+    value = var.fakeeventgenerator_enabled
   }
 
   set {

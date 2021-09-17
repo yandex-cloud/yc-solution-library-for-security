@@ -1,0 +1,198 @@
+image:
+  repository: cr.yandex/crpjfmfou6gflobbfvfv/policy-reporter-test
+  pullPolicy: Always
+  tag: latest
+
+imagePullSecrets: []
+
+# Deploy not more than one replica
+# Policy Reporter doesn't scale yet.
+# Each pod will report each change.
+replicaCount: 1
+
+deploymentStrategy: {}
+  # rollingUpdate:
+  #  maxSurge: 25%
+  #  maxUnavailable: 25%
+  # type: RollingUpdate
+
+# Key/value pairs that are attached to Deployment.
+annotations: {}
+
+# Create cluster role policies
+rbac:
+  enabled: true
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+service:
+  enabled: true
+  ## configuration of service
+  # key/value
+  annotations: {}
+  # key/value
+  labels: {}
+  type: ClusterIP
+  # integer nubmer. This is port for service
+  port: 2112
+
+securityContext:
+  runAsUser: 1234
+  runAsNonRoot: true
+  privileged: false
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - all
+
+# Key/value pairs that are attached to pods.
+podAnnotations: {}
+
+# Key/value pairs that are attached to pods.
+podLabels: {}
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   memory: 30Mi
+  #   cpu: 10m
+  # requests:
+  #   memory: 20Mi
+  #   cpu: 5m
+
+# enable policy-report-ui
+ui:
+  enabled: true
+
+kyvernoPlugin:
+  enabled: true
+
+monitoring:
+  enabled: false
+  namespace: cattle-dashboards
+
+  serviceMonitor:
+    # labels to match the serviceMonitorSelector of the Prometheus Resource
+    labels: {}
+
+global:
+  # availale plugins
+  plugins:
+    # enable kyverno for Policy Reporter UI and monitoring
+    keyverno: false
+  # The name of service policy-report. If you changed ReleaseName you have to replace it
+  backend: policy-reporter
+  # Service Port number
+  port: 8080
+  fullnameOverride: ""
+  # additional labels added on each resource
+  labels: {}
+
+# DEPRECTED - Can be removed
+# Policy Reporter watches now for both existing versions by default
+crdVersion: v1alpha1
+
+# DEPRECTED - Can be removed
+# Policy Reporter uses a new internal cache instead
+cleanupDebounceTime: 20
+
+api:
+  enabled: false
+
+# Policy Priorities
+policyPriorities:
+  enabled: false
+  # configure mappings from policy to priority
+  # you can use default to configure a default priority not passing results
+  # example mapping
+  #   default: warning
+  #   require-ns-labels: error
+  mapping: {}
+
+# Supported targets for new PolicyReport Results
+target:
+  loki:
+    # loki host address
+    host: ""
+    # minimum priority "" < info < warning < critical < error
+    minimumPriority: ""
+    # Skip already existing PolicyReportResults on startup
+    skipExistingOnStartup: true
+
+  elasticsearch:
+    # elasticsearch host address
+    host: ""
+    # elasticsearch index (default: policy-reporter)
+    index: ""
+    # elasticsearch index rotation and index suffix
+    # possible values: dayli, monthly, annually, none (default: dayli)
+    rotation: ""
+    # minimum priority "" < info < warning < critical < error
+    minimumPriority: ""
+    # Skip already existing PolicyReportResults on startup
+    skipExistingOnStartup: true
+
+  slack:
+    # slack app webhook address
+    webhook: ""
+    # minimum priority "" < info < warning < critical < error
+    minimumPriority: ""
+    # Skip already existing PolicyReportResults on startup
+    skipExistingOnStartup: true
+
+  discord:
+    # discord app webhook address
+    webhook: ""
+    # minimum priority "" < info < warning < critical < error
+    minimumPriority: ""
+    # Skip already existing PolicyReportResults on startup
+    skipExistingOnStartup: true
+
+  teams:
+    # teams webhook address
+    webhook: ""
+    # minimum priority "" < info < warning < critical < error
+    minimumPriority: ""
+    # Skip already existing PolicyReportResults on startup
+    skipExistingOnStartup: true
+
+  ui:
+    # teams webhook address
+    host: ""
+    # minimum priority "" < info < warning < critical < error
+    minimumPriority: "info"
+    # Skip already existing PolicyReportResults on startup
+    skipExistingOnStartup: true
+  
+  yandex:
+    accesskeyid: ""  # yandex access key
+    secretaccesskey: ""  # yandex secret access key
+    bucket: ""  # Yandex storage, bucket name
+    prefix: KYVERNO
+    minimumpriority: info  # minimum priority "" < info < warning < critical < error
+    skipExistingOnStartup: true  # Skip already existing PolicyReportResults on startup
+
+
+
+
+# Node labels for pod assignment
+# ref: https://kubernetes.io/docs/user-guide/node-selection/
+nodeSelector: {}
+
+# Tolerations for pod assignment
+# ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+tolerations: []
+
+# Anti-affinity to disallow deploying client and master nodes on the same worker node
+affinity: {}
