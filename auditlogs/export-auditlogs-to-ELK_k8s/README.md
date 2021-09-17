@@ -9,7 +9,7 @@
 ![2](https://user-images.githubusercontent.com/85429798/133788762-75152c1a-ad93-4291-999d-7fc0739d2438.png)
 
 
-#### Описание 
+## Описание 
 Решение из "коробки" выполняет следующее:
 - ☑️ собирает [k8s AUDIT-LOGS](https://kubernetes.io/docs/tasks/debug-application-cluster/audit/) в [Managed ELK SIEM](https://cloud.yandex.ru/docs/managed-elasticsearch/)
 - ☑️ устанавливает [FALCO](https://falco.org/) и собирает его [ALERTS](https://falco.org/docs/alerts/) в [Managed ELK SIEM](https://cloud.yandex.ru/docs/managed-elasticsearch/)
@@ -17,18 +17,18 @@
 - ☑️ импортирует Security Content (dashboards, detection rules и др.)(см. в секции Security Content) в [Managed ELK SIEM](https://cloud.yandex.ru/docs/managed-elasticsearch/) для анализа и реагирования на события ИБ. 
 - ✔️ *В том числе импортирует Security Content для [OPA Gatekeeper](https://open-policy-agent.github.io/gatekeeper/website/docs/) (в режиме enforce). (сам OPA Gatekeeper может быть установлен вручную дополнительно)
 
-#### Связь с решением "Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)"
+## Связь с решением "Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)"
 Решение ["Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)"](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_main) содержит информацию о том, как установить Yandex Managed Service for Elasticsearch (ELK) и собирать в него логи Audit Trails
 
 
-#### Общая схема 
+## Общая схема 
 
 ![Tech_scheme](https://user-images.githubusercontent.com/85429798/133788824-a1e2ae2d-c8e0-4a11-9ca9-f1a67607fc80.png)
 
-#### Описание импортируемых объектов ELK (Security Content)
+## Описание импортируемых объектов ELK (Security Content)
 Подробное описание объектов по [ссылке](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Описание%20объектов.pdf)
 
-#### Описание terraform 
+## Описание terraform 
 
 Решение состоит из 2-х модулей Terraform:
 1) [security-events-to-storage-exporter](./security-events-to-storage-exporter) (экспортирует логи в s3)
@@ -117,7 +117,7 @@ module "security-events-to-siem-importer" {
     
 ```
 
-#### Опционально ручные действие: установка OPA Gatekeeper (helm)
+## Опционально ручные действие: установка OPA Gatekeeper (helm)
 В случае, если вы предпочитаете OPA Gatekeeper вместо Kyverno то выставите значение `kyverno_enabled` - *false* при вызове модуля и выполните установку вручную
 - Установите OPA Gatekeeper [с помощью helm](https://open-policy-agent.github.io/gatekeeper/website/docs/install/#deploying-via-helm)
 - Выберите и установить необходимые constraint template и constraint из [gatekeeper-library](https://github.com/open-policy-agent/gatekeeper-library/tree/master/library/pod-security-policy) 
