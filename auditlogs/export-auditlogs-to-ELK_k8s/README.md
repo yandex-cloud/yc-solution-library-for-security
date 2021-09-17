@@ -10,13 +10,22 @@
 
 
 #### Описание 
-Решение устанавливает falco и импортирует аудит-логи k8s, алерты falco в Managed ELK SIEM. Также импортирует security content (dashboards, detection rules и др.) в ELK для анализа и реагирования на события ИБ. В том числе "из коробки" импортирует срабатывания Policy Engine (OPA Gatekeeper) (только в режиме enforce).
+Решение из "коробки" выполняет следующее:
+- собирает [k8s AUDIT-LOGS](https://kubernetes.io/docs/tasks/debug-application-cluster/audit/) в [Managed ELK SIEM](https://cloud.yandex.ru/docs/managed-elasticsearch/)
+- устанавливает [FALCO](https://falco.org/) и собирает его [ALERTS](https://falco.org/docs/alerts/) в [Managed ELK SIEM](https://cloud.yandex.ru/docs/managed-elasticsearch/)
+- устанавливает [Kyverno](https://kyverno.io/) c политиками категории [Pod Security Policy(Restricted)](https://kyverno.io/policies/?policytypes=Pod%2520Security%2520Standards%2520%28Restricted%29) в режиме audit и собирает его [ALERTS (PolicyReports)](https://kyverno.io/docs/policy-reports/) (при помощи [Policy Reporter](https://github.com/kyverno/policy-reporter))
+- импортирует Security Content (dashboards, detection rules и др.)(см. в секции Security Content) в [Managed ELK SIEM](https://cloud.yandex.ru/docs/managed-elasticsearch/) для анализа и реагирования на события ИБ. 
+- *В том числе импортирует Security Content для [OPA Gatekeeper](https://open-policy-agent.github.io/gatekeeper/website/docs/) (в режиме enforce). (сам OPA Gatekeeper может быть установлен вручную дополнительно)
+
+#### Связь с решением "Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)"
+Решение ["Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)"](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_main) содержит информацию о том, как установить Yandex Managed Service for Elasticsearch (ELK) и собирать в него логи Audit Trails
+
 
 #### Общая схема 
 
 ![Tech_scheme](https://user-images.githubusercontent.com/85429798/133788824-a1e2ae2d-c8e0-4a11-9ca9-f1a67607fc80.png)
 
-#### Описание импортируемых объектов ELK (security content)
+#### Описание импортируемых объектов ELK (Security Content)
 Подробное описание объектов по [ссылке](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Описание%20объектов.pdf)
 
 #### Описание terraform 
@@ -34,13 +43,14 @@
 	- создание статического ключа для сервисного аккаунта
 	- создание функции и тригера для записи логов кластера в s3
 	- установку falco и настроенного falcosidekick, который отправит логи в s3
-	- **(скоро)** установку Kyverno в режиме аудит и [Policy Reporter](https://github.com/kyverno/policy-reporter)
+    - установку Kyverno и настроенного [Policy Reporter](https://github.com/kyverno/policy-reporter), который отправит логи в s3
 
 2) [security-events-to-siem-importer](./security-events-to-siem-importer) (импортирует логи в ELK)
 - Принимает на вход: 
     - ряд параметров из модуля (`security-events-to-storage-exporter`)
     - `auditlog_enabled` - *true* или *false* (отправлять ли аудит логи k8s в ELK)
     - `falco_enabled` - *true* или *false* (отправлять ли алерты falco в ELK)
+    - `kyverno_enabled` - *true* или *false* (отправлять ли алерты kyverno в ELK)
     - адрес FQDN инсталляции ELK 
     - id подсети, в которой создается ВМ с контейнером импортера
     - credentials ELK пользователя для импорта событий
@@ -60,34 +70,27 @@
 - :white_check_mark: Subnet для развертывания ВМ с включенным NAT
 
 
-
-#### Дополнительное действие: установка OPA Gatekeeper (helm)
-- Установите OPA Gatekeeper [с помощью helm](https://open-policy-agent.github.io/gatekeeper/website/docs/install/#deploying-via-helm)
-- Выберите и установить необходимые constraint template и constraint из [gatekeeper-library](https://github.com/open-policy-agent/gatekeeper-library/tree/master/library/pod-security-policy) 
-- [Пример установки](https://github.com/open-policy-agent/gatekeeper-library#usage)
-
-
 #### Пример вызова модулей:
 См. Пример вызова модулей в /example/main.tf 
 
 ```Python
 
-// Вызов модуля security-events-to-storage-exporter
+//Вызов модуля security-events-to-storage-exporter
 module "security-events-to-storage-exporter" {
     source = "../security-events-to-storage-exporter/" # путь до модуля
 
     folder_id = "xxxxxx" // folder-id кластера k8s yc managed-kubernetes cluster get --id <ID кластера> --format=json | jq  .folder_id
 
-    cluster_name = "k8s-example" // имя кластера
+    cluster_name = "k8s-cluster" // имя кластера
 
     log_bucket_service_account_id = "xxxxxx" // id sa (должен обладать ролями: ymq.admin, write to bucket)
     
     log_bucket_name = "k8s-bucket" // можно подставить из конфига развертывания
-    #function_service_account_id = "чч" // опциоанальный id сервисного аккаунта который вызывает функции - если не выставлен то функция вызывается от имени log_bucket_service_account_id
+    # function_service_account_id = "чч" // опциоанальный id сервисного аккаунта который вызывает функции - если не выставлен то функция вызывается от имени log_bucket_service_account_id
 }
 
 
-// Вызов модуля security-events-to-siem-importer
+//Вызов модуля security-events-to-siem-importer
 module "security-events-to-siem-importer" {
     source = "../security-events-to-siem-importer/" # путь до модуля
 
@@ -97,7 +100,9 @@ module "security-events-to-siem-importer" {
     
     auditlog_enabled = true //отправлять k8s auditlog в elk
     
-    falco_enabled = true // отправлять алерты falco в elk 
+    falco_enabled = true //  установить falco и отправлять его алерты в elk
+
+    kyverno_enabled = true // установить kyverno и отправлять его алерты в elk
 
     log_bucket_name = module.security-events-to-storage-exporter.log_bucket_name
 
@@ -105,9 +110,15 @@ module "security-events-to-siem-importer" {
 
     coi_subnet_id = "xxxxxx" // subnet id в которой будет развернута ВМ с контейнером (обязательно включить NAT)
 
-    elastic_pw = var.elk_pw // выполнить команду: export TF_VAR_elk_pwn=<ELK PASS> (заменить ELK PASS на ваше значение) // пароль учетной записи ELK (можно подставить из модуля module.yc-managed-elk.elk-pass)
+    elastic_pw = "P@ssw0rd!" // пароль учетной записи ELK (можно подставить из модуля module.yc-managed-elk.elk-pass)
     
     elastic_user = "admin" // имя учетной записи ELK
 }
     
 ```
+
+#### Опционально ручные действие: установка OPA Gatekeeper (helm)
+В случае, если вы предпочитаете OPA Gatekeeper вместо Kyverno то выставите значение `kyverno_enabled` - *false* при вызове модуля и выполните установку вручную
+- Установите OPA Gatekeeper [с помощью helm](https://open-policy-agent.github.io/gatekeeper/website/docs/install/#deploying-via-helm)
+- Выберите и установить необходимые constraint template и constraint из [gatekeeper-library](https://github.com/open-policy-agent/gatekeeper-library/tree/master/library/pod-security-policy) 
+- [Пример установки](https://github.com/open-policy-agent/gatekeeper-library#usage)
