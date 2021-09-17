@@ -15,6 +15,17 @@ variable "log_bucket_service_account_id" {
 
 }
 
+variable "fakeeventgenerator_enabled" {
+    default = true
+}
+
+variable "podSecurityStandard" {
+    default = "restricted"
+}
+
+variable "validationFailureAction" {
+    default = "audit"
+}
 
 variable "log_bucket_name" {
 
