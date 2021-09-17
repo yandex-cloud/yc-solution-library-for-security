@@ -1,10 +1,12 @@
 ## Yandex Cloud: Анализ логов безопасности k8s в ELK: аудит-логи, policy engine, falco 
 
-![Логотип](https://user-images.githubusercontent.com/85429798/130331398-27cc1d8f-0b2c-4c1d-9be5-b1186116b618.png)
+![Logo-scheme](https://user-images.githubusercontent.com/85429798/133788649-452b4d2f-7cfc-4fcc-9b6b-339ba8facb18.png)
 
 ![Дашборд](https://user-images.githubusercontent.com/85429798/130331405-26a909ae-0171-47b2-93a2-c656632d262c.png)
 
-![Дашборд](https://user-images.githubusercontent.com/85429798/130331411-cf016471-ad7b-49d6-870a-f13f07ba79b5.png)
+<img width="1403" alt="1" src="https://user-images.githubusercontent.com/85429798/133788731-3c410508-3539-4ba0-b873-85ae55d58b87.png">
+
+![2](https://user-images.githubusercontent.com/85429798/133788762-75152c1a-ad93-4291-999d-7fc0739d2438.png)
 
 
 #### Описание 
@@ -12,8 +14,7 @@
 
 #### Общая схема 
 
-![Схема](https://user-images.githubusercontent.com/85429798/130331922-3ca923cd-f1a1-4555-87fb-71160e925b82.png)
-
+![Tech_scheme](https://user-images.githubusercontent.com/85429798/133788824-a1e2ae2d-c8e0-4a11-9ca9-f1a67607fc80.png)
 
 #### Описание импортируемых объектов ELK (security content)
 Подробное описание объектов по [ссылке](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Описание%20объектов.pdf)
