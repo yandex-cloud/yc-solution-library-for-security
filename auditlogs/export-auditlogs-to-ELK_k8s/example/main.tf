@@ -38,6 +38,7 @@ module "security-events-to-siem-importer" {
     elastic_user = "admin" // имя учетной записи ELK
 }
 
-
+variable "elk_pw" {
+}
 
 
