@@ -8,14 +8,13 @@
 
 ![2](https://user-images.githubusercontent.com/85429798/133788762-75152c1a-ad93-4291-999d-7fc0739d2438.png)
 
+# Version
+
 **Version-2.0**
-<details>
-<summary>Change-log</summary>
 - Changelog:
     - добавлена поддержка авто-установки kyverno с политиками в режиме audit 
 - Docker images:
     - cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:1.1.0
-</details>
 
 # Оглавление
 
