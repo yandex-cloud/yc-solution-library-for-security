@@ -1,2 +1,2 @@
-{"attributes":{"description":"","filters":[],"query":{"language":"kuery","query":"event.dataset : yandexcloud.k8s_kyverno and Status : fail"},"title":"Yandexcloud:k8s:kyverno-reporter-detect"},"coreMigrationVersion":"7.13.4","id":"Yandexcloud:k8s:kyverno-reporter-detect","references":[],"type":"query","updated_at":"2021-09-17T08:55:03.619Z","version":"WzM2OTE4OCwxXQ=="}
-{"exportedCount":1,"missingRefCount":0,"missingReferences":[]}
+{"attributes":{"description":"","filters":[],"query":{"language":"kuery","query":"event.dataset : yandexcloud.k8s_kyverno and Status : fail and not objectRef.namespace : \"falco\""},"title":"Yandexcloud:k8s:kyverno-reporter-detect"},"coreMigrationVersion":"7.14.1","id":"Yandexcloud:k8s:kyverno-reporter-detect","references":[],"type":"query","updated_at":"2021-09-18T11:38:19.976Z","version":"WzU0NTQsMV0="}
+{"excludedObjects":[],"excludedObjectsCount":0,"exportedCount":1,"missingRefCount":0,"missingReferences":[]}
