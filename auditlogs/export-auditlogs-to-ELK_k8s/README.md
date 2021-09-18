@@ -14,7 +14,7 @@
 - Changelog:
     - добавлена поддержка авто-установки kyverno с политиками в режиме audit 
 - Docker images:
-    - cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:1.1.0
+    - `cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:1.1.0`
 
 # Оглавление
 

@@ -2,6 +2,14 @@
 
 ![Дашборд](https://user-images.githubusercontent.com/85429798/127686785-27658104-6258-4de8-929f-9cf87624fa27.png)
 
+# Version
+
+**Version-2.0**
+- Changelog:
+    - добавлен фильтр по Folder name
+- Docker images:
+    - `cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:1.0.6`
+
 # Оглавление
 - [Описание решения](#описание-решения)
 - [Что делает решение](#что-делает-решение)
