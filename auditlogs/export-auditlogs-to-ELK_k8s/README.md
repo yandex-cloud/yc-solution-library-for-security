@@ -8,6 +8,14 @@
 
 ![2](https://user-images.githubusercontent.com/85429798/133788762-75152c1a-ad93-4291-999d-7fc0739d2438.png)
 
+# Оглавление
+
+- [Описание](#описание)
+- [Связь с решением "Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)"](#связь-с-решением-"Сбор-мониторинг-и-анализ-аудит-логов-в-Yandex-Managed-Service-for-Elasticsearch-(ELK)")
+- [Общая схема](#общая-схема)
+- [Описание импортируемых объектов ELK (Security Content)](#описание-импортируемых-объектов-ELK-(Security-Content))
+- [Описание terraform](#описание-terraform)
+- [Опционально ручные действие](#опционально-ручные-действие)
 
 ## Описание 
 Решение из "коробки" выполняет следующее:
@@ -117,7 +125,8 @@ module "security-events-to-siem-importer" {
     
 ```
 
-## Опционально ручные действие: установка OPA Gatekeeper (helm)
+## Опционально ручные действие
+#### Установка OPA Gatekeeper (helm)
 В случае, если вы предпочитаете OPA Gatekeeper вместо Kyverno то выставите значение `kyverno_enabled` - *false* при вызове модуля и выполните установку вручную
 - Установите OPA Gatekeeper [с помощью helm](https://open-policy-agent.github.io/gatekeeper/website/docs/install/#deploying-via-helm)
 - Выберите и установить необходимые constraint template и constraint из [gatekeeper-library](https://github.com/open-policy-agent/gatekeeper-library/tree/master/library/pod-security-policy) 
