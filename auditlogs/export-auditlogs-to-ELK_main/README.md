@@ -5,7 +5,7 @@
 # Оглавление
 
 - [Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)](#-------yandex-managed-service-for-elasticsearch-elk)
-  - [Описание решения](#описание решения)
+  - [Описание решения](#описание-решения)
   - [Что делает решение](#--)
   - [Схема решения](#-)
   - [Security Content](#security-content)
