@@ -8,6 +8,15 @@
 
 ![2](https://user-images.githubusercontent.com/85429798/133788762-75152c1a-ad93-4291-999d-7fc0739d2438.png)
 
+**Version-2.0**
+<details>
+<summary>Change-log</summary>
+- Changelog:
+    - добавлена поддержка авто-установки kyverno с политиками в режиме audit 
+- Docker images:
+    - cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:1.1.0
+</details>
+
 # Оглавление
 
 - [Описание](#описание)
@@ -15,7 +24,9 @@
 - [Общая схема](#общая-схема)
 - [Описание импортируемых объектов ELK (Security Content)](#описание-импортируемых-объектов-ELK-(Security-Content))
 - [Описание terraform](#описание-terraform)
+- [Процесс обновления контента](#процесс-обновления-контента)
 - [Опционально ручные действие](#опционально-ручные-действие)
+
 
 ## Описание 
 Решение из "коробки" выполняет следующее:
@@ -123,6 +134,20 @@ module "security-events-to-siem-importer" {
     elastic_user = "admin" // имя учетной записи ELK
 }
     
+```
+
+## Процесс обновления контента
+Рекомендуется подписаться на обновления в данном репозитории для оповещений о наличии нового обновления.
+Технически, обновление контента выполняется за счет обновления версии контейнера на новую версию `cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:latest`
+
+Для обновления необходимо обеспечить удаления текущией версии образа, загрузку новой версии, пересоздание контейнера на основе нового образа:
+- либо пересоздать COI Instance через terraform (который был использован для его деплоя)
+- либо выполнить вышеуказанные действия вручную (удалить образ, удалить контейнер, перезагрузить ВМ)
+
+Также, рекомендуется обновить контент Kibana (dashboards, detection rules, searches) - обновление производится при помощи единоразового запуска контейнера Updater.
+
+```
+docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -e KIBANA_SERVER='https://xxx.rw.mdb.yandexcloud.net' --name elk-updater cr.yandex/crpjfmfou6gflobbfvfv/elk-updater:latest
 ```
 
 ## Опционально ручные действие
