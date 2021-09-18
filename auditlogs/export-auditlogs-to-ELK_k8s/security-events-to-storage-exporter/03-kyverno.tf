@@ -35,7 +35,7 @@ set {
     helm_release.kyverno
   ]
   name       = "policy-reporter"
-  chart      = "./charts/policy-reporter"
+  chart      = "${path.module}/charts/policy-reporter"
   repository = "https://kyverno.github.io/kyverno/"
   namespace = "kyverno"
 
