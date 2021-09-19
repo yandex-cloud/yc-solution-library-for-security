@@ -14,11 +14,6 @@
 </a></br>
 
 
-
-#### Блокеры
-- AuditTrails в UI: вывод логов в CloudLogging
-- Function_trigger на CloudLogging в UI
-
 #### Будет доработано
 - Function_trigger на CloudLogging в terraform 
 - AuditTrails в terraform
