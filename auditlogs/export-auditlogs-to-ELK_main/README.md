@@ -34,6 +34,7 @@
 - [x] Разворачивает COI Instance с контейнером на базе образа s3-elk-importer (`cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest`)
 - [x] Загружает Security Content в ELK (Dashboards, Detection Rules (с alerts), etc.)
 - [x] Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в ELK
+- [x] Создает индексы в двух репликах, настраивает базовую политику rollover (создания новых индексов каждые тридцать дней или по достижению 50ГБ), для дальнейшей настройки в части высокой доступности данных и для настройки снимков данных в S3 - см. [рекомендации](./CONFIGURE-HA.md). 
 
 ## Схема решения
 ![Схема решения](https://user-images.githubusercontent.com/85429798/129480037-cef97473-bba2-4589-b291-0578163d09fd.png)
