@@ -155,3 +155,7 @@ docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -
 - Установите OPA Gatekeeper [с помощью helm](https://open-policy-agent.github.io/gatekeeper/website/docs/install/#deploying-via-helm)
 - Выберите и установить необходимые constraint template и constraint из [gatekeeper-library](https://github.com/open-policy-agent/gatekeeper-library/tree/master/library/pod-security-policy) 
 - [Пример установки](https://github.com/open-policy-agent/gatekeeper-library#usage)
+
+## Рекомендации по настройке retention, rollover и snapshots:
+
+[Рекомендации по настройке retention, rollover и snapshots](../export-auditlogs-to-ELK_main/CONFIGURE-HA.md)
