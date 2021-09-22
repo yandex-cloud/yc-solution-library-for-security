@@ -18,3 +18,19 @@ variable "network_id" {
   description = "ID сети для размещения хостов ElasticSearch" 
   default     = ""
 }
+
+variable "elk_edition" {
+  description = "Редакция установки ELK (basic, gold, platinum)"
+  default     =  "gold"
+}
+
+variable "elk_datanode_preset" {
+  # see https://cloud.yandex.com/ru-kz/docs/managed-elasticsearch/concepts/instance-types#available-flavors
+  description = "Размер ВМ для data узла" 
+  default     = "s2.medium"
+}
+
+variable "elk_datanode_disk_size" {
+  description = "Размер диска data узла, в GB"
+  default     = 1000
+}

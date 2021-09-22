@@ -18,14 +18,14 @@ resource "yandex_mdb_elasticsearch_cluster" "yc-elk" {
   network_id  = var.network_id
 
   config {
-    edition         = "gold"
+    edition         = var.elk_edition
     admin_password  = random_password.passwords[0].result
 
     data_node {
       resources {
-        resource_preset_id = "s2.medium"
+        resource_preset_id = var.elk_datanode_preset
         disk_type_id       = "network-ssd"
-        disk_size          = 1000
+        disk_size          = var.elk_datanode_disk_size
       }
     }
   }
