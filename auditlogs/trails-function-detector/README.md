@@ -33,7 +33,7 @@
 
 #### Общая схема 
 
-![Tech_scheme](https://user-images.githubusercontent.com/85429798/132173681-8c32b75f-ebf5-4c98-ba5f-bc90ea482d07.png)
+![image](https://user-images.githubusercontent.com/85429798/134821478-46e3e6a4-4bf9-4425-8d8d-61bc87bc1bb2.png)
 
 #### Пререквизиты
 - :white_check_mark: Созданная custom лог группа в CloudLogging ([инструкция](https://cloud.yandex.ru/docs/logging/operations/create-group))
