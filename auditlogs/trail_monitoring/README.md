@@ -21,7 +21,7 @@
 
 ![image](https://user-images.githubusercontent.com/85429798/134897575-762c94fc-e709-4aed-a143-ec512852b5da.png)
 
-#### Мониторинг самого сервиса Audit Trails
+#### Мониторинг событий из Audit Trails
 - Перейдите в Audit Trails -> Monitoring -> Открыть в мониторинге -> Обзор метрик
 - Сформируйте необходимый запрос к желаемой метрике из списка ниже, например: "service="audit-trails", event_type="yandex.cloud.audit.compute.AddInstanceOneToOneNat"
 - Нажмите на "..." троеточие -> "Создать алерт"
