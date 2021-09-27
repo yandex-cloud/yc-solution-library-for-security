@@ -1,8 +1,8 @@
 ## Мониторинг Audit Trails и событий в Yandex Cloud Monitoring
 
-скрин общих дешбордов трейлза
+![image](https://user-images.githubusercontent.com/85429798/134897482-37c00391-7a01-48c1-9b78-bae7513b42d0.png)
 
-скрин конкретно по сек группе например из презвы
+![image](https://user-images.githubusercontent.com/85429798/134897506-79fbbffa-0537-4028-b1f3-132486127fdf.png)
 
 ### Описание 
 Решение содержит рекомендации о том, как мониторить работоспособность самого сервиса Audit Trails и событий безопасности с помощью сервиса [Yandex Monitoring](https://cloud.yandex.ru/services/monitoring)
@@ -19,13 +19,16 @@
 - Нажмите на "..."(троеточие) , выберите "создать алерт"
 - Настройте [алерт согласно документации](https://cloud.yandex.ru/docs/monitoring/operations/alert/create-alert) на интересующий вас порог,например на dashboard "Trails by status" условие "status не равен 1 в течении 5 минут" (раз в секунду trail шлет метрику 1, если жив)
 
-вставить скрин
+![image](https://user-images.githubusercontent.com/85429798/134897575-762c94fc-e709-4aed-a143-ec512852b5da.png)
 
 #### Мониторинг самого сервиса Audit Trails
 - Перейдите в Audit Trails -> Monitoring -> Открыть в мониторинге -> Обзор метрик
 - Сформируйте необходимый запрос к желаемой метрике из списка ниже, например: "service="audit-trails", event_type="yandex.cloud.audit.compute.AddInstanceOneToOneNat"
 - Нажмите на "..." троеточие -> "Создать алерт"
 - Настройте [алерт согласно документации](https://cloud.yandex.ru/docs/monitoring/operations/alert/create-alert) на интересующий вас порог, например "Больше 0"
+
+![image](https://user-images.githubusercontent.com/85429798/134897649-90cedcfc-ba5f-4037-9278-a5fd58beb12d.png)
+
 
 #### Список интересных метрик с точки зрения ИБ
 - UpdateSecurityGroup (Изменение группы безопасности)
@@ -49,4 +52,3 @@
 - DeleteNetwork (Удаление облачной сети.)
 - др.
 
-вставить скрин
