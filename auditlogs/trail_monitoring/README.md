@@ -23,7 +23,7 @@
 
 #### Мониторинг событий из Audit Trails
 - Перейдите в Audit Trails -> Monitoring -> Открыть в мониторинге -> Обзор метрик
-- Сформируйте необходимый запрос к желаемой метрике из списка ниже, например: "service="audit-trails", event_type="yandex.cloud.audit.compute.AddInstanceOneToOneNat"
+- Сформируйте необходимый запрос к желаемой метрике из списка ниже, например: "trail.processed_events_count"{folderId="b1gh4nansv4ebqqmeu7b", service="audit-trails", event_type="yandex.cloud.audit.compute.CreateInstance"}"
 - Нажмите на "..." троеточие -> "Создать алерт"
 - Настройте [алерт согласно документации](https://cloud.yandex.ru/docs/monitoring/operations/alert/create-alert) на интересующий вас порог, например "Больше 0"
 
