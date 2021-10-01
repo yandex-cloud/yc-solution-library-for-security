@@ -119,6 +119,9 @@ module "yc-managed-elk" {
     folder_id  = var.folder_id
     subnet_ids = yandex_vpc_subnet.elk-subnet[*].id  # subnets в 3-х зонах доступности для развертывания ELK
     network_id = yandex_vpc_network.vpc-elk.id # network id в которой будет развернут ELK
+    elk_edition = "gold"
+    elk_datanode_preset = "s2.medium"
+    elk_datanode_disk_size = 1000
 }
 
 module "yc-elastic-trail" {
