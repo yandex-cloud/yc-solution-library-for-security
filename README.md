@@ -5,7 +5,8 @@
 #### Референсная архитектура
 ![Refer_arc](https://user-images.githubusercontent.com/85429798/132501079-0bd89876-2cc9-405b-aac3-ea65ac1fb6d2.png)
 
-#### ☑️ Yandex Cloud Security Checklist (скоро)
+#### ☑️ Yandex Cloud Security Checklist
+https://cloud.yandex.ru/docs/overview/security/domains/checklist
 
 # Список решений
 - 🕸 Сетевая безопасность
