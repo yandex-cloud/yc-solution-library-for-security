@@ -34,3 +34,8 @@ variable "elk_datanode_disk_size" {
   description = "Размер диска data узла, в GB"
   default     = 1000
 }
+
+variable "elk_public_ip" {
+  description = "Назначать публичный IP адрес"
+  default     = false
+}

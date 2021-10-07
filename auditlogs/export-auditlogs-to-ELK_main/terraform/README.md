@@ -39,6 +39,7 @@ module "yc-managed-elk" {
     elk_edition = "gold"
     elk_datanode_preset = "s2.medium"
     elk_datanode_disk_size = 1000
+    elk_public_ip = false # true, если нужен публичный доступ к ElasticSearch
 }
 
 module "yc-elastic-trail" {

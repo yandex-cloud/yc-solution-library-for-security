@@ -36,7 +36,7 @@ resource "yandex_mdb_elasticsearch_cluster" "yc-elk" {
       name              = "datanode${host.value}"
       zone              = local.zones[(host.value)%3]
       type              = "DATA_NODE"
-      assign_public_ip  = false
+      assign_public_ip  = var.elk_public_ip
       subnet_id         = var.subnet_ids[(host.value)%3]
     }
   }
