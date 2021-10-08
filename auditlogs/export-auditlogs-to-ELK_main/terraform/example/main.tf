@@ -79,7 +79,7 @@ module "yc-managed-elk" {
     elk_edition             = "gold"
     elk_datanode_preset     = "s2.medium"
     elk_datanode_disk_size  = 1000
-    elk_public_ip           = false
+    elk_public_ip           = true
 }
 
 module "yc-elastic-trail" {
