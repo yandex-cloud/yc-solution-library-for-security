@@ -86,7 +86,7 @@ docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -
 
 #### Пререквизиты
 - :white_check_mark: Object Storage Bucket для Audit Trails
-- :white_check_mark: Включенный сервис Audit Trails в UI
+- :white_check_mark: [Включенный сервис Audit Trails](https://cloud.yandex.ru/docs/audit-trails/quickstart) в UI
 - :white_check_mark: Сеть VPC
 - :white_check_mark: Подсети в 3-х зонах доступности
 - :white_check_mark: Наличие доступа в интернет с COI Instance для скачивания образа контейнера
@@ -122,6 +122,7 @@ module "yc-managed-elk" {
     elk_edition = "gold"
     elk_datanode_preset = "s2.medium"
     elk_datanode_disk_size = 1000
+    elk_public_ip = false # true, если нужен публичный доступ к ElasticSearch
 }
 
 module "yc-elastic-trail" {

@@ -1,0 +1,35 @@
+spec:
+  containers:
+  - env:
+    - name: KMS_KEY_ID
+      value: ${KMS_KEY_ID}
+    - name: ELASTIC_SERVER
+      value: ${ELASTIC_SERVER}
+    - name: ELASTIC_AUTH_USER
+      value: ${ELASTIC_AUTH_USER}
+    - name: ELK_PASS_ENCR
+      value: ${ELK_PASS_ENCR}
+    - name: KIBANA_SERVER
+      value: ${KIBANA_SERVER}
+    - name: S3_BUCKET
+      value: ${S3_BUCKET}
+    - name: S3_KEY_ENCR
+      value: ${S3_KEY_ENCR}
+    - name: S3_SECRET_ENCR
+      value: ${S3_SECRET_ENCR}
+    - name: YMQ_URL
+      value: ${YMQ_URL}
+    - name: KYVERNO_LOG_PREFIX
+      value: ${KYVERNO_LOG_PREFIX}
+    - name: SLEEP_TIME
+      value: ${SLEEP_TIME}
+    - name: PYTHONUNBUFFERED
+      value: 1
+    image: cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:latest
+    name: k8s-kyverno-siem-worker
+    securityContext:
+      privileged: false
+    stdin: false
+    tty: false
+  restartPolicy: Always
+
