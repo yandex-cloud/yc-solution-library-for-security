@@ -9,43 +9,44 @@
 - :white_check_mark: установить и настроить [git](https://git-scm.com/book/ru/v2/Введение-Установка-Git)
 - :white_check_mark: установить [terraform](https://www.terraform.io/downloads.html)
 - :white_check_mark: установить [jq](https://macappstore.org/jq/)
-- :white_check_mark: установить helm
+- :white_check_mark: установить [helm](https://helm.sh/docs/intro/install/)
 
 ## Audit Trails Demo
 
-0. Проверить, что у вас настроен yc client 
+0. **Проверить, что у вас настроен yc client**
 
-1. Выполните команду:
+1. **Выполните команду** для скачивания файлов:
 ```
 git clone https://github.com/yandex-cloud/yc-solution-library-for-security.git
 ``` 
 
-- 2) Перейдите в папку:
+2. **Перейдите в папку** c первым демо:
 ```
-cd /yc-solution-library-for-security/auditlogs/export-auditlogs-to-ELK_main/workshop-guide/example/audit_trails_demo
+cd ./yc-solution-library-for-security/auditlogs/export-auditlogs-to-ELK_main/workshop-guide/example/audit_trails_demo/ 
 ``` 
 
-- 3) Выполнить команду:
+3. **Выполнить команду** просмотра yc cli конфигурации:
 ```
 yc config list
 ``` 
 
-- 4) Скопируйте вывод в файл и замените ":" на "=" , а также добавьте "" в значения переменных:
+4. **Скопируйте** вывод в файл private.auto.tfvars и замените ":" на "=" , а также добавьте "" в значения переменных:
 ```
 vim private.auto.tfvars
 ``` 
 
-- 5) Выполнить команду:
+5. **Выполнить команду** для инициализации terraform:
 ```
 terraform init
 ``` 
 
-- 6) Выполнить команду и нажмите "yes":
+6. **Выполнить команду** и нажмите "yes":
 ```
 terraform apply
 ``` 
+(если команда будет ругаться на folder_id то укажите ваш folder id в файле variables.tf)
 
-- 7) Сохраните значение elk_fqdn из output - это адрес ELK (например, elk_fqdn = "https://c-enpj9n0h87pi99mh3r26.rw.mdb.yandexcloud.net")
+7. Сохраните значение elk_fqdn из output - это адрес ELK (например, elk_fqdn = "https://c-enpj9n0h87pi99mh3r26.rw.mdb.yandexcloud.net")
 
 - 8) Зайдите в консоль облака. VPC -> провалитесь -> elk-subnet-a(...) -> Включить NAT в интернет
 
