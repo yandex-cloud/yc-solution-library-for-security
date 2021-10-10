@@ -13,9 +13,9 @@
 
 ## Audit Trails Demo
 
-- 0) Проверить, что у вас настроен yc client 
+0. Проверить, что у вас настроен yc client 
 
-- 1) Выполните команду:
+1. Выполните команду:
 ```
 git clone https://github.com/yandex-cloud/yc-solution-library-for-security.git
 ``` 
