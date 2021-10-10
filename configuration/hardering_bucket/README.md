@@ -1,5 +1,9 @@
 ## Пример безопасной конфигурации Yandex Cloud Object Storage: Terraform
 
+#### Схема решения
+![Схема](https://user-images.githubusercontent.com/85429798/136698539-f7772475-cca7-4498-8c79-426fc385a90f.png)
+
+
 #### Описание 
 Terraform скрипт выполняет следующее:
 - :white_check_mark: Создает [Bucket](https://cloud.yandex.ru/docs/storage/concepts/bucket)
