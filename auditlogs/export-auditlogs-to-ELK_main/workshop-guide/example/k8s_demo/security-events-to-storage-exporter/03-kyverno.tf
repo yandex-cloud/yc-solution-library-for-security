@@ -7,7 +7,6 @@ resource "helm_release" "kyverno-policies" {
   repository = "https://kyverno.github.io/kyverno/"
   namespace = "kyverno"
 
-  create_namespace = true
 
   set {
     name  = "podSecurityStandard"
@@ -28,7 +27,7 @@ resource "helm_release" "kyverno" {
   chart      = "kyverno"
   repository = "https://kyverno.github.io/kyverno/"
   namespace = "kyverno"
-
+  create_namespace = true
 
 }
  resource "helm_release" "policy_repoter" {

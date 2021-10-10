@@ -6,7 +6,7 @@ module "security-events-to-storage-exporter" {
 
     cluster_name = "k8s-cluster-b1g9divt1fgrifqrkvmb" // имя кластера можно получить yc managed-kubernetes cluster list --format json | jq -r '.[].name'
 
-    log_bucket_service_account_id = "ajen8r7jo0vjmt0rblpi" // можно получить yc iam service-account get --name terraform-sa --format json | jq -r '.id' 
+    log_bucket_service_account_id = "ajen8r7jo0vjmt0rblpi" // можно получить yc iam service-account get --name terraform-sa-$(yc config get folder-id) --format json | jq -r '.id' 
     
     log_bucket_name = "k8s-bucket-b1g9divt1fgrifqrkvmb" // создайте бакет и подставьте
 

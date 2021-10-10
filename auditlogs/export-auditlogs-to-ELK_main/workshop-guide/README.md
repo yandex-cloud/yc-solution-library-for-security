@@ -46,11 +46,11 @@ terraform apply
 ``` 
 (если команда будет ругаться на folder_id то укажите ваш folder id в файле variables.tf)
 
-7. Сохраните значение elk_fqdn из output - это адрес ELK (например, elk_fqdn = "https://c-enpj9n0h87pi99mh3r26.rw.mdb.yandexcloud.net")
+7. **Сохраните значение elk_fqdn** из output - это адрес ELK (например, elk_fqdn = "https://c-enpj9n0h87pi99mh3r26.rw.mdb.yandexcloud.net")
 
-- 8) Зайдите в консоль облака. VPC -> провалитесь -> elk-subnet-a(...) -> Включить NAT в интернет
+8. **Зайдите в консоль облака** VPC -> провалитесь -> elk-subnet-a(...) -> Включить NAT в интернет
 
-- 9) Настройте Audit Trails:
+9. **Настройте Audit Trails**:
     - перейдите в audit trails (иконка в главном меню)
     - укажите имя
     - укажите сервисный аккаунт (trails-sa-...)
@@ -60,52 +60,54 @@ terraform apply
     - выбрать единственное облако
     - создать
 
-- 10) Подключитесь через браузер к elk_fqdn (https://c-XXXXX.net) из п. 7
+10. **Подключитесь через браузер** к elk_fqdn (https://c-XXXXX.net) из п. 7
 
-- 11) Укажите логин: admin , пароль: ваш folder id (можно получить командой: yc config get folder-id)
+11. **Укажите логин**: admin , пароль: ваш folder id (можно получить командой: yc config get folder-id)
 
 #
 
 ## k8s Demo
 
-- 1) Перейдите в папку:
+1. **Перейдите в папку**:
 ```
-cd /yc-solution-library-for-security/auditlogs/export-auditlogs-to-ELK_main/workshop-guide/example/k8s_demo/example/
+cd ../k8s_demo/example/
 ``` 
 
-- 2) Создайте руками новый пустой сервисный аккаунт:
-    - зайдите во вкладку сервисные аккаунты
-    - создать сервисный аккаунт "terraform-sa"
-    - укажите права "admin"
-
-- 3) Выполните команду:
+2. **Создайте sa и назначьте ему права**:
 ```
-yc iam key create --service-account-name terraform-sa --output key.json
+yc iam service-account create terraform-sa-$(yc config get folder-id)
+yc resource-manager folder add-access-binding --id=$(yc config get folder-id) --role=admin --subject=serviceAccount:$(yc iam service-account get --name terraform-sa-$(yc config get folder-id) --format json | jq -r '.id')
 ``` 
 
-- 4) Заполните файл provider.tf
+3. **Выполните команду**:
+```
+yc iam key create --service-account-name terraform-sa-$(yc config get folder-id) --output key.json
+``` 
+
+4. **Заполните файл provider.tf**:
     - cloud_id можно получить командой yc config get cloud-id  
     - folder_id можно получить командой yc config get folder-id  
 
-- 5) Заполните файл main.tf
+5. **Заполните файл main.tf**:
     - folder_id можно получить командой yc config get folder-id 
     - cluster_name можно получить yc managed-kubernetes cluster list --format json | jq -r '.[].name'
-    - log_bucket_service_account_id можно получить yc iam service-account get --name terraform-sa --format json | jq -r '.id' 
+    - log_bucket_service_account_id можно получить yc iam service-account get --name terraform-sa-$(yc config get folder-id) --format json | jq -r '.id' 
     - log_bucket_name: создайте отдельный бакет Object Storage и назовите его "k8s-bucket-<ваш folder_id>", подставьте значение в переменную
     - elastic_server : подставьте значение вашего fqdn сервера Elastic из предидущего демо (можно быстро получить командой - echo https://c-$(yc managed-elasticsearch cluster get yc-elk-$(yc config get folder-id) --format=json | jq -r '.id').rw.mdb.yandexcloud.net)
     - coi_subnet_id: зайти в UI консоль и посмотреть id подсети elk-subnet-a
+    - elastic_pw: укажите ваш folder_id (можно узнать с помощью команды yc config get folder-id )
 
-- 6) Выполнить команду:
+6. **Выполнить команду**:
 ```
 terraform init
 ``` 
 
-- 7) Выполнить команду и нажмите "yes":
+7. **Выполнить команду** и нажмите "yes":
 ```
 terraform apply
 ``` 
 
-- 8) Для подключения к k8s кластеру выполните следующую команду:
+8. **Для подключения к k8s кластеру выполните следующую команду**:
 ```
 yc managed-kubernetes cluster get-credentials $(yc managed-kubernetes cluster list --format json | jq -r '.[].name') --external --force 
 ``` 
