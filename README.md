@@ -49,14 +49,13 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
   - Шифрование данных и управление ключами/секретами Managed Kubernetes
     - [Управление секретами c SecretManager(Lockbox,Vault)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/encrypt_and_keys/secret-management)
 
-
+#
 ##
 <a href="https://kubernetes.io/">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/1200px-Telegram_2019_Logo.svg.png"
          alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
 </a></br>
 
-#
 
 # Обратная связь и пожелания
 - Доработки, ошибки, contribute: Заводите, пожалуйста с помощью github issue/pr
