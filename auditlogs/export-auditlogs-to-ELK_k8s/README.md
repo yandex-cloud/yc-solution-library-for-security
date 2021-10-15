@@ -1,6 +1,6 @@
 ## Yandex Cloud: Анализ логов безопасности k8s в ELK: аудит-логи, policy engine, falco 
 
-![image](https://user-images.githubusercontent.com/85429798/137449036-52396ffd-c920-4715-a01d-813faa45f8e4.png)
+![image](https://user-images.githubusercontent.com/85429798/137449451-eaa3a4ec-5a79-4fc5-8e7e-bd222c78b714.png)
 
 ![Дашборд](https://user-images.githubusercontent.com/85429798/130331405-26a909ae-0171-47b2-93a2-c656632d262c.png)
 
