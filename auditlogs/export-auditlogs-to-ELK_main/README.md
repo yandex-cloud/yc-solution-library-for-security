@@ -57,7 +57,7 @@
 
 ## Лицензионные ограничения
 
-![image](https://user-images.githubusercontent.com/85429798/127733756-1a751356-a0f3-492e-9a85-56d3a73e298f.png)
+![image](https://user-images.githubusercontent.com/85429798/137449824-329e7eea-58d0-4aef-81e9-c1f53da6b39c.png)
 ![image](https://user-images.githubusercontent.com/85429798/137449722-6aae24e6-f567-4a4f-b52e-3c9f63893ac9.png)
 [Описание различий с сайта ELK](https://www.elastic.co/subscriptions)
 
