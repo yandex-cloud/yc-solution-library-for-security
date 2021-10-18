@@ -30,7 +30,7 @@ cd ./yc-solution-library-for-security/auditlogs/export-auditlogs-to-ELK_main/wor
 yc config list
 ``` 
 
-4. **Скопируйте** вывод в файл private.auto.tfvars и замените ":" на "=" , а также добавьте "" в значения переменных:
+4. **Скопируйте** вывод в файл private.auto.tfvars и замените ":" на "=" , "тире" на "нижнее подчеркивание" а также добавьте "" в значения переменных:
 ```
 vim private.auto.tfvars
 ``` 
