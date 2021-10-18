@@ -44,7 +44,6 @@ terraform init
 ```
 terraform apply
 ``` 
-(если команда будет ругаться на folder_id то укажите ваш folder id в файле variables.tf)
 
 7. **Сохраните значение elk_fqdn** из output - это адрес ELK (например, elk_fqdn = "https://c-enpj9n0h87pi99mh3r26.rw.mdb.yandexcloud.net")
 
