@@ -45,9 +45,10 @@ terraform init
 terraform apply
 ``` 
 
-7. **Сохраните значение elk_fqdn** из output - это адрес ELK (например, elk_fqdn = "https://c-enpj9n0h87pi99mh3r26.rw.mdb.yandexcloud.net")
+7. Не дожидаясь завершения **Зайдите в консоль облака** VPC -> провалитесь -> elk-subnet-a(...) -> Включить NAT в интернет
 
-8. **Зайдите в консоль облака** VPC -> провалитесь -> elk-subnet-a(...) -> Включить NAT в интернет
+8. **Сохраните значение elk_fqdn** из output - это адрес ELK (например, elk_fqdn = "https://c-enpj9n0h87pi99mh3r26.rw.mdb.yandexcloud.net")
+
 
 9. **Настройте Audit Trails**:
     - перейдите в audit trails (иконка в главном меню)
