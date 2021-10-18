@@ -42,7 +42,7 @@
 
 ## Общая схема 
 
-![Tech_scheme](https://user-images.githubusercontent.com/85429798/133788824-a1e2ae2d-c8e0-4a11-9ca9-f1a67607fc80.png)
+![image](https://user-images.githubusercontent.com/85429798/137740249-a9b09aaf-13f3-4022-83fe-5ba45f6c8418.png)
 
 ## Описание импортируемых объектов ELK (Security Content)
 Подробное описание объектов по [ссылке](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Описание%20объектов.pdf)
