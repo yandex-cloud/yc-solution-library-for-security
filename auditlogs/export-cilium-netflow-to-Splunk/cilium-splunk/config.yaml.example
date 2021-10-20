@@ -1,0 +1,7 @@
+s3:
+  bucket: "k8s-logs"
+  prefix: "k8s/b1gnusj8glj1pkr3ru0e/b1gpl1hi60t84gv7gg8o/catfr1ki8briuhgra3qm"
+  access-key-id: "..." # Can be set using S3_ACCESS_KEY_ID env
+  secret-access-key: "..." # Can be set using S3_SECRET_ACCESS_KEY env
+
+hubble-relay-url: "localhost:4245" # Defaults to "hubble-relay.kube-system.svc.cluster.local:80"
