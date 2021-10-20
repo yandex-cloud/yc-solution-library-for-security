@@ -11,46 +11,46 @@
 - :white_check_mark: установить [jq](https://macappstore.org/jq/)
 - :white_check_mark: установить [helm](https://helm.sh/docs/intro/install/)
 
-## Audit Trails Demo
+## Первая часть - Audit Trails Demo
 
-0. **Проверить, что у вас настроен yc client**
+Шаг 0. **Проверить, что у вас настроен yc client**
 
-1. **Выполните команду** для скачивания файлов:
+Шаг 1. **Выполните команду** для скачивания файлов:
 ```
 git clone https://github.com/yandex-cloud/yc-solution-library-for-security.git
 ``` 
 
-2. **Перейдите в папку** c первым демо:
+Шаг 2. **Перейдите в папку** c первым демо:
 ```
 cd ./yc-solution-library-for-security/auditlogs/export-auditlogs-to-ELK_main/workshop-guide/example/audit_trails_demo/ 
 ``` 
 
-3. **Выполнить команду** просмотра yc cli конфигурации:
+Шаг 3. **Выполнить команду** просмотра yc cli конфигурации:
 ```
 yc config list
 ``` 
 
-4. **Скопируйте** вывод в файл private.auto.tfvars и замените ":" на "=" , "тире" на "нижнее подчеркивание" а также добавьте "" в значения переменных:
+Шаг 4. **Скопируйте** вывод в файл private.auto.tfvars и замените ":" на "=" , "тире" на "нижнее подчеркивание" а также добавьте "" в значения переменных:
 ```
 vim private.auto.tfvars
 ``` 
 
-5. **Выполнить команду** для инициализации terraform:
+Шаг 5. **Выполнить команду** для инициализации terraform:
 ```
 terraform init
 ``` 
 
-6. **Выполнить команду** и нажмите "yes":
+Шаг 6. **Выполнить команду** и нажмите "yes":
 ```
 terraform apply
 ``` 
 
-7. Не дожидаясь завершения **Зайдите в консоль облака** VPC -> провалитесь -> elk-subnet-a(...) -> Включить NAT в интернет
+Шаг 7. Не дожидаясь завершения **Зайдите в консоль облака** VPC -> провалитесь -> elk-subnet-a(...) -> Включить NAT в интернет
 
-8. **Сохраните значение elk_fqdn** из output - это адрес ELK (например, elk_fqdn = "https://c-enpj9n0h87pi99mh3r26.rw.mdb.yandexcloud.net")
+Шаг 8. **Сохраните значение elk_fqdn** из output - это адрес ELK (например, elk_fqdn = "https://c-enpj9n0h87pi99mh3r26.rw.mdb.yandexcloud.net")
 
 
-9. **Настройте Audit Trails**:
+Шаг 9. **Настройте Audit Trails**:
     - перейдите в audit trails (иконка в главном меню)
     - укажите имя
     - укажите сервисный аккаунт (trails-sa-...)
@@ -61,35 +61,35 @@ terraform apply
     - выберите в фильтре folder только свой каталог
     - создать
 
-10. **Подключитесь через браузер** к elk_fqdn (https://c-XXXXX.net) из п. 7
+Шаг 10. **Подключитесь через браузер** к elk_fqdn (https://c-XXXXX.net) из п. 7
 
-11. **Укажите логин**: admin , пароль: ваш folder id (можно получить командой: yc config get folder-id)
+Шаг 11. **Укажите логин**: admin , пароль: ваш folder id (можно получить командой: yc config get folder-id)
 
 #
 
-## k8s Demo
+## Вторая часть - Kubernetes Demo
 
-1. **Перейдите в папку**:
+Шаг 1. **Перейдите в папку**:
 ```
 cd ../k8s_demo/example/
 ``` 
 
-2. **Создайте sa и назначьте ему права**:
+Шаг 2. **Создайте sa и назначьте ему права**:
 ```
 yc iam service-account create terraform-sa-$(yc config get folder-id)
 yc resource-manager folder add-access-binding --id=$(yc config get folder-id) --role=admin --subject=serviceAccount:$(yc iam service-account get --name terraform-sa-$(yc config get folder-id) --format json | jq -r '.id')
 ``` 
 
-3. **Выполните команду**:
+Шаг 3. **Выполните команду**:
 ```
 yc iam key create --service-account-name terraform-sa-$(yc config get folder-id) --output key.json
 ``` 
 
-4. **Заполните файл provider.tf**:
+Шаг 4. **Заполните файл provider.tf**:
     - cloud_id можно получить командой yc config get cloud-id  
     - folder_id можно получить командой yc config get folder-id  
 
-5. **Заполните файл main.tf**:
+Шаг 5. **Заполните файл main.tf**:
     - folder_id можно получить командой yc config get folder-id 
     - cluster_name можно получить yc managed-kubernetes cluster list --format json | jq -r '.[].name'
     - log_bucket_service_account_id можно получить yc iam service-account get --name terraform-sa-$(yc config get folder-id) --format json | jq -r '.id' 
@@ -98,17 +98,17 @@ yc iam key create --service-account-name terraform-sa-$(yc config get folder-id)
     - coi_subnet_id: зайти в UI консоль и посмотреть id подсети elk-subnet-a
     - elastic_pw: укажите ваш folder_id (можно узнать с помощью команды yc config get folder-id )
 
-6. **Выполнить команду**:
+Шаг 6. **Выполнить команду**:
 ```
 terraform init
 ``` 
 
-7. **Выполнить команду** и нажмите "yes":
+Шаг 7. **Выполнить команду** и нажмите "yes":
 ```
 terraform apply
 ``` 
 
-8. **Для подключения к k8s кластеру выполните следующую команду**:
+Шаг 8. **Для подключения к k8s кластеру выполните следующую команду**:
 ```
 yc managed-kubernetes cluster get-credentials $(yc managed-kubernetes cluster list --format json | jq -r '.[].name') --external --force 
 ``` 
