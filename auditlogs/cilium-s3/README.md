@@ -3,6 +3,8 @@
 <img width="1081" alt="Снимок экрана 2021-10-23 в 20 40 23" src="https://user-images.githubusercontent.com/85429798/138566364-3f6beb5b-aab9-4bb3-8d14-c7f108aaa1d6.png">
 
 <img width="607" alt="Снимок экрана 2021-10-23 в 20 38 08" src="https://user-images.githubusercontent.com/85429798/138566328-f1a32606-47aa-4a4d-bf68-a346d3c87a74.png">
+![image](https://user-images.githubusercontent.com/85429798/138566479-6e92c52d-1fe7-4605-a4fd-6edf329c3db8.png)
+
 
 # Version
 
