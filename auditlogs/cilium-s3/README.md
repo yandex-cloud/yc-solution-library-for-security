@@ -39,8 +39,9 @@ helm install cilium-s3-chart oci://cr.yandex/crpjfmfou6gflobbfvfv/cilium-s3-char
 
 ```
 
+```
 Helm values:
-- yandex:
+yandex:
 -    accesskeyid: ""  # yandex access key
 -    secretaccesskey: ""  # yandex secret access key
 -    bucket: ""  # Yandex storage, bucket name
@@ -48,3 +49,4 @@ Helm values:
 -    prefix: "k8s-cilium-flow-logs/" # Prefix of bucket folder
 -    region: "ru-central1" # region of S3
 -    endpoint: "https://storage.yandexcloud.net" # endpoint of S3
+```
