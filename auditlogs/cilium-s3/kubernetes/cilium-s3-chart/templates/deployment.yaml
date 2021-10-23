@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cilium-s3
+  name: cilium-s3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cilium-s3
+  template:
+    metadata:
+      labels:
+        app: cilium-s3
+    spec:
+      containers:
+      - env:
+        - name: S3_REGION
+          value: {{ .Values.yandex.region }}  
+        - name: S3_ENDPOINT
+          value: {{ .Values.yandex.endpoint }}  
+        - name: S3_BUCKET
+          value: {{ .Values.yandex.bucket }} 
+        - name: S3_PREFIX
+          value: {{ .Values.yandex.prefix }} 
+        - name: S3_ACCESS_KEY_ID
+          value:  {{ .Values.yandex.accesskeyid }} 
+        - name: hubble-relay-url
+          value: {{ .Values.yandex.hubble_url }} 
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        securityContext:
+          runAsUser: 1234
+          runAsNonRoot: true
+          privileged: false
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+              - all
+        envFrom:
+        - secretRef:
+            name: s3-secret-cilium
+        name: cilium-s3-deployment
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

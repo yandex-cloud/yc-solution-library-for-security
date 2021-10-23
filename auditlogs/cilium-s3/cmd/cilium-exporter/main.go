@@ -30,7 +30,10 @@ type S3Config struct {
 }
 
 type Config struct {
-	HubbleRelayUrl string   `config:"hubble-relay-url,required" yaml:"hubble-relay-url"`
+	//Old string
+	// HubbleRelayUrl string   `config:"hubble-relay-url,required" yaml:"hubble-relay-url"`
+	//Есть сомнения, что так заработает (надо сделать чтобы через env)
+	HubbleRelayUrl string   `config:"hubble-relay-url,required,backend=env"`
 	S3             S3Config `config:"s3"`
 }
 

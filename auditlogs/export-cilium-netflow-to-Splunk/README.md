@@ -1,1 +1,0 @@
-# Yandex Cloud: Отправка Cilium netflow логов в Splunk

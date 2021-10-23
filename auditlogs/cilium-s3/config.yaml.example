@@ -4,4 +4,4 @@ s3:
   access-key-id: "..." # Can be set using S3_ACCESS_KEY_ID env
   secret-access-key: "..." # Can be set using S3_SECRET_ACCESS_KEY env
 
-hubble-relay-url: "localhost:4245" # Defaults to "hubble-relay.kube-system.svc.cluster.local:80"
+hubble-relay-url: "hubble-relay.kube-system.svc.cluster.local:80" # Defaults to "hubble-relay.kube-system.svc.cluster.local:80"
