@@ -4,7 +4,8 @@
 
 <img width="607" alt="Снимок экрана 2021-10-23 в 20 38 08" src="https://user-images.githubusercontent.com/85429798/138566328-f1a32606-47aa-4a4d-bf68-a346d3c87a74.png">
 
-![image](https://user-images.githubusercontent.com/85429798/138566529-cf6aadb4-df28-4de1-83ce-360523a12588.png)
+<img width="607" alt="Снимок экрана 2021-10-23 в 20 38 08" src="https://user-images.githubusercontent.com/85429798/138566529-cf6aadb4-df28-4de1-83ce-360523a12588.png">
+
 
 
 # Version
