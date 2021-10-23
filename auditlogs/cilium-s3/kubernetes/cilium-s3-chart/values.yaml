@@ -72,8 +72,8 @@ yandex:
     accesskeyid: ""  # yandex access key
     secretaccesskey: ""  # yandex secret access key
     bucket: ""  # Yandex storage, bucket name
-    hubble_url: "hubble-relay.kube-system.svc.cluster.local:80"
-    prefix: "k8s-cilium-flow-logs/"
-    region: "ru-central1"
-    endpoint: "https://storage.yandexcloud.net"
+    hubble_url: "hubble-relay.kube-system.svc.cluster.local:80" # Hubble-url
+    prefix: "k8s-cilium-flow-logs/" # Prefix of bucket folder
+    region: "ru-central1" # region of S3
+    endpoint: "https://storage.yandexcloud.net" # endpoint of S3
 

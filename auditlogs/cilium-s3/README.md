@@ -12,7 +12,7 @@
 
 ## Solution Description
 Connects via gRPC to hubble-relay and sends netflow events to Object Storage
-Then you can pick up these events from Object Storage to any SIEM using [GeeseFS] (https://cloud.yandex.ru/docs/storage/tools/geesefs) or other aws compatible plugins
+Then you can pick up these events from Object Storage to any SIEM using [GeeseFS](https://cloud.yandex.ru/docs/storage/tools/geesefs) or other aws compatible plugins
 
 Or using prepared Object Storage integrations in the following SIEMs:
 - [Object storage to Splunk](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-Splunk)
@@ -38,3 +38,13 @@ helm install cilium-s3-chart oci://cr.yandex/crpjfmfou6gflobbfvfv/cilium-s3-char
 --set yandex.prefix=<your-secretaccesskey> (например:k8s-cilium-flow-logs/cluster-id-1232145gfg) 
 
 ```
+
+Helm values:
+- yandex:
+-    accesskeyid: ""  # yandex access key
+-    secretaccesskey: ""  # yandex secret access key
+-    bucket: ""  # Yandex storage, bucket name
+-    hubble_url: "hubble-relay.kube-system.svc.cluster.local:80" # Hubble-url
+-    prefix: "k8s-cilium-flow-logs/" # Prefix of bucket folder
+-    region: "ru-central1" # region of S3
+-    endpoint: "https://storage.yandexcloud.net" # endpoint of S3
