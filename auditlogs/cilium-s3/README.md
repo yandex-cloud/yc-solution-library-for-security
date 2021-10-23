@@ -1,5 +1,6 @@
 # "cilium-s3" Export flow logs of Cilium to Yandex Cloud Object Storage
-![image](https://user-images.githubusercontent.com/85429798/138566244-ae52cdb1-d9dd-4c89-a129-4ff22b8d0b03.png)
+
+<img width="1081" alt="Снимок экрана 2021-10-23 в 20 40 23" src="https://user-images.githubusercontent.com/85429798/138566364-3f6beb5b-aab9-4bb3-8d14-c7f108aaa1d6.png">
 
 <img width="607" alt="Снимок экрана 2021-10-23 в 20 38 08" src="https://user-images.githubusercontent.com/85429798/138566328-f1a32606-47aa-4a4d-bf68-a346d3c87a74.png">
 
