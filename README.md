@@ -14,7 +14,7 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
 - 🕸 Сетевая безопасность
   - [Пример настройки Security Groups (dev/stage/prod): Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/network-sec/segmentation)
   - [Пример установки 1 ВМ-Межсетевой экран (NGFW): Checkpoint](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/network-sec/checkpoint-1VM)
-  - [Пример установки 2 ВМ NGFW Checkpoint: Active-Active]()
+  - [Пример установки 2 ВМ NGFW Checkpoint: Active-Active](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/network-sec/checkpoint-2VM_active-active/README.md)
   - [Пример создания site-to-site VPN соединения с Yandex Cloud: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/network-sec/vpn)
 - 🔑 Аутентификация и управление доступом
   - [IAM модуль (с примерами использования)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auth_and_access/iam#identity-and-access-management-iam-terraform-module-for-yandexcloud)
