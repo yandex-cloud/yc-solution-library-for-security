@@ -1,5 +1,9 @@
 # 2 NGFW Checkpoint: Active-Active
 
+![network_diagram_final](https://user-images.githubusercontent.com/85429798/139543124-cf9cbb90-1d90-4d29-95ed-8e9c5b29c30b.png)
+
+![image](https://user-images.githubusercontent.com/85429798/139543134-1a9f3390-d3a2-4e67-b401-85a544c27e79.png)
+
 
 
 ## Описание решения
@@ -59,6 +63,8 @@ variable "subnet-a_vpc_2" {
 variable "subnet-b_vpc_2" {
   default = "10.161.2.0/24" #change if you need
 }
+...
+
 ```
 
 - запустите команду:
