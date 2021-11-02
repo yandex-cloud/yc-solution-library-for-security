@@ -1,0 +1,21 @@
+loadBalancerId: ${load_balancer_id}
+targetGroupId: ${target_group_id} 
+routes_config:
+  ${first_router_address}:
+    active: primary 
+    route_table:
+      primary: ${first_az_rt}
+      secondary: ${second_az_rt}
+    subnets: 
+  %{ for subnet_id in first_az_subnet_list ~}
+  - ${subnet_id}
+  %{ endfor ~}
+${second_router_address}:
+    active: primary 
+    route_table: 
+      primary: ${second_az_rt}
+      secondary: ${first_az_rt}
+    subnets: 
+  %{ for subnet_id in second_az_subnet_list ~}
+  - ${subnet_id}
+  %{ endfor ~}

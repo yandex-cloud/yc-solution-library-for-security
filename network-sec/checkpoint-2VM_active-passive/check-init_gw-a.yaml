@@ -1,0 +1,54 @@
+#Example file. Removing a stanza will result in system defaults for that section.
+
+#cloud-config
+
+blink_config:
+  configure: "true"
+  gateway_cluster_member: "false"
+  download_info: "true"
+  upload_info: "true"
+  ftw_sic_key: "${pass_sic}"
+
+ssh_authorized_keys:
+- "${ssh_key}"
+
+system:
+  hostname: FW-A
+  #domainname: test.com
+  #dns1: 10.128.0.2
+  dns2: 8.8.8.8
+  dns3: 4.2.2.2
+  ntp1:
+    address: ntp.checkpoint.com
+    version: 4
+  ntp2:
+    address: ntp2.checkpoint.com
+    version: 4
+
+# Please configure interfaces per OpenStack or Generic image instructions !!!!!
+
+#interfaces:
+#  - name: eth0
+#    ipv4-address: 192.168.1.35
+#    subnet-length: 24
+#  - name: eth1
+#    ipv4-address: DHCP
+
+routing:
+  static:
+    - dst: "${dst-1}"
+      nexthop: "${next-hop-1}"
+    - dst: "${dst-2}"
+      nexthop: "${next-hop-2}"
+    - dst: "${dst-3}"
+      nexthop: "${next-hop-3}"
+    - dst: "${dst-4}"
+      nexthop: "${next-hop-4}"
+    
+    
+
+clishcmd:
+- 'set static-route default nexthop gateway address "${gw}" on'
+- 'set static-route default nexthop gateway address 192.168.1.1 off'
+- 'save config'
+
