@@ -1,4 +1,4 @@
-# 2 NGFW Checkpoint: Active-Active
+# 2 NGFW Checkpoint: Active-Passive
 
 ![network_diagram_active-active](https://user-images.githubusercontent.com/85429798/139930384-90260071-d50c-4d75-8eeb-4c2ac26f2b49.png)
 
