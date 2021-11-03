@@ -1,6 +1,7 @@
 # 2 NGFW Checkpoint: Active-Passive
 
-![network_diagram_active-active](https://user-images.githubusercontent.com/85429798/139930384-90260071-d50c-4d75-8eeb-4c2ac26f2b49.png)
+
+![network_diagram_final](https://user-images.githubusercontent.com/85429798/140020381-07fe578d-304d-44b6-81e6-f1bd427190f6.png)
 
 
 ![image](https://user-images.githubusercontent.com/85429798/139543134-1a9f3390-d3a2-4e67-b401-85a544c27e79.png)
