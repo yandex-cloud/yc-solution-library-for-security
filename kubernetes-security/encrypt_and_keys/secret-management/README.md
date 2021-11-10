@@ -16,12 +16,12 @@
 
 ![image](https://user-images.githubusercontent.com/85429798/132330706-933ff062-ce71-4263-b5f0-d6f08526ddd7.png)
 
-TBD детальная схема
 
 #### Инструкция по настройке
-[Ссылка на официальную документацию](https://external-secrets.io/provider-yandex-lockbox/)
 
-TBD ссылка на документацию Yandex Cloud
+
+[Ссылка на официальную документацию](https://cloud.yandex.ru/docs/managed-kubernetes/solutions/kubernetes-lockbox-secrets)
+
 
 #### Сценарии разграничения доступов и объектов
 https://external-secrets.io/guides-multi-tenancy/
