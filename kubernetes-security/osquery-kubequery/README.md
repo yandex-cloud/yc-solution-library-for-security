@@ -8,7 +8,7 @@
 ## Вводная
 
 <a href="https://kubernetes.io/">
-    <img src="https://www.google.ru/url?sa=i&url=https%3A%2F%2Fwww.facebook.com%2Fosqueryi%2F&psig=AOvVaw17PTz_wMGvw5iR3G3PdFCN&ust=1638028292863000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJjl-4axtvQCFQAAAAAdAAAAABAO"
+    <img src="https://engineering.fb.com/wp-content/uploads/2014/10/1_XC-k2QigREIwZnBpFZ4StA@2x.png"
          alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
 </a></br>
 
