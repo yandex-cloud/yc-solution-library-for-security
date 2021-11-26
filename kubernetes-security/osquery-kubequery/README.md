@@ -20,6 +20,13 @@
 - [Anomaly detection with osquery](https://osquery.readthedocs.io/en/stable/deployment/anomaly-detection/)
 - др.
 
+## 
+
+<a href="https://kubernetes.io/">
+    <img src="https://repository-images.githubusercontent.com/330738883/21226100-5c12-11eb-9223-9a51942d504e"
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="150" />
+</a></br>
+
 [Kubequery](https://github.com/Uptycs/kubequery) - инструмент от создателей osquery, который позволяет получать информацию из кластера k8s о действующей конфигурации:
 - api ресурсы
 - назначенные роли RBAC
@@ -40,6 +47,11 @@
 ## Развертывание
 
 ### Osquery
+
+<a href="https://kubernetes.io/">
+    <img src="https://engineering.fb.com/wp-content/uploads/2014/10/1_XC-k2QigREIwZnBpFZ4StA@2x.png"
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="150" />
+</a></br>
 
 #### Установка osquery в k8s
 **Особенности установки в k8s**:
@@ -90,6 +102,12 @@ kubectl apply -f ./
 Отправка результатов в SIEM выполняется по схеме [Using a node logging agent](https://kubernetes.io/docs/concepts/cluster-administration/logging/#using-a-node-logging-agent)
 
 ##### Отправка результатов в ELK
+
+<a href="https://kubernetes.io/">
+    <img src="https://oracle-patches.com/images/2020/03/05/estc-logo-vvedenie_large.jpg"
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="150" />
+</a></br>
+
 <details>
 <summary>Развернуть для просмотра..........⬇️</summary>  
 
@@ -142,6 +160,11 @@ helm install filebeat elastic/filebeat -f values.yaml
 
 ##### Отправка результатов в Splunk
 
+<a href="https://kubernetes.io/">
+    <img src="https://cdn.f1ne.ws/userfiles/brown/142781.jpg"
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="150" />
+</a></br>
+
 <details>
 <summary>Развернуть для просмотра..........⬇️</summary>  
 
@@ -178,6 +201,11 @@ helm install my-splunk-logging -f values.yaml --set splunk.hec.insecureSSL=true 
 ##
 
 ### Kubequery
+
+<a href="https://kubernetes.io/">
+    <img src="https://repository-images.githubusercontent.com/330738883/21226100-5c12-11eb-9223-9a51942d504e"
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="150" />
+</a></br>
 
 #### Установка kubequery в k8s
 
