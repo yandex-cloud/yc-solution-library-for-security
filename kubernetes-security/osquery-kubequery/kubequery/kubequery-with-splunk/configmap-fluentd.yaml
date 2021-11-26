@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentd-configmap-sidecar
+  namespace: {{ .Values.namespace }}
+data:
+  fluent.conf: |-
+    @include system.conf
+    @include source.containers.conf
+    @include source.files.conf
+    @include source.journald.conf
+    @include monit.conf
+    @include output.conf
+    @include prometheus.conf
+  output.conf: |-
+    #Events are emitted to the CONCAT label from the container, file and journald sources for multiline processing.
+    <label @CONCAT>
+      # = output =
+      <match **>
+        @type splunk_hec
+        protocol https
+        hec_host "51.250.7.127"
+        hec_port 8088
+        hec_token "#{ENV['SPLUNK_HEC_TOKEN']}"
+        insecure_ssl true
+        host "my-cluster"
+        <buffer>
+          @type memory
+          chunk_limit_records 100000
+          chunk_limit_size 20m
+          flush_interval 5s
+          flush_thread_count 1
+          overflow_action block
+          retry_max_times 5
+          retry_type periodic
+          total_limit_size 600m
+        </buffer>
+        <format monitor_agent>
+          @type json
+        </format>
+        <format>
+          # we just want to keep the raw logs, not the structure created by docker or journald
+          @type single_value
+          message_key log
+          add_newline false
+        </format>
+      </match>
+    </label>
+  source.files.conf: |-
+    # This fluentd conf file contains sources for log files other than container logs.
+    <source>
+      @id tail.file.my-log-file
+      @type tail
+      @label @CONCAT
+      tag tail.file.my-log-file
+      path /opt/uptycs/logs/*.log
+      pos_file /opt/uptycs/logs/splunk-fluentd-containers.log.pos
+      read_from_head true
+      path_key source
+      <parse>
+        @type none
+        message_key log
+      </parse>
+    </source>
+  system.conf: |-
+    # system wide configurations
+    <system>
+      log_level info
+      root_dir /tmp/fluentd
+    </system>
+

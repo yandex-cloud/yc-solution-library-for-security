@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: filebeat-configmap-sidecar
+  namespace: {{ .Values.namespace }}
+data:
+  filebeat.yml: |
+    setup.ilm.enabled: auto
+    setup.ilm.rollover_alias: "filebeat-kubequery"
+    setup.ilm.pattern: "{now/d}-000001"
+    filebeat.inputs:
+    filebeat.modules:
+    - module: osquery
+      result:
+        enabled: true
+        var.paths: ["/opt/uptycs/logs/osqueryd.results.log*"]
+    output.elasticsearch:
+      hosts: "c-c9qfrs7u8i6g59dkb0vj.rw.mdb.yandexcloud.net:9200"
+      username: '${ELASTICSEARCH_USERNAME}'
+      password: '${ELASTICSEARCH_PASSWORD}'
+      protocol: https
+      ssl.certificate_authorities:
+      - /usr/share/filebeat/config/certs/elastic-certificate.pem
+

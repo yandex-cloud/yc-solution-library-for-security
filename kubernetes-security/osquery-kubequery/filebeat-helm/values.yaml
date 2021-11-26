@@ -1,0 +1,33 @@
+daemonset:
+  extraEnvs:
+    - name: "ELASTICSEARCH_HOSTS"
+      value: "c-c9qfrs7u8i6g59dkb0vj.rw.mdb.yandexcloud.net:9200"
+    - name: "ELASTICSEARCH_USERNAME"
+      valueFrom:
+        secretKeyRef:
+          name: security-master-credentials
+          key: username
+    - name: "ELASTICSEARCH_PASSWORD"
+      valueFrom:
+        secretKeyRef:
+          name: security-master-credentials
+          key: password
+  filebeatConfig:
+    filebeat.yml: |
+      setup.ilm.enabled: auto
+      setup.ilm.rollover_alias: "filebeat-osquery"
+      setup.ilm.pattern: "{now/d}-000001"
+      filebeat.inputs:
+      filebeat.modules:
+      - module: osquery
+      output.elasticsearch:
+        hosts: '${ELASTICSEARCH_HOSTS:elasticsearch-master:9200}'
+        username: '${ELASTICSEARCH_USERNAME}'
+        password: '${ELASTICSEARCH_PASSWORD}'
+        protocol: https
+        ssl.certificate_authorities:
+        - /usr/share/filebeat/config/certs/elastic-certificate.pem
+  secretMounts:
+    - name: elastic-certificate-pem
+      secretName: elastic-certificate-pem
+      path: /usr/share/filebeat/config/certs

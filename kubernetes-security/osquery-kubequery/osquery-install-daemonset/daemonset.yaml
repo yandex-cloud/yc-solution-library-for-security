@@ -1,0 +1,65 @@
+apiVersion: "apps/v1"
+kind: DaemonSet
+metadata:
+  name: osquery-daemonset
+  namespace: osquery
+  labels:
+    k8s-app: osquery-daemonset
+spec:
+  selector:
+    matchLabels:
+      k8s-app: osquery-daemonset
+  template:
+    metadata:
+      labels:
+        k8s-app: osquery-daemonset
+    spec:
+      hostNetwork: true
+      hostPID: true
+      hostIPC: true
+      containers:
+      - name: osquery-cont
+        image: cr.yandex/crpjfmfou6gflobbfvfv/osquery-ds:mvp
+        command: ["/bin/sh","-c"]
+        #run initial script
+        #args: ["cp /var/osquery.example.conf /host/etc/osquery/osquery.conf; cp /opt/pack.example.conf /host/opt/osquery/share/osquery/packs/vuln-management.conf; /tmp/startup.sh"]
+        #args: ["cp /var/osquery.example.conf /host/etc/osquery/osquery.conf; cp /opt/*.conf /host/opt/osquery/share/osquery/packs/; /tmp/startup.sh"]
+        args: ["/tmp/startup.sh"]
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi          
+        volumeMounts:
+        - name: osquery-script-mount
+          mountPath: /tmp
+        - name: osquery-config-mount
+          mountPath: /var/config
+        - name: osquery-pack-mount
+          mountPath: /opt/config
+        - mountPath: /host
+          name: host
+      volumes:
+      #Configmap with initial script
+      - name: osquery-script-mount
+        configMap:
+          name: osquery-cm-startup
+          defaultMode: 0744
+      #Configmap with osquery config
+      - name: osquery-config-mount
+        configMap:
+          name: osquery-cm-config
+          defaultMode: 0744
+      #Configmap with osquery pack conf
+      - name: osquery-pack-mount
+        configMap:
+          name: osquery-cm-pack
+          defaultMode: 0744
+      #mount host file-system
+      - name: host
+        hostPath:
+          path: /
