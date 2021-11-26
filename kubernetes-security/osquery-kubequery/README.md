@@ -54,7 +54,10 @@
 **Прериквизиты**:
 - развернутый кластер [Managed Service for Kubernetes](https://cloud.yandex.ru/docs/managed-kubernetes/quickstart)
 
-**Установка компонентов в k8s**
+**Установка компонентов osquery в k8s**
+<details>
+<summary>Развернуть для просмотра</summary>
+
 - скачайте файлы репозитория 
 ```
 git clone https://github.com/yandex-cloud/yc-solution-library-for-security.git 
@@ -70,6 +73,8 @@ kubectl apply -f ./ns.yaml
 kubectl apply -f ./
 ```
 - <span style="color: red"> TBD: создание helm chart </span>
+
+</details>
 
 #### Отправка результатов в SIEM
 Отправка результатов в SIEM выполняется по схеме [Using a node logging agent](https://kubernetes.io/docs/concepts/cluster-administration/logging/#using-a-node-logging-agent)
