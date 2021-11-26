@@ -24,7 +24,7 @@
 
 <a href="https://kubernetes.io/">
     <img src="https://repository-images.githubusercontent.com/330738883/21226100-5c12-11eb-9223-9a51942d504e"
-         alt="Kubernetes logo" title="Kubernetes" height="50" width="150" />
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="90" />
 </a></br>
 
 [Kubequery](https://github.com/Uptycs/kubequery) - инструмент от создателей osquery, который позволяет получать информацию из кластера k8s о действующей конфигурации:
@@ -105,7 +105,7 @@ kubectl apply -f ./
 
 <a href="https://kubernetes.io/">
     <img src="https://oracle-patches.com/images/2020/03/05/estc-logo-vvedenie_large.jpg"
-         alt="Kubernetes logo" title="Kubernetes" height="50" width="150" />
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="90" />
 </a></br>
 
 <details>
@@ -162,7 +162,7 @@ helm install filebeat elastic/filebeat -f values.yaml
 
 <a href="https://kubernetes.io/">
     <img src="https://cdn.f1ne.ws/userfiles/brown/142781.jpg"
-         alt="Kubernetes logo" title="Kubernetes" height="50" width="150" />
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="90" />
 </a></br>
 
 <details>
@@ -204,7 +204,7 @@ helm install my-splunk-logging -f values.yaml --set splunk.hec.insecureSSL=true 
 
 <a href="https://kubernetes.io/">
     <img src="https://repository-images.githubusercontent.com/330738883/21226100-5c12-11eb-9223-9a51942d504e"
-         alt="Kubernetes logo" title="Kubernetes" height="50" width="150" />
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="90" />
 </a></br>
 
 #### Установка kubequery в k8s
