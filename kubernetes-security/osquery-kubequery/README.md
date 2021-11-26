@@ -110,9 +110,10 @@ kubectl apply -f ./
 <details>
 <summary>Развернуть для просмотра..........⬇️</summary>  
 
+![image](https://user-images.githubusercontent.com/85429798/143606732-547cd5c6-35ed-4296-b0ca-fbb0e017da5c.png)
+
 Для отправки в ELK используется [filebeat](https://www.elastic.co/beats/filebeat). Filebeat имеет встроенный [модуль osquery](https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-module-osquery.html). Устанавливается с помощью [helm-chart](https://github.com/elastic/helm-charts/tree/main/filebeat). 
 
-![image](https://user-images.githubusercontent.com/85429798/143606732-547cd5c6-35ed-4296-b0ca-fbb0e017da5c.png)
 
 **Прериквизиты**:
 - развернутый кластер [Managed Service for Elasticsearch](https://cloud.yandex.ru/docs/managed-elasticsearch/operations/cluster-create)
@@ -167,10 +168,11 @@ helm install filebeat elastic/filebeat -f values.yaml
 <details>
 <summary>Развернуть для просмотра..........⬇️</summary>  
 
+![image](https://user-images.githubusercontent.com/85429798/143606623-1d3630aa-53e8-44dd-a619-a7b19d9dc925.png)
+
 Для отправки в Splunk используется [fluentd splunk hec plugin](https://github.com/splunk/fluent-plugin-splunk-hec). Устанавливается с помощью [helm-chart](https://github.com/splunk/splunk-connect-for-kubernetes/tree/develop/helm-chart/splunk-connect-for-kubernetes/charts/splunk-kubernetes-logging
 ). 
 
-![image](https://user-images.githubusercontent.com/85429798/143606623-1d3630aa-53e8-44dd-a619-a7b19d9dc925.png)
 
 **Прериквизиты**:
 - развернутый Splunk
@@ -267,11 +269,11 @@ helm install my-kubequery ./kubequery/charts/kubequery/
 
 ##### Установка kubequery с fluentd sidecar для отправки в Splunk
 
-![image](https://user-images.githubusercontent.com/85429798/143606787-4ef0c6e9-7595-4293-958d-7e06d10abbe5.png)
-
 
 <details>
 <summary>Развернуть для просмотра..........⬇️</summary>  
+
+![image](https://user-images.githubusercontent.com/85429798/143606787-4ef0c6e9-7595-4293-958d-7e06d10abbe5.png)
 
 - перейдите в папку
 ```
