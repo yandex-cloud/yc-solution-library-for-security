@@ -59,7 +59,7 @@ source of image - https://github.com/Uptycs/kubequery
 - По причине выше и результатам тестов было найдено решение: устанавливать контейнеру параметры: hostNetwork: true, hostPID: true, hostIPC: true, "hostPath:path: /" и выполнять из него chroot в хостовый namespace. Это влечет за собой риски связанные с привелигированным подом и выходом за пределы контейнера, которые могут быть минимизированы отдельным namespace с данным контейнером и правильным RBAC + policy engine, network policy, и др.  
 Существуют 2 способа понизить привилегии контейнера:
     - устанавливать агент osquery не через k8s, а напрямую на ноды (трудности в администрировании)
-    - одна команда [в статье](https://developer.ibm.com/articles/monitoring-containers-osquery/) упоминает, что справилась с этой задачей разработав свой кастомный extension используя [osquery-go](https://github.com/kolide/osquery-go/blob/master/README.md) и в нем изменили default folder с /proc на /host/proc тем самым требуется лишь монтирование данного фолдера без привелегий ** Необходим research **
+    - одна команда [в статье](https://developer.ibm.com/articles/monitoring-containers-osquery/) упоминает, что справилась с этой задачей разработав свой кастомный extension используя [osquery-go](https://github.com/kolide/osquery-go/blob/master/README.md) и в нем изменили default folder с /proc на /host/proc тем самым требуется лишь монтирование данного фолдера без привелегий **Необходим research**
 
 
 
@@ -91,7 +91,7 @@ cd /yc-solution-library-for-security/kubernetes-security/osquery-kubequery/osque
 kubectl apply -f ./ns.yaml 
 kubectl apply -f ./
 ```
-- **TBD: создание helm chart **
+- **TBD: создание helm chart**
 
 </details>
 
@@ -154,7 +154,7 @@ helm repo add elastic https://helm.elastic.co
 helm install filebeat elastic/filebeat -f values.yaml
 ```
 - проверить наличие записей в базе ELK в индексе filebeat-osquery (создать index pattern)
--  ** TBD: создание отделього dashboard в ELK для osquery (установленные пакеты, шел команды, открытые порты, версии ос и нод и т.д.) **
+- **TBD: создание отделього dashboard в ELK для osquery (установленные пакеты, шел команды, открытые порты, версии ос и нод и т.д.)**
 
 </details>
 
