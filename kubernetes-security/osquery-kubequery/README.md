@@ -7,6 +7,11 @@
 
 ## Вводная
 
+<a href="https://kubernetes.io/">
+    <img src="https://www.google.ru/url?sa=i&url=https%3A%2F%2Fwww.facebook.com%2Fosqueryi%2F&psig=AOvVaw17PTz_wMGvw5iR3G3PdFCN&ust=1638028292863000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCJjl-4axtvQCFQAAAAAdAAAAABAO"
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
+</a></br>
+
 [Osquery](https://github.com/osquery/osquery) - инструмент, который позволяет получать информацию об ОС в формате [SQL запросов](https://osquery.io/schema/current/#file_events). 
 Решаемые задачи: 
 - [Query configs, OS/device settings, proccess, open ports, packets](https://github.com/osquery/osquery#what-is-osquery)
