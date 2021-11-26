@@ -194,7 +194,7 @@ splunk:
 ```
 - установить helm chart с указанием файла ./values.yaml , вашего HEC Token и настройками SSL
 ```
-helm install my-splunk-logging -f values.yaml --set splunk.hec.insecureSSL=true --set splunk.hec.token=20d504ff-269b-4443-953f-fb721c890d91 --set splunk-kubernetes-logging.fullnameOverride=splunk-logging https://github.com/splunk/splunk-connect-for-kubernetes/releases/download/1.4.5/splunk-kubernetes-logging-1.4.5.tgz
+helm install my-splunk-logging -f values.yaml --set splunk.hec.insecureSSL=true --set splunk.hec.token=<your token> --set splunk-kubernetes-logging.fullnameOverride=splunk-logging https://github.com/splunk/splunk-connect-for-kubernetes/releases/download/1.4.5/splunk-kubernetes-logging-1.4.5.tgz
 ```
 
 </details>
@@ -288,7 +288,7 @@ kubectl create ns kubequery
 ```
 - создаем секрет для хранения HEC токена
 ```
-kubectl create secret generic splunk-hec-secret --from-literal=splunk_hec_token=706f58e0-73bf-4ca5-b9b3-f691a88e17b0 -n kubequery
+kubectl create secret generic splunk-hec-secret --from-literal=splunk_hec_token=<your token> -n kubequery
 ```
 - указать в файле ./configmap-fluentd.yaml значение hec_host "51.250.7.127" (ваш адрес) и host "my-cluster" (имя кластера)
 - скачать helm-chart командой 
