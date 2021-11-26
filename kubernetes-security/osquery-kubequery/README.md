@@ -24,8 +24,8 @@
 
 ## Проблемы
 
-- osquery не имеет примеров установки в k8s в виде daemonset в публичном доступе
-- инструменты не имеют встроенной возможности отправки результатов в SIEM (ELK, Splunk)
+- **osquery не имеет примеров установки в k8s в виде daemonset в публичном доступе**
+- **инструменты не имеют встроенной возможности отправки результатов в SIEM (ELK, Splunk)**
 
 ## Схема решения
 Картинка с kubequry
@@ -56,7 +56,7 @@
 
 **Установка компонентов osquery в k8s**
 <details>
-<summary>Развернуть для просмотра</summary>
+<summary>Развернуть для просмотра..........⬇️</summary>
 
 - скачайте файлы репозитория 
 ```
@@ -76,10 +76,15 @@ kubectl apply -f ./
 
 </details>
 
+## 
+
 #### Отправка результатов в SIEM
 Отправка результатов в SIEM выполняется по схеме [Using a node logging agent](https://kubernetes.io/docs/concepts/cluster-administration/logging/#using-a-node-logging-agent)
 
 ##### Отправка результатов в ELK
+<details>
+<summary>Развернуть для просмотра..........⬇️</summary>
+
 Для отправки в ELK используется [filebeat](https://www.elastic.co/beats/filebeat). Filebeat имеет встроенный [модуль osquery](https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-module-osquery.html). Устанавливается с помощью [helm-chart](https://github.com/elastic/helm-charts/tree/main/filebeat). 
 
 <скрин>
@@ -125,6 +130,7 @@ helm install filebeat elastic/filebeat -f values.yaml
 - проверить наличие записей в базе ELK в индексе filebeat-osquery (создать index pattern)
 -  <span style="color: red"> TBD: создание отделього dashboard в ELK для osquery (установленные пакеты, шел команды, открытые порты, версии ос и нод и т.д.) </span>
 
+</details>
 
 ##### Отправка результатов в Splunk
 Для отправки в Splunk используется [fluentd splunk hec plugin](https://github.com/splunk/fluent-plugin-splunk-hec). Устанавливается с помощью [helm-chart](https://github.com/splunk/splunk-connect-for-kubernetes/tree/develop/helm-chart/splunk-connect-for-kubernetes/charts/splunk-kubernetes-logging
