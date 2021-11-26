@@ -170,6 +170,8 @@ helm install my-splunk-logging -f values.yaml --set splunk.hec.insecureSSL=true 
 
 </details>
 
+##
+
 ### Kubequery
 
 #### Установка kubequery в k8s
@@ -182,6 +184,9 @@ Kubequery устанавливается в k8s в виде [Deployment](https:/
 
 
 ##### Установка kubequery с filebeat sidecar для отправки в ELK
+
+<details>
+<summary>Развернуть для просмотра..........⬇️</summary>  
 
 - перейдите в папку
 ```
@@ -226,8 +231,12 @@ helm install my-kubequery ./kubequery/charts/kubequery/
 ```
 - <span style="color: red"> TBD: создание helm chart для удобства и contribute его в kubequery </span>
 
+</details>
 
 ##### Установка kubequery с fluentd sidecar для отправки в Splunk
+
+<details>
+<summary>Развернуть для просмотра..........⬇️</summary>  
 
 - перейдите в папку
 ```
@@ -259,3 +268,5 @@ rm ./kubequery/charts/kubequery/templates/namespace.yaml
 helm install my-kubequery ./kubequery/charts/kubequery/ 
 ```
 - <span style="color: red"> TBD: создание helm chart для удобства и contribute его в kubequery </span>
+
+</details>
