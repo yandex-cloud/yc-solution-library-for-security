@@ -83,7 +83,7 @@ kubectl apply -f ./
 
 ##### Отправка результатов в ELK
 <details>
-<summary>Развернуть для просмотра..........⬇️</summary>
+<summary>Развернуть для просмотра..........⬇️</summary>  
 
 Для отправки в ELK используется [filebeat](https://www.elastic.co/beats/filebeat). Filebeat имеет встроенный [модуль osquery](https://www.elastic.co/guide/en/beats/filebeat/current/filebeat-module-osquery.html). Устанавливается с помощью [helm-chart](https://github.com/elastic/helm-charts/tree/main/filebeat). 
 
@@ -133,6 +133,10 @@ helm install filebeat elastic/filebeat -f values.yaml
 </details>
 
 ##### Отправка результатов в Splunk
+
+<details>
+<summary>Развернуть для просмотра..........⬇️</summary>  
+
 Для отправки в Splunk используется [fluentd splunk hec plugin](https://github.com/splunk/fluent-plugin-splunk-hec). Устанавливается с помощью [helm-chart](https://github.com/splunk/splunk-connect-for-kubernetes/tree/develop/helm-chart/splunk-connect-for-kubernetes/charts/splunk-kubernetes-logging
 ). 
 
@@ -161,6 +165,7 @@ splunk:
 helm install my-splunk-logging -f values.yaml --set splunk.hec.insecureSSL=true --set splunk.hec.token=20d504ff-269b-4443-953f-fb721c890d91 --set splunk-kubernetes-logging.fullnameOverride=splunk-logging https://github.com/splunk/splunk-connect-for-kubernetes/releases/download/1.4.5/splunk-kubernetes-logging-1.4.5.tgz
 ```
 
+</details>
 
 ### Kubequery
 
