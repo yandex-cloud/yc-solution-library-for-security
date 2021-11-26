@@ -219,12 +219,12 @@ Kubequery устанавливается в k8s в виде [Deployment](https:/
 
 ##### Установка kubequery с filebeat sidecar для отправки в ELK
 
-![image](https://user-images.githubusercontent.com/85429798/143607391-b0c5c2ee-4556-429b-a3e4-bb17e2dcdda5.png)
-
 
 <details>
 <summary>Развернуть для просмотра..........⬇️</summary>  
 
+![image](https://user-images.githubusercontent.com/85429798/143607391-b0c5c2ee-4556-429b-a3e4-bb17e2dcdda5.png)
+    
 - перейдите в папку
 ```
 cd /yc-solution-library-for-security/kubernetes-security/osquery-kubequery/kubequery/kubequery-with-elastic-filebeat/
