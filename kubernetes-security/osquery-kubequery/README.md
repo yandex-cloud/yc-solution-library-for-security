@@ -9,7 +9,7 @@
 
 <a href="https://kubernetes.io/">
     <img src="https://engineering.fb.com/wp-content/uploads/2014/10/1_XC-k2QigREIwZnBpFZ4StA@2x.png"
-         alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
+         alt="Kubernetes logo" title="Kubernetes" height="150" width="50" />
 </a></br>
 
 [Osquery](https://github.com/osquery/osquery) - инструмент, который позволяет получать информацию об ОС в формате [SQL запросов](https://osquery.io/schema/current/#file_events). 
