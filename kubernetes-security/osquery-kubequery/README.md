@@ -45,6 +45,12 @@
     - устанавливать агент osquery не через k8s, а напрямую на ноды (трудности в администрировании)
     - одна команда [в статье](https://developer.ibm.com/articles/monitoring-containers-osquery/) упоминает, что справилась с этой задачей разработав свой кастомный extension используя [osquery-go](https://github.com/kolide/osquery-go/blob/master/README.md) и в нем изменили default folder с /proc на /host/proc тем самым требуется лишь монтирование данного фолдера без привелегий <span style="color: green"> Необходим research </span>  
 
+
+
+**Установка компонентов osquery в k8s**
+<details>
+<summary>Развернуть для просмотра..........⬇️</summary>
+
 **Подготовленная конфигурация включает**:
 - основной конфиг osquery с включенным:
     - контролем целостности критичных k8s nodes файлов (согласно CIS Benchmark)
@@ -54,9 +60,6 @@
 **Прериквизиты**:
 - развернутый кластер [Managed Service for Kubernetes](https://cloud.yandex.ru/docs/managed-kubernetes/quickstart)
 
-**Установка компонентов osquery в k8s**
-<details>
-<summary>Развернуть для просмотра..........⬇️</summary>
 
 - скачайте файлы репозитория 
 ```
