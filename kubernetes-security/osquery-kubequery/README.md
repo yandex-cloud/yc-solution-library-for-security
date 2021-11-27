@@ -32,7 +32,10 @@
 - назначенные роли RBAC
 - инфо о политиках
 - инфо о секретах
-- др.
+- др.  
+
+Подробнее с default sql запросами можно ознакомиться [по ссылке](https://github.com/Uptycs/kubequery/blob/master/charts/kubequery/values.yaml#L41)
+
 
 ## Проблемы
 
