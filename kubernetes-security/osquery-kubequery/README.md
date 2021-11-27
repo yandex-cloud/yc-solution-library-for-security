@@ -155,6 +155,7 @@ helm repo add elastic https://helm.elastic.co
 helm install filebeat elastic/filebeat -f values.yaml
 ```
 - проверить наличие записей в базе ELK в индексе filebeat-osquery (создать index pattern)
+- в elastic появится index "filebeat-osquery"
 - **TBD: создание отделього dashboard в ELK для osquery (установленные пакеты, шел команды, открытые порты, версии ос и нод и т.д.)**
 
 </details>
@@ -267,6 +268,7 @@ rm ./kubequery/charts/kubequery/templates/namespace.yaml
 ```
 helm install my-kubequery ./kubequery/charts/kubequery/ 
 ```
+- в elastic появится index "filebeat-kubequery"
 - ** TBD: создание helm chart для удобства и contribute его в kubequery **
 
 </details>
