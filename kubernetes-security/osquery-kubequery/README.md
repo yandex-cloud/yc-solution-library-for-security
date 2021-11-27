@@ -72,6 +72,7 @@ source of image - https://github.com/Uptycs/kubequery
     - контролем целостности критичных k8s nodes файлов (согласно CIS Benchmark)
     - включенными [osquery packs](https://github.com/osquery/osquery/tree/master/packs): "incident response", "vuln-management"
 - конфиг со скриптом, который проверяет наличие osquery бинарника на k8s ноде и при необходимости копирует его и запускает
+- network policy, которые по умолчанию запрещают весь входящий и исходящший траффик namespace "osquery"
 
 **Прериквизиты**:
 - развернутый кластер [Managed Service for Kubernetes](https://cloud.yandex.ru/docs/managed-kubernetes/quickstart)
@@ -242,11 +243,11 @@ cp ~/.elasticsearch/root.crt ./elastic-certificate.pem
 ```
 - создать секрет с сертификатом ELK в кластере k8s 
 ```
-kubectl create secret generic elastic-certificate-pem --from-file=./elastic-certificate.pem
+kubectl create secret generic elastic-certificate-pem --from-file=./elastic-certificate.pem -n kubequery
 ```
 - создать секрет с credentials ELK в кластере k8s (заменить на свои)
 ```
-kubectl create secret generic security-master-credentials --from-literal=username=admin --from-literal=password=P@ssword
+kubectl create secret generic security-master-credentials --from-literal=username=admin --from-literal=password=P@ssword -n kubequery
 ```
 - указать в файле ./configmap-filebeat.yaml значение output.elasticsearch: hosts: "c-c9qfrs7u8i6g59dkb0vj.rw.mdb.yandexcloud.net:9200" (ваше значение)
 - скачать файлы helm-chart командой
