@@ -18,6 +18,7 @@
 - [File Integrity Monitoring with osquery](https://osquery.readthedocs.io/en/stable/deployment/file-integrity-monitoring/)
 - [Reading syslog with osquery](https://osquery.readthedocs.io/en/stable/deployment/syslog/)
 - [Anomaly detection with osquery](https://osquery.readthedocs.io/en/stable/deployment/anomaly-detection/)
+- [Process and socket auditing with osquery](https://osquery.readthedocs.io/en/stable/deployment/process-auditing/)
 - др.
 
 ## 
