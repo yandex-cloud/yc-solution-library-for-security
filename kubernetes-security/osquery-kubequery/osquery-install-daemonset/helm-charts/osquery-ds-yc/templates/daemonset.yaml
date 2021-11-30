@@ -1,0 +1,55 @@
+apiVersion: "apps/v1"
+kind: DaemonSet
+metadata:
+  name: osquery-daemonset
+  labels:
+    k8s-app: osquery-daemonset
+spec:
+  selector:
+    matchLabels:
+      k8s-app: osquery-daemonset
+  template:
+    metadata:
+      labels:
+        k8s-app: osquery-daemonset
+    spec:
+      hostNetwork: true
+      hostPID: true
+      hostIPC: true
+      containers:
+      - name: osquery-cont
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        command: ["/bin/sh","-c"]
+        #run initial script
+        args: ["([ -f host/opt/osquery/bin/osqueryd ] && cp /var/config/osquery.example.conf /host/etc/osquery/osquery.conf; cp /opt/config/*.conf /host/opt/osquery/share/osquery/packs/; chroot /host /opt/osquery/bin/osqueryd --verbose --disable_events=false --enable_file_events=true) || mkdir /host/etc/osquery; mkdir -p /host/opt/osquery/share/osquery/packs/; mkdir -p /host/opt/osquery/bin/; mkdir -p /host/var/log/osquery && cp /var/config/osquery.example.conf /host/etc/osquery/osquery.conf; cp /opt/config/*.conf /host/opt/osquery/share/osquery/packs/; cp /opt/osquery/bin/osqueryd /host/opt/osquery/bin/osqueryd && chroot /host /opt/osquery/bin/osqueryd --verbose --disable_events=false --enable_file_events=true"]
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 200Mi          
+        volumeMounts:
+        - name: osquery-config-mount
+          mountPath: /var/config
+        - name: osquery-pack-mount
+          mountPath: /opt/config
+        - mountPath: /host
+          name: host
+      volumes:
+      #Configmap with osquery config
+      - name: osquery-config-mount
+        configMap:
+          name: osquery-cm-config
+          defaultMode: 0744
+      #Configmap with osquery pack conf
+      - name: osquery-pack-mount
+        configMap:
+          name: osquery-cm-pack
+          defaultMode: 0744
+      #mount host file-system
+      - name: host
+        hostPath:
+          path: /

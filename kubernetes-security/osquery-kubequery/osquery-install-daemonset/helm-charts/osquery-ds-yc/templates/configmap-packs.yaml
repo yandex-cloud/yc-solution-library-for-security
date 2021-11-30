@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: osquery-cm-pack
+  namespace: osquery
+data:
+{{- range $path, $config := .Values.osqueryConfig }}
+  {{ $path }}: |
+{{ $config | indent 4 -}}
+{{- end -}}
+

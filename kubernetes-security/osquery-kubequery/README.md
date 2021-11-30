@@ -1,6 +1,16 @@
 # osquery и kubequery в k8s
 **MVP**
 
+# Version
+
+**Version-1.0**
+- Changelog:
+    - First version
+- Docker images:
+    - `cr.yandex/crpjfmfou6gflobbfvfv/osquery-ds:mvp`
+- Helm chart:
+    - `cr.yandex/crpjfmfou6gflobbfvfv/osquery-ds-yc:0.1.0`
+
 ## Задача
 
 Использовать **osquery** и **kubequery** в k8s кластере и отправлять результаты в SIEM (ELK, Splunk)
@@ -81,7 +91,22 @@ source of image - https://github.com/Uptycs/kubequery
 **Прериквизиты**:
 - развернутый кластер [Managed Service for Kubernetes](https://cloud.yandex.ru/docs/managed-kubernetes/quickstart)
 
+**Установка с помощью helm**:
+- скачайте values.yaml:
+```
+helm inspect values oci://cr.yandex/crpjfmfou6gflobbfvfv/osquery-ds-yc --version 0.1.0 > values.yaml
+```
+- при необходимости кастомизируйте конфигурацию
+- выполгните установку с параметрами:
+```
+helm install osquery-ds-yc \
+oci://cr.yandex/crpjfmfou6gflobbfvfv/osquery-ds-yc --version 0.1.0 \
+ --namespace osquery \
+--create-namespace \
+-f values.yaml
+```
 
+**Установка с помощью kubectl apply**:
 - скачайте файлы репозитория 
 ```
 git clone https://github.com/yandex-cloud/yc-solution-library-for-security.git 
@@ -96,6 +121,7 @@ cd /yc-solution-library-for-security/kubernetes-security/osquery-kubequery/osque
 kubectl apply -f ./ns.yaml 
 kubectl apply -f ./
 ```
+
 - **TBD: создание helm chart**
 
 </details>
