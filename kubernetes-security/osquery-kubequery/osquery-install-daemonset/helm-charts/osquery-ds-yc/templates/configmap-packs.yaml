@@ -4,7 +4,7 @@ metadata:
   name: osquery-cm-pack
   namespace: osquery
 data:
-{{- range $path, $config := .Values.osqueryConfig }}
+{{- range $path, $config := .Values.osqueryPacks }}
   {{ $path }}: |
 {{ $config | indent 4 -}}
 {{- end -}}

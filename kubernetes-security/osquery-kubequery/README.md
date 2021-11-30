@@ -85,6 +85,7 @@ source of image - https://github.com/Uptycs/kubequery
 - основной конфиг osquery с включенным:
     - контролем целостности критичных k8s nodes файлов (согласно CIS Benchmark)
     - включенными [osquery packs](https://github.com/osquery/osquery/tree/master/packs): "incident response", "vuln-management"
+    - включенным proccess events
 - конфиг со скриптом, который проверяет наличие osquery бинарника на k8s ноде и при необходимости копирует его и запускает
 - network policy, которые по умолчанию запрещают весь входящий и исходящший траффик namespace "osquery"
 
@@ -96,14 +97,15 @@ source of image - https://github.com/Uptycs/kubequery
 ```
 helm inspect values oci://cr.yandex/crpjfmfou6gflobbfvfv/osquery-ds-yc --version 0.1.0 > values.yaml
 ```
-- при необходимости кастомизируйте конфигурацию
+- при необходимости кастомизируйте конфигурацию в файле либо задайте параметры при установке
 - выполгните установку с параметрами:
 ```
 helm install osquery-ds-yc \
 oci://cr.yandex/crpjfmfou6gflobbfvfv/osquery-ds-yc --version 0.1.0 \
  --namespace osquery \
 --create-namespace \
--f values.yaml
+-f values.yaml \
+--set osqueryArgs="--verbose --disable_events=false --enable_file_events=true --disable_audit=false --audit_allow_config=true --audit_persist=true --audit_allow_process_events=true"
 ```
 
 **Установка с помощью kubectl apply**:

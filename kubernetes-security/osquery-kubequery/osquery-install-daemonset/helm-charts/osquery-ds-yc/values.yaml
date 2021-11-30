@@ -69,6 +69,8 @@ tolerations: []
 
 affinity: {}
 
+osqueryArgs: --verbose --disable_events=false --enable_file_events=true --disable_audit=false --audit_allow_config=true --audit_persist=true --audit_allow_process_events=true
+
 osqueryConfig:
   osquery.example.conf: |
     {
@@ -112,21 +114,20 @@ osqueryConfig:
       // Define a schedule of queries:
       "schedule": {
         // This is a simple example query that outputs basic system information.
-        "system_info": {
-          // The exact query to run.
-          "query": "SELECT hostname, cpu_brand, physical_memory FROM system_info;",
+        "proccess_info": {
+          "query": "SELECT * FROM process_events;",
           // The interval in seconds to run this query, not an exact interval.
           "interval": 20
         }
       },
 
       // Decorators are normal queries that append data to every query.
-      "decorators": {
-        "load": [
-          "SELECT uuid AS host_uuid FROM system_info;",
-          "SELECT user AS username FROM logged_in_users ORDER BY time DESC LIMIT 1;"
-        ]
-      },
+      //"decorators": {
+      //  "load": [
+      //    "SELECT uuid AS host_uuid FROM system_info;",
+       //   "SELECT user AS username FROM logged_in_users ORDER BY time DESC LIMIT 1;"
+        //]
+      //},
 
       // Add default osquery packs or install your own.
       //

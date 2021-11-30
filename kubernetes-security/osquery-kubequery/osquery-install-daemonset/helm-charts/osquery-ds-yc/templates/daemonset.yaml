@@ -21,7 +21,7 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         command: ["/bin/sh","-c"]
         #run initial script
-        args: ["([ -f host/opt/osquery/bin/osqueryd ] && cp /var/config/osquery.example.conf /host/etc/osquery/osquery.conf; cp /opt/config/*.conf /host/opt/osquery/share/osquery/packs/; chroot /host /opt/osquery/bin/osqueryd --verbose --disable_events=false --enable_file_events=true) || mkdir /host/etc/osquery; mkdir -p /host/opt/osquery/share/osquery/packs/; mkdir -p /host/opt/osquery/bin/; mkdir -p /host/var/log/osquery && cp /var/config/osquery.example.conf /host/etc/osquery/osquery.conf; cp /opt/config/*.conf /host/opt/osquery/share/osquery/packs/; cp /opt/osquery/bin/osqueryd /host/opt/osquery/bin/osqueryd && chroot /host /opt/osquery/bin/osqueryd --verbose --disable_events=false --enable_file_events=true"]
+        args: ["([ -f host/opt/osquery/bin/osqueryd ] && cp /var/config/osquery.example.conf /host/etc/osquery/osquery.conf; cp /opt/config/*.conf /host/opt/osquery/share/osquery/packs/; chroot /host /opt/osquery/bin/osqueryd {{ .Values.osqueryArgs }}) || mkdir /host/etc/osquery; mkdir -p /host/opt/osquery/share/osquery/packs/; mkdir -p /host/opt/osquery/bin/; mkdir -p /host/var/log/osquery && cp /var/config/osquery.example.conf /host/etc/osquery/osquery.conf; cp /opt/config/*.conf /host/opt/osquery/share/osquery/packs/; cp /opt/osquery/bin/osqueryd /host/opt/osquery/bin/osqueryd && chroot /host /opt/osquery/bin/osqueryd {{ .Values.osqueryArgs }}"]
         imagePullPolicy: Always
         securityContext:
           privileged: true

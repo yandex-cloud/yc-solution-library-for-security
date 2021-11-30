@@ -3,7 +3,7 @@ kind: ConfigMap
 metadata:
   name: osquery-cm-config
 data:
-{{- range $path, $config := .Values.osqueryPacks }}
+{{- range $path, $config := .Values.osqueryConfig }}
   {{ $path }}: |
 {{ $config | indent 4 -}}
 {{- end -}}
