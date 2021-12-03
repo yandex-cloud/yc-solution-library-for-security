@@ -8,7 +8,7 @@
 - Changelog:
     - Добавлен фильтр по Folder name
 - Docker images:
-    - `cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:1.0.6`
+    - `cr.yandex/sol/s3-elk-importer:1.0.6`
 
 # Оглавление
 - [Описание решения](#описание-решения)
@@ -31,7 +31,7 @@
 
 ## Что делает решение
 - ☑️ Разворачивает в инфраструктуре Yandex.Cloud кластер Managed ELK (через Terraform) (в default конфигурации см. п. Terraform)(рассчитать необходимую конфигурацию для вашей инфраструктуры необходимо совместно с Cloud Архитектором)
-- ☑️ Разворачивает COI Instance с контейнером на базе образа s3-elk-importer (`cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest`)
+- ☑️ Разворачивает COI Instance с контейнером на базе образа s3-elk-importer (`cr.yandex/sol/s3-elk-importer:latest`)
 - ☑️ Загружает Security Content в ELK (Dashboards, Detection Rules (с alerts), etc.)
 - ☑️ Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в ELK
 - ☑️ Создает индексы в двух репликах, настраивает базовую политику rollover (создания новых индексов каждые тридцать дней или по достижению 50ГБ), для дальнейшей настройки в части высокой доступности данных и для настройки снимков данных в S3 - см. [рекомендации](./CONFIGURE-HA.md). 
@@ -69,7 +69,7 @@
 - Поддерживать в актуальном состоянии Security контент, который импортируется в ElasticSearch
 
 В части обновления контента, необходимо убедиться, что вы используете последнюю доступную версию образа:
-`cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest`
+`cr.yandex/sol/s3-elk-importer:latest`
 
 Обновление контейнера можно выполнить следующим образом:
 - Можно пересоздать развернутый COI Instance с контейнером через Terraform (удалить COI Instance, выполнить `terraform apply`)
@@ -78,7 +78,7 @@
 Обновление Security контента в Kibana (dashboards, detection rules, searches) — можно выполнить через запуск контейнера `elk-updater`:
 
 ```
-docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -e KIBANA_SERVER='https://xxx.rw.mdb.yandexcloud.net' --name elk-updater cr.yandex/crpjfmfou6gflobbfvfv/elk-updater:latest
+docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -e KIBANA_SERVER='https://xxx.rw.mdb.yandexcloud.net' --name elk-updater cr.yandex/sol/elk-updater:latest
 ```
 
 ## Развертывание с помощью Terraform

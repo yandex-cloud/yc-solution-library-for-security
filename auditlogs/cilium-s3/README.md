@@ -14,9 +14,9 @@
 - Changelog:
     - First version
 - Docker images:
-    - `cr.yandex/crpjfmfou6gflobbfvfv/cilium-s3:1`
+    - `cr.yandex/sol/cilium-s3:1`
 - Helm chart:
-    - `cr.yandex/crpjfmfou6gflobbfvfv/cilium-s3-chart:0.1.0`
+    - `cr.yandex/sol/cilium-s3-chart:0.1.0`
 
 ## Solution Description
 Connects via gRPC to hubble-relay and sends netflow events to Object Storage
@@ -39,7 +39,7 @@ Or using prepared Object Storage integrations in the following SIEMs:
 Install helm hart by replacing the values with your own (specified in the prerequisites)
 
 ```Python
-helm install cilium-s3-chart oci://cr.yandex/crpjfmfou6gflobbfvfv/cilium-s3-chart --version 0.1.0 --namespace cilium-s3 --create-namespace \
+helm install cilium-s3-chart oci://cr.yandex/sol/cilium-s3-chart --version 0.1.0 --namespace cilium-s3 --create-namespace \
 --set yandex.secretaccesskey=<your-secretaccesskey> \
 --set yandex.bucket=<your-Bucket-name> \
 --set yandex.accesskeyid=<your-accesskeyid> \

@@ -7,9 +7,9 @@
 - Changelog:
     - First version
 - Docker images:
-    - `cr.yandex/crpjfmfou6gflobbfvfv/osquery-ds:mvp`
+    - `cr.yandex/sol/osquery-ds:mvp`
 - Helm chart:
-    - `cr.yandex/crpjfmfou6gflobbfvfv/osquery-ds-yc:0.1.0`
+    - `cr.yandex/sol/osquery-ds-yc:0.1.0`
 
 ## Задача
 
@@ -95,13 +95,13 @@ source of image - https://github.com/Uptycs/kubequery
 **Установка с помощью helm**:
 - скачайте values.yaml:
 ```
-helm inspect values oci://cr.yandex/crpjfmfou6gflobbfvfv/osquery-ds-yc --version 0.1.0 > values.yaml
+helm inspect values oci://cr.yandex/sol/osquery-ds-yc --version 0.1.0 > values.yaml
 ```
 - при необходимости кастомизируйте конфигурацию в файле либо задайте параметры при установке
 - выполгните установку с параметрами:
 ```
 helm install osquery-ds-yc \
-oci://cr.yandex/crpjfmfou6gflobbfvfv/osquery-ds-yc --version 0.1.0 \
+oci://cr.yandex/sol/osquery-ds-yc --version 0.1.0 \
  --namespace osquery \
 --create-namespace \
 -f values.yaml \

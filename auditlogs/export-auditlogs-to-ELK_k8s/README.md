@@ -14,7 +14,7 @@
 - Changelog:
     - добавлена поддержка авто-установки kyverno с политиками в режиме audit 
 - Docker images:
-    - `cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:1.1.0`
+    - `cr.yandex/sol/k8s-events-siem-worker:1.1.0`
 
 # Оглавление
 
@@ -144,7 +144,7 @@ module "security-events-to-siem-importer" {
 - Поддерживать в актуальном состоянии Security контент, который импортируется в ElasticSearch
 
 В части обновления контента, необходимо убедиться, что вы используете последнюю доступную версию образа:
-`cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:latest`
+`cr.yandex/sol/k8s-events-siem-worker:latest`
 
 Обновление контейнера можно выполнить следующим образом:
 - Можно пересоздать развернутый COI Instance с контейнером через Terraform (удалить COI Instance, выполнить `terraform apply`)
@@ -153,7 +153,7 @@ module "security-events-to-siem-importer" {
 Обновление Security контента в Kibana (dashboards, detection rules, searches) — можно выполнить через запуск контейнера `elk-updater`:
 
 ```
-docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -e KIBANA_SERVER='https://xxx.rw.mdb.yandexcloud.net' --name elk-updater cr.yandex/crpjfmfou6gflobbfvfv/elk-updater:latest
+docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -e KIBANA_SERVER='https://xxx.rw.mdb.yandexcloud.net' --name elk-updater cr.yandex/sol/elk-updater:latest
 ```
 
 ## Опционально ручные действие

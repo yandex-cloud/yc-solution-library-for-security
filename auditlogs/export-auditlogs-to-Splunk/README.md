@@ -15,7 +15,7 @@
 Вы можете описанные сценарии для реагирования на события в части информационной безопасности.
 
 ## Что делает решение (через Terraform)
-- [x] Разворачивает COI Instance с контейнером на базе образа s3-splunk-importer (`cr.yandex/crpjfmfou6gflobbfvfv/s3-splunk-importer:1.0`)
+- [x] Разворачивает COI Instance с контейнером на базе образа s3-splunk-importer (`cr.yandex/sol/s3-splunk-importer:1.0`)
 - [x] Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в Splunk
 
 ## Схема решения
