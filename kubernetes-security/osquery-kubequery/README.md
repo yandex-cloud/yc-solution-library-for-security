@@ -108,6 +108,7 @@ oci://cr.yandex/sol/osquery-ds-yc --version 0.1.0 \
 -f values.yaml \
 --set osqueryArgs="--verbose --disable_events=false --enable_file_events=true --disable_audit=false --audit_allow_config=true --audit_persist=true --audit_allow_process_events=true"
 ```
+- * для включения eBPF proccess events добавьте флаг "--enable_bpf_events=true" и обращайтесь к таблице "bpf_process_events". Подробнее в [док](https://osquery.readthedocs.io/en/stable/deployment/process-auditing/)
 
 **Установка с помощью kubectl apply**:
 - скачайте файлы репозитория 
