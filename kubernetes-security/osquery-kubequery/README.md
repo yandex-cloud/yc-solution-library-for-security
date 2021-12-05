@@ -29,7 +29,7 @@
 - [Reading syslog with osquery](https://osquery.readthedocs.io/en/stable/deployment/syslog/)
 - [Anomaly detection with osquery](https://osquery.readthedocs.io/en/stable/deployment/anomaly-detection/)
 - [Process and socket auditing with osquery](https://osquery.readthedocs.io/en/stable/deployment/process-auditing/)
-- [Сбор Информации о containers на хосте](https://www.uptycs.com/blog/get-started-using-osquery-for-container-security)
+- [Сбор Информации о containers на хосте (с помощью eBPF)](https://www.uptycs.com/blog/get-started-using-osquery-for-container-security)
 - др.
 
 ## 
