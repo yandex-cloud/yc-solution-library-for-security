@@ -28,7 +28,7 @@
 - [File Integrity Monitoring with osquery](https://osquery.readthedocs.io/en/stable/deployment/file-integrity-monitoring/)
 - [Reading syslog with osquery](https://osquery.readthedocs.io/en/stable/deployment/syslog/)
 - [Anomaly detection with osquery](https://osquery.readthedocs.io/en/stable/deployment/anomaly-detection/)
-- [Process and socket auditing with osquery](https://osquery.readthedocs.io/en/stable/deployment/process-auditing/)
+- [Process and socket auditing with osquery (включая eBPF)](https://osquery.readthedocs.io/en/stable/deployment/process-auditing/)
 - [Сбор Информации о containers на хосте)](https://www.uptycs.com/blog/get-started-using-osquery-for-container-security)
 - др.
 
