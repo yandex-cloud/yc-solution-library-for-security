@@ -36,19 +36,19 @@ resource "helm_release" "kyverno" {
     helm_release.kyverno
   ]
   name       = "policy-reporter"
-  chart      = "${path.module}/charts/policy-reporter"
-  repository = "https://kyverno.github.io/kyverno/"
+  chart      = "policy-reporter"
+  repository = "https://kyverno.github.io/policy-reporter"
   namespace = "kyverno"
 
 
 
   set {
-    name  = "target.yandex.accesskeyid"
+    name  = "target.yandex.accessKeyID"
     value = yandex_iam_service_account_static_access_key.sa_static_key.access_key
   }
 
   set {
-    name  = "target.yandex.secretaccesskey"
+    name  = "target.yandex.secretAccessKey"
     value = yandex_iam_service_account_static_access_key.sa_static_key.secret_key
   }
 
