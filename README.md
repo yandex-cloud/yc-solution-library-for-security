@@ -3,7 +3,7 @@
 Команда Yandex.Cloud проработала самые распространённые задачи, которые возникают при построении безопасности в облаке, протестировала и подробно описала необходимые сценарии.
 
 #### Вводный вебинар 
-[![image](https://user-images.githubusercontent.com/85429798/146542094-38475622-399d-4516-a592-6f06834b4d76.png)](https://www.youtube.com/watch?v=WZOB9ow0WrA)
+[![image](https://user-images.githubusercontent.com/85429798/146542425-b250c494-9a3c-4744-897d-5f65849355d5.png))](https://www.youtube.com/watch?v=WZOB9ow0WrA)
 
 
 #### ☑️ Yandex.Cloud Security Checklist
