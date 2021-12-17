@@ -2,8 +2,9 @@
 **Yandex.Cloud Security Solution Library** — это набор примеров и рекомендаций, собранных в публичном репозитории на GitHub. Они помогут компаниям, которые хотят построить безопасную инфруструктуру в Облаке и соответствовать требованиям различных регуляторов и стандартов.
 Команда Yandex.Cloud проработала самые распространённые задачи, которые возникают при построении безопасности в облаке, протестировала и подробно описала необходимые сценарии.
 
-#### Референсная архитектура
-![Refer_arc](https://user-images.githubusercontent.com/85429798/132501079-0bd89876-2cc9-405b-aac3-ea65ac1fb6d2.png)
+#### Вводный вебинар 
+[![image](https://user-images.githubusercontent.com/85429798/146542094-38475622-399d-4516-a592-6f06834b4d76.png)](https://www.youtube.com/watch?v=WZOB9ow0WrA)
+
 
 #### ☑️ Yandex.Cloud Security Checklist
 Чеклист по безопасности в облачной инфраструкутре Yandex Cloud
@@ -61,7 +62,10 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
 </a></br>
 
 
+
 # Обратная связь и пожелания
 - Доработки, ошибки, contribute: Заводите, пожалуйста с помощью github issue/pr
 - Вопросы, пожелания, консультации: Пишите нам в телеграм https://t.me/YandexCloudSecurity
 
+#### Референсная архитектура
+![Refer_arc](https://user-images.githubusercontent.com/85429798/132501079-0bd89876-2cc9-405b-aac3-ea65ac1fb6d2.png)
