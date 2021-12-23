@@ -1,5 +1,18 @@
-###Folder
+### Name convertion
+variable "usernames_to_ids" {
+  description = "If true Usernames from IAM and Federation will be used as input variables 'iam_users_names' and 'fed_users_names'"
+  type        = bool
+  default     = true
 
+}
+variable "federation_id" {
+  description = "Federation ID, mandatory for 'fed_users_names'"
+  type        = string
+  default     = null
+}
+
+
+###Folder
 variable "folder_id" {
   default     = null
   type        = string
@@ -14,17 +27,18 @@ variable "folder_user_role_mapping" {
   default     = []
   type        = any
   description = <<EOT
-Group of IAM User-IDs and it's permissions in FOLDER, where name = JOB Tille(aka IAM Group)
+Group of IAM User-IDs and it's permissions in FOLDER, where name = JOB Tille(aka IAM Group). Use usernames or user-ids or both
 ### Example
 #folder_user_role_mapping = [
   {
-    name  = "devops"
-    users = ["userAccount:idxxxxxx1", "federatedUser:idxxxxxx2"]
+    job_title_name  = "devops"
+    iam_users_names = ["name.surname", ]
+    fed_users_names = ["name.surname@yantoso.ru", ]
     roles = ["iam.serviceAccounts.user", "k8s.editor", "k8s.cluster-api.cluster-admin", "container-registry.admin"]
   },
   {
-    name  = "developers"
-    users = ["userAccount:idxxxxxx3"]
+    job_title_name  = "developers"
+    users_with_ids  = ["userAccount:idxxxxxx1", "federatedUser:idxxxxxx2"]
     roles = ["k8s.viewer",]
   },
 ]
@@ -68,17 +82,19 @@ variable "cloud_user_role_mapping" {
   default     = []
   type        = any
   description = <<EOT
-Group of IAM User-IDs and it's permissions in CLOUD, where name = JOB Tille(aka IAM Group)
+Group of IAM User-IDs and it's permissions in CLOUD, where name = JOB Tille(aka IAM Group). Use usernames or user-ids or both
 ### Example
 #cloud_user_role_mapping = [
   {
-    name  = "devops"
-    users = ["userAccount:idxxxxxx1", "federatedUser:idxxxxxx2"]
+    job_title_name  = "devops"
+    iam_users_names = ["name.surname", ]
+    fed_users_names = ["name.surname@yantoso.ru", ]
     roles = ["editor", ]
   },
   {
-    name  = "developers"
-    users = ["userAccount:idxxxxxx3"]
+    job_title_name  = "developers"
+    users_with_ids  = ["userAccount:idxxxxxx1", "federatedUser:idxxxxxx2"]
+    iam_users_names = ["name.surname", ]
     roles = ["viewer","k8s.editor",]
   },
  ]
@@ -104,19 +120,22 @@ variable "org_user_role_mapping" {
   default     = []
   type        = any
   description = <<EOT
-Group of IAM User-IDs and it's permissions in ORGANIZATION, where name = JOB Tille(aka IAM Group)
+Group of IAM User-IDs and it's permissions in ORGANIZATION, where name = JOB Tille(aka IAM Group). Use usernames or user-ids or both
 ### Example
 #org_user_role_mapping = [
   {
-    name  = "admins"
-    users = ["userAccount:idxxxxxx1", "federatedUser:idxxxxxx2"]
+    job_title_name  = "admins"
+    iam_users_names = ["name.surname", ]
+    fed_users_names = ["name.surname@yantoso.ru", ]
     roles = ["admin",]
   },
   {
-    name  = "network_admins"
-    users = ["userAccount:idxxxxxx3"]
+    job_title_name  = "network_admins"
+    users_with_ids  = ["userAccount:idxxxxxx1", "federatedUser:idxxxxxx2"]
     roles = ["vpc.admin",]
   },
  ]
 EOT 
 }
+
+
