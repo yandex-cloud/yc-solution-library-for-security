@@ -1,10 +1,11 @@
-# Multi-environment infrastructure with centralized RBAC management
+# Using IAM users (Yandex ID accounts) and Federated User instead user IDs
 
-Use `iam_mgmt` folder to set roles.
+Remember to change your in variables:
+* **folder-id**
+* **cloud-id**
+* **Users**
+* **federation_id** if exist
 
-Use `data.data.terraform_remote_state` to use newly created service accounts in dev/prod folders.
-
-Remember to change your **folder-IDs** in all environment folders.
 
 ## Configure Terraform for Yandex.Cloud 
 
@@ -18,7 +19,7 @@ export YC_FOLDER_ID=$(yc config get folder-id)
 ``` 
 ## Quick Start
 
-To run this example you need to execute from **all** folders:
+To run this example you need to execute:
 ```
 terraform init
 terraform plan
