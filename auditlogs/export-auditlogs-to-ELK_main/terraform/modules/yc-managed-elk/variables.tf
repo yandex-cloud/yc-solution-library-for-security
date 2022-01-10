@@ -39,3 +39,8 @@ variable "elk_public_ip" {
   description = "Назначать публичный IP адрес"
   default     = false
 }
+
+variable "elk_name" {
+  description = "Имя кластера ElasticSearch"
+  default     = "elk"
+}

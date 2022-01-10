@@ -13,7 +13,7 @@ locals {
 }
 
 resource "yandex_mdb_elasticsearch_cluster" "yc-elk" {
-  name        = "yc-elk"
+  name        = var.elk_name
   environment = "PRODUCTION"
   network_id  = var.network_id
 

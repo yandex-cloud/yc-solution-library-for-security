@@ -1,76 +1,83 @@
-//----------------------Подготовка тестовой инфраструктуры-----------------------------------
-// Генерация random-string для имени bucket---------------------------------------------------------
+## Example infrastructure
+# Создания random-string
 resource "random_string" "random" {
-  length           = 8
-  special          = false
-  upper            = false 
+  length              = 4
+  special             = false
+  upper               = false 
 }
 
-// Создание сети
+# Создание VPC сети
 resource "yandex_vpc_network" "vpc-elk" {
-  name = "vpc-elk"
+  name                = "vpc-elk-${random_string.random.result}"
 }
 
-// Создание подсетей
+# Создание подсети
 resource "yandex_vpc_subnet" "elk-subnet" {
-  folder_id      = var.folder_id
-  count          = 3
-  name           = "app-elk-${element(var.network_names, count.index)}"
-  zone           = element(var.zones, count.index)
-  network_id     = yandex_vpc_network.vpc-elk.id
-  v4_cidr_blocks = [element(var.app_cidrs, count.index)]
+  folder_id           = var.folder_id
+  count               = 3
+  name                = "app-elk-${element(var.network_names, count.index)}"
+  zone                = element(var.zones, count.index)
+  network_id          = yandex_vpc_network.vpc-elk.id
+  v4_cidr_blocks      = [element(var.app_cidrs, count.index)]
 }
 
-// Создание sa storage admin для создания Bucket for AuditTrail
+# Создание service account
 resource "yandex_iam_service_account" "sa-bucket-creator" {
-  name        = "sa-bucket-creator-${random_string.random.result}"
-  folder_id = var.folder_id
+  folder_id           = var.folder_id
+  name                = "sa-bucket-creator-${random_string.random.result}"
 }
 
-// Создание статического ключа
+resource "yandex_iam_service_account" "sa-bucket-editor" {
+  name                = "sa-bucket-editor-${random_string.random.result}"
+  folder_id           = var.folder_id
+}
+
+# Создание статического ключа для service account
 resource "yandex_iam_service_account_static_access_key" "sa-bucket-creator-sk" {
-  service_account_id = yandex_iam_service_account.sa-bucket-creator.id
+  service_account_id  = yandex_iam_service_account.sa-bucket-creator.id
 }
 
-// Назначение прав для создания бакета
+# Назначение прав на service account
 resource "yandex_resourcemanager_folder_iam_binding" "storage_admin" {
-  folder_id = var.folder_id
-  role      = "storage.admin"
+  folder_id           = var.folder_id
+  role                = "storage.admin"
 
   members = [
     "serviceAccount:${yandex_iam_service_account.sa-bucket-creator.id}",
   ]
 }
 
-// Создание S3 bucket для AuditTrails
-resource "yandex_storage_bucket" "trail-bucket" {
-  bucket = "trails-audit-log-bucket-${random_string.random.result}"
-
-  access_key = yandex_iam_service_account_static_access_key.sa-bucket-creator-sk.access_key
-  secret_key = yandex_iam_service_account_static_access_key.sa-bucket-creator-sk.secret_key
-}
-
-// Создание sa storage editor для работы от ELK с Bucket for AuditTrail
-resource "yandex_iam_service_account" "sa-bucket-editor" {
-  name        = "sa-bucket-editor-${random_string.random.result}"
-  folder_id = var.folder_id
-}
-
-// Назначение прав для изменения бакета
 resource "yandex_resourcemanager_folder_iam_binding" "storage_editor" {
-  folder_id = var.folder_id
-  role      = "storage.editor"
+  folder_id           = var.folder_id
+  role                = "storage.editor"
 
   members = [
     "serviceAccount:${yandex_iam_service_account.sa-bucket-editor.id}",
   ]
 }
 
-// Обязательно включить AuditTrail в UI на созданный bucket
-// Обязательно включить Egress NAT для подсети COI в UI на созданный bucket
+# Создание S3 бакета
+resource "yandex_storage_bucket" "trail-bucket" {
+  bucket              = "trails-audit-log-bucket-${random_string.random.result}"
 
-//----------------------Вызов модулей-----------------------------------
+  access_key          = yandex_iam_service_account_static_access_key.sa-bucket-creator-sk.access_key
+  secret_key          = yandex_iam_service_account_static_access_key.sa-bucket-creator-sk.secret_key
+}
 
+# Добавление правила для HTTPS-доступа в default security group
+resource "yandex_vpc_security_group_rule" "elk-https" {
+  security_group_binding = yandex_vpc_network.vpc-elk.default_security_group_id
+  direction              = "ingress"
+  description            = "incoming-https"
+  v4_cidr_blocks         = ["0.0.0.0/0"]
+  port                   = 443
+  protocol               = "TCP"
+}
+
+# Обязательно включить AuditTrail в UI на созданный bucket
+# Обязательно включить Egress NAT для подсети COI в UI на созданный bucket
+
+## Modules
 module "yc-managed-elk" {
     source                  = "../modules/yc-managed-elk" # path to module yc-managed-elk    
     folder_id               = var.folder_id
@@ -80,6 +87,7 @@ module "yc-managed-elk" {
     elk_datanode_preset     = "s2.medium"
     elk_datanode_disk_size  = 1000
     elk_public_ip           = true
+    elk_name                = "elk-${random_string.random.result}"
 }
 
 module "yc-elastic-trail" {
@@ -93,14 +101,18 @@ module "yc-elastic-trail" {
     coi_subnet_id           = yandex_vpc_subnet.elk-subnet[0].id
 }
 
+## Outputs
 output "elk-pass" {
-  value     = module.yc-managed-elk.elk-pass
-  sensitive = true
-} // Чтобы посмотреть пароль ELK: terraform output elk-pass
+  # Вывод пароля ELK через команду: terraform output elk-pass
+  value               = module.yc-managed-elk.elk-pass
+  sensitive           = true
+} 
+
 output "elk_fqdn" {
-  value = module.yc-managed-elk.elk_fqdn
-} // Выводит адрес ELK на который можно обращаться, например через браузер 
+  # Вывод FQDN для доступа к ELK 
+  value               = module.yc-managed-elk.elk_fqdn
+} 
 
 output "elk-user" {
-  value = "admin"
+  value               = "admin"
 }
