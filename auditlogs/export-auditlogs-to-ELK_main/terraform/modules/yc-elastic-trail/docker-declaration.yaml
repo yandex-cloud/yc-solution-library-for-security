@@ -25,7 +25,7 @@ spec:
       value: ${S3_SECRET_ENCR}
     - name: KMS_KEY_ID
       value: ${KMS_KEY_ID}
-    image: cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:latest
+    image: cr.yandex/crpjfmfou6gflobbfvfv/s3-elk-importer:1.0.6
     name: audittrails-worker
     securityContext:
       privileged: false
