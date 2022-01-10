@@ -25,7 +25,7 @@ spec:
       value: ${SLEEP_TIME}
     - name: PYTHONUNBUFFERED
       value: 1
-    image: cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:latest
+    image: cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:1.1.0
     name: k8s-falco-siem-worker
     securityContext:
       privileged: false
