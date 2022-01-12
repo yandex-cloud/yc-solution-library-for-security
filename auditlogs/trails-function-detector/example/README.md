@@ -15,7 +15,7 @@ terraform apply
 // Вызов модуля
 
 module "trails-function-detector" {
-    source = "../" // путь до модуля
+    source = "../" // путь до модуля (нет необходимости изменять, ведет к модулю в корне)
     //Общие:
     folder_id = "XXXXXXX" // your_folder_id
     service_account_id = "XXXXXXX" // yout service-account id, которому будут назначены права: serverless.functions.invoker
