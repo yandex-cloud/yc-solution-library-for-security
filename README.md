@@ -54,6 +54,7 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
     - [Управление секретами c SecretManager(Lockbox,Vault)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/encrypt_and_keys/secret-management)
   - Безопасная конфигурация Managed Kubernetes:
     - [osquery и kubequery в k8s: osquery (защита k8s nodes), kubequery (анализ конфиг. всего k8s) ](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/osquery-kubequery)
+  - [Таблица сравениня функций решений по безопасности k8s](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/choice_of_solutions)
 
 #
 <a href="https://kubernetes.io/">
