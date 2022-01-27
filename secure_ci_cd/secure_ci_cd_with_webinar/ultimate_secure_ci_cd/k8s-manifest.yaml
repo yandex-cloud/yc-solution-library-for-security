@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-vuln-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myvulnapp
+  template:
+    metadata:
+      labels:
+        app: myvulnapp
+    spec:
+      imagePullSecrets:
+      - name: regcred
+      containers:
+      - name: app
+        image: image_name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-my-vuln-app
+spec:
+  ports:
+  - port: 80 # Порт сетевого балансировщика, на котором будут обслуживаться пользовательские запросы.
+    name: plaintext 
+    targetPort: 8080 # Порт контейнера, на котором доступно приложение.
+  selector: # Метки селектора, использованные в шаблоне подов при создании объекта Deployment.
+    app: myvulnapp
+  type: LoadBalancer

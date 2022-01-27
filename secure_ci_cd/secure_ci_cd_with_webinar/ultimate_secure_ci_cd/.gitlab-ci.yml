@@ -1,0 +1,178 @@
+#Short description of steps:
+
+#-Container scanning
+    #-build_docker_image 
+    #-container_scanning
+    #-cs-fail-on-detection (fail if you have critical vuln)
+#-Push to prod registry
+#-Dependency-checker
+    #-gemnasium-maven-dependency_scanning
+    #-dc-fail-on-detection (fail if you have critical vuln)
+#-SAST
+#-DAST
+    #-deploy (deploy app to staging k8s)
+    #-DAST scan
+#-Deploy to prod (only for merged: after approve of merge request)
+
+
+include:
+- template: Security/Dependency-Scanning.gitlab-ci.yml
+- template: Security/Container-Scanning.gitlab-ci.yml 
+- '.push_to_prod_registry.yml' #Push to prod registry with kaniko
+- template: Security/DAST.latest.gitlab-ci.yml
+- template: Security/SAST.gitlab-ci.yml
+- template: Security/Secret-Detection.gitlab-ci.yml
+
+
+#----Container scanning------------------------------------------------
+#Build docker for container scanning with kaniko
+build_docker_image:
+  stage: build
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}"/log4shell-vulnerable-app
+      --dockerfile "${CI_PROJECT_DIR}/log4shell-vulnerable-app/Dockerfile"
+      --destination "${CI_REGISTRY_IMAGE}/${CI_COMMIT_REF_SLUG}:${CI_COMMIT_SHA}"
+
+
+#Container scanning job
+container_scanning:
+  stage: test
+  variables:
+    CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
+    CI_APPLICATION_TAG: $CI_COMMIT_SHA
+    CS_DISABLE_LANGUAGE_VULNERABILITY_SCAN: "false"
+
+
+#We check results of dependency-checker and if it has "critical" vuln - fail
+cs-fail-on-detection:
+  variables: 
+    REPORT_NAME: gl-dependency-scanning-report.json # Name of artifact that contain security report
+  stage: check-stage
+  script:
+    - apt-get update
+    - apt-get install jq -y
+    - apt-get install curl -y
+    #Show Critical vulns report full
+    - jq -r '.vulnerabilities[] | select(.severity=="Critical")' $REPORT_NAME
+    #Show summary 
+    - jq -r '["CVE", "FILE", "SOLUTION"], ["--","--","--","--"], (.vulnerabilities[] | select(.severity=="Critical") | [.identifiers[1].name, .location.file, .solution]) | @tsv' $REPORT_NAME
+    - echo "Please fix this Critical vuln to pass pipeline (if its false-positive - check this point in security dashboard)"
+    #Find if any Critical vulns
+    - jq '.vulnerabilities[] | .severity' $REPORT_NAME | grep 'Critical' && exit 1 || exit 0
+
+
+#Push to prod registry with kaniko
+#You need to assign yandex cloud serivce-account on VM with runner https://cloud.yandex.ru/docs/compute/operations/vm-connect/auth-inside-vm 
+push_to_prod_registry:
+  stage: push
+  variables:
+    REGISTRY: "cr.yandex"
+    YC_REGISTRY_ID: "crpvbsvtjommpkb0dr9a"
+    DOCKER_CUSTOM_SUBFOLDER: "log4shell-vulnerable-app"
+
+
+#-----Dependency-checker------------------------------------------------
+#Dependency-checker jobs
+gemnasium-maven-dependency_scanning:
+  stage: test
+  needs: 
+    - container_scanning
+  artifacts:
+      paths:
+        - gl-dependency-scanning-report.json
+      name: ds.json
+
+
+#We check results of dependency-checker and if it has "critical" vuln - fail
+dc-fail-on-detection:
+  variables: 
+    REPORT_NAME: gl-dependency-scanning-report.json # Name of artifact that contain security report
+  stage: check-stage
+  needs: 
+    - gemnasium-maven-dependency_scanning
+  script:
+    - apt-get update
+    - apt-get install jq -y
+    - apt-get install curl -y
+    #Show Critical vulns report full
+    - jq -r '.vulnerabilities[] | select(.severity=="Critical")' gl-dependency-scanning-report.json
+    #Show summary 
+    - jq -r '["CVE", "FILE", "SOLUTION"], ["--","--","--","--"], (.vulnerabilities[] | select(.severity=="Critical") | [.identifiers[1].name, .location.file, .solution]) | @tsv' gl-dependency-scanning-report.json
+    - echo "Please fix this Critical vuln to pass pipeline (if its false-positive - check this point in security dashboard)"
+    #Find if any Critical vulns
+    - jq '.vulnerabilities[] | .severity' $REPORT_NAME | grep 'Critical' && exit 1 || exit 0
+
+#-----SAST------------------------------------------------
+sast:
+  stage: test
+  variables:
+    SCAN_KUBERNETES_MANIFESTS: "true" #enable kubesec for manifests and charts
+  artifacts:
+    paths:
+      - gl-sast-report.json
+
+#-----DAST------------------------------------------------
+#Deploy image to test k8s
+deploy:
+  stage: deploy
+  variables:
+    REGISTRY: "cr.yandex"
+    YC_REGISTRY_ID: "crpvbsvtjommpkb0dr9a"
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
+  script:
+  - wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ./jq 
+  - kubectl config use-context my-group/k8s-config2:my-agent
+  - sed -ie "s/image_name/$REGISTRY\\/$YC_REGISTRY_ID\\/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA/g" k8s-manifest.yaml
+  - kubectl apply -f k8s-manifest.yaml
+  - export APP_IP=$(kubectl get svc service-my-vuln-app -o json | ./jq -r '.status.loadBalancer.ingress[0].ip')
+  - echo $APP_IP
+
+#DAST scan
+dast:
+  stage: dast
+  variables:
+    DAST_WEBSITE: http://51.250.10.27 #change to your domain name of app in staging
+    DAST_FULL_SCAN_ENABLED: "true"
+    DAST_SKIP_TARGET_CHECK: "true"
+    DAST_INCLUDE_ALPHA_VULNERABILITIES: "true"
+    DAST_ZAP_CLI_OPTIONS: "-config replacer.full_list(0).description=X-Api-Version -config replacer.full_list(0).enabled=true -config replacer.full_list(0).matchtype=REQ_HEADER -config replacer.full_list(0).matchstr=X-Api-Version -config replacer.full_list(0).regex=false -config replacer.full_list(0).replacement=test -config scanner.injectable=11 -config scanner.scanHeadersAllRequests=true -addonupdate -addoninstall ascanrulesAlpha -config oast.boast.uri=https://odiss.eu:1337/events -config oast.boast.uri=https://odiss.eu:1337/events -config oast.activeScanService=BOAST -config oast.boast.pollingFrequency=10"
+
+
+#-----Deploy-to-prod------------------------------------------------
+deploy_to_prod:
+  stage: deploy-prod
+  variables:
+    REGISTRY: "cr.yandex"
+    YC_REGISTRY_ID: "crpvbsvtjommpkb0dr9a"
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
+  script:
+  - wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ./jq 
+  - kubectl config use-context my-group/k8s-cilium:cilium-agent
+  - sed -ie "s/image_name/$REGISTRY\\/$YC_REGISTRY_ID\\/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA/g" k8s-manifest.yaml
+  - kubectl apply -f k8s-manifest.yaml
+  - export APP_IP=$(kubectl get svc service-my-vuln-app -o json | ./jq -r '.status.loadBalancer.ingress[0].ip')
+  - echo $APP_IP
+  only:
+    - main
+
+#Stages of pipeline
+stages:
+  - build
+  - test
+  - check-stage
+  - push
+  - deploy
+  - dast
+  - deploy-prod
+
