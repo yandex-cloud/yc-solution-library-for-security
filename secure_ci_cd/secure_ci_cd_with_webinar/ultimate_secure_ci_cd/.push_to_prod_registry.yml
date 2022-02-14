@@ -1,0 +1,25 @@
+#Push to prod registry with kaniko
+#You need to assign yandex cloud serivce-account on VM with runner https://cloud.yandex.ru/docs/compute/operations/vm-connect/auth-inside-vm
+push_to_prod_registry:
+  stage: push
+  variables:
+    REGISTRY: "cr.yandex" #leave it if your registry is yandex
+    YC_REGISTRY_ID: "crpvbsvtjommpkb0dr9a" #set your registry ID
+    DOCKER_CUSTOM_SUBFOLDER: "" #if your folder with docker files has some custom path
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    #install jq
+    - wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ./jq && cp jq /kaniko
+    #get sa token from metadata
+    - wget --header Metadata-Flavor:Google 169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token && cp token /kaniko
+    - echo "{\"auths\":{\"cr.yandex\":{\"auth\":\"$(printf "%s:%s" "iam" "$(cat /kaniko/token | ./jq -r '.access_token')" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}"/"${DOCKER_CUSTOM_SUBFOLDER}"
+      --dockerfile "${CI_PROJECT_DIR}/"${DOCKER_CUSTOM_SUBFOLDER}"/Dockerfile"
+      --destination "${REGISTRY}/${YC_REGISTRY_ID}/${CI_COMMIT_REF_SLUG}:${CI_COMMIT_SHA}"
+    #delete metadata file
+    - rm /kaniko/token

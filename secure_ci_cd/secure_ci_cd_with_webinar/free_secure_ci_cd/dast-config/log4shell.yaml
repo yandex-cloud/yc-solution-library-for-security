@@ -1,0 +1,34 @@
+---
+env:
+  contexts:
+  - name: "Default Context"
+    urls:
+    - "http://url_name"
+  parameters:
+    failOnError: true
+    failOnWarning: false
+    progressToStdout: true
+  vars: {}
+jobs:
+- parameters: {}
+  name: "spider"
+  type: "spider"
+- parameters: {}
+  policyDefinition:
+    defaultStrength: "medium"
+    defaultThreshold: "off"
+    rules:
+    - id: 40043
+      name: "Log4Shell (CVE-2021-44228)"
+      threshold: "medium"
+      strength: "default"
+  name: "activeScan"
+  type: "activeScan"
+- parameters:
+    time: "2:30"
+  name: "delay"
+  type: "delay"
+- type: report
+  parameters:
+    template: traditional-json
+    reportFile: owasp.json

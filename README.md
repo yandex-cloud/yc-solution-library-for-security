@@ -36,7 +36,7 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
   - [Trails-function-detector: Оповещения и реагирование на события ИБ Audit trails с помощью Cloud Logging/Cloud Functions + Telegram](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/trails-function-detector)
   - Мониторинг Audit Trails и событий в Yandex Cloud Monitoring скоро
 - 👮 Безопасная конфигурация
-  - [Пример безопасной конфигурации Yandex Cloud Object Storage: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/configuration/hardering_bucket)
+  - [Пример безопасной конфигурации Yandex Cloud Object Storage: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/configuration/hardening_bucket)
   - (Скоро) запрет доступа к метадате
 ##
 <a href="https://kubernetes.io/">

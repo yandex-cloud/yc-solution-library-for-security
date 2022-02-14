@@ -1,0 +1,199 @@
+#Short description of steps:
+
+#-Container scanning
+    #-build_docker_image 
+    #-container_scanning_free_trivy # for trivy scan or
+    #-container_scanning_free_yc # for yandex cloud container scanner 
+#-Push to prod registry
+#-SAST
+#-DAST
+    #-deploy (deploy app to staging k8s)
+    #-DAST scan
+#-Deploy to prod (only for merged: after approve of merge request)
+
+
+include:
+- template: Security/SAST.gitlab-ci.yml
+- template: Security/Secret-Detection.gitlab-ci.yml
+- '.push_to_prod_registry.yml' #Push to prod registry with kaniko
+
+variables: # Choose which scanner you want
+  IMAGE_SCAN_ENGINE_TRIVY: "false"
+  IMAGE_SCAN_ENGINE_YC: "false"
+
+
+
+#----Container scanning------------------------------------------------
+
+#Push-to-test-registry (Build docker for container scanning with kaniko and push it to test registry)
+#You need to assign yandex cloud serivce-account on VM with runner https://cloud.yandex.ru/docs/compute/operations/vm-connect/auth-inside-vm
+build_docker_image:
+  stage: build
+  variables:
+    REGISTRY: "cr.yandex" #leave it if your registry is yandex
+    YC_REGISTRY_ID: "crpa4sj54dagb22c6f5o" #set your registry ID
+    DOCKER_CUSTOM_SUBFOLDER: "log4shell-vulnerable-app" #if your folder with docker files has some custom path
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - mkdir -p /kaniko/.docker
+    #install jq
+    - wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ./jq && cp jq /kaniko
+    #get sa token from metadata
+    - wget --header Metadata-Flavor:Google 169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token && cp token /kaniko
+    - echo "{\"auths\":{\"cr.yandex\":{\"auth\":\"$(printf "%s:%s" "iam" "$(cat /kaniko/token | ./jq -r '.access_token')" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - >-
+      /kaniko/executor
+      --context "${CI_PROJECT_DIR}"/"${DOCKER_CUSTOM_SUBFOLDER}"
+      --dockerfile "${CI_PROJECT_DIR}/"${DOCKER_CUSTOM_SUBFOLDER}"/Dockerfile"
+      --destination "${REGISTRY}/${YC_REGISTRY_ID}/${CI_COMMIT_REF_SLUG}:${CI_COMMIT_SHA}"
+    #delete metadata file
+    - rm /kaniko/token
+
+
+#Container scanning job for scanning with Trivy
+container_scanning_free_trivy:
+  stage: test
+  artifacts:
+      when: always
+      paths:
+        - gl-container-scanning-report.json
+  rules:
+    - if: $IMAGE_SCAN_ENGINE_TRIVY == "true"
+      when: always
+  variables:
+    REGISTRY: "cr.yandex" #leave it if your registry is yandex
+    YC_REGISTRY_ID: "crpa4sj54dagb22c6f5o" #set your registry ID
+  image:
+    name: aquasec/trivy
+    entrypoint: [""]
+  script:
+    - wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ./jq
+    - wget --header Metadata-Flavor:Google 169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token
+    - export TRIVY_AUTH_URL=https://${REGISTRY}
+    - export TRIVY_USERNAME=iam
+    - export TRIVY_PASSWORD="$(cat token | ./jq -r '.access_token')"
+    # Build report
+    - trivy --cache-dir .trivycache/ image --exit-code 0 --no-progress -o gl-container-scanning-report.json ${REGISTRY}/${YC_REGISTRY_ID}/${CI_COMMIT_REF_SLUG}:${CI_COMMIT_SHA}
+    # Print report
+    - trivy --cache-dir .trivycache/ image --exit-code 0 --no-progress --severity HIGH ${REGISTRY}/${YC_REGISTRY_ID}/${CI_COMMIT_REF_SLUG}:${CI_COMMIT_SHA}
+    # Fail on critical vulnerabilities
+    - trivy --cache-dir .trivycache/ image --exit-code 1 --severity CRITICAL --no-progress ${REGISTRY}/${YC_REGISTRY_ID}/${CI_COMMIT_REF_SLUG}:${CI_COMMIT_SHA}
+
+
+#Container scanning job for scanning with Yandex Cloud container scanner
+#You need to assign yandex cloud serivce-account on VM with runner https://cloud.yandex.ru/docs/compute/operations/vm-connect/auth-inside-vm
+container_scanning_free_yc:
+  image: 
+    name: pindar/jq
+    entrypoint: [""]
+  stage: test
+  artifacts:
+    when: always
+    paths:
+      - gl-container-scanning-report-yc.json
+  rules:
+    - if: $IMAGE_SCAN_ENGINE_YC == "true"
+      when: always
+  variables:
+    REGISTRY: "cr.yandex" #leave it if your registry is yandex
+    YC_REGISTRY_ID: "crpa4sj54dagb22c6f5o" #set your registry ID
+  script:
+    - export CI_COMMIT_SHA=${CI_COMMIT_SHA}
+    #install yc cli
+    - curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh | bash -s -- -a && cp /root/yandex-cloud/bin/yc /usr/bin/
+    #start scan
+    - echo "Scanning image $IMAGE_NAME ${REGISTRY}/${YC_REGISTRY_ID}/${CI_COMMIT_REF_SLUG}:${CI_COMMIT_SHA}..."
+    - export IMAGE_ID=$(yc container image list --registry-id $YC_REGISTRY_ID --format=json | jq -r --arg CI_COMMIT_SHA $CI_COMMIT_SHA '.[] | select(.tags[0]==$CI_COMMIT_SHA) | .id ')
+    #Report
+    - export SCAN_RESULT=$(yc container image scan $IMAGE_ID --format=json)
+    - export CRIT_VULN=$(echo $SCAN_RESULT | jq -r '.vulnerabilities.critical // 0')
+    - export HIGH_VULN=$(echo $SCAN_RESULT | jq -r '.vulnerabilities.high // 0')
+    - export SCAN_ID=$(echo $SCAN_RESULT | jq -r '.id')
+    - echo "Scan results:"
+    - yc container image list-vulnerabilities --scan-result-id="${SCAN_ID}" --format json | jq -r '.[] | select(.severity=="CRITICAL", .severity=="HIGH")'
+    - yc container image list-vulnerabilities --scan-result-id="${SCAN_ID}" --format json | jq -r '.[] | select(.severity=="CRITICAL", .severity=="HIGH")' > gl-container-scanning-report-yc.json
+    #Check result
+    - (( SUM = $CRIT_VULN + $HIGH_VULN  )) && (( RES = (SUM >= 1) )) && echo $RES && echo "image has $CRIT_VULN critical vulns and $HIGH_VULN high vulns" && exit 1 || echo "image has no high or crit vulns" exit 0
+
+#Push to prod registry with kaniko
+#You need to assign yandex cloud serivce-account on VM with runner https://cloud.yandex.ru/docs/compute/operations/vm-connect/auth-inside-vm 
+push_to_prod_registry:
+  stage: push
+  variables:
+    REGISTRY: "cr.yandex"
+    YC_REGISTRY_ID: "crpvbsvtjommpkb0dr9a"
+    DOCKER_CUSTOM_SUBFOLDER: "log4shell-vulnerable-app"
+
+#-----SAST------------------------------------------------
+sast:
+  stage: test
+  variables:
+    SCAN_KUBERNETES_MANIFESTS: "true" #enable kubesec for manifests and charts
+  artifacts:
+    paths:
+      - gl-sast-report.json
+
+#-----DAST------------------------------------------------
+#Deploy image to test k8s
+deploy:
+  stage: deploy
+  variables:
+    REGISTRY: "cr.yandex"
+    YC_REGISTRY_ID: "crpvbsvtjommpkb0dr9a"
+  image:
+    name: bitnami/kubectl:latest
+    entrypoint: [""]
+  script:
+  - wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ./jq 
+  - kubectl config use-context my-group/k8s-config2:my-agent
+  - sed -ie "s/image_name/$REGISTRY\\/$YC_REGISTRY_ID\\/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA/g" k8s-manifest.yaml
+  - kubectl apply -f k8s-manifest.yaml
+  - export APP_IP=$(kubectl get svc service-my-vuln-app -o json | ./jq -r '.status.loadBalancer.ingress[0].ip')
+  - echo $APP_IP
+
+#DAST scan
+dast-free:
+  stage: dast
+  image: 
+    name: owasp/zap2docker-weekly
+    entrypoint: [""]
+  variables:
+    DAST_HOSTNAME: "51.250.10.27" #change to your domain name of app in staging
+  script:
+    - sed -ie "s/url_name/$DAST_HOSTNAME/g" /builds/my-group/free-pipeline/dast-config/log4shell.yaml
+    - cat /builds/my-group/free-pipeline/dast-config/log4shell.yaml
+    - cp /builds/my-group/free-pipeline/dast-config/log4shell.conf /zap/
+    - cp /builds/my-group/free-pipeline/dast-config/log4shell.yaml /zap/
+    - zap.sh -cmd -configfile /zap/log4shell.conf -autorun /zap/log4shell.yaml -addonupdate -addoninstall ascanrulesAlpha
+    - cat /home/zap/owasp.json
+
+
+#-----Deploy-to-prod------------------------------------------------
+#deploy_to_prod:
+ # stage: deploy-prod
+  #variables:
+   # REGISTRY: "cr.yandex"
+    #YC_REGISTRY_ID: "crpvbsvtjommpkb0dr9a"
+  #image:
+   # name: bitnami/kubectl:latest
+   # entrypoint: [""]
+  #script:
+  #- wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && chmod +x ./jq 
+  #- kubectl config use-context my-group/k8s-cilium:cilium-agent
+  #- sed -ie "s/image_name/$REGISTRY\\/$YC_REGISTRY_ID\\/$CI_COMMIT_REF_SLUG:$CI_COMMIT_SHA/g" k8s-manifest.yaml
+  #- kubectl apply -f k8s-manifest.yaml
+  #- export APP_IP=$(kubectl get svc service-my-vuln-app -o json | ./jq -r '.status.loadBalancer.ingress[0].ip')
+  #- echo $APP_IP
+  #only:
+  #  - main
+
+#Stages of pipeline
+stages:
+  - build
+  - test
+  - push
+  - deploy
+  - dast
+  #- deploy-prod
