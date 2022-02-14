@@ -60,6 +60,19 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
   - [Таблица сравениня функций решений по безопасности k8s](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/choice_of_solutions)
   - [Интеграция Starboard с Yandex Cloud Container Registry с целью сканирования запущенных образов](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/starboard_and_yc-cr)
 
+##
+<a href="https://kubernetes.io/">
+    <img src="https://logowik.com/content/uploads/images/gitlab8368.jpg"
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
+</a></br>
+
+- CI/CD Security
+  - Secure CI/CD на базе Managed GitLab:
+    - [Вебинар+материалы:Обнаружение Log4shell и др. уязвимостей в CI/CD на базе Managed GitLab](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar):
+      - [Обнаружение уязвимостей в CI/CD (Ultimate лицензия)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar/ultimate_secure_ci_cd)
+      - [Обнаружение уязвимостей в CI/CD (Free лицензия)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar/free_secure_ci_cd)
+      - [Security in Gtilab instance check-list](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar/gitlab_instance_sec_checklist)
+
 #
 <a href="https://kubernetes.io/">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/1200px-Telegram_2019_Logo.svg.png"
