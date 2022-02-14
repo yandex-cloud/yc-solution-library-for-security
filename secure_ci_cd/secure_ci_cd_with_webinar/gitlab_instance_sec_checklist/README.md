@@ -27,6 +27,6 @@
     - ограничиваейте сетевой доступ runners с помощью [Yandex Cloud Security Groups](https://cloud.yandex.ru/docs/vpc/concepts/security-groups), чтобы они не имели бесконтрольного входящего и исходящего доступа
     - используйте механизм [назначения сервисных аккаунтов на VM](https://cloud.yandex.ru/docs/compute/operations/vm-connect/auth-inside-vm ) для взаимодействия с облачным API изнутри Jobs. Он более безопасен чем указание credentials через env
     - Используйте базовые рекомендации для ОС: Patching, vulnerability scanning, user isolation, transport security, secure boot, machine identity, etc. Например, NIST 800-53 
-- Аудит и анализ событий безопасности: настройте [экспорт аудит логов](https://docs.gitlab.com/ee/administration/audit_event_streaming.html) в стороннюю систему для анализа событий (например Managed Service Elastic в Yandex Cloud) либо Splunk
+- Аудит и анализ событий безопасности: настройте [экспорт аудит логов](https://docs.gitlab.com/ee/administration/audit_event_streaming.html) в стороннюю систему для анализа событий (например [Yandex Managed Service for Elasticsearch в Yandex Cloud](https://cloud.yandex.ru/services/managed-elasticsearch)) либо Splunk
 - Используйте [Signing Commit (gpg)](https://docs.gitlab.com/ee/user/project/repository/gpg_signed_commits/) для подписи commits
 - Используйте принцип как минимум 2-х персон, которые выполняют approve внесения изменений в код. [Merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)

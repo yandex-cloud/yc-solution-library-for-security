@@ -1,9 +1,8 @@
 # Обнаружение уязвимостей в CI/CD (Free лицензия)
-Цель демонстрации - развертывание решения Kaspersky и удаленная установка агентов в Yandex.Cloud для обеспечения 
 
-## Схема картинка
+## Схема 
 
-## Схема блок схема
+## Схема (из чего состоит pipeline)
 #Short description of steps:
 - Container scanning
     - build_docker_image 
@@ -17,3 +16,4 @@
 - Deploy to prod (only for merged: after approve of merge request)
 
 ## Инструкция как использовать
+Вы можете скачать данные файлы и использовать их в качестве security pipeline для вашего проекта. Подробности из вебинара размещены на корневой странице раздела. 
