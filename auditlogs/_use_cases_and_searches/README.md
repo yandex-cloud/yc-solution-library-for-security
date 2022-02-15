@@ -7,8 +7,7 @@
 
 ## Синтаксис файла
 Выражения по анализу событий подготовлены на языке KQL(ElsticSearch) и Cloudlogging на выбор
-![image](https://user-images.githubusercontent.com/85429798/154081283-73beb685-ede4-47ab-896b-13c9fd4395aa.png)
-
+![image](https://user-images.githubusercontent.com/85429798/154081374-843f5c6d-a881-404a-b618-3693f1d3a11b.png)
 
 ## Пример анализа событий в Cloud Logging
 ![Screen Shot 2022-02-15 at 17 11 06](https://user-images.githubusercontent.com/85429798/154079879-db576283-3afb-4bc5-a1d7-4e7de9dcb987.png)
