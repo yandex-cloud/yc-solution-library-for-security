@@ -1,6 +1,7 @@
 # Обнаружение уязвимостей в CI/CD (Ultimate лицензия)
 
 ## Схема 
+![image](https://user-images.githubusercontent.com/85429798/154460366-22e15ec1-fd09-47cb-afc2-578f3e264a2e.png)
 
 ## Схема (из чего состоит pipeline)
 #Short description of steps:
