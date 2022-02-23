@@ -9,3 +9,5 @@ docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -
 - Detection Rules
 - Filters
 - Index Patterns
+
+!!!Важно: для корректного обновления должны быть открыты порты tcp **443**, **9200** в Security Group ELK с устройства откуда запускается данная команда 

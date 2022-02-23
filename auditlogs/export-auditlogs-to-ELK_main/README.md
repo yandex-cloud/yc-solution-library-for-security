@@ -4,6 +4,13 @@
 
 # Version
 
+**Version-2.1**
+- Changelog:
+    - Добавлены новые detection rules из [Use cases и важные события безопасности в аудит логах](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/_use_cases_and_searches#use-cases-%D0%B8-%D0%B2%D0%B0%D0%B6%D0%BD%D1%8B%D0%B5-%D1%81%D0%BE%D0%B1%D1%8B%D1%82%D0%B8%D1%8F-%D0%B1%D0%B5%D0%B7%D0%BE%D0%BF%D0%B0%D1%81%D0%BD%D0%BE%D1%81%D1%82%D0%B8-%D0%B2-%D0%B0%D1%83%D0%B4%D0%B8%D1%82-%D0%BB%D0%BE%D0%B3%D0%B0%D1%85)"
+- Docker images:
+    - `cr.yandex/sol/s3-elk-importer:2.1`
+    - `cr.yandex/sol/elk-updater:1.0.4`
+
 **Version-2.0**
 - Changelog:
     - Добавлен фильтр по Folder name
