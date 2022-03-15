@@ -9,7 +9,7 @@
 #### ☑️ Yandex.Cloud Security Checklist
 Checklist for security in the Yandex.Cloud infrastructure
 
-https://cloud.yandex.ru/docs/overview/security/domains/checklist
+https://cloud.yandex.com/en/docs/overview/security/domains/checklist
 
 # List of solutions
 - 🕸 Network security
@@ -37,7 +37,6 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
   - [Monitoring Audit Trails and events in Yandex Cloud Monitoring](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/trail_monitoring)
 - 👮 Secure configuration
   - [Example of a secure configuration for Yandex Cloud Object Storage: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/configuration/hardening_bucket)
-  - (Скоро) запрет доступа к метадате
 ##
 <a href="https://kubernetes.io/">
     <img src="https://github.com/magnologan/awesome-k8s-security/blob/master/logo.png"

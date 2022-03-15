@@ -6,10 +6,10 @@
 
 - [Collecting, monitoring, and analyzing audit logs in an external SIEM ArcSight](#)
   * [Solution description](#solution-description)
-  * [Two log shipping scenarios] (#two-log-shipping-scenarios)
+  * [Two log shipping scenarios](#two-log-shipping-scenarios)
   * [Solution diagram](#solution-diagram)
   * [Security Content](#security-content)
-  * [Long-term storing of logs in S3] (#long-term-storing-of-logs-in-s3)
+  * [Long-term storing of logs in S3](#long-term-storing-of-logs-in-s3)
   * [Instructions for scenarios](#instruction-for-scenarios)
       - [Prerequisites for scenarios](#prerequisites-for-scenarios)
       - [Scenario #1: Uploading log files to ArcSight from a server located inside the infrastructure of the customer's remote site](#prerequisites-for-scenarios)
@@ -25,7 +25,7 @@ The solution lets you collect, monitor, and analyze audit logs in Yandex.Cloud f
 
 
 ## Two log shipping scenarios
-- [xx] Uploading log files to ArcSight from a server located inside the infrastructure of the customer's remote site
+- [x] Uploading log files to ArcSight from a server located inside the infrastructure of the customer's remote site
 
 - [x] Uploading log files to ArcSight using a VM located in Yandex.Cloud
 
