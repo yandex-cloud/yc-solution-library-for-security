@@ -1,121 +1,116 @@
-# Сбор, мониторинг и анализ аудит логов во внешний SIEM ArcSight
-![Дашборд](https://user-images.githubusercontent.com/85429798/128209194-bc4eb274-1b97-4271-a712-e00a5f3f9b84.png)
-![Сценарии](https://user-images.githubusercontent.com/85429798/128209212-a705f950-4eea-4305-8f21-decfc2ab7af0.png)
+# Collecting, monitoring, and analyzing audit logs in an external SIEM ArcSight
+![Dashboard](https://user-images.githubusercontent.com/85429798/128209194-bc4eb274-1b97-4271-a712-e00a5f3f9b84.png)
+![Scenarios](https://user-images.githubusercontent.com/85429798/128209212-a705f950-4eea-4305-8f21-decfc2ab7af0.png)
 
-## Содержание
+## Table of Contents
 
-- [Сбор, мониторинг и анализ аудит логов во внешний SIEM ArcSight](#)
-  * [Описание решения](#описание-решения)
-  * [Два сценария отгрузки логов](#два-сценария-отгрузки-логов)
-  * [Схема решения](#схема-решения)
+- [Collecting, monitoring, and analyzing audit logs in an external SIEM ArcSight](#)
+  * [Solution description](#solution-description)
+  * [Two log shipping scenarios](#two-log-shipping-scenarios)
+  * [Solution diagram](#solution-diagram)
   * [Security Content](#security-content)
-  * [Долгосрочное хранение логов в S3](#долгосрочное-хранение-логов-в-s3)
-  * [Инструкция для сценариев](#инструкция-для-сценариев)
-      - [Пререквизиты для сценариев:](#пререквизиты-для-сценариев)
-      - [Сценарий №1 - Загрузка лог файлов в  ArcSight с сервера, который находится внутри инфраструктуры удаленной площадки Заказчика](#пререквизиты-для-сценариев)
-      - [Сценарий №2 - Загрузка лог файлов в  ArcSight с помощью ВМ, которая находится в Yandex Cloud "](#пререквизиты-для-сценариев)
-  * [Поддержка/Консалтинговые услуги](#поддержкаконсалтинговые-услуги)
+  * [Long-term storing of logs in S3](#long-term-storing-of-logs-in-s3)
+  * [Instructions for scenarios](#instruction-for-scenarios)
+      - [Prerequisites for scenarios](#prerequisites-for-scenarios)
+      - [Scenario #1: Uploading log files to ArcSight from a server located inside the infrastructure of the customer's remote site](#prerequisites-for-scenarios)
+      - [Scenario #2: Uploading log files to ArcSight using a VM located in Yandex.Cloud](#prerequisites-for-scenarios)
+  * [Support and consulting services](#supportconsulting-services)
 
 
-## Описание решения
-Актуальная версия Security Content находится в [репозитории](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex) сервис партнёр по поддержке ООО «АТБ»
-Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud со следующих источников:
+## Solution description
+The current version of Security Content is available in the [repository](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex). Our support partner is ATB.
+The solution lets you collect, monitor, and analyze audit logs in Yandex.Cloud from the following sources:
 
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
 
 
-## Два сценария отгрузки логов
-- [x] Загрузка лог файлов в ArcSight с сервера, который находится внутри инфраструктуры удаленной площадки Заказчика
+## Two log shipping scenarios
+- [x] Uploading log files to ArcSight from a server located inside the infrastructure of the customer's remote site
 
-- [x] Загрузка лог файлов в ArcSight с помощью ВМ, которая находится в Yandex.Cloud 
-
-
-## Схема решения
-#### Сценарий №1 - Загрузка лог файлов в ArcSight с сервера, который находится внутри инфраструктуры удаленной площадки Заказчика
-Описание: 
-- JSON файлы с логами хранятся в S3
-- На сервер в инфраструктуре заказчика устанавливается утилита s3fs, которая позволяет монтировать S3 bucket, как локальную папку в ОС
-- На сервер в инфраструктуре заказчика устанавливается стандартный ArcSight Connector
-- Загруается security content из текущего репозитория
-- ArcSight Connector с помощью security content вычитывает файлы, парсит и отправляет на сервер ArcSight 
-
-![Схема](https://user-images.githubusercontent.com/85429798/128553857-a6837742-8e63-4d8c-967a-be92454a0cb0.png)
+- [x] Uploading log files to ArcSight using a VM located in Yandex.Cloud
 
 
-#### Сценарий №2 - Загрузка лог файлов в ArcSight с помощью ВМ, которая находится в Yandex Cloud
+## Solution diagram
+#### Scenario #1: Uploading log files to ArcSight from a server located inside the infrastructure of the customer's remote site
+Description: 
+- JSON files with logs are stored in S3.
+- The s3fs utility is installed on a server in the customer's infrastructure, which allows you to mount an S3 Bucket as a local folder in your OS.
+- A standard ArcSight Connector is installed on a server in the customer's infrastructure.
+- Security content is loaded from the current repository.
+- ArcSight Connector uses security content to read files, parses the files, and sends them to the ArcSight server.
+
+![Diagram](https://user-images.githubusercontent.com/85429798/128553857-a6837742-8e63-4d8c-967a-be92454a0cb0.png)
+
+
+#### Scenario #2: Uploading log files to ArcSight using a VM located in Yandex.Cloud
  
-![Схема](https://user-images.githubusercontent.com/85429798/128553811-2d25dcc7-0500-446b-96ea-35a8fe8959ba.png)
+![Diagram](https://user-images.githubusercontent.com/85429798/128553811-2d25dcc7-0500-446b-96ea-35a8fe8959ba.png)
 
 
 ## Security Content
-Security Content - объекты ArcSight, которые загружаются по инструкции. Весь контент разработан совместно с командой партнером ООО «АТБ» с учетом многолетнего опыта Security команды Yandex.Cloud и на основе опыта Клиентов облака.
+Security Content - ArcSight objects that are loaded according to the instructions. All the content has been developed together with our partner ATB, leveraging the long-term expertise of the Yandex.Cloud Security team and our cloud customers.
 
-Актуальная версия Security Content находится в [репозитории](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex) 
+The current version of Security Content is available in the [repository](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex).
 
-Содержит следующий Security Content:
-- Parsing file (+map file)
-- Dashboard, на котором отражена полезная статистика
-- Набор Filters, Active channels, Active lists
-- Набор Правил корреляции (Rules). [Подробное описание списка правил корреляции](./Use-cases.docx) (Клиенту самостоятельно необходимо указать назначение уведомлений)
-- Все интересные поля событий преобразованы в формат [Common Event Format](https://community.microfocus.com/cyberres/productdocs/w/connector-documentation/38809/arcsight-common-event-format-cef-implementation-standard)
+The solution contains the following Security Content:
+- Parsing file (and map file).
+- Dashboard that shows useful statistics.
+- A set of Filters, Active channels, Active lists.
+- A set of correlation Rules. [Detailed description of the list of correlation rules](./Use-cases.docx ) (the client should specify the alert destination).
+All relevant event fields have been converted to a [Common Event Format](https://community.microfocus.com/cyberres/productdocs/w/connector-documentation/38809/arcsight-common-event-format-cef-implementation-standard).
 
-Подробное описание мапинга полей в файле [Поля ArcSight_JSON.docx](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex/blob/master/Поля%20ArcSight_JSON.docx)
-
-
-## Долгосрочное хранение логов в S3
-По умолчанию данная инструция предлагает удалять файлы после вычитывания, но вы можете одновременно хранить аудит логи Audit Trails в S3 на долгосрочной основе и отсылать в ArcSight.
-Для этого необходимо создать два Audit Trails в разных S3 бакетах:
-- Первый бакет будет использоваться только для хранения 
-- Второй бакет будет использоваться для интеграции с ArcSight 
+For a detailed description of field mapping, see the file [Поля ArcSight_JSON.docx](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex/blob/master/Поля%20ArcSight_JSON.docx).
 
 
-## Инструкция для сценариев
-#### Пререквизиты для сценариев
-- :white_check_mark: Object Storage Bucket для Audit Trails ([инструкция](https://cloud.yandex.ru/docs/storage/quickstart))
-- :white_check_mark: Включенный сервис Audit Trails в UI ([инструкция](https://cloud.yandex.ru/docs/audit-trails/quickstart))
+## Long-term storage of logs in S3
+By default, these instructions suggest deleting files after reading, but you can both store Audit Trails audit logs in S3 on a long-term basis and send them to ArcSight.
+For this you need to create two Audit Trails in different S3 buckets:
+- The first bucket will be used only for storage.
+- The second bucket will be used for integration with ArcSight.
 
 
-#### Сценарий № 1 - Загрузка лог файлов в ArcSight с сервера, который находится внутри инфраструктуры удаленной площадки Заказчика
-1) Установите на сервер внутри инфраструктуры удаленной площадки и подготовьте к работе утилиту s3fs [согласно инструкции](https://cloud.yandex.ru/docs/storage/tools/s3fs). Результат: смонтированный в качестве папки Object Storage бакет, в котором находятся json файлы Audit Trails. Например: `/var/trails/`
-
-2) Установите на ваш сервер ПО ArcSight SmartConnector (FlexAgent - JSON Folder follower) [согласно официальной инструкции](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors/AS_smartconn_install/)
-
-3) При установке выбирете *ArcSight FlexConnector JSON Folder Follower* и укажите примонтированную папку ранее `/var/trails/`
-
-4) Укажите JSON configuration filename prefix - `yc`
-
-5) Завершите установку connector 
-
-6) Скачайте все файлы Security Content из [репозитория](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex)
-
-7) Скопируйте файл `yc.jsonparser.properties` в `<папку установки агента>/current/user/agent/flexagent`
-
-8) Скопируйте файл `map.0.properties` в `<папку установки агента>/current/user/agent/map`
-
-9) отредактируйте файл `<папку установки агента>/current/user/agent/agent.properties` следующим образом:
-- `agents[0].mode=DeleteFile`
-- `agents[0].proccessfoldersrecursively=true` 
-
-10) Запустите коннектор и убедитесь, что события поступают
-![События](https://user-images.githubusercontent.com/85429798/128209247-c1582fc9-ea2a-4908-9c95-618ac1a097ee.png)
+## Instructions for scenarios
+#### Prerequisites for scenarios
+- :white_check_mark: Object Storage Bucket for Audit Trails ([instructions](https://cloud.yandex.ru/docs/storage/quickstart)).
+- :white_check_mark: Audit Trails service enabled in the UI ([instructions](https://cloud.yandex.ru/docs/audit-trails/quickstart)).
 
 
-#### Сценарий №2 - Загрузка лог файлов в ArcSight с помощью ВМ, которая находится в Yandex.Cloud
+#### Scenario #1: Uploading log files to ArcSight from a server located inside the infrastructure of the customer's remote site
+1) Install the s3fs utility on the server inside the remote site infrastructure and prepare it for operation [follow the instructions](https://cloud.yandex.ru/docs/storage/tools/s3fs). Result: an Object Storage Bucket mounted as a folder and hosting Audit Trails JSON files. For example, `/var/trails/`.
 
-- ручное 
-- пререквизиты, что должен быть впн или интерконнект
-- через терраформ пример с установкой VPN соединения
+2) Install ArcSight SmartConnector (FlexAgent — JSON Folder Follower) software on your server [follow the official instructions](https://www.microfocus.com/documentation/arcsight/arcsight-smartconnectors/AS_smartconn_install/).
+
+3) During the installation, select *ArcSight FlexConnector JSON Folder Follower* and specify the previously mounted `/var/trails/` folder.
+
+4) Specify the JSON configuration filename prefix: `yc`.
+
+5) Complete the connector installation. 
+
+6) Download all Security Content files from the [repository](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex).
+
+7) Copy the yc.jsonparser.properties file to the `<agent installation folder >/current/user/agent/flexagent`.
+
+8) Copy the file map.0.properties in `<agent installation folder>/current/user/agent/map`.
+
+9) Edit the file `<agent installation folder>/current/user/agent/agent.properties`:
+```
+agents[0].mode=DeleteFile
+agents[0].proccessfoldersrecursively=true
+```
+
+10) Start the connector and make sure that events are arriving
+![Events](https://user-images.githubusercontent.com/85429798/128209247-c1582fc9-ea2a-4908-9c95-618ac1a097ee.png)
 
 
-## Поддержка/Консалтинговые услуги
-Компания сервис партнёр по поддержке – ООО «АТБ» готова оказывать следующие услуги на платной основе:
-- Установка и настройка коннектора
-- Подключение новых источников данных о событиях безопасности
-- Разработка новых правил корреляции и средств визуализации
-- Разработка механизмов реагирования на возникающие инциденты
+## Support and consulting services
+Our support partner, ATB, provides the following services on a paid basis:
+- Installing and configuring the connector.
+- Connecting new data sources with security events.
+- Developing new correlation rules and visualization tools.
+- Developing mechanisms for responding to incidents.
 
-Контактные данные партнёра:
-- +7 (499) 648-75-48
-- info@ast-security.ru
+Partner's contact details:
++7 (499) 648-75-48
+info@ast-security.ru
 
 ![image](https://user-images.githubusercontent.com/85429798/128419821-aa2a4c85-7c67-4173-b21b-f0ec6b96e9e3.png)

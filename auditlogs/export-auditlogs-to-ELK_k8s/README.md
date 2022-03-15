@@ -1,8 +1,8 @@
-## Yandex Cloud: Анализ логов безопасности k8s в ELK: аудит-логи, policy engine, falco 
+## Yandex.Cloud: Analyzing K8s security logs in ELK: audit logs, Policy Engine, Falco 
 
 ![image](https://user-images.githubusercontent.com/85429798/137449451-eaa3a4ec-5a79-4fc5-8e7e-bd222c78b714.png)
 
-![Дашборд](https://user-images.githubusercontent.com/85429798/130331405-26a909ae-0171-47b2-93a2-c656632d262c.png)
+![Dashboard](https://user-images.githubusercontent.com/85429798/130331405-26a909ae-0171-47b2-93a2-c656632d262c.png)
 
 <img width="1403" alt="1" src="https://user-images.githubusercontent.com/85429798/133788731-3c410508-3539-4ba0-b873-85ae55d58b87.png">
 
@@ -12,157 +12,158 @@
 
 **Version-2.0**
 - Changelog:
-    - добавлена поддержка авто-установки kyverno с политиками в режиме audit 
+    - Added support for automatic Kyverno installation with policies in the audit mode. 
 - Docker images:
-    - `cr.yandex/sol/k8s-events-siem-worker:1.1.0`
+    - `cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:1.1.0`.
 
-# Оглавление
+# Table of contents
 
-- [Описание](#описание)
-- [Связь с решением "Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)"](#связь-с-решением-"Сбор-мониторинг-и-анализ-аудит-логов-в-Yandex-Managed-Service-for-Elasticsearch-(ELK)")
-- [Общая схема](#общая-схема)
-- [Описание импортируемых объектов ELK (Security Content)](#описание-импортируемых-объектов-ELK-(Security-Content))
-- [Описание terraform](#описание-terraform)
-- [Процесс обновления контента](#процесс-обновления-контента)
-- [Опционально ручные действие](#опционально-ручные-действие)
-
-
-## Описание 
-Решение из "коробки" выполняет следующее:
-- ☑️ собирает [k8s AUDIT-LOGS](https://kubernetes.io/docs/tasks/debug-application-cluster/audit/) в [Managed ELK SIEM](https://cloud.yandex.ru/docs/managed-elasticsearch/)
-- ☑️ устанавливает [FALCO](https://falco.org/) и собирает его [ALERTS](https://falco.org/docs/alerts/) в [Managed ELK SIEM](https://cloud.yandex.ru/docs/managed-elasticsearch/)
-- ☑️ устанавливает [Kyverno](https://kyverno.io/) c политиками категории [Pod Security Policy(Restricted)](https://kyverno.io/policies/?policytypes=Pod%2520Security%2520Standards%2520%28Restricted%29) в режиме audit и собирает его [ALERTS (PolicyReports)](https://kyverno.io/docs/policy-reports/) (при помощи [Policy Reporter](https://github.com/kyverno/policy-reporter))
-- ☑️ импортирует Security Content (dashboards, detection rules и др.)(см. в секции Security Content) в [Managed ELK SIEM](https://cloud.yandex.ru/docs/managed-elasticsearch/) для анализа и реагирования на события ИБ. 
-- ✔️ *В том числе импортирует Security Content для [OPA Gatekeeper](https://open-policy-agent.github.io/gatekeeper/website/docs/) (в режиме enforce). (сам OPA Gatekeeper может быть установлен вручную дополнительно)
-- ☑️ Создает индексы в двух репликах, настраивает базовую политику rollover (создания новых индексов каждые тридцать дней или по достижению 50ГБ), для дальнейшей настройки в части высокой доступности данных и для настройки снимков данных в S3 - см. [рекомендации](../export-auditlogs-to-ELK_main/CONFIGURE-HA.md). 
-
-## Связь с решением "Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)"
-Решение ["Сбор, мониторинг и анализ аудит логов в Yandex Managed Service for Elasticsearch (ELK)"](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_main) содержит информацию о том, как установить Yandex Managed Service for Elasticsearch (ELK) и собирать в него логи Audit Trails
+- [Description](#description)
+- [Link to the solution "Collecting, monitoring, and analyzing audit logs in Yandex Managed Service for Elasticsearch (ELK)"](#link-to-solution-"Collecting-monitoring-and-analyzing-audit-logs-in-Yandex-Managed-Service-for-Elasticsearch-(ELK)")
+- [Generic diagram](#generic-diagram)
+- [Description of imported ELK (Security Content) objects](#description of-imported-ELK-(Security-Content)-objects)
+- [Terraform description](#terraform-description)
+- [Content update process](#content-update-process)
+- [Optional manual actions](#optional-manual-actions)
 
 
-## Общая схема 
+## Description 
+Here are the out-of-the-box features of the solution:
+☑️ Collect [K8s audit logs](https://kubernetes.io/docs/tasks/debug-application-cluster/audit/) in [Managed ELK SIEM](https://cloud.yandex.ru/docs/managed-elasticsearch/).
+- ☑️ Install [Falco](https://falco.org/) and collect its [Alerts](https://falco.org/docs/alerts/) in [Managed ELK SIEM](https://cloud.yandex.ru/docs/managed-elasticsearch/).
+- ☑️ Install [Kyverno](https://kyverno.io/) with the [Pod Security Policy (Restricted)](https://kyverno.io/policies/?policytypes=Pod%2520Security%2520Standards%2520%28Restricted%29) policies in the audit mode and collect its [Alerts (Policy Reports)](https://kyverno.io/docs/policy-reports/) using [Policy Reporter](https://github.com/kyverno/policy-reporter).
+- ☑️ Import Security Content: dashboards, detection rules, and so on (see the Security Content section) in [Managed ELK SIEM](https://cloud.yandex.ru/docs/managed-elasticsearch/) to enable analysis and response to information security events. 
+- ☑️ This also includes importing Security Content for [OPA Gatekeeper](https://open-policy-agent.github.io/gatekeeper/website/docs/) (in the enforce mode). You can install OPA Gatekeeper manually if needed.
+- ☑️ Create indexes in two replicas, set up the basic rollover policy (creating of new indexes every thirty days or when 50 GB are reached) to enable provisioning of high data availability and to set up data snapshots in S3, see [recommendations](../export-auditlogs-to-ELK_main/CONFIGURE-HA.md). 
+
+## Link to the solution "Collecting, monitoring, and analyzing audit logs in Yandex Managed Service for Elasticsearch (ELK)"
+The solution ["Collecting, monitoring, and analyzing audit logs in Yandex Managed Service for Elasticsearch (ELK)"](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_main) contains information on how to install Yandex Managed Service for Elasticsearch (ELK) and collect logs from Audit Trails in it.
+
+
+## Generic diagram 
 
 ![image](https://user-images.githubusercontent.com/85429798/137740249-a9b09aaf-13f3-4022-83fe-5ba45f6c8418.png)
 
-## Описание импортируемых объектов ELK (Security Content)
-Подробное описание объектов по [ссылке](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Описание%20объектов.pdf)
+## Description of imported ELK (Security Content) object
+See a detailed description of the objects [here](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Описание%20объектов.pdf).
 
-## Описание terraform 
+## Terraform description 
 
-Решение состоит из 2-х модулей Terraform:
-1) [security-events-to-storage-exporter](./security-events-to-storage-exporter) (экспортирует логи в s3)
-- Принимает на вход: 
-    - `folder_id` - id каталога, в котором расположен кластер
-	- `cluster_name` - имя кластера Kubernetes
-	- `log_bucket_service_account_id` - id сервисного аккаунта, который может писать в бакет и имеет роль *ymq.admin*
-	- `log_bucket_name` - имя бакета, куда нужно сохранять логи
-	- `function_service_account_id` - (опционально) id сервисного аккаунта, который будет запускать фукнцию, если не указан, то используется `log_bucket_service_account_id`
+The solution consists of two Terraform modules:
+1) [security-events-to-storage-exporter](./security-events-to-storage-exporter) exports logs to S3.
+- It accepts the following input: 
+        - `folder_id`: The ID of the folder where the cluster is hosted.
+    - `cluster_name`: The name of the Kubernetes cluster.
+    - `log_bucket_service_account_id`: The ID of the service account that can write to the bucket and has the *ymq.admin* role.
+    - `log_bucket_name`: The name of the bucket to save logs to.
+    - `function_service_account_id`: The ID of the service account that will run the function (optional). If omitted, `log_bucket_service_account_id` is used.
 
-- Выполняет: 
-	- создание статического ключа для сервисного аккаунта
-	- создание функции и тригера для записи логов кластера в s3
-	- установку falco и настроенного falcosidekick, который отправит логи в s3
-    - установку Kyverno и настроенного [Policy Reporter](https://github.com/kyverno/policy-reporter), который отправит логи в s3
+- Functionality: 
+    - Create a static key for the service account.
+    - Create a function and a trigger for writing cluster logs to S3.
+    - Install Falco and pre-configured falcosidekick that will send logs to S3.
+       - Install Kyverno and pre-configured [Policy Reporter](https://github.com/kyverno/policy-reporter) that will send logs to S3.
 
-2) [security-events-to-siem-importer](./security-events-to-siem-importer) (импортирует логи в ELK)
-- Принимает на вход: 
-    - ряд параметров из модуля (`security-events-to-storage-exporter`)
-    - `auditlog_enabled` - *true* или *false* (отправлять ли аудит логи k8s в ELK)
-    - `falco_enabled` - *true* или *false* (отправлять ли алерты falco в ELK)
-    - `kyverno_enabled` - *true* или *false* (отправлять ли алерты kyverno в ELK)
-    - адрес FQDN инсталляции ELK 
-    - id подсети, в которой создается ВМ с контейнером импортера
-    - credentials ELK пользователя для импорта событий
+2) [security-events-to-siem-importer](./security-events-to-siem-importer) imports logs into ELK.
+- It accepts the following input: 
+    - Several parameters from the module (`security-events-to-storage-exporter`) module.
+    - `auditlog_enabled`: *true* or *false* (enables/disables sending of K8s audit logs to ELK).
+    - 'falco_enabled`: *true* or *false* (enables/disables sending of Falco alerts to ELK).
+    - 'kyverno_enabled`: *true* or *false* — (enables/disables sending of Kyverno alerts to ELK).
+    - The FQDN address of the ELK installation.
+    - The ID of the subnet where the VM instance with the importer container is being created.
+    - The ELK user credentials for event import.
 
-- Выполняет: 
-	- создание YMQ очередей с именами файлов логов в S3
-    - создание функций для push имен файлов из S3 в YMQ
-    - создание тригеров для взаимодействия очередей и функций
-    - генерацию и запись в файл и на ВМ ключей SSH
-    - создание ВМ на базе COI ([container optimised image](https://cloud.yandex.ru/docs/cos/concepts/)) с контейнерами workers, которые импортируют событий из s3 в ELK
+- Functionality: 
+    - Create YMQ queues with log file names in S3.
+    - Create functions to push file names from S3 to YMQ.
+    - Create triggers for interaction between queues and functions.
+    - Generate and write SSH keys to a file and to a VM.
+    - Create VM instances based on COI ([Container Optimized Image](https://cloud.yandex.ru/docs/cos/concepts/)) with worker containers that import events from S3 to ELK.
 
-#### Пререквизиты
-- :white_check_mark: Cluster Managed k8s
-- :white_check_mark: Managed ELK
-- :white_check_mark: Сервисный аккаунт, который может писать в бакет и имеет роль *ymq.admin*
-- :white_check_mark: Object Storage Bucket 
-- :white_check_mark: Subnet для развертывания ВМ с включенным NAT
+#### Prerequisites:
+- :white_check_mark: Cluster Managed K8s.
+- :white_check_mark: Managed ELK.
+- :white_check_mark: A service account that can write to the bucket and has the *ymq.admin* role.
+- :white_check_mark: Object Storage Bucket.
+- :white_check_mark: A subnet for deploying a VM with NAT enabled.
 
 
-#### Пример вызова модулей:
-См. Пример вызова модулей в /example/main.tf 
+#### Example of calling modules:
+See the example of calling modules in /example/main.tf 
 
 ```Python
 
-//Вызов модуля security-events-to-storage-exporter
+//Calling the security-events-to-storage-exporter module
+
 module "security-events-to-storage-exporter" {
-    source = "../security-events-to-storage-exporter/" # путь до модуля
+    source = "../security-events-to-storage-exporter/" # path to the module
 
-    folder_id = "xxxxxx" // folder-id кластера k8s yc managed-kubernetes cluster get --id <ID кластера> --format=json | jq  .folder_id
+    folder_id = "xxxxxx" // The folder ID of the K8s cluster yc managed-kubernetes cluster get --id <cluster ID> --format=json | jq  .folder_id
 
-    cluster_name = "k8s-cluster" // имя кластера
+    cluster_name = "k8s-cluster" // The name of the cluster
 
-    log_bucket_service_account_id = "xxxxxx" // id sa (должен обладать ролями: ymq.admin, write to bucket)
+    log_bucket_service_account_id = "xxxxxx" // The ID of the Service Account (it must have the roles: ymq.admin and "write to bucket")
     
-    log_bucket_name = "k8s-bucket" // можно подставить из конфига развертывания
-    # function_service_account_id = "чч" // опциоанальный id сервисного аккаунта который вызывает функции - если не выставлен то функция вызывается от имени log_bucket_service_account_id
+    log_bucket_name = "k8s-bucket" // You can use the value from the deploy config
+    # function_service_account_id = "xx" // An optional ID of the service account that calls functions. If not set, the function is called on behalf of log_bucket_service_account_id
 }
 
 
-//Вызов модуля security-events-to-siem-importer
+//Calling the security-events-to-siem-importer module
 module "security-events-to-siem-importer" {
-    source = "../security-events-to-siem-importer/" # путь до модуля
+    source = "../security-events-to-siem-importer/" # path to the module
 
     folder_id = module.security-events-to-storage-exporter.folder_id 
     
     service_account_id = module.security-events-to-storage-exporter.service_account_id
     
-    auditlog_enabled = true //отправлять k8s auditlog в elk
+    auditlog_enabled = true // Send K8s auditlog to ELK
     
-    falco_enabled = true //  установить falco и отправлять его алерты в elk
+    falco_enabled = true // Install Falco and send its alerts to ELK
 
-    kyverno_enabled = true // установить kyverno и отправлять его алерты в elk
+    kyverno_enabled = true // Install Kyverno and send its alerts to ELK
 
     log_bucket_name = module.security-events-to-storage-exporter.log_bucket_name
 
-    elastic_server = "https://c-xxx.rw.mdb.yandexcloud.net" // url ELK "https://c-xxx.rw.mdb.yandexcloud.net" (можно подставить из модуля module.yc-managed-elk.elk_fqdn)
+    elastic_server = "https://c-xxx.rw.mdb.yandexcloud.net " // The ELK URL "https://c-xxx.rw.mdb.yandexcloud.net" (you can use the value from the module.yc-managed-elk.elk_fqdn module)
 
-    coi_subnet_id = "xxxxxx" // subnet id в которой будет развернута ВМ с контейнером (обязательно включить NAT)
+    coi_subnet_id = "xxxxxx" // The ID of the subnet where the VM with the container will be deployed (be sure to enable NAT)
 
-    elastic_pw = var.elk_pw // выполнить команду: export TF_VAR_elk_pw=<ELK PASS> (заменить ELK PASS на ваше значение) // пароль учетной записи ELK (можно подставить из модуля module.yc-managed-elk.elk-pass)
+    elastic_pw = var.elk_pw // Run the command: export TF_VAR_elk_pw=<ELK PASS> (replace ELK PASS with your value) // The password for the ELK account (you may use the value from the module.yc-managed-elk.elk-pass module)
     
-    elastic_user = "admin" // имя учетной записи ELK
+    elastic_user = "admin" // The name of the ELK account
 }
     
 ```
 
-## Процесс обновления контента
-Рекомендуем подписаться на данный репозиторий для получения уведомлений об обновлениях.
+## Content update process
+We recommend subscribing to this repository to receive update notifications.
 
-Для того, чтобы использовать самую актуальную версию контента, необходимо
-- Поддерживать в актуальной версии контейнер, выполняющий синхронизацию
-- Поддерживать в актуальном состоянии Security контент, который импортируется в ElasticSearch
+To get the latest content version, do the following:
+- Keep the sync container up-to-date.
+- Keep the Security content imported to Elasticsearch in the updated state.
 
-В части обновления контента, необходимо убедиться, что вы используете последнюю доступную версию образа:
-`cr.yandex/sol/k8s-events-siem-worker:latest`
+For content updates, make sure that you are running the latest available image version:
+`cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:latest`
 
-Обновление контейнера можно выполнить следующим образом:
-- Можно пересоздать развернутый COI Instance с контейнером через Terraform (удалить COI Instance, выполнить `terraform apply`)
-- Можно остановить и удалить контейнеры (`falco-worker-*`, `kyverno-worker-*`, `audit-worker-*`), удалить образ `k8s-events-siem-worker`, перезапустить COI Instance — после запуска будет скачан новый образ и созданы новые контейнеры
+You can update the container as follows:
+- You can re-create the deployed COI Instance with the container via Terraform (delete the COI Instance, run `terraform apply`).
+- You can stop and delete the `falco-worker-*`, `kyverno-worker-*`, `audit-worker-*` containers, delete the `k8s-events-siem-worker` image, and restart the COI Instance. When it starts, a new image is downloaded and new containers are created.
 
-Обновление Security контента в Kibana (dashboards, detection rules, searches) — можно выполнить через запуск контейнера `elk-updater`:
+You can update the Security content in Kibana (dashboards, detection rules, searches) by launching the `elk-updater` container:
 
 ```
-docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -e KIBANA_SERVER='https://xxx.rw.mdb.yandexcloud.net' --name elk-updater cr.yandex/sol/elk-updater:latest
+docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -e KIBANA_SERVER='https://xxx.rw.mdb.yandexcloud.net' --name elk-updater cr.yandex/crpjfmfou6gflobbfvfv/elk-updater:latest
 ```
 
-## Опционально ручные действие
-#### Установка OPA Gatekeeper (helm)
-В случае, если вы предпочитаете OPA Gatekeeper вместо Kyverno то выставите значение `kyverno_enabled` - *false* при вызове модуля и выполните установку вручную
-- Установите OPA Gatekeeper [с помощью helm](https://open-policy-agent.github.io/gatekeeper/website/docs/install/#deploying-via-helm)
-- Выберите и установить необходимые constraint template и constraint из [gatekeeper-library](https://github.com/open-policy-agent/gatekeeper-library/tree/master/library/pod-security-policy) 
-- [Пример установки](https://github.com/open-policy-agent/gatekeeper-library#usage)
+## Optional manual actions
+#### Installing OPA Gatekeeper (Helm)
+If you prefer OPA Gatekeeper to Kyverno, set the value `kyverno_enabled` to *false* when calling the module, then run the manual installation:
+- Install OPA Gatekeeper [using Helm](https://open-policy-agent.github.io/gatekeeper/website/docs/install/#deploying-via-helm).
+- Select and install the required constraint template and constraint from [gatekeeper-library](https://github.com/open-policy-agent/gatekeeper-library/tree/master/library/pod-security-policy).
+- [Installation example](https://github.com/open-policy-agent/gatekeeper-library#usage).
 
-## Рекомендации по настройке retention, rollover и snapshots:
+## Recommendations for setting up retention, rollover, and snapshots:
 
-[Рекомендации по настройке retention, rollover и snapshots](../export-auditlogs-to-ELK_main/CONFIGURE-HA.md)
+[Recommendations for setting up retention, rollover, and snapshots](../export-auditlogs-to-ELK_main/CONFIGURE-HA.md)

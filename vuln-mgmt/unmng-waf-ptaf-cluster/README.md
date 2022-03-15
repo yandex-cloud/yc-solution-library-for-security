@@ -1,142 +1,141 @@
-# Отказоустойчивая эксплуатация PT Application Firewall на базе Yandex.Cloud
-Цель демо: Установка PT Web Application Firewall (далее PT WAF) в Yandex.Cloud в отказоустойчивой конфигурации.
+# Fault-tolerant operation of PT Application Firewall based on Yandex.Cloud
+Purpose of the demo: Install PT Web Application Firewall (hereinafter, PT WAF) in Yandex.Cloud in a fault-tolerant configuration.
 
-## Подробный workshop-разбор на видео:
+## For a detailed workshop analysis, see the video:
 [![image](https://user-images.githubusercontent.com/85429798/129480863-ef468a52-1191-4a23-9801-5e09c0de0cad.png)](https://www.youtube.com/watch?v=tnGuyIXNL6o)
 
 
-## Содержание:
-- Описание
-- Развертывание
-- Описание шагов работы с PT WAF
-- Проверка прохождения траффика и отказоустойчивости
-- Дполнительные материалы: настройка кластеризации PT WAF и настройка Application Load Balancer 
+## Table of Contents:
+- Description
+- Deployment
+- Description of the steps of working with PT WAF
+- Checking the traffic flow and fault tolerance
+- Additional materials: configuring PT WAF clustering and Application Load Balancer 
 
-## Описание:
-В рамках workshop будут выполнены:
-- установка инфраструктуры с помощью terraform (infrastructure as a code)
-- инсталяция и базовая конфигурация PT WAF cluster в двух зонах доступности Yandex.Cloud
+## Description:
+Steps to be completed during the workshop:
+- Installing the infrastructure using Terraform (Infrastructure as a Code).
+- Installation and basic configuration of PT WAF Cluster in two Yandex.Cloud availability zones.
 
-Отказоучстойчивость обеспечивается за счет:
-- кластеризации самих PT WAF в режиме Active-Active
-- балансировки траффика с помощью External-LB Yandex.Cloud
-- использования Cloud Function функции в Yandex.Cloud, которая отслеживает состояние PT WAF и в случаи их падения направляет траффик на приложения напрямую - `BYPASS`
+Fault tolerance is provided by:
+- Clustering of the PT WAF in Active-Active mode
+- Balancing of traffic using External-LB Yandex.Cloud
+- Using Cloud Function in Yandex.Cloud to monitor the status of PT WAFs and, if they fail, direct the traffic to applications — `BYPASS`.
 
-#### Сценарий окружения:
-Предполагается, что в Yandex.Cloud у Клиента уже развернут небезопасный сценарий публикации ВМ наружу: ВМ с веб приложениями в 2-х зонах доступности. Также имеется внешний сетевой балансировщик нагрузки. 
+#### Environment scenario:
+It is assumed that in Yandex.Cloud, the client has already deployed an unsafe external scenario of publishing a VM, that is, a VM running web applications in two availability zones. It also runs an external network load balancer. 
 
-> Для установки целой схемы снуля необходимо использовать playbook из папки "from-scratch"
+> To implement the entire diagram from scratch, use the playbook in the from-scratch folder
 
-#### Схема до:
-![Схема](https://user-images.githubusercontent.com/85429798/127995744-e9213d79-6fca-49cd-a2bf-3cf7bead0c75.png)
-
-
-#### Схема после:
-![Схема](https://user-images.githubusercontent.com/85429798/127995787-9d547d0c-390c-4df7-8577-928607fb3d08.png)
-
-![Схема](https://user-images.githubusercontent.com/85429798/127995819-fdc647d8-9125-4acf-8708-4088b8c28826.png)
+#### Diagram before:
+![Diagram](https://user-images.githubusercontent.com/85429798/127995744-e9213d79-6fca-49cd-a2bf-3cf7bead0c75.png)
 
 
-## Подготовка/Пререквизиты:
-- установить и настроить [yc client](https://cloud.yandex.ru/docs/cli/quickstart)
-- установить [terraform](https://www.terraform.io/downloads.html)
-- установить [jq](https://macappstore.org/jq/)
+#### Diagram after:
+![Diagram](https://user-images.githubusercontent.com/85429798/127995787-9d547d0c-390c-4df7-8577-928607fb3d08.png)
 
-## Развертывание
+![Diagram](https://user-images.githubusercontent.com/85429798/127995819-fdc647d8-9125-4acf-8708-4088b8c28826.png)
 
-#### Развертывание terraform:
 
-- скачать архив с файлами [pt_archive.zip](https://github.com/yandex-cloud/yc-architect-solution-library/blob/main/security-solution-library/unmng-waf-ptaf-cluster/main/pt_archive.zip)
-- перейти в папку с файлами
-- вставить необходимые параметры в файле `variables.tf` (в комментариях указаны необходимые команды yc для получения значений)
-- выполнить команду инициализации terraform
+## Preparation and prerequisites
+- Install and configure [YC CLI](https://cloud.yandex.ru/docs/cli/quickstart).
+- Install [Terraform](https://www.terraform.io/downloads.html ).
+- Install [jq](https://macappstore.org/jq/).
 
+## Deployment
+
+#### Terraform deployment:
+
+- Download an archive with files [pt_archive.zip](https://github.com/yandex-cloud/yc-architect-solution-library/blob/main/security-solution-library/unmng-waf-ptaf-cluster/main/pt_archive.zip).
+- Go to the folder with files.
+- Add relevant parameters to the variables.tf file (comments indicate the necessary yc commands to get the values).
+- Execute the Terraform initialization command:
 ```
 terraform init
 ```
-- выполнить команду импорта load-balancer
+- Execute the load-balancer import command:
 
 ```
 terraform import yandex_lb_network_load_balancer.ext-lb $(yc load-balancer network-load-balancer list --format=json | jq '.[].id' | sed 's/"//g') 
 ```
-
-- выполнить команду запуска terraform
+- Execute the Terraform startup command:
 ```
 terraform apply
 ```
-- включить NAT на subnet: *ext-subnet-a*, *ext-subnet-b* (для того, чтобы PT WAF мог выходить в интернет за обновлениями и активировать лицензию)
-- назначить Security Group `app-sg` на ВМ: *app-a*, *app-b*
+- Enable NAT on *ext-subnet-a* and *ext-subnet-b* (so that PT WAF can go online for updates and activate the license).
+- Assign the security group `app-sg` to the VM *app-a* and *app-b*.
 
 [<img width="1135" alt="image" src="https://user-images.githubusercontent.com/85429798/126979165-eb4c9e6b-806d-401c-bec1-53f54cbecef1.png">](https://www.youtube.com/watch?v=IOYw4fdn69A)
 
 ##
 
-## Описание шагов работы с PT AF
-Видеоинструкция этапа:
+## Steps for working with PT AF
+Video instructions:
 
-- пробрасываем порты по SSH для подключения к серверам PT AF (**нужно выполнять в двух разных окнах терминала**):
+- Forward SSH ports to connect to PT AF servers (**needs to be executed in two different terminal windows**):
 ```
 ssh -L 22001:192.168.2.10:22013 -L 22002:172.18.0.10:22013 -L 8443:192.168.2.10:8443 -L 127.0.0.2:8443:172.18.0.10:8443 -i ./pt_key.pem yc-user@$(yc compute instance list --format=json | jq '.[] | select( .name == "ssh-a")| .network_interfaces[0].primary_v4_address.one_to_one_nat.address '| sed 's/"//g') 
 ```
-После этого вы окажитесь в терминале ssh-a (брокер машина) оставте его открытым
+This opens the SSH terminal (broker machine) — leave it open.
 
-## Настройка кластеризации PT AF 
+## Configuring PT AF clustering 
 
-### Настройка master-сервера
-- подключитесь к ptaf-a: 
+### Setting up the master server
+- Connect to ptaf-a: 
 ```
 ssh -p 22001 -i pt_key.pem yc-user@localhost -o StrictHostKeyChecking=no
 ```
-- выпишите текущий пароль БД:
+- List the current DB password:
 ```
 sudo wsc -c 'password list'  
 ```
-- выполните скрипт автоконфигурации кластера: 
+- Execute the cluster autoconfiguring script: 
 ```
 /home/pt/cluster.sh
 ```
-### Настройка slave-сервера
-- подключитесь к ptaf-b: 
+### Setting up a Slave server
+- Connect to ptaf-b: 
 ```
 ssh -p 22002 -i pt_key.pem yc-user@localhost -o StrictHostKeyChecking=no
 ```
-- задайте пароль БД из прошлого этапа
+- Set the DB password from the previous step:
 ```
-sudo wsc -c 'password set <мастер-пароль>' (должен совпадать с тем, который задан на узле master). 
+sudo wsc -c 'password set <master password>' 
+(it must be the same as the password on the master node) 
 ```
-- выполните скрипт автоконфигурации кластера: 
+- Execute the cluster autoconfiguring script: 
 ```
 /home/pt/cluster.sh
 ```
-#### Создание кластера
+### Creating clusters
 
-- сначала запустим синхронизацию на SLAVE-сервере использовав команду:
+- First, run synchronization on the Slave server using the commands:
 ```
 ssh -p 22002 -i pt_key.pem yc-user@localhost -o StrictHostKeyChecking=no
 sudo wsc
 Enter 0 
 config commit
 ```
-- дождитесь когда на SLAVE-сервере появится сообщение: `TASK: [mongo | please configure all other nodes of your cluster]`, после этого  переключитесь на MASTER-сервер и начните синхронизацию той же командой:
+- Wait for the message on the Slave server: `TASK: [mongo | please configure all other nodes of your cluster]`. After that, switch to the Master server and start syncing with similar commands:
 ```
 ssh -p 22001 -i pt_key.pem yc-user@localhost -o StrictHostKeyChecking=no
 sudo wsc
 Enter 0 
 config commit
 ```
-> В случае, если на MASTER команда *config commit* завершится неуспешно, нужно применить команду еще раз.
+> If the *config commit* command fails on the Master, apply the command again.
 
-- далее конфигурация на узле master остановилась на сообщении `TASK: [mongo | wait config sync on secondary nodes]`, просто вручную выполните команду config sync на узле SLAVE.
+- Next, the configuration on the Master node stopped at the message: `TASK: [mongo | wait config sync on secondary nodes]`. Manually execute the command on the Slave node: `config sync`.
 
-- на SLAVE выполнить:
+- On the Slave, run:
 ```
 config sync 
 ```
-- на MASTER выполнить:
+- On the Master, run:
 ```
 config sync
 ```
-- на MASTER выполнить:
+- On the Master, run:
 ```
 mongo --authenticationDatabase admin -u root -p $(cat /opt/waf/conf/master_password) waf --eval 'c = db.sentinel; l = c.findOne({_id: "license"}); Object.keys(l).forEach(function(k) { if (l[k].ip) { delete l[k].ip; l[k].hostname = "yclicense.ptsecurity.ru" }}); c.update({_id: l._id}, l)'
 ```
@@ -144,49 +143,49 @@ mongo --authenticationDatabase admin -u root -p $(cat /opt/waf/conf/master_passw
 [<img width="1041" alt="image" src="https://user-images.githubusercontent.com/85429798/127007705-3a727cec-07c9-4071-80ca-1631070f83f2.png">](https://www.youtube.com/watch?v=zuTxyEeM7Vg)
 
 
-#### Настройка обработки траффика
+#### Configuring traffic processing
 
-- Открываем в браузере https://127.0.0.1:8443 
+- Open in the browser: https://127.0.0.1:8443
 
-- Вводим стандартные логин и пароль, **admin/positive**, меняем пароль, например на `P@ssw0rd`
+- Enter the standard login **admin** and password **positive**, change the password, for example, to `P@ssw0rd`.
 
-- Открываем вкладку `Configuration -> Network -> Gateways`, кликая на иконку карандаша (Edit) 
-- в каждом из шлюзе устанавливаем галочку `Active`
-- в каждом из шлюзе на вкладке `Network` определяем для интерфейса *eth-ext1* алиасы *mgmt*, *wan*, *lan*
+- Open the tab Configuration → Network → Gateways by clicking on the pencil icon (Edit). 
+- On each of the gateways, select the **Active** option.
+- On each of the gateways, on the **Network** tab, define the aliases `mgmt`, `wan`, `lan` for the `eth-ext1` interface.
 
-- Создаем апстрим на вкладке `Configuration -> Network -> Upstreams`
+- Create an upstream on the tab Configuration → Network → Upstreams:
 - Name: `internal-lb`
-- Backend Host: *впишите адрес внутреннего балансировщика яндекс облако*
+- Backend Host: *enter the address of the Yandex.Cloud internal load balancer*
 - Backend port: `80`
 
-- Создаем сервис на вкладке `Configuration -> Network -> Services`
+- Create a service on the tab Configuration → Network → Services:
 - Name: `app`
 - Net interface alias: `wan`
 - Listen port: `80`
 - Upstream: `internal-lb`
 
-- Редактуируем существующее веб приложение *Any* на вкладке `Configuration -> Security -> Web Applications`:
+- Edit an existing *Any* web application on the Configuration → Security → Web Applications tab:
 - Service: `app`
 
 [![image](https://user-images.githubusercontent.com/85429798/127023351-f0731361-5ba5-429a-82e9-5cc3c14a6355.png)](https://www.youtube.com/watch?v=lCFnHanCSSE)
 
 
-## Проверка прохождения траффика и отказоустойчивости
-- посмотрите внешний ip адреса внешнего балансировщика нагрузки
-- отклюим *ptaf-a* и убедимся, что трафик проходит
-- отключим *app-a* и убедимся, что трафик проходит
-- отклюим *ptaf-b* и убедимся, что `BYPASS` сработает и трафик переключится напрямую на внутренний балансировщик
-- включите *ptaf-a*, *ptaf-b* обратно и убедитесь то, что трафик снова идет через *ptaf*
+## Checking the traffic flow and fault tolerance
+- Look at the external IP address of your external load balancer.
+- Disable *ptaf-a* and make sure that the traffic is passing.
+- Disable *app-a* and make sure that the traffic is passing.
+- Disable *ptaf-b* and make sure that `BYPASS` applies and the traffic switches over directly to the internal load balancer.
+- Turn on *ptaf-a*, *ptaf-b*, and make sure that traffic goes through *ptaf* again.
 
 [![image](https://user-images.githubusercontent.com/85429798/127031813-f9460c50-2765-40d4-aa16-f66fc7fd70b7.png)](https://www.youtube.com/watch?v=DQYzXVKVVjg)
 
 
-# Дополнительные материалы
+# Additional materials
 
-## Настройка Yandex Application LoadBalancer 
+## Setting up Yandex Application Load Balancer 
 
-В данной схеме возможно использовать [Application LoadBalancer Yandex.Cloud](https://cloud.yandex.ru/docs/application-load-balancer/)
+In this model, you can use [Yandex Application Load Balancer](https://cloud.yandex.ru/docs/application-load-balancer/).
 
-Существует подробная инструкция по [Организация виртуального хостинга](https://cloud.yandex.ru/docs/application-load-balancer/solutions/virtual-hosting)
-(включая интеграцию с certificate manager для управления SSL сертификатами)
+There are detailed instructions on [enabling a virtual hosting](https://cloud.yandex.ru/docs/application-load-balancer/solutions/virtual-hosting)
+(including integration with Certificate Manager to manage SSL certificates).
 

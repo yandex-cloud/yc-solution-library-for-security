@@ -1,49 +1,47 @@
-# Установка уязвимого веб приложения (dvwa) в Яндекс Облаке (с помощью terraform) для тестирования managed WAF
+# Installing a Damn Vulnerable Web Application (DVWA) in Yandex.Cloud using Terraform for managed WAF testing
 
-Ссылка на видео-обзор на youtube - https://www.youtube.com/watch?v=r7Dxv_as24E
+Link to a video review on YouTube: https://www.youtube.com/watch?v=r7Dxv_as24E
 
-Terraform playbook создаст:
-- новую vpc network и vpc subnet;
-- внешний vpc address;
-- security group для доступа к приложению;
-- VM на базе [Yandex Container Solution](https://cloud.yandex.ru/docs/cos/) c запущенным docker контейнером с [Damn Vulnerable Web Application (DVWA)](https://dvwa.co.uk/)
+Terraform playbook will create:
+- New VPC network and VPC subnet
+- External VPC address
+- Security group to access the application
+- VM based on [Yandex Container Solution](https://cloud.yandex.ru/docs/cos/) running a Docker container with a [Damn Vulnerable Web Application (DVWA)](https://dvwa.co.uk/)
 
-## Пререквизиты
-- bash
-- [terraform](https://www.terraform.io/downloads.html)
-- [cli yandex cloud](https://cloud.yandex.ru/docs/cli/operations/install-cli), пользователь (роль: admin или editor на уровне folder)
-## Установка
-- скопировать файлы репозитория с помощью git:
+## Prerequisites:
+- Bash.
+- [Terraform](https://www.terraform.io/downloads.html).
+- [YC CLI](https://cloud.yandex.ru/docs/cli/operations/install-cli), a user with the admin or editor role at the folder level.
+
+## Installation
+- Copy repository files using Git:
 ```
 git clone https://github.com/mirtov-alexey/dvwa_and_managed_waf.git 
 ```
-- заполнить переменные в файле - "variables.tf" (в поле token необходимо ввести либо oauth token пользователя либо [путь к файлу ключа service account](https://cloud.yandex.ru/docs/cli/operations/authentication/service-account))
-- в файле "provider.tf" указать `token = var.token` (для аутентификациии пользователя) или `service_account_key_file = var.token` (для аутентификации от service account)
-- перейти в папку с файлами и запустить terraform init 
+- Fill out the variables in the variables.tf file: in the `token` field, enter either the user's OAuth token or a [path to the service account's key file](https://cloud.yandex.ru/docs/cli/operations/authentication/service-account).
+- In the provider.tf file, specify `token = var.token` (for user authentication) or `service_account_key_file = var.token` (for authenticating on behalf of the service account).
+- Go to the file folder and run terraform init:
 ```
 cd ./dvwa_and_managed_waf/
-```
-```
 terraform init
 ```
-- далее запустить terraform apply
+- Next, run terraform apply:
 ```
 terraform apply
 ```
-## Результаты установки
-- По результату установки в командной строке будет показан внешний ip адрес:
+## Installation results
+- As a result of the installation, an external IP address will be displayed in the command line:
 ![image](https://user-images.githubusercontent.com/85429798/120917860-2e6c5380-c6ba-11eb-87a6-336d6f4f8593.png)
 
 
-- Далее при переходе по адресу через браузер вы должны видеть следующее:
+- Next, when you open the address in the browser, you should see the following:
 ![image](https://user-images.githubusercontent.com/85429798/120917903-5d82c500-c6ba-11eb-802d-9bc4b622ec96.png)
 
-- введите логин: admin, пароль: password
-- в самом низу страницы будет кнопка "create /reset database" - нажмите ее
-- далее внизу нажмите login
-- во вкладке "DVWA Security" поменяйте уровень на "low"
-- перейдите во вкладку "SQL Injection" и введите в поле User ID следующее: `%' and 1=0 union select null, concat(user,':',password) from users #`
+- Enter login: 'admin`, password: 'password`.
+- At the very bottom of the page, click Create/Reset database.
+- Then click Login at the bottom.
+- On the DVWA Security tab, change the level to Low.
+- Go to the SQL Injection tab and in the User ID field, enter the following: `'%' and 1=0 union select null, concat(user,':', password) from users #`.
 
 ![image](https://user-images.githubusercontent.com/85429798/120918060-252fb680-c6bb-11eb-8398-32c98e2f70ca.png)
-
 

@@ -1,34 +1,34 @@
-# Рекомендации для высокой доступности данных
+# Recommendations for high data availability
 
-Наш пример ElasticSearch устанавливается в базовой конфигурации.
-В части высокой доступности данных применены следующие механизмы:
-- Несколько нод для данных
-- Несколько реплик для индексов
-- Индексы ротируются (`rollover`) по рекомендованной схеме, а именно:
-    - По достижению индексом размера в 50ГБ, создается новый индекс, или
-    - Каждый тридцать дней, создается новый индекс
-- Данные отправляются в алиас (`alias`), который привязан к активному индексу, то есть ротация индекса не должна повлиять на работу схемы в примере
+Our Elasticsearch example is installed in the basic configuration.
+In terms of high data availability, the following mechanisms are used:
+- Multiple nodes for data.
+- Multiple replicas for indexes.
+- Indexes roll over according to the recommended schema:
+    - When the index reaches 50GB, a new index is created;
+    - A new index is created every thirty days.
+- The data is sent to the alias linked to the active index, that is, the index rollover must not affect operability of the schema in the example.
 
-## Ротация индекса
+## Index rollover
 
-Ротация индекса использует следующие сущности в ElasticSearch:
-- Индексы и алиас (`alias`) индекса 
-- Шаблона индекса (`index template`)
-- Политика жизненного цикла индекса (`index lifecycle policy`)
+Index rollover uses the following Elasticsearch  entities:
+- Indexes and index aliases.
+- Index template.
+- Index lifecycle policy.
 
-Первый индекс в примере создается с цифровым суффиксом — это необходимо, чтобы в результате ротации создался новый индекс с измененным суффиксом.
+The first index in the example is created with a numeric suffix. This is to ensure that a new index with a modified suffix is created as a result of rollover.
 
-На созданный индекс назначается алиас, который в процессе ротации переносится на новый индекс.
+An alias is assigned to the created index, and this alias is then assigned to the new index at rollover.
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-alias.jpg" width="600px">
 
-## Шаблон индекса
+## Index template
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-templates.jpg" width="600px">
 
-Шаблон индекса содержит все необходимые параметры для создания нового индекса в результате ротации:
-- Паттерн индекса (`index pattern`). Новосозданные индексы, подпадающие под паттерн, будут автоматически созданы с параметрами шаблона.
-- Настройки индекса. В нашем случае, это имя политики ротации (`index rollover policy`), количество реплик данных и `rollover_alias` - алиас, который будет перенесен на новый индекс.
+An index template contains all the necessary parameters to create a new index as a result of the rollover:
+- Index pattern. Newly created indexes that meet the pattern are automatically created with the template parameters.
+- Index settings. In our case, this is the name of the index rollover policy, the number of data replicas, and the `rollover_alias`, that is, the alias that will be moved to the new index.
 
 ```
 {
@@ -41,80 +41,75 @@
   }
 }
 ```
+- Mapping parameters.
 
-- Параметры сопоставления (`mapping`).
+## Index lifecycle policy
 
-## Политика ротации
-
-Политика ротации (`index lifecycle policy`) отслеживает "жизненный путь" наших данных.
-По мере устаревания данных, данные можно переносить на менее производительные серверы или диски, а по истечении определенного времени — и, вовсе, удалить.
+The index lifecycle policy tracks the lifecycle of our data.
+As the data becomes older, you can move it to lower-end servers or disks, and, finally, delete them, after a certain period.
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-1.jpg" width="600px">
 
-В нашем примере настроена только горячая фаза (`hot phase`) и была включена рекомендованный по умолчанию метрики для процедуры rollover.
+In our example, we configured only the hot phase, with only default metrics for the rollover procedure enabled.
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-2.jpg" width="400px">
 
-Но в продуктивном развертывании рекомендуется спланировать, как процесс устаревания данных (перенос на "медленные" ноды), так и их удаление.
+But for production deployment, we recommended to plan for the process of data obsolescence (that is, moving it to "slow" nodes), and deletion.
 
-Удаление данных рекомендуется включить и при отсутствии других фаз, только для горячей фазы.
+It is recommended to enable data deletion when you have no other phase but the hot one.
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-3.jpg" width="600px">
 
-По истечении определенного времени, индексы с устаревшими данными будут удалены.
-Если настроены снимки данных (`snapshots`) — можно включить опцию удаления только при наличии снимка.
-В этом случае, необходимо указать имя политики создания снимков (`snapshot policy`).
+After a certain period, indexes with obsolete data will be deleted.
+If you have set up data snapshots, you can enable the delete option only if a snapshot is present. In this case, specify the name of the snapshot policy.
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-index-policy-4.jpg" width="600px">
 
-Настройка политики создания снимков описана ниже.
+Setting up the snapshot creation policy is described below.
 
-## Политика создания снимков
+## Snapshot creation policy
 
-Снимки данных (`snapshots`) необходимы для создания резервных копий данных на определенный момент времени.
-Рекомендуется настроить политику создания снимков в продуктивной среде.
-Созданные снимки данных можно хранить в S3 хранилище Yandex.Cloud — ниже описана процедура настройки политики с использованием хранилища S3.
-Снимки создаются инкрементально и не занимают много пространства в долгосрочной перспективе, так как добавляются только изменения.
+Data snapshots are used for backing up data at certain time points. We recommend setting up a snapshot creation policy for your production environment. The snapshots created can be stored in Yandex.Cloud S3 storage. The procedure for setting up the policy with an S3 storage is described below. Snapshots are created incrementally and consume a minimum space in the long run, because only changes are added.
 
-Для хранения снимков в S3 хранилище необходимо:
-1. Настроить сервисный аккаунт для работы с S3 и подключить его к кластеру ElasticSearch
-2. Настроить права доступа
-3. Подключить репозиторий к ElasticSearch
+To store snapshots in an S3 storage, you need:
+1. Set up a service account to work with S3 and connect it to the Elasticsearch cluster.
+2. Configure access rights.
+3. Connect the repository to Elasticsearch.
 
-Эти шаги описаны в [документации](https://cloud.yandex.ru/docs/managed-elasticsearch/operations/s3-access) к Managed Service for ElasticSearch.
+These steps are described in the [documentation](https://cloud.yandex.ru/docs/managed-elasticsearch/operations/s3-access) for Managed Service for Elasticsearch.
 
-Пример созданного репозитория снимков:
+Example of a created snapshot repository:
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-2.jpg" width="600px">
 
-После того, как репозиторий был подключен к ElasticSearch, можно выполнить настройку первой политики для создания снимков.
+After the repository has been connected to Elasticsearch, you can configure your first snapshot creation policy.
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-1.jpg" width="600px">
 
-Далее, через простой мастер настройки, необходимо указать:
-- Имя политики снимков
-- Паттерн для имен, созданных снимков
-- Репозиторий снимков, который был создан ранее
-- График создания снимков (например, каждый час)
-- Параметры снимков: делать снимки для всех или определенных индексов, хранить в снимке состояние кластера, и др.
-- Параметры хранения снимков (`retention`)
+Then use a simple setup wizard to specify:
+- The name of the snapshot policy.
+- Pattern for the snapshot names.
+- A repository for snapshots that your created previously.
+- A schedule for creating snapshots (for example, every hour).
+- Snapshot parameters: take snapshots for all or specific indexes, retain cluster state in the snapshot, and others.
+- Snapshot retention parameters.
 
-Созданная политика снимков может выглядеть следующим образом:
+The created snapshot policy may look as follows:
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-4.jpg" width="600px">
 
-После создания политики, она будет видна в общем списке политик, где её можно сразу же запустить и проверить.
+After the policy is created, you can see it in the list of all policies wherefrom you can run it and check straight away.
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-5.jpg" width="600px">
 
-В результате запуска, создан новый снимок, который отображается в списке.
+When you run the policy, a new snapshot is created and shown in the list.
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-6.jpg" width="600px">
 
-А также, данные появились и в самом объектном хранилище:
+The data also appears in the object storage:
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-7.jpg" width="600px">
 
-Созданную политику снимков можно задействовать в политике ротации индексов, которая была создана ранее.
+The snapshot policy can be used in the index lifecycle policy created previously.
 
 <img src="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auditlogs/export-auditlogs-to-ELK_main/images/ha-snapshots-8.jpg" width="600px">

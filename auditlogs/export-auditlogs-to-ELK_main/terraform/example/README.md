@@ -1,30 +1,27 @@
-## Развертывание примера через Terraform
+## Terraform test script 
 
-1) Заполните файл `variables.tf`
-2) Запустите:
+1) Fill out the variables.tf file.
+2) Run:
 
 ```
 terraform init
 terraform apply
 ```
 
-Terraform модуль создает следующий набор объектов в Yandex.Cloud:
-1) Сеть VPC с тремя подсетями (по одной в каждой из зон доступности)
-2) Сервисный аккаунт с ролью `storage.admin` для создания бакета в Object Storage
-2.1) Статический ключ для сервисного аккаунта
-2.2) S3 бакет
-3) Сервисный аккаунт с правами `storage.editor` для дальнейшей работы с бакетом
-4) Кластер ElasticSearch из модуля `yc-managed-elk`
-5) Контейнер и COI-инстанс из модуля `yc-elastic-trail`
+The module performs the following actions:
+1) Creates a VPC network 
+2) Creates three subnets (one for each availability zone: a, b, c).
+3)  Creates a service account with the *storage.admin* role to create a Bucket (Object Storage).
+4) Creates a static key for this SA.
+5) Creates a bucket.
+6) Service account with permissions `storage.editor` for bucket jobs
+7) Cluster ElasticSearch from module `yc-managed-elk`
+8) Container and COI-instance from module `yc-elastic-trail`
 
-После выполнения установки Terraform, в консоли будут выведены: FQDN-адрес кластера ElasticSearch, имя администратора для входа в консоль, и скрытый пароль. Для отображения пароля необходимо выполнить команду:
+When you exit the console, you'll see the DNS name of ELK Kibana and the password for the default admin user. To output the password, enter the `terraform output elk-pass` command.
 
-```
- terraform output elk-pass
-```
+After that, [create Audit Trails](https://cloud.yandex.ru/docs/audit-trails/quickstart) manually from the UI and specify the bucket created
 
-По окончанию установки необходимо развернуть сервис [AuditTrails](https://cloud.yandex.ru/docs/audit-trails/quickstart) через консоль Yandex.Cloud, создать сервисную учетную запись по инструкции, и указать созданный модулем бакет. 
+> **Important:** Be sure to leave the trails bucket prefix empty or change this prefix in call of module `yc-elastic-trail` in the file `main.tf`.
 
-> **Важно:** Необходимо указать пустой префикс для бакета, либо изменить префикс в вызове модуля `yc-elastic-trail` в файле `main.tf`.
-
-> **Важно:** Необходимо включить NAT на созданных подсетях.
+> **Важно:** Then manually enable Egress NAT for subnet-a (go to the subnet settings, then click "Enable NAT" in the upper-right corner).

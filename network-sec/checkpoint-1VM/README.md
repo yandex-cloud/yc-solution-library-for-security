@@ -1,10 +1,10 @@
-# Пример установки в Яндекс Облако ВМ-Межсетевой экран (NGFW): Checkpoint
+# Example of installing a VM instance with a firewall (NGFW) in Yandex.Cloud: Check Point
 
-## Вводное видео
+## Introductory video
 [![image](https://user-images.githubusercontent.com/85429798/128354504-100adaf3-5924-4cc0-b5e5-07c3b493a77d.png)](https://www.youtube.com/watch?v=qvR9G_oDfnE)
 
 
-## Материалы
-- [Ссылка на инструкцию по установке CheckPoint с сайта Checkpoint](https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk165481)
-- [Ссылка на видео-гайд по установке Gateway](https://www.youtube.com/watch?v=LtQltM71cUw) 
-- [Ссылка на видео-гайд по установке Management Server](https://www.youtube.com/watch?v=MraLOJRDWts) 
+## Materials
+- [Link to the Check Point installation instructions](https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk165481)
+- [Link to the Gateway installation video guide](https://www.youtube.com/watch?v=LtQltM71cUw ) 
+- [Link to the Management Server installation video guide](https://www.youtube.com/watch?v=MraLOJRDWts )
