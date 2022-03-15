@@ -1,40 +1,40 @@
-## Пример безопасной конфигурации Yandex Cloud Object Storage: Terraform
+## Example of a secure configuration for Yandex Cloud Object Storage: Terraform
 
-#### Схема решения
-![Схема](https://user-images.githubusercontent.com/85429798/136698539-f7772475-cca7-4498-8c79-426fc385a90f.png)
+#### Solution diagram
+![Diagram](https://user-images.githubusercontent.com/85429798/136698539-f7772475-cca7-4498-8c79-426fc385a90f.png)
 
 
-#### Описание 
-Terraform скрипт выполняет следующее:
-- :white_check_mark: Создает [Bucket](https://cloud.yandex.ru/docs/storage/concepts/bucket)
-- :white_check_mark: Выполняет разграничение доступа ([IAM](https://cloud.yandex.ru/docs/storage/security/), [BucketPolicy](https://cloud.yandex.ru/docs/storage/concepts/policy)) для групп: администраторы, read-only, write-only
-- :white_check_mark: Включает [версионирование](https://cloud.yandex.ru/docs/storage/concepts/versioning) и [жизненный цикл](https://cloud.yandex.ru/docs/storage/concepts/lifecycles) так, чтобы: хранить текущие версии файлов 365 дней, НЕтекущие версии файлов (удаленные/измененные) 150 дней
-- :white_check_mark: Включает [логирование](https://cloud.yandex.ru/docs/storage/operations/buckets/enable-logging) действий над Bucket в отдельный Bucket
-- :white_check_mark: Включает [шифрование](https://cloud.yandex.ru/docs/storage/operations/buckets/encrypt) (Server-Side) объектов в Bucket 
+#### Description 
+Terraform script performs the following:
+- :white_check_mark: Creates a [Bucket](https://cloud.yandex.ru/docs/storage/concepts/bucket).
+- :white_check_mark: Enables ([IAM](https://cloud.yandex.ru/docs/storage/security/) access control, [BucketPolicy](https://cloud.yandex.ru/docs/storage/concepts/policy)) for groups: administrators, read-only, write-only.
+- :white_check_mark: Enables [versioning](https://cloud.yandex.ru/docs/storage/concepts/versioning) and [life cycle](https://cloud.yandex.ru/docs/storage/concepts/lifecycles) to store the current file versions for 365 days, and **non**-current file versions (deleted or updated) for 150 days.
+- :white_check_mark: Enables [logging](https://cloud.yandex.ru/docs/storage/operations/buckets/enable-logging) actions on the Bucket in a separate Bucket.
+- :white_check_mark: Enables Server-Side object [encryption](https://cloud.yandex.ru/docs/storage/operations/buckets/encrypt) in the Bucket.
 
-#### Terraform детали 
-Решение принимает на вход (variables):
-- список учетных записей администраторов: all-access-users
-- список сервисных аккаунтов, требущих прав чтения: read-only-sa
-- список сервисных аккаунтов, требущих прав записи: write-only-sa
+#### Terraform details 
+The solution accepts the following input:
+- A list of administrator accounts: all-access-users.
+- A list of service accounts requiring read rights: read-only-sa.
+- A list of service accounts that require write rights: write-only-sa.
 
-Выполняет:
-- Создание sa с правами storage admin для создания Bucket
-- Создание KMS ключа для шифрования
-- Назначение прав учетным записям на работу с KMS ключами
-- Назначение прав IAM учетным записям для работы с Bucket
-- Создание отдельного Bucket для логирования действий 
-- Создание основного Bucket
-- Применение BucketPolicy 
-- Включение версионирования и жизненного цикла
-- Включение логирования
-- Включение шифрования
+Functionality:
+- Create an SA with Storage Admin rights to create a Bucket.
+- Create a KMS key for encryption.
+- Assign rights to accounts to work with KMS keys.
+- Assign IAM rights to accounts to work with a Bucket.
+- Create a separate Bucket for actions logging.
+- Create the main Bucket.
+- Apply the BucketPolicy.
+- Enable versioning and lifecycle.
+- Enable logging.
+- Enable encryption.
 
-#### Пример заполнения variables:
+#### Example of filling out variables:
 ```Python
 variable "token" {
   description = "Yandex.Cloud security OAuth token"
-  default     = "key.json" # generate yours: https://cloud.yandex.ru/docs/iam/concepts/authorization/oauth-token
+  default     = "key.json" # generate yours: https://cloud.yandex.ru/docs/iam/concepts/authorization/OAuth-token
 }
 
 variable "folder_id" {

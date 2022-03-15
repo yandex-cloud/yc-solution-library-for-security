@@ -1,46 +1,45 @@
-# Пример настройки ролевых моделей и политик в Managed Service for Kubernetes®
+# Example of setting up role-based models and policies in Yandex Managed Service for Kubernetes®
 
-# Подробный разбор на видео
+# A detailed analysis in the video
 [![image](https://user-images.githubusercontent.com/85429798/130356018-0840545a-da13-4faa-b15d-2858e3a9e369.png)](https://www.youtube.com/watch?v=ot6I_wmkLr4&t=1597s)
 
 
-# Стенд для для практического вебинара по Kubernetes
+# A stand for a practice webinar on Kubernetes
 
-Видео стенда будет доступно после публикации на Youtube
-Стенд позволяет самостоятельно настроить все, что было показано в вебинаре. В частности
-
-1) Ролевую модель управления к разным контейнерным средам
-2) Политики запуска подов в созданном кластере
-
-
-## Пререквизиты
-
-- bash
-- terraform
-- jq
-- [cli](https://cloud.yandex.ru/docs/cli/operations/install-cli), инициированный в профиле default а вашего пользователя( он должен быть admin или editor на уровне облака)
-- Два тестовых фолдера. Их ID понадобятся ниже
-- helm v3
-
-## Подготовка окружения
-
-Стенд будет состоять из двух фолдеров и двух пользователей devops и developer. 
+The video from the stand will be available when published on YouTube.
+The stand lets you to independently set up everything that was demonstrated at the webinar, for example:
+- A role-based management model for different container environments.
+- Pod launch policies in the created cluster.
 
 
-Запишем ID фолдеров для нашей задач
+## Prerequisites:
+
+- Bash.
+- Terraform.
+- jq.
+- [YC CLI](https://cloud.yandex.ru/docs/cli/operations/install-cli) initiated in the default profile for your user (they must be an admin or editor at the cloud level).
+- Two test folders, you'll need their IDs below.
+- Helm v3.
+
+## Preparing the environment
+
+The stand will include two folders and two users: devops and developer. 
+
+
+Write down IDs of the folders for our task:
 
 ```
-export STAGING_FOLDER_ID=<ID фолдера staging для демо>
-export PROD_FOLDER_ID=<ID фолдера prod для демо>
+export STAGING_FOLDER_ID=<ID of the staging folder for the demo>
+export PROD_FOLDER_ID=<ID of the prod folder for the demo>
 ```
 
-Создадим сервисные аккаунты, которые будут эмулировать пользователей
+Create service accounts that will emulate users:
 
 ```
 $ yc iam service-account create --name devops-user1 --folder-id=$STAGING_FOLDER_ID
 $ yc iam service-account create --name developer-user1 --folder-id=$STAGING_FOLDER_ID
 ```
-Создадим два профиля для cli, один профиль будет эмулировать пользователя devops, второй developer
+Create two profiles for the CLI, one profile will emulate a devops user, the other one, a developer:
 ```
 $ yc iam key create --service-account-name devops-user1 --folder-id=$STAGING_FOLDER_ID --output devops.json
 $ yc iam key create --service-account-name developer-user1 --folder-id=$STAGING_FOLDER_ID --output developer.json
@@ -51,7 +50,7 @@ $ yc config set service-account-key devops.json
 $ yc config profile create demo-developer-user1
 $ yc config set service-account-key developer.json
 ```
-Проверим что в фолдерах для задания ни у кого пока нет никаких ролей
+Check that no one has any roles in the folders for the task:
 ```
 $ yc resource-manager folder list-access-bindings --id=$STAGING_FOLDER_ID --profile=default
 
@@ -68,31 +67,30 @@ $ yc resource-manager folder list-access-bindings --id=$PROD_FOLDER_ID --profile
 +---------+--------------+------------+
 ```
 
-Переходим к лабе
+Move on to the lab task.
 
-#### Часть первая - настройка ролевого доступа 
+#### Part one: Setting up role-based access 
 
 ```
 $ cd ./terraform/iam
 ```
 
-И изучаем readme [данного раздела](./terraform/iam/)
+Look at the readme file [for this section](./terraform/iam/).
 
-#### Часть вторая - настройка политик
+#### Part two: Setting up policies
 
-( Требует чтобы вы прошли часть 1 , или ранее созданного кластера kubernetes )
+(Part 1 is a prerequisite)
 
 ```
 $ cd ./kubernetes/
 ```
 
-И изучаем readme [данного раздела](./kubernetes/)
+Look at the readme [for this section](./kubernetes/).
 
-#### Часть третья удаляем стенд
+#### Part three: delete the stand
 
 ```
 $ cd ./end
 ```
 
-И изучаем readme [данного раздела](./end/)
-
+Look at the readme [for this section](./end/).

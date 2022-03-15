@@ -1,5 +1,4 @@
-## Yandex Cloud: Trails-function-detector
-Оповещения и реагирование на события ИБ Audit trails с помощью Cloud Logging/Cloud Functions + Telegram
+## Yandex.Cloud Trails-function-detector: Alerts and response to Information Security events in Audit Trails using Cloud Logging and Cloud Functions + Telegram
 
 ![Logo-scheme](https://user-images.githubusercontent.com/85429798/132173603-0fde1851-2572-404a-82a0-33034e16d0ea.png)
 
@@ -14,83 +13,80 @@
 </a></br>
 
 
-#### Будет доработано
-- Function_trigger на CloudLogging в terraform 
-- AuditTrails в terraform
+#### To be revised
+- Function_trigger on Cloud Logging in Terraform 
+- Audit Trails in Terraform
 
-#### Описание 
-Решение выполняет c помощью CloudFunctions и AuditTrails:
+#### Description 
+The solution uses Cloud Functions and Audit Trails to perform:
 
-- Оповщение в telegram на следующие события AuditTrails (опционально):
-    - 1)"Create danger, ingress ACL in SG (0.0.0.0/0)"
-    - 2)"Change Bucket access to public"
-    - 3)"Assign rights to the secret (Lockbox) to some account"
-    - Будут добавляться по запросам желающих (из [списка актуальных Use cases](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/_use_cases_and_searches))
-- (Опционально) Активное реагирование:
-    - Удаление опасного правила группы безопасности (для правила № 1)
-    - Удаление назначенных прав на секрет в Lockbox (для правила № 3)
-- Оповещение в telegram на любое событие AuditTrails (на выбор)
+- Telegram alerts for the following Audit Trails events (optional):
+    - Create danger, ingress ACL in SG (0.0.0.0/0).
+    - Change Bucket access to public.
+    - Assign rights to the secret (Lockbox) to some account.
+    - To be updated on request based on the [list of current use cases](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/_use_cases_and_searches).
+- Active response (optional):
+    - Removing a dangerous security group rule: for Rule No. 1.
+    - Removing assigned rights for a secret in Lockbox: for Rule #3.
+- Telegram alerting for any selected Audit Trails event.
 
-#### Общая схема 
+#### Generic diagram 
 
 ![image](https://user-images.githubusercontent.com/85429798/134821478-46e3e6a4-4bf9-4425-8d8d-61bc87bc1bb2.png)
 
-#### Пререквизиты
-- :white_check_mark: Созданная custom лог группа в CloudLogging ([инструкция](https://cloud.yandex.ru/docs/logging/operations/create-group))
-- :white_check_mark: Включенный сервис Audit Trails (с выводом логов в лог группу CloudLogging) ([инструкция](https://cloud.yandex.ru/docs/audit-trails/quickstart))
-- :white_check_mark: Сервисный аккаунт (ему будут выданы необходимые права)
-- :white_check_mark: Созданный бот в telegram ([инструкция](https://tlgrm.ru/docs/bots#kak-sozdat-bota))
-- :white_check_mark: ID чата с telegram ботом (для получения chat-id сначала пишем хотябы одно сообщение боту, далее используем https://api.telegram.org/bot<token>/getUpdates для получения id чата)
-- :white_check_mark: После выполнения Terraform скрипта, необходимо в UI включить trigger на CloudLogging (подробности ниже)
+#### Prerequisites:
+- :white_check_mark: A custom log group created  in Cloud Logging ([instructions](https://cloud.yandex.ru/docs/logging/operations/create-group)).
+- :white_check_mark: Audit Trails service enabled with logs output to the Cloud Logging log group ([instructions](https://cloud.yandex.ru/docs/audit-trails/quickstart)).
+- :white_check_mark: Service account (it will be granted relevant rights).
+- :white_check_mark: A bot created in Telegram ([instructions](https://tlgrm.ru/docs/bots#kak-sozdat-bota)).
+- :white_check_mark: ID of the chat with a Telegram bot (to get the Chat ID, first write at least one message to the bot, then use https://api.telegram.org/bot<token>/getUpdates to get the Chat ID).
+- :white_check_mark: After you run the Terraform script, enable the trigger for Cloud Logging in the UI (see details below).
 
 
-#### Описание terraform 
-Модуль terraform:
-- Принимает на вход: 
+#### Terraform description 
+Terraform module:
+- It accepts the following input: 
 
 ```Python
-// Вызов модуля
+// Call the module
 module "trails-function-detector" {
-    source = "../" // путь до модуля
-    //Общие:
+    source = "../" // path to the module
+    //General:
     folder_id = "XXXXXXX" // your_folder_id
-    service_account_id = "XXXXXXX" // yout service-account id, которому будут назначены права: serverless.functions.invoker
+    service_account_id = "XXXXXXX" // Your service account ID to which the serverless.functions.invoker rights  will be assigned
     
-    //Инфо для telegram уведомлений:
-    bot_token = "XXXXXX:XXXXXXXXXXXXXX" // токен telegram бота для отправки уведомлений (Для того, чтобы получить токен https://proglib.io/p/telegram-bot)
-    chat_id_var = "XXXXXXX" // для получения chat-id сначала пишем хоть одно сообщение боту, далее используем https://api.telegram.org/bot<token>/getUpdates для получения
-    //Включение Detection-rules:
-    rule_sg_on = "True" // Правило: "Create danger, ingress ACL in SG (0.0.0.0/0)" (если не требуется то выставить в False)
-    del_rule_on = "False" // Включение активного реагирования на правило rule_sg_on: удаляет опасное правило группы безопасности
+    //Info for Telegram alerts:
+    bot_token = " XXXXXX:XXXXXXXXXXXXXX" // A token of a Telegram bot for sending alerts. To get a token: https://proglib.io/p/telegram-bot
+    chat_id_var = "XXXXXXX" // To get the Chat ID, first write any message to the bot, then use https://api.telegram.org/bot<token>/getUpdates.
+    //Enable Detection-rules:
+    rule_sg_on = "True" // The rule: "Create danger, ingress ACL in SG (0.0.0.0/0)" (set to False if not needed)
+    del_rule_on = "False" // Enable active response to the rule_sg_on rule: removes the danger rule from a security group
 
-    rule_bucket_on = "True" // Правило: "Change Bucket access to public" (если не требуется то выставить в False)
+    rule_bucket_on = "True" // The rule: "Change Bucket access to public" (set to False if not needed)
 
-    rule_secret_on = "True" // Правило: "Assign rights to the secret (Lockbox) to some account" (если не требуется то выставить в False)
-    del_perm_secret_on = "False" // Включение активного реагирования на правило rule_secret_on: удаляет назначенные права на секрет в Lockbox
+    rule_secret_on = "True" // The rule: "Assign rights to the secret (Lockbox) to some account" (set to False if not needed)
+    del_perm_secret_on = "False" // Enable active response to the rule rule_secret_on rule: remove rights for the secret assigned in Lockbox
     
-    //Доп. события для получения уведомлений без деталей
-    any_event_dict = "yandex.cloud.audit.iam.CreateServiceAccount,event2" // оставить как есть, если не требуется alert на доп. события, либо "yandex.cloud.audit.iam.CreateServiceAccount,event2", нащвания событий, можно получить https://cloud.yandex.ru/docs/audit-trails/concepts/events
+    //Additional events for alerts without details
+    any_event_dict = "yandex.cloud.audit.iam.CreateServiceAccount,event2" // Leave as is unless you need an alert for additional events, or "yandex.cloud.audit.iam.CreateServiceAccount,event2". To get event names, go to: https://cloud.yandex.ru/docs/audit-trails/concepts/events
 
 
-    //TBD когда появится поддержка триггеров для cloudlogging в terraform
-    //loggroup_id = "af3o0pc24hi1qmpovcss" //id лог группы, в которую AuditTrails пишет события (можно посмотреть в CloudLogging, создавалась при создании трейла)
+    //TBD when we support triggers for Cloud Logging in Terraform
+    //loggroup_id = "af3o0pc24hi1qmpovcss" //The ID of the log group to which Audit Trails writes events (you can view it in Cloud Logging, it was created along with the trail)
 }
 
 ```
 
-- Выполняет: 
-	- назначение прав serverless.functions.invoker на указанный сервисный аккаунт (в случае включения реагирования, назначает также права vpc.securityGroups.admin,lockbox.admin)
-    - создает функцию на основе python скрипта (функция выполняет описанную выше логику)
+- Assigns serverless rights.functions.invoker for the specified service account (if the response is enabled, it also assigns the rights vpc.SecurityGroups.admin, lockbox.admin).
+- Creates a function based on a Python script (the function executes the logic described above).
 
-- Действия после terraform (будет упаковано в terraform позже):
-    - необходимо через UI включить Function_trigger на CloudLogging со следующими параметрами:
-        - тип: CloudLogging
-        - лог группа: созданная в CloudLogging
-        - время ожидания: 10
-        - размер группы сообщений: 5
-        - функция: созданная с помощью terraform скрипта функция "function-for-trails"
+- After Terraform (it will be packed in Terraform later), enable Function_trigger on Cloud Logging via the UI using the following parameters:
+        Type: `Cloud Logging`
+        Log group: The one created in Cloud Logging
+        Waiting time: `10`
+        Batch size: `5`
+        Function: The function-for-trails function that you created by a Terraform script
 
 
-#### Пример вызова модуля:
-См. Пример вызова модулей в /example/main.tf 
-
+#### Example of calling a module:
+See the example of calling modules in /example/main.tf 

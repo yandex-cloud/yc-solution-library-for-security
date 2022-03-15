@@ -1,45 +1,44 @@
-## Развертывание с помощью Terraform
+## Deployment using Terraform
 
-#### Описание 
+#### Description 
 
-Решение состоит из 2-х модулей Terraform [/terraform/modules/](ссылка) :
-1) yc-managed-elk:
-- создает cluster [Yandex Managed Service for Elasticsearch](https://cloud.yandex.ru/services/managed-elasticsearch) 
-- с 3 нодами (1 на зону доступности) 
-- с лицензией Gold
-- характеристики: s2-medium (8vCPU, 32Gb Memory)
-- HDD: 1TB
-- назначает пароль на аккаунт admin в ELK
+The solution consists of two [Terraform modules](/terraform/modules/):
+1) yc-managed-elk creates a cluster [Yandex Managed Service for Elasticsearch](https://cloud.yandex.ru/services/managed-elasticsearch). 
+- With three nodes (one for each availability zone).
+- With a Gold license.
+- Characteristics: s2-medium (8 vCPU, 32GB RAM).
+- HDD: 1TB.
+- Assigns a password to the ELK admin account.
 
 2) yc-elastic-trail:
-- создает static keys для sa (для работы с объектами JSON в бакете и шифрования/расшифрования секретов)
-- создает ВМ COI со спецификацией Docker Container со скриптом
-- создает ssh пару ключей и сохраняет приватную часть на диск, публичную в ВМ
-- создает KMS ключ
-- назначает права kms.keys.encrypterDecrypter на ключ для sa для шифрование секретов
-- шифрует секреты и передает их в Docker Container
+- Creates static keys for the SA (for working with JSON objects in a bucket and encrypting/decrypting secrets).
+- Creates a COI VM with a Docker Container specification using a script.
+- Creates an SSH key pair and saves the private part to the disk and the public part to the VM.
+- Creates a KMS key.
+- Assigns the *kms.keys.encrypterDecrypter* rights to the key for SA to encrypt secrets.
+- Encrypts secrets and passes them to Docker Container.
 
-#### Пререквизиты
-- :white_check_mark: Object Storage Bucket для AuditTrails
-- :white_check_mark: Включенный сервис AuditTrail в UI
-- :white_check_mark: Сеть VPC
-- :white_check_mark: Подсети в 3-х зонах доступности
-- :white_check_mark: ServiceAccount с ролью storage.editor для действий в Object Storage
+### Prerequisites:
+- :white_check_mark: Object Storage Bucket for Audit Trails.
+- :white_check_mark: Enabled Audit Trails service in the UI.
+- :white_check_mark: VPC network.
+- :white_check_mark: Subnets in three availability zones.
+- :white_check_mark: A service account with the *storage.editor* role for actions on Object Storage.
 
-**См. Пример конфигурации пререквизитов в /example/main.tf**
+**See the example of the prerequisite configuration in /example/main.tf**
 
 
-#### Пример вызова модулей:
+### Example of calling modules:
 ```Python
 module "yc-managed-elk" {
     source     = "../modules/yc-managed-elk" # path to module yc-managed-elk    
     folder_id  = var.folder_id
-    subnet_ids = yandex_vpc_subnet.elk-subnet[*].id  # subnets в 3-х зонах доступности для развертывания ELK
-    network_id = yandex_vpc_network.vpc-elk.id # network id в которой будет развернут ELK
+    subnet_ids = yandex_vpc_subnet.elk-subnet[*].id # Subnets in three availability zones for ELK deployment
+    network_id = yandex_vpc_network.vpc-elk.id # The ID of the network where ELK will be deployed
     elk_edition = "gold"
     elk_datanode_preset = "s2.medium"
     elk_datanode_disk_size = 1000
-    elk_public_ip = false # true, если нужен публичный доступ к ElasticSearch
+    elk_public_ip = false # true if you need public access to Elasticsearch
 }
 
 module "yc-elastic-trail" {
@@ -48,7 +47,7 @@ module "yc-elastic-trail" {
     elk_credentials = module.yc-managed-elk.elk-pass
     elk_address     = module.yc-managed-elk.elk_fqdn
     bucket_name     = yandex_storage_bucket.trail-bucket.bucket
-    bucket_folder   = "" # указать название префикса куда trails пишет логи в бакет, например "prefix-trails", если в корень то оставить по умолчанию пустым
+    bucket_folder = "" # Specify the name of the prefix where trails writes logs to the bucket, for example *prefix-trails* (if it's root, then leave empty at default)
     sa_id           = yandex_iam_service_account.sa-bucket-editor.id
     coi_subnet_id   = yandex_vpc_subnet.elk-subnet[0].id
 }
@@ -56,10 +55,10 @@ module "yc-elastic-trail" {
 output "elk-pass" {
   value     = module.yc-managed-elk.elk-pass
   sensitive = true
-} // Чтобы посмотреть пароль ELK: terraform output elk-pass
+} // View the ELK password: terraform output elk-pass
 output "elk_fqdn" {
   value = module.yc-managed-elk.elk_fqdn
-} // Выводит адрес ELK на который можно обращаться, например через браузер 
+} // Outputs the ELK URL that can be accessed in the browser, for example 
 
 output "elk-user" {
   value = "admin"

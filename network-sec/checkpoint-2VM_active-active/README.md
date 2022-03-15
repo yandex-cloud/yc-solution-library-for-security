@@ -1,4 +1,4 @@
-# 2 NGFW Checkpoint: Active-Active
+# Two NGFW Check Points: Active-Active
 
 ![network_diagram_final](https://user-images.githubusercontent.com/85429798/139543124-cf9cbb90-1d90-4d29-95ed-8e9c5b29c30b.png)
 
@@ -6,38 +6,36 @@
 
 
 
-## Описание решения
-Сегментация сети с помощью NGFW Checkpoint в двух зонах доступности (ДЦ) в режиме **Active-Active**
+## Solution description
+Network segmentation using an NGFW Check Point in two availability zones (DC) in the **Active-Active** mode.
 
-p.s Решение возможно упростить в случае, если применять SOURCE NAT на FW, чтобы избежать ассиметрии
+- The solution automatically creates several network segments in two availability zones (DC).
+- It Installs and configures two NGFW Check Points in the Active-Active mode and the management server.
+- Network communication between the zones is still possible and performed **without asymmetry**.
+- **If one of the two firewalls in this availability zone fails, connectivity to the internet and other VPCs is lost**.
+- For cross-zonal connectivity between VPCs, VPC Transit between two FWS is used. The traffic path from VPC Servers (zone A) to VPC Database (zone B): servers-a → FW-A → FW-B → database-b.
 
-- Решение автоматически создает несколько сегментов сети в 2-х зонах доступности (ДЦ)
-- Устанавливает/настраивает NGFW Checkpoint в кол-ве 2 шт. в режиме Active-Active, а также сервер управления
-- При этом сетеая связь между зонами возможна и выполняется **без ассиметрии** 
-- **В случае падения одного из 2-х FW - в этой зоне доступности сетевая связанность с интернетом и другими VPC пропадает**
-- Для кроссзональной связанности между VPC используется VPC Transit между 2-мя FW. Путь траффика из VPC Servers (zone A) в VPC Database (zone B) : servers-a -> FW-A -> FW-B -> database-b
+## Solution features (details)
+- Create a separate folder and VPC for each network segment: Servers, Database, Mgmt, and several VPC-# stubs. Stubs are used because it won't be possible to add more interfaces to the VM afterwards. You can select VPC names at your discretion.
+- Create networks and subnets for the VPC data according to the network diagram and the filled out variables.tf file.
+- Create the necessary static cloud routes and assign them to VPC subnets.
+- Create two FW VMs: [Check Point CloudGuard IaaS - Firewall & Threat Prevention BYOL](https://cloud.yandex.ru/marketplace/products/f2eb527bqp4f4ksht2af) and a VM instance with a management server: [Check Point CloudGuard IaaS - Security Management BYOL](https://cloud.yandex.ru/marketplace/products/f2e1si2qna6s0q01eda0). Both images have a trial period. When used in production, FW has a PAYG pay-as-you-go image, and for the management server you need to purchase a separate license from Check Point or use your on-premise license.
+- ☑️ Set up FW using [cloud-config](https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk165476 ) according to the diagram (interfaces, routes, passwords). That's why you don't need to run the First time wizard.
+- ☑️ Create a test Windows machine for managing firewalls using Check Point SMS.
 
-## Что делает решение (детали)
-- ☑️ Создает отдельные folder и vpc под каждый сегмент сети: "Servers", "Database", "Mgmt", (несколько "VPC-#" заглушек). Заглушки использованы по причине невозможности добавления дополнительных интерфейсов в ВМ в будущем. Названия VPC вы можете выбрать сами.
-- ☑️ Создает сети и подсети для данных VPC в соответствии со схемой и заполненным файлом variables.tf
-- ☑️ Создает необходимые облачные статические маршруты и назначает их на подсети VPC
-- ☑️ Создает 2 ВМ FW: [Check Point CloudGuard IaaS - Firewall & Threat Prevention BYOL](https://cloud.yandex.ru/marketplace/products/f2eb527bqp4f4ksht2af) и 1 ВМ Сервер Управления: [Check Point CloudGuard IaaS - Security Management BYOL](https://cloud.yandex.ru/marketplace/products/f2e1si2qna6s0q01eda0). Оба образа имеют триал период. При использовании в прод для FW существует образ PAYG (с оплатой по факту использования), а для Сервера Управления необходимо приобрести лицензию отдельно от CheckPoint либо использовать свою on-prem license.
-- ☑️ Выполняет настройку FW с помощью [cloud-config](https://supportcenter.checkpoint.com/supportcenter/portal?eventSubmit_doGoviewsolutiondetails=&solutionid=sk165476) в соответствии со схемой (интерфейсы, маршруты, пароли). Благодаря этому нет необходимости проходить First time wizard.
-- ☑️ Создает тестовую  windows машину для управления файрволами с помощью CheckPoint SMS.
+## Prerequisites:
+- :white_check_mark: You have an account in Yandex.Cloud.
+- :white_check_mark: You installed and configured [YC CLI](https://cloud.yandex.ru/docs/cli/quickstart).
+- :white_check_mark: You installed and configured Git.
+- :white_check_mark: [Terraform](https://www.terraform.io/downloads.html) is installed.
+- :white_check_mark: A cloud account with cloud administrator's rights.
 
-## Пререквизиты
-- :white_check_mark: должен быть аккаунт в облаке Yandex.Cloud
-- :white_check_mark: установлен и настроен [yc cli](https://cloud.yandex.ru/docs/cli/quickstart)
-- :white_check_mark: установлен и настроен git
-- :white_check_mark: установлен [terraform](https://www.terraform.io/downloads.html)
-- :white_check_mark: учетная запись облака с правами admin облака
-
-## Развертывание с помощью Terraform
-- скачайте все файлы и перейдите в папку
-- заполните файл provider.tf вашим cloud_id и токеном (oauth токен либо файл-ключ сервисного аккаунта). Подробности [тут](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs)
-- заполните файл variables.tf . Файл содержит default значения, но вы можете менять их своими данными (подсети, название vpc, название folder и др.). Обязательный параметр для смены - cloud_id. Пример:
+## Deployment using Terraform
+- Download all the files and go to the folder.
+- Fill out the provider.tf file with your `cloud_id` and `token` (use an OAuth token or a service account key file). See details [here](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs).
+- Fill out the variables.tf file. The file contains default values, but you can replace them with your own data (subnets, VPC name, folder name, and so on). Make sure to change the `cloud_id` parameter. Example:
 ```Python
-//-------------For terrafrom
+//-------------For Terraform
 
 variable "cloud_id" {
   default     = "Your cloud id" #yc config get cloud-id
@@ -69,45 +67,45 @@ variable "subnet-b_vpc_2" {
 
 ```
 
-- запустите команду:
+- Run the command:
 ```
 terraform init
 ``` 
-- запустите команду:
+- Run the command:
 ```
 terraform apply
 ``` 
 
-- по результатам вы получите outputs в консоли:
+- As a result, you will get outputs in the console:
 
 ```Python
 Outputs:
 
-a-external_ip_address_of_win-check-vm = "193.32.218.131" # адрес windows ВМ для управления (зайдите скачайте через ui сервера управления gui консоль)
-b-password-for-win-check = <sensitive> # пароль для win ВМ (для получения выполните "terraform output b-password-for-win-check")
-c-ip_address_mgmt-server = "192.168.1.100" # адрес сервера управления
-d-ui_console_mgmt-server_password = "admin" # пароль по умолчанию для ui сервера управления
-e-gui_console_mgmt-server_password = <sensitive> # пароль для входа в gui консоль сервера управления ("terraform output e-gui_console_mgmt-server_password")
-f-sic-password = <sensitive> # SIC пароль для связи между сервером управления и FW ("terraform output f-sic-password")
-g-ip_address_fw-a = "192.168.1.10" # адрес FW-A
-h-ip_address_fw-b = "192.168.2.10" # адрес FW-B
-i-path_for_private_ssh_key = "./pt_key.pem" # SSH ключ для подключения к Checkpoint ВМ
+a-external_ip_address_of_win-check-vm = "193.32.218.131" # address of the Windows VM for management purposes (log in, download the GUI console using the management server UI)
+b-password-for-win-check = <sensitive> # The password for the Windows VM. To get it, run: terraform output b-password-for-win-check
+c-ip_address_mgmt-server = "192.168.1.100" # management server IP address
+d-ui_console_mgmt-server_password = "admin" # A default password for the management server UI
+e-gui_console_mgmt-server_password = <sensitive> # a password to log in to the management server GUI console. To get it, run: terraform output e-gui_console_mgmt-server_password
+f-sic-password = <sensitive> # A SIC password for communication between the management server and FW. To get it, run: terraform output f-sic-password
+g-ip_address_fw-a = "192.168.1.10" # FW-A address
+h-ip_address_fw-b = "192.168.2.10" # FW-B address
+i-path_for_private_ssh_key = "./pt_key.pem" # An SSH key to connect to a Check Point VM
 ``` 
-- последовательность действий:
-    - подключиться к win ВМ по RDP
-    - подключиться через браузер к адресу сервера управления (ввести дефолт логин, пароль и сменить его)
-    - скачать gui консоль из UI
-    - подключиться через gui к серверу управления (ввести логин admin, пароль e-gui_console_mgmt-server_password)
-    - добавить оба FW в сервер управления (используя SIC password)
+- Sequence of actions:
+    - Connect to the Windows VM via RDP.
+    - Connect via the browser to the management server address: enter the default login, password and change the password.
+    - Download the GUI console from the UI.
+    - Connect via the GUI to the management server: enter admin as a login, and e-gui_console_mgmt-server_password as a password.
+    - Add both FWs to the management server using the SIC password.
 
-## Требования к развертыванию в PROD 
-По итогам теста следуйте следующим указаниям для обеспечения безопасности вашей инфраструктуры:
-- Обязательно смените пароли, которые были переданы через сервис metadata в файлах: check-init...yaml и cloud-int_win...yaml. Пароли:
-    - Пароль администратора windows ВИ
-    - Пароль от gui консоли сервера управления
-    - Пароль SIC для связи сервера управления и FW
-- Сохраните ssh ключ pt_key.pem в надеждное место либо пересоздайте его отдельно от terraform с помощью ваших bastion инструментов
-- Удалите публичный адрес у windows ВМ
-- Настройте ACL и NAT политики в CheckPoint NGFW
-- Учесть особенности облачной сети и не назначать публичные адреса средствами облака на ВМ, у которых в качестве default gateway указан CheckPoint NGFW. Подробности (https://cloud.yandex.ru/docs/vpc/concepts/static-routes#internet-routes)
-- Выбрать подходящую лицензию и образ: Для FW Либо PAYG из marketplace либо BYOL , для сервера управления BYOL со своей лицензией
+## Requirements for production deployment
+By the results of the test, follow the instructions to ensure security of your infrastructure:
+- Be sure to change the passwords that were passed using the metadata service in the check-init...yaml and cloud-int_win...yaml files:
+    - The password of the Windows VM administrator.
+    - The password for the GUI console of the management server.
+    - A SIC password to enable communication between the management server and the FW.
+- Save the pt_key.pem SSH key to a secure location or recreate it separately on behalf of Terraform using your bastion tools.
+- Delete the public address of the Windows VM.
+- Set up ACL and NAT policies in the Check Point NGFW.
+- Consider your cloud network specifics and don't assign public addresses using cloud tools to VM instances where the Check Point NGFW is specified as the default gateway. Details (https://cloud.yandex.ru/docs/vpc/concepts/static-routes#internet-routes).
+- Select the appropriate license and image: either PAYG from the marketplace (for the FW) or BYOL with its license (for the management server).

@@ -1,7 +1,7 @@
 
-1) Скачате файлы и перейдите в папку example
-2) Заполните файл main.tf своими значениями
-3) Выполните
+1) Download the files and go to the example folder.
+2) Fill out the main.tf file with your values.
+3) Run:
 ```
 terraform init
 ```
@@ -12,32 +12,32 @@ terraform apply
 
 
 ```Python
-// Вызов модуля
+// Call the module
 
 module "trails-function-detector" {
-    source = "../" // путь до модуля (нет необходимости изменять, ведет к модулю в корне)
-    //Общие:
+    source = "../" // path to the module
+    //General:
     folder_id = "XXXXXXX" // your_folder_id
-    service_account_id = "XXXXXXX" // yout service-account id, которому будут назначены права: serverless.functions.invoker
+    service_account_id = "XXXXXXX" // your service-account ID to which the serverless.functions.invoker rights  will be assigned
     
-    //Инфо для telegram уведомлений:
-    bot_token = "XXXXXX:XXXXXXXXXXXXXX" // токен telegram бота для отправки уведомлений (Для того, чтобы получить токен https://proglib.io/p/telegram-bot)
-    chat_id_var = "XXXXXXX" // для получения chat-id сначала пишем хоть одно сообщение боту, далее используем https://api.telegram.org/bot<token>/getUpdates для получения
-    //Включение Detection-rules:
-    rule_sg_on = "True" // Правило: "Create danger, ingress ACL in SG (0.0.0.0/0)" (если не требуется то выставить в False)
-    del_rule_on = "False" // Включение активного реагирования на правило rule_sg_on: удаляет опасное правило группы безопасности
+    //Info for Telegram alerts:
+    bot_token = "XXXXXX:XXXXXXXXXXXX" // A token of a Telegram bot for sending alerts (to get a token, go to: https://proglib.io/p/telegram-bot)
+    chat_id_var = "XXXXXXX" // To get the Chat ID, first write at least one message to the bot, then use https://api.telegram.org/bot<token>/getUpdates
+    //Enable Detection-rules:
+    rule_sg_on = "True" // The rule "Create danger, ingress ACL in SG (0.0.0.0/0)" (set to False if not needed)
+    del_rule_on = "False" // Enable active response to the rule_sg_on rule: removes the danger rule from a security group
 
-    rule_bucket_on = "True" // Правило: "Change Bucket access to public" (если не требуется то выставить в False)
+    rule_bucket_on = "True" // The rule "Change Bucket access to public" (set to False if not needed)
 
-    rule_secret_on = "True" // Правило: "Assign rights to the secret (Lockbox) to some account" (если не требуется то выставить в False)
-    del_perm_secret_on = "False" // Включение активного реагирования на правило rule_secret_on: удаляет назначенные права на секрет в Lockbox
+    rule_secret_on = "True" // The rule "Assign rights to the secret (Lockbox) to some account" (set to False if not needed)
+    del_perm_secret_on = "False" // Enable active response to the rule rule_secret_on rule: remove rights for the secret assigned in Lockbox
     
-    //Доп. события для получения уведомлений без деталей
-    any_event_dict = "yandex.cloud.audit.iam.CreateServiceAccount,event2" // оставить как есть, если не требуется alert на доп. события, либо "yandex.cloud.audit.iam.CreateServiceAccount,event2", нащвания событий, можно получить https://cloud.yandex.ru/docs/audit-trails/concepts/events
+    //Additional events for alerts without details
+    any_event_dict = "yandex.cloud.audit.iam.CreateServiceAccount,event2" // Leave as is unless you need an alert for additional events, or "yandex.cloud.audit.iam.CreateServiceAccount,event2" (to get event names, go to: https://cloud.yandex.ru/docs/audit-trails/concepts/events)
 
 
-    //TBD когда появится поддержка триггеров для cloudlogging в terraform
-    //loggroup_id = "af3o0pc24hi1qmpovcss" //id лог группы, в которую AuditTrails пишет события (можно посмотреть в CloudLogging, создавалась при создании трейла)
+    //TBD when we support triggers for Cloud Logging in Terraform
+    //loggroup_id = "af3o0pc24hi1qmpovcss" //The ID of the log group to which Audit Trails writes events (you can view it in Cloud Logging, it was created when creating the trail)
 }
 
 ```

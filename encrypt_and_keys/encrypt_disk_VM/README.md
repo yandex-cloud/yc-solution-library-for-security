@@ -1,79 +1,79 @@
-# Шифрование диска ВМ в Облаке с помощью YC KMS
+# VM disk encryption in the cloud using YC KMS
 
-## Описание
-- Решение позволяет выполнять шифрование диска (кроме загрузочного) [Yandex Compute Cloud ВМ](https://cloud.yandex.ru/services/compute) с помощью [Yandex Key Management Service](https://cloud.yandex.ru/services/kms) и [dm-crypt](https://en.wikipedia.org/wiki/Dm-crypt)+[LUKS](https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup)
-- Развертывание решения и пререквизитов выполняется с помощью примера terraform скрипта 
+## Description
+- The solution allows you to encrypt the disk (except the boot disk) on a [Yandex Compute Cloud VM](https://cloud.yandex.ru/services/compute) using [Yandex Key Management Service](https://cloud.yandex.ru/services/kms) and [dm-crypt](https://en.wikipedia.org/wiki/Dm-crypt)+[LUKS](https://en.wikipedia.org/wiki/Linux_Unified_Key_Setup).
+- Deployment of the solution and prerequisites is performed using an example Terraform script.
 
-## Схема работы
-![Схема](https://user-images.githubusercontent.com/85429798/131116794-8dd100e3-c024-4297-a39d-8d1482fc8ead.png)
-
-
-## Описание работы решения
-- В [cloud-init](https://cloud.yandex.ru/docs/compute/concepts/vm-metadata#keys-processed-in-public-images) скрипт при развертывания ВМ передатися необходимые данные
-- Устанавливается ПО: awscli, cryptsetup-bin, curl
-- Передается созданный terraform ssh ключ
-- На ВМ выполняется bash скрипт с аргументом create: создается ключ шифрования с высокой энтропией методом KMS [generateDataKey](https://cloud.yandex.ru/docs/kms/api-ref/SymmetricCrypto/generateDataKey) и записывается на диск в открытом и зашифрованном виде 
-- Шифруется и монтируется второй диск ВМ на основе ключа шифрования
-- Ключ в зашифрованном виде копируется в [Yandex Object Storage](https://cloud.yandex.ru/services/storage) и удаляется из файловой системы
-- Скрипт с аргументом open добавляется в автозагрузку ОС (чтобы при перезагрузке автоматически примонтировать шифрованный диск)
-- В момент монтирования ключ шифрования скачивается из S3, расшифровывается и по окончанию мониторования удаляется из файловой системы
-
-> Все операции с KMS и Object Storage выполняются с помощью токена сервисного аккаунта, привязанного к ВМ при ее создании
-
-Описание аргументов скрипта:
-- create: Скрипт выполняет создание ключа с высокой энтропией методом KMS [generateDataKey](https://cloud.yandex.ru/docs/kms/api-ref/SymmetricCrypto/generateDataKey)
-- open: Монтирование зашифрованного диска в расшифрованный объект
-- close: Размонтирование зашифрованного устройства
-- erase: Удаление исходного устройства
+## Operating diagram
+![Diagram](https://user-images.githubusercontent.com/85429798/131116794-8dd100e3-c024-4297-a39d-8d1482fc8ead.png)
 
 
-## Пререквизиты (настраиваются с помощью примера Terraform скрипта):
-- установить на ВМ [yc client](https://cloud.yandex.ru/docs/cli/quickstart)
-- создать сервисную УЗ
-- создать ключ KMS
-- назначить права на ключ KMS созданному сервисному аккаунту (kms.keys.encrypterDecrypter)
-- создать Object Storage Bucket
-- назначить права на Object Storage bucket созданному сервисному аккаунту (storage.uploader, storage.viewer + BucketPolicy)
-- назначить на ВМ сервисную УЗ
-- установить aws cli (`apt install awscli`)
-- установить cryptsetup (`apt install cryptsetup-bin`)
+## Description of the solution operation
+- Pass data to the [cloud-init](https://cloud.yandex.ru/docs/compute/concepts/vm-metadata#keys-processed-in-public-images) script when deploying a VM instance.
+- Install the software: AWS CLI, cryptsetup-bin, curl.
+- The SSH key created by Terraform is transmitted.
+- A Bash script with the create argument is executed on the VM: a high entropy encryption key is created using the KMS [generateDataKey](https://cloud.yandex.ru/docs/kms/api-ref/SymmetricCrypto/generateDataKey) method and then written to a disk in both a free-text and encrypted format.
+- The second VM disk is encrypted and mounted based on the encryption key.
+- The encrypted key is copied to [Yandex Object Storage](https://cloud.yandex.ru/services/storage) and deleted from the file system.
+- A script with the "open" argument is added to the OS startup options to automatically mount the encrypted disk at reboot.
+- At the time of mounting, the encryption key is downloaded from S3, decrypted, and then deleted from the file system when mounting is complete.
+
+> All operations with KMS and Object Storage are performed using a service account token linked to the VM at its creation.
+
+Description of script arguments:
+- create: Creating a high entropy key using the KMS [generateDataKey] (https://cloud.yandex.ru/docs/kms/api-ref/SymmetricCrypto/generateDataKey) method.
+- open: Mounting an encrypted disk to a decrypted object.
+- close: Unmounting an encrypted device.
+- erase: Deleting the source device.
 
 
-## Запуск решения
-- Скачайте файлы
-- Заполните файл variables.tf
-- Выполните команды terraform:
+## Prerequisites (configured using the Terraform script example):
+- Install and configure [YC CLI](https://cloud.yandex.ru/docs/cli/quickstart).
+- Create a service account.
+- Create a KMS key.
+- Assign rights for the KMS key to the created service account (kms.keys.encrypterDecrypter).
+- Create an Object Storage Bucket.
+- Assign rights to the Object Storage Bucket to the created service account (storage.uploader, storage.viewer + BucketPolicy).
+- Assign a service account to the VM.
+- Install AWS CLI: `apt install awscli`
+- Install cryptsetup: `apt install cryptsetup-bin`
+
+
+## Launching the solution
+- Download the files.
+- Fill out the variables.tf file.
+- Execute Terraform commands:
 
 ```
 terraform init
 terraform apply
 ```
-## Итоги развертывания
-- Проверить статус примонтированных объектов:
+## Deployment results
+- Check the status of mounted objects:
 
 ```
 lsblk
 ```
 
-![Статус](https://user-images.githubusercontent.com/85429798/131117114-d15f733e-8db8-4bdc-a3bf-082554a4e7cc.jpg)
+![Status](https://user-images.githubusercontent.com/85429798/131117114-d15f733e-8db8-4bdc-a3bf-082554a4e7cc.jpg)
 
-- Проверить статус шифрования диска:
+- Check the disk encryption status:
 
 ```
 cryptsetup status encrypted1
 ```
-![Статус](https://user-images.githubusercontent.com/85429798/131117237-bb081d75-3876-4970-9a2c-b52ae4161c55.jpg)
+![Status](https://user-images.githubusercontent.com/85429798/131117237-bb081d75-3876-4970-9a2c-b52ae4161c55.jpg)
 
-- Проверить диск на другой ВМ: Создать snapshot диска:
+- Check the disk on another VM. To do this, create a snapshot of the disk:
 
-![Снапшот](https://user-images.githubusercontent.com/85429798/131117342-0ef73d39-890b-49c4-888c-7ca43789356f.jpg)
+![Snapshot](https://user-images.githubusercontent.com/85429798/131117342-0ef73d39-890b-49c4-888c-7ca43789356f.jpg)
 
-- Создать ВМ с диском из snapshot:
-![Создание ВМ](https://user-images.githubusercontent.com/85429798/131117386-e1e9e805-2412-48bd-be9e-41e4ee83eed9.png)
+- Create a VM with a disk based on a snapshot:
+![Creating a VM](https://user-images.githubusercontent.com/85429798/131117386-e1e9e805-2412-48bd-be9e-41e4ee83eed9.png)
 
-- Попробовать примонтировать диск:
+- Try mounting a disk:
 
 ```
 sudo mount /dev/vdb /mnt
 ```
-![Результат теста](https://user-images.githubusercontent.com/85429798/131117495-c2cc85d4-21c9-4578-9027-907bf6c9d0c2.jpg)
+![Test result](https://user-images.githubusercontent.com/85429798/131117495-c2cc85d4-21c9-4578-9027-907bf6c9d0c2.jpg)
