@@ -72,4 +72,4 @@ type: kubernetes.io/dockerconfigjson
 - можно анализировать вручную путем вычитывания CRD [vulnerability-report](https://aquasecurity.github.io/starboard/v0.14.0/crds/vulnerability-report/)
 - можно визуализировать с помощью [octant и lens](https://aquasecurity.github.io/starboard/v0.14.0/integrations/octant/)
 - можно разработать автоматизацию, которая будет считывать CRD vulnarebility report и отправлять их в SIEM, например [Yandex Managed Service for Elasticsearch](https://cloud.yandex.ru/services/managed-elasticsearch)
-- анализировать на Security Dashboard с помощью [Cluster image scanning]((https://docs.gitlab.com/14.6/ee/user/application_security/cluster_image_scanning/index.html)) в [Yandex Managed Service for GitLab](https://cloud.yandex.ru/services/managed-gitlab). 
+- анализировать на Security Dashboard с помощью [Cluster image scanning]((https://docs.gitlab.com/ee/user/application_security/cluster_image_scanning/)) в [Yandex Managed Service for GitLab](https://cloud.yandex.ru/services/managed-gitlab). 
