@@ -43,22 +43,22 @@ resource "helm_release" "kyverno" {
 
 
   set {
-    name  = "target.yandex.accessKeyID"
+    name  = "target.s3.accessKeyID"
     value = yandex_iam_service_account_static_access_key.sa_static_key.access_key
   }
 
   set {
-    name  = "target.yandex.secretAccessKey"
+    name  = "target.s3.secretAccessKey"
     value = yandex_iam_service_account_static_access_key.sa_static_key.secret_key
   }
 
   set {
-    name  = "target.yandex.bucket"
+    name  = "target.s3.bucket"
     value = var.log_bucket_name
   }
 
   set {
-    name  = "target.yandex.prefix"
+    name  = "target.s3.prefix"
     value = "KYVERNO/${data.yandex_resourcemanager_folder.my_folder.cloud_id}/${var.folder_id}/${data.yandex_kubernetes_cluster.my_cluster.id}"
   }
 
