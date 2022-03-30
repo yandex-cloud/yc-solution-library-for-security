@@ -25,7 +25,7 @@ https://cloud.yandex.com/en/docs/overview/security/domains/checklist
 - 🐞 Vulnerability management
   - [Fault-tolerant operation of PT Application Firewall based on Yandex.Cloud](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/vuln-mgmt/unmng-waf-ptaf-cluster)
   - [Installing a vulnerable web application (DVWA) in Yandex.Cloud using Terraform for Managed WAF testing](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/vuln-mgmt/vulnerable-web-app-waf-test)
-  - [Testing AntiDDos system using Yandex Load Testing](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/vuln-mgmt/anti-ddos-lt/README_RU.md)
+  - [Testing AntiDDos system using Yandex Load Testing](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/vuln-mgmt/anti-ddos-lt/README.md)
 - 🔏 Data encryption and key and secret management
   - [Encrypting secrets with KMS when transferring the keys to the COI VM container Yandex.Cloud: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/encrypt_and_keys/terraform%2BKMS%2BCOI)
   - [Encrypting a VM disk in the cloud using YC KMS](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/encrypt_and_keys/encrypt_disk_VM)
