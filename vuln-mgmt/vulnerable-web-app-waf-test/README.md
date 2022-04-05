@@ -41,7 +41,10 @@ terraform apply
 - At the very bottom of the page, click Create/Reset database.
 - Then click Login at the bottom.
 - On the DVWA Security tab, change the level to Low.
-- Go to the SQL Injection tab and in the User ID field, enter the following: `'%' and 1=0 union select null, concat(user,':', password) from users #`.
+- Go to the SQL Injection tab and in the User ID field, enter the following: 
+```
+`%' and 1=0 union select null, concat(user,':',password) from users #`
+```
 
 ![image](https://user-images.githubusercontent.com/85429798/120918060-252fb680-c6bb-11eb-8398-32c98e2f70ca.png)
 
