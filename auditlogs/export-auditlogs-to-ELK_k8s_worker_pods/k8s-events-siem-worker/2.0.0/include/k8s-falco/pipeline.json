@@ -1,0 +1,62 @@
+{
+"description": "k8s pipeline",
+"processors": [
+  {
+    "set": {
+      "field": "event.kind",
+      "value": "event",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "event.category",
+      "value": ["configuration", "iam"],
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "event.dataset",
+      "value": "yandexcloud.k8s_falco",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "cloud.provider",
+      "value": "yandexcloud",
+      "ignore_failure": true
+    }
+  },
+    {
+      "set": {
+        "field": "@timestamp",
+        "value": "{{{time}}}",
+        "ignore_failure": true
+      }
+    },
+  {
+    "set": {
+      "field": "cloud.service.name",
+      "value": "falco",
+      "ignore_failure": true
+    }
+  },
+  {
+      "dot_expander": {
+        "field": "k8s.ns.name",
+        "path": "output_fields",
+        "ignore_failure": true
+      }
+    },
+    {
+      "rename": {
+        "field": "output_fields.k8s.ns.name",
+        "target_field": "objectRef.namespace",
+        "ignore_missing": true,
+        "ignore_failure": true
+      }
+    }
+]
+}

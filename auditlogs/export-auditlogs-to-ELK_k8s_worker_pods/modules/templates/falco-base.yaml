@@ -1,0 +1,36 @@
+image:
+  registry: docker.io
+  repository: falcosecurity/falco
+  pullPolicy: IfNotPresent
+
+docker:
+  enabled: true
+  socket: /var/run/docker.sock
+
+containerd:
+  enabled: true
+  socket: /run/containerd/containerd.sock
+
+falco:
+  jsonOutput: true
+  jsonIncludeOutputProperty: true
+  httpOutput:
+    enabled: true
+    url: http://falcosidekick:2801/
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    memory: 1Gi
+
+customRules:
+ rules-cilium.yaml:  |-
+  # disabling cilium false positives
+  - rule: Packet socket created in container
+    desc: Detect new packet socket at the device driver (OSI Layer 2) level in a container. Packet socket could be used for ARP Spoofing and privilege escalation(CVE-2020-14386) by attacker.
+    condition: evt.type=socket and evt.arg[0]=AF_PACKET and consider_packet_socket_communication and container and not proc.name in (user_known_packet_socket_binaries) and not container.image.repository=cr.yandex/crpsjg1coh47p81vh2lc/k8s-addons/cilium/cilium
+    output: Packet socket was created in a container (user=%user.name user_loginuid=%user.loginuid command=%proc.cmdline socket_info=%evt.args container_id=%container.id container_name=%container.name image=%container.image.repository:%container.image.tag)
+    priority: NOTICE
+    tags: [network, mitre_discovery]

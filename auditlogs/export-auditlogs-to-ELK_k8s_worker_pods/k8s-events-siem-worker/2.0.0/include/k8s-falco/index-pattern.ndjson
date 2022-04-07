@@ -1,0 +1,2 @@
+{"attributes":{"fieldAttrs":"{}","fields":"[]","runtimeFieldMap":"{}","timeFieldName":"@timestamp","title":"k8s-falco*"},"coreMigrationVersion":"7.13.4","id":"4c290ba0-fdad-11eb-b912-d99e9986f72b","migrationVersion":{"index-pattern":"7.11.0"},"references":[],"type":"index-pattern","updated_at":"2021-08-15T09:43:51.394Z","version":"WzU2OTIzLDJd"}
+{"exportedCount":1,"missingRefCount":0,"missingReferences":[]}

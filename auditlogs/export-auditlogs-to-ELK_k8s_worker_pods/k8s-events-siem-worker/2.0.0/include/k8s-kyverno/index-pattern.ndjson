@@ -1,0 +1,2 @@
+{"attributes":{"fieldAttrs":"{\"Status\":{\"count\":2},\"Policy\":{\"count\":1},\"Priority\":{\"count\":1}}","fields":"[]","runtimeFieldMap":"{}","timeFieldName":"@timestamp","title":"k8s-kyverno*"},"coreMigrationVersion":"7.13.4","id":"38774430-1722-11ec-a10e-0d206e63071e","migrationVersion":{"index-pattern":"7.11.0"},"references":[],"type":"index-pattern","updated_at":"2021-09-17T11:34:04.849Z","version":"WzM3MzU5NSwxXQ=="}
+{"exportedCount":1,"missingRefCount":0,"missingReferences":[]}
