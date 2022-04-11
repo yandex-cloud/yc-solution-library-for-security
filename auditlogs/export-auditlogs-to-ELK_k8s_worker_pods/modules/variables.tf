@@ -11,6 +11,12 @@ variable "cloud_id" {
   type        = string
 }
 
+variable "region_name" {
+  description = "The Yandex.Cloud Cloud Region name."
+  type        = string
+  default     = "ru-central1"
+}
+
 variable "cluster_name" {
   description = "The Yandex.Cloud K8s cluster name."
   type        = string

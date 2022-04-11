@@ -13,13 +13,7 @@ spec:
   selector:
     matchLabels:
       {{- include "server.selector" . | nindent 6 }}
-  {{- if .Values.server.replicas.audit }}
-  replicas: {{ .Values.server.replicas.audit }}
-  {{- else if .Values.server.replicas.falco }}
-  replicas: {{ .Values.server.replicas.falco }}
-  {{- else if .Values.server.replicas.kyverno }}
-  replicas: {{ .Values.server.replicas.kyverno }}
-  {{- end }}
+  replicas: {{ .Values.server.replicas }}
   template:
     metadata:
       labels:

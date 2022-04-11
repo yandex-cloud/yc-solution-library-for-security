@@ -13,7 +13,7 @@ resource "random_string" "project_suffix" {
 }
 
 #--------Permissions-----------
-# Grant permissions  to create function_pusher
+# Grant permissions to create function_pusher
 resource "yandex_resourcemanager_folder_iam_binding" "create_funct" {
   depends_on = [yandex_iam_service_account.sa-writer]
   folder_id  = var.folder_id
@@ -21,7 +21,7 @@ resource "yandex_resourcemanager_folder_iam_binding" "create_funct" {
   members    = ["serviceAccount:${yandex_iam_service_account.sa-writer.id}"]
 }
 
-# Grant permissions sennd logs to queue
+# Grant permissions send logs to queue
 resource "yandex_resourcemanager_folder_iam_member" "send_queue" {
   depends_on = [yandex_iam_service_account.sa-writer]
   folder_id  = var.folder_id

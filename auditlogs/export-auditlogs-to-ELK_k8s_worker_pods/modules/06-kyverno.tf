@@ -65,7 +65,7 @@ resource "helm_release" "policy_reporter" {
 
   set {
     name  = "target.s3.region"
-    value = "ru-central1"
+    value = var.region_name
   }
 
   set {

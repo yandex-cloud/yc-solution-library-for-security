@@ -23,10 +23,7 @@ server:
   image: ""
 
   # The minimum number of replicas.
-  replicas:
-    audit: ""
-    falco: ""
-    kyverno: ""
+  replicas: ""
 
   envVars:
     logPrefix:

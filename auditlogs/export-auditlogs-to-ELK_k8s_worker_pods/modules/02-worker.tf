@@ -45,9 +45,7 @@ locals {
   }
   auditlog_values_yaml = {
     server = {
-      replicas = {
-        audit = "${var.auditlog_worker_replicas_count}"
-      }
+      replicas = "${var.auditlog_worker_replicas_count}"
       envVars = {
         logPrefix = {
           audit = "AUDIT/"
@@ -62,9 +60,7 @@ locals {
   }
   falco_values_yaml = {
     server = {
-      replicas = {
-        falco = "${var.falco_worker_replicas_count}"
-      }
+      replicas = "${var.falco_worker_replicas_count}"
       envVars = {
         logPrefix = {
           falco = "FALCO/"
@@ -79,9 +75,7 @@ locals {
   }
   kyverno_values_yaml = {
     server = {
-      replicas = {
-        kyverno = "${var.kyverno_worker_replicas_count}"
-      }
+      replicas = "${var.kyverno_worker_replicas_count}"
       envVars = {
         logPrefix = {
           kyverno = "KYVERNO/"
