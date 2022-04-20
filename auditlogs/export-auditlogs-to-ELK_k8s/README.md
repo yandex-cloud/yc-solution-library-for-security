@@ -51,7 +51,7 @@ The solution ["Collecting, monitoring, and analyzing audit logs in Yandex Manage
 
 ## Generic diagram 
 
-![image](https://user-images.githubusercontent.com/85429798/137740249-a9b09aaf-13f3-4022-83fe-5ba45f6c8418.png)
+![image](https://user-images.githubusercontent.com/85429798/164211865-5f95498a-3778-47a9-bb82-cb43110836c4.png)
 
 ## Description of imported ELK (Security Content) object
 See a detailed description of the objects [here](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Описание%20объектов.pdf).
