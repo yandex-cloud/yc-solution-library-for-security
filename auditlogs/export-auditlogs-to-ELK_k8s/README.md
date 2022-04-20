@@ -87,7 +87,7 @@ The solution consist of terraform module:
 
 
 #### Example of calling modules:
-See the example of calling modules in [/examples/README.md](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_k8s/example/README.md)
+See the example of calling modules in [/examples/README.md](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_k8s/examples/README.md)
 
 
 ## Content update process
