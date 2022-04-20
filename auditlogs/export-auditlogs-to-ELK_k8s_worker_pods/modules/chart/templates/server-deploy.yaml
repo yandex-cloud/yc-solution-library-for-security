@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "server.name" . | quote }}
+  labels:
+    {{- include "server.labels" . | nindent 4 }}
+  annotations:
+    {{- if .Values.server.tracing.jaeger.enabled }}
+    sidecar.jaegertracing.io/inject: "true"
+    {{- end }}
+    {{- include "server.annotations" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "server.selector" . | nindent 6 }}
+  replicas: {{ .Values.server.replicas }}
+  template:
+    metadata:
+      labels:
+        {{- include "server.labels" . | nindent 8 }}
+      annotations:
+        {{- include "server.annotations" . | nindent 8 }}
+    spec:
+      {{- if .Values.pullSecret }}
+      imagePullSecrets:
+        - name: {{ .Values.pullSecret }}
+      {{- end }}
+      containers:
+        - name: server
+          image: {{ .Values.server.image | quote }}
+          imagePullPolicy: {{ .Values.pullPolicy | quote }}
+          resources: {{- toYaml .Values.server.resources | nindent 12 }}
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+          envFrom:
+            - configMapRef:
+                name: {{ include "server.name" . | quote }}
+            - secretRef:
+                name: {{ include "server.name" . | quote }}
+          {{- if .Values.server.probes.readiness }}
+          readinessProbe: {{- toYaml .Values.server.probes.readiness | nindent 12 }}
+          {{- end }}
+          {{- if .Values.server.probes.liveness }}
+          livenessProbe: {{- toYaml .Values.server.probes.liveness | nindent 12 }}
+          {{- end }}
+        {{- if .Values.server.tracing.jaeger.enabled }}
+        - name: jaeger-agent
+          image: {{ .Values.jaeger.agent.image }}
+          imagePullPolicy: {{ .Values.pullPolicy }}
+          resources: {{- toYaml .Values.server.tracing.jaeger.resources | nindent 14 }}
+          ports:
+            - containerPort: 5775
+              name: zk-compact-trft
+              protocol: UDP
+            - containerPort: 5778
+              name: config-rest
+              protocol: TCP
+            - containerPort: 6831
+              name: jg-compact-trft
+              protocol: UDP
+            - containerPort: 6832
+              name: jg-binary-trft
+              protocol: UDP
+            - containerPort: 14271
+              name: admin-http
+              protocol: TCP
+          args:
+            - --reporter.grpc.host-port={{ .Values.jaeger.collector.endpoint }}
+            - --reporter.type=grpc
+        {{- end }}
+
+      {{- if .Values.server.nodeSelector }}
+      nodeSelector: {{ toYaml .Values.server.nodeSelector | nindent 8 }}
+      {{- end }}
+
+      {{- if .Values.server.affinity }}
+      affinity: {{ toYaml .Values.server.affinity | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - {{ include "server.name" . | quote }}
+                topologyKey: kubernetes.io/hostname
+      {{- end }}
+
+      {{- if .Values.server.tolerations }}
+      tolerations: {{ toYaml .Values.server.tolerations | nindent 8 }}
+      {{- end }}

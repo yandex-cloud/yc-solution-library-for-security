@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "server.name" . | quote }}
+  labels:
+    {{- include "server.labels" . | nindent 4 }}
+  annotations:
+    {{- include "server.annotations" . | nindent 4 }}
+data:
+  {{- if .Values.server.envVars.logPrefix.audit }}
+  AUDIT_LOG_PREFIX : {{ .Values.server.envVars.logPrefix.audit | quote }}
+  {{- else if .Values.server.envVars.logPrefix.falco }}
+  FALCO_LOG_PREFIX : {{ .Values.server.envVars.logPrefix.falco | quote }}
+  {{- else if .Values.server.envVars.logPrefix.kyverno }}
+  KYVERNO_LOG_PREFIX : {{ .Values.server.envVars.logPrefix.kyverno | quote }}
+  {{- end }}
+  CLOUD_ID : {{ .Values.server.envVars.yandex.cloud.id | quote }}
+  CLUSTER_ID : {{ .Values.server.envVars.yandex.cluster.id | quote }}
+  ELASTIC_AUTH_USER : {{ .Values.server.envVars.elastic.authUser | quote }}
+  ELASTIC_SERVER : {{ .Values.server.envVars.elastic.server | quote }}
+  ELK_PASS_ENCR : {{ .Values.server.envVars.elastic.passEncr | quote }}
+  FOLDER_ID : {{ .Values.server.envVars.yandex.folder.id | quote }}
+  KIBANA_SERVER : {{ .Values.server.envVars.elastic.kibanaServer | quote }}
+  KMS_KEY_ID : {{ .Values.server.envVars.yandex.kms.key.id | quote }}
+  S3_BUCKET : {{ .Values.server.envVars.yandex.s3.bucket.name | quote }}
+  S3_KEY_ENCR : {{ .Values.server.envVars.yandex.s3.bucket.keyEncr | quote }}
+  S3_SECRET_ENCR : {{ .Values.server.envVars.yandex.s3.bucket.secretEncr | quote }}
+  SA_ID : {{ .Values.server.envVars.yandex.serviceAccount.id | quote }}
+  SA_KEY_ID : {{ .Values.server.envVars.yandex.serviceAccount.authKey.id | quote }}
+  SLEEP_TIME : {{ .Values.server.envVars.sleepTime | quote }}
+  YMQ_URL : {{ .Values.server.envVars.yandex.messageQueue.url | quote }}

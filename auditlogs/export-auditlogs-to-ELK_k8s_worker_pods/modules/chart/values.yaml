@@ -1,0 +1,112 @@
+# Image pull policy. Possible values: Always, Never, IfNotPresent.
+pullPolicy: IfNotPresent
+# Image pull secret name.
+pullSecret: ""
+
+# Alerts configuration.
+alerts:
+  # Slack channel for alerts.
+  slackChannel: ""
+
+# Jaeger configuration.
+jaeger:
+  agent:
+    image: jaegertracing/jaeger-agent:latest
+  collector:
+    endpoint: dns:///jaeger-collector.ke.internal:14250
+
+# Server configuration.
+server:
+  # override full name of server
+  nameOverride: ""
+  # Docker image of the server application.
+  image: ""
+
+  # The minimum number of replicas.
+  replicas: ""
+
+  envVars:
+    logPrefix:
+      audit: ""
+      falco: ""
+      kyverno: ""
+    elastic:
+      authUser: ""
+      server: ""
+      passEncr: ""
+      kibanaServer: ""
+    sleepTime: ""
+    yandex:
+      cloud:
+        id: ""
+      cluster:
+        id: ""
+      kms:
+        key:
+          id: ""
+      folder:
+        id: ""
+      messageQueue:
+        url: ""
+      s3:
+        bucket:
+          name: ""
+          keyEncr: ""
+          secretEncr: ""
+      serviceAccount:
+        id: ""
+        authKey:
+          id: ""
+          privPem: ""
+
+  # The resources allocated for each replica, both requests and limits.
+  resources:
+    requests:
+      memory: 512Mi
+      cpu: 500m
+    limits:
+      memory: 1Gi
+      cpu: 1
+
+  # Probes configuration.
+  probes:
+    readiness: {}
+#      initialDelaySeconds: 10
+#      httpGet:
+#        port: 8081
+#        path: "/readiness"
+    liveness: {}
+#      initialDelaySeconds: 10
+#      httpGet:
+#        port: 8081
+#        path: "/healthz"
+
+  # Tracing configuration.
+  tracing:
+    # Jaeger configuration.
+    jaeger:
+      # Inject Jaeger Agent sidecar?
+      enabled: false
+      # The resources allocated for each replica, both requests and limits.
+      resources:
+        requests:
+          memory: 128Mi
+          cpu: 100m
+        limits:
+          memory: 128Mi
+          cpu: 100m
+
+  # NodeSelector configuration of the validators.
+  nodeSelector: { }
+
+  # Deployment affinity configuration. If not set the default one will be used.
+  affinity: { }
+
+  # Tolerations of the validators pods.
+  tolerations: [ ]
+
+  # Annotations used in the server resources.
+  annotations: { }
+
+# Annotations used in all application resources.
+annotations: { }

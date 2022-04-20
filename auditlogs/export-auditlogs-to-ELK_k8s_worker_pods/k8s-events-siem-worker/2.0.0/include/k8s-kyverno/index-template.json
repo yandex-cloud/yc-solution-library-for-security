@@ -1,0 +1,22 @@
+{   
+    "index_patterns": ["k8s-kyverno-index*"],
+    "template": {
+        "settings": {
+            "index": {
+                "lifecycle": {
+                    "name": "k8s-kyverno-ilm",
+                    "rollover_alias": "k8s-kyverno"
+                },
+                "number_of_replicas": "2"
+            }
+        },
+        "mappings": {
+            "properties": {
+                "@timestamp": {
+                    "type": "date"
+                }
+            }
+        },
+        "aliases": {}
+    }
+}
