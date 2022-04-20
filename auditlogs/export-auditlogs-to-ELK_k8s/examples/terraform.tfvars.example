@@ -6,6 +6,7 @@ elastic_pw                     = "str0ng_password"
 elastic_user                   = "example_user"
 service_account_id             = "k8s-audit-logs-example"
 log_bucket_name                = "k8s-audit-logs-example"
+#worker_docker_image            = "cr.yandex/sol/k8s-events-siem-worker:2.0.0"
 worker_docker_image            = "docker.io/aidjek/k8s-events-siem-worker:aidjek2"
 create_namespace               = true
 auditlog_enabled               = true

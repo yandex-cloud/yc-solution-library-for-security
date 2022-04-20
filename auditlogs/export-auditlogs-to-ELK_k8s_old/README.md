@@ -12,25 +12,16 @@
 
 **Version-2.0**
 - Changelog:
-    - Changed the method of deployment. Deprecation of virtual machines as a worker engine to deployments in k8s. Thanks to "Hilbert Team" for contribution
-    <a href="https://kubernetes.io/">
-    <img src="https://storage.yandexcloud.net/9863c845-4d2b-4a09-a7dc-84118e8b892a-ht-logo/HT%20Logo.png"
-         alt="Kubernetes logo" title="Kubernetes" height="115" width="115" />
-</a></br>
-- Docker images:
-    - `cr.yandex/sol/k8s-events-siem-worker:2.0.0`.
-
-**Version-2.0**
-- Changelog:
     - Added support for automatic Kyverno installation with policies in the audit mode. 
 - Docker images:
-    - `cr.yandex/sol/k8s-events-siem-worker:1.1.0`.
+    - `cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:1.1.0`.
 
 # Table of contents
 
 - [Description](#description)
 - [Link to the solution "Collecting, monitoring, and analyzing audit logs in Yandex Managed Service for Elasticsearch (ELK)"](#link-to-solution-"Collecting-monitoring-and-analyzing-audit-logs-in-Yandex-Managed-Service-for-Elasticsearch-(ELK)")
 - [Generic diagram](#generic-diagram)
+- [Description of imported ELK (Security Content) objects](#description of-imported-ELK-(Security-Content)-objects)
 - [Terraform description](#terraform-description)
 - [Content update process](#content-update-process)
 - [Optional manual actions](#optional-manual-actions)
@@ -58,46 +49,113 @@ See a detailed description of the objects [here](https://github.com/yandex-cloud
 
 ## Terraform description 
 
-The solution consist of terraform module:
+The solution consists of two Terraform modules:
+1) [security-events-to-storage-exporter](./security-events-to-storage-exporter) exports logs to S3.
 - It accepts the following input: 
-    - `folder_id`: The ID of the folder where the cluster is hosted.
-    - `cloud_id`: The ID of the cloud where the cluster is hosted.
+        - `folder_id`: The ID of the folder where the cluster is hosted.
     - `cluster_name`: The name of the Kubernetes cluster.
-    - `elastic_server`: The FQDN address of the ELK installation
-    - `elastic_pw` and `elastic_user`: The ELK user credentials for event import
-    - `service_account_id`: The ID of the service account that can write to the bucket and has the *ymq.admin* role.
-    - `log_bucket_name`: The name of the bucket that will create module to save logs to.
-    - `auditlog_enabled`: *true* or *false* (enables/disables sending of K8s audit logs to ELK).
-    - `falco_enabled`: *true* or *false* (enables/disables sending of Falco alerts to ELK).
-    - `kyverno_enabled`: *true* or *false* — (enables/disables sending of Kyverno alerts to ELK).
+    - `log_bucket_service_account_id`: The ID of the service account that can write to the bucket and has the *ymq.admin* role.
+    - `log_bucket_name`: The name of the bucket to save logs to.
+    - `function_service_account_id`: The ID of the service account that will run the function (optional). If omitted, `log_bucket_service_account_id` is used.
+
 - Functionality: 
     - Create a static key for the service account.
     - Create a function and a trigger for writing cluster logs to S3.
     - Install Falco and pre-configured falcosidekick that will send logs to S3.
-    - Install Kyverno and pre-configured [Policy Reporter](https://github.com/kyverno/policy-reporter) that will send logs to S3.
+       - Install Kyverno and pre-configured [Policy Reporter](https://github.com/kyverno/policy-reporter) that will send logs to S3.
+
+2) [security-events-to-siem-importer](./security-events-to-siem-importer) imports logs into ELK.
+- It accepts the following input: 
+    - Several parameters from the module (`security-events-to-storage-exporter`) module.
+    - `auditlog_enabled`: *true* or *false* (enables/disables sending of K8s audit logs to ELK).
+    - 'falco_enabled`: *true* or *false* (enables/disables sending of Falco alerts to ELK).
+    - 'kyverno_enabled`: *true* or *false* — (enables/disables sending of Kyverno alerts to ELK).
+    - The FQDN address of the ELK installation.
+    - The ID of the subnet where the VM instance with the importer container is being created.
+    - The ELK user credentials for event import.
+
+- Functionality: 
     - Create YMQ queues with log file names in S3.
     - Create functions to push file names from S3 to YMQ.
     - Create triggers for interaction between queues and functions.
-    - Create deployments in k8s with worker containers that import events from S3 to ELK.
+    - Generate and write SSH keys to a file and to a VM.
+    - Create VM instances based on COI ([Container Optimized Image](https://cloud.yandex.ru/docs/cos/concepts/)) with worker containers that import events from S3 to ELK.
 
 #### Prerequisites:
 - :white_check_mark: Cluster Managed K8s.
 - :white_check_mark: Managed ELK.
 - :white_check_mark: A service account that can write to the bucket and has the *ymq.admin* role.
+- :white_check_mark: Object Storage Bucket.
+- :white_check_mark: A subnet for deploying a VM with NAT enabled.
 
 
 #### Example of calling modules:
-See the example of calling modules in [/examples/README.md](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_k8s/examples/README.md)
+See the example of calling modules in /example/main.tf 
 
+```Python
+
+//Calling the security-events-to-storage-exporter module
+
+module "security-events-to-storage-exporter" {
+    source = "../security-events-to-storage-exporter/" # path to the module
+
+    folder_id = "xxxxxx" // The folder ID of the K8s cluster yc managed-kubernetes cluster get --id <cluster ID> --format=json | jq  .folder_id
+
+    cluster_name = "k8s-cluster" // The name of the cluster
+
+    log_bucket_service_account_id = "xxxxxx" // The ID of the Service Account (it must have the roles: ymq.admin and "write to bucket")
+    
+    log_bucket_name = "k8s-bucket" // You can use the value from the deploy config
+    # function_service_account_id = "xx" // An optional ID of the service account that calls functions. If not set, the function is called on behalf of log_bucket_service_account_id
+}
+
+
+//Calling the security-events-to-siem-importer module
+module "security-events-to-siem-importer" {
+    source = "../security-events-to-siem-importer/" # path to the module
+
+    folder_id = module.security-events-to-storage-exporter.folder_id 
+    
+    service_account_id = module.security-events-to-storage-exporter.service_account_id
+    
+    auditlog_enabled = true // Send K8s auditlog to ELK
+    
+    falco_enabled = true // Install Falco and send its alerts to ELK
+
+    kyverno_enabled = true // Install Kyverno and send its alerts to ELK
+
+    log_bucket_name = module.security-events-to-storage-exporter.log_bucket_name
+
+    elastic_server = "https://c-xxx.rw.mdb.yandexcloud.net " // The ELK URL "https://c-xxx.rw.mdb.yandexcloud.net" (you can use the value from the module.yc-managed-elk.elk_fqdn module)
+
+    coi_subnet_id = "xxxxxx" // The ID of the subnet where the VM with the container will be deployed (be sure to enable NAT)
+
+    elastic_pw = var.elk_pw // Run the command: export TF_VAR_elk_pw=<ELK PASS> (replace ELK PASS with your value) // The password for the ELK account (you may use the value from the module.yc-managed-elk.elk-pass module)
+    
+    elastic_user = "admin" // The name of the ELK account
+}
+    
+```
 
 ## Content update process
 We recommend subscribing to this repository to receive update notifications.
 
+To get the latest content version, do the following:
+- Keep the sync container up-to-date.
+- Keep the Security content imported to Elasticsearch in the updated state.
+
 For content updates, make sure that you are running the latest available image version:
-`cr.yandex/sol/k8s-events-siem-worker:latest`
+`cr.yandex/crpjfmfou6gflobbfvfv/k8s-events-siem-worker:latest`
 
 You can update the container as follows:
-You can re-create the deployments in k8s via Terraform (change worker_docker_image env in tfvars and run `terraform apply`).
+- You can re-create the deployed COI Instance with the container via Terraform (delete the COI Instance, run `terraform apply`).
+- You can stop and delete the `falco-worker-*`, `kyverno-worker-*`, `audit-worker-*` containers, delete the `k8s-events-siem-worker` image, and restart the COI Instance. When it starts, a new image is downloaded and new containers are created.
+
+You can update the Security content in Kibana (dashboards, detection rules, searches) by launching the `elk-updater` container:
+
+```
+docker run -it --rm -e ELASTIC_AUTH_USER='admin' -e ELASTIC_AUTH_PW='password' -e KIBANA_SERVER='https://xxx.rw.mdb.yandexcloud.net' --name elk-updater cr.yandex/crpjfmfou6gflobbfvfv/elk-updater:latest
+```
 
 ## Optional manual actions
 #### Installing OPA Gatekeeper (Helm)
