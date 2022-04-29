@@ -1,0 +1,97 @@
+stages:
+    - checkov-test-files
+    - tfplan
+    - checkov-test-tfplan
+    - tf-apply
+
+#Checkov test terrafrom files
+checkov-test-files:
+  stage: checkov-test-files
+  allow_failure: false  # True for AutoDevOps compatibility
+  image:
+    name: bridgecrew/checkov:latest
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  rules:
+    - if: $SAST_DISABLED
+      when: never
+    - if: $CI_COMMIT_BRANCH
+      exists:
+        - '**/*.yml'
+        - '**/*.yaml'
+        - '**/*.json'
+        - '**/*.template'
+        - '**/*.tf'      
+        - '**/serverless.yml'
+        - '**/serverless.yaml'
+  script:
+    # Use `script` to emulate `tty` for colored output.
+    - script -q -c 'checkov -d . --soft-fail-on CKV_YC_2,CKV_YC_11,CKV_YC_4,CKV_YC_24,CKV_YC_13,CKV_YC_23,CKV_YC_21,CKV_YC_5,CKV_YC_16,CKV_YC_10,CKV_YC_14,CKV_YC_7,CKV_YC_8,CKV_YC_6,CKV_YC_15; echo $? > CKVEXIT'
+    - exit $(cat CKVEXIT)
+
+
+#Terraform generate plan
+tfplan:
+  stage: tfplan
+  allow_failure: false  # True for AutoDevOps compatibility
+  image:
+    name: hashicorp/terraform:light
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  script:
+    # Use `script` to emulate `tty` for colored output.
+    - terraform --version
+    - cp ./.terraformrc ~/.terraformrc
+    - terraform init
+    - terraform plan -out tf.plan
+    - terraform show -json tf.plan  > tf_plan.json 
+  artifacts:
+      paths:
+        - tf_plan.json 
+      name: tf_plan.json
+
+
+#Checkov test terrafrom plan file
+checkov-test-tfplan:
+  stage: checkov-test-tfplan
+  allow_failure: false  # True for AutoDevOps compatibility
+  image:
+    name: bridgecrew/checkov:latest
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  rules:
+    - if: $SAST_DISABLED
+      when: never
+    - if: $CI_COMMIT_BRANCH
+      exists:
+        - '**/*.yml'
+        - '**/*.yaml'
+        - '**/*.json'
+        - '**/*.template'
+        - '**/*.tf'      
+        - '**/serverless.yml'
+        - '**/serverless.yaml'
+  script:
+    # Use `script` to emulate `tty` for colored output.
+    - script -q -c 'checkov -f ./tf_plan.json --soft-fail-on CKV_YC_2,CKV_YC_11,CKV_YC_4,CKV_YC_24,CKV_YC_13,CKV_YC_23,CKV_YC_21,CKV_YC_5,CKV_YC_16,CKV_YC_10,CKV_YC_14,CKV_YC_7,CKV_YC_8,CKV_YC_6,CKV_YC_15; echo $? > CKVEXIT'
+    - exit $(cat CKVEXIT)
+
+
+#Terraform apply
+tf-apply:
+  stage: tf-apply
+  allow_failure: false  # True for AutoDevOps compatibility
+  image:
+    name: hashicorp/terraform:light
+    entrypoint:
+      - '/usr/bin/env'
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+  script:
+    # Use `script` to emulate `tty` for colored output.
+    - terraform --version
+    - cp ./.terraformrc ~/.terraformrc
+    - terraform init
+    - terraform plan # change to apply in prod
