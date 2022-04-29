@@ -1,8 +1,11 @@
 # Checkov + Yandex Cloud
 
-картинка + из презы
+![image](https://user-images.githubusercontent.com/85429798/165979281-b1c59627-1386-495f-9d26-c301465a6325.png)
 
-Оглавление
+- [Checkov + Yandex Cloud](#checkov---yandex-cloud)
+  * [Intro](#intro)
+  * [Information about checks for Yandex cloud](#information-about-checks-for-yandex-cloud)
+  * [Examples of use in Managed Service for GitLab](#examples-of-use-in-managed-service-for-gitlab)
 
 ## Intro
 **Checkov now supports Yandex Cloud terraform objects**.
@@ -12,7 +15,7 @@ It scans cloud infrastructure provisioned using Terraform, Terraform plan, Cloud
 
 Installation and usage instructions are available on the [checkov page](https://github.com/bridgecrewio/checkov#getting-started)
 
-картинка с рабочего успешного скана
+![Screen Shot 2022-04-29 at 16 34 35](https://user-images.githubusercontent.com/85429798/165979509-a95872d4-880f-4c7f-be1a-75fedf8a721d.png)
 
 ## Information about checks for Yandex cloud
 You can find all checks in [source code](https://github.com/bridgecrewio/checkov/tree/master/checkov/terraform/checks/resource/yandexcloud)
