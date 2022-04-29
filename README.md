@@ -73,6 +73,16 @@ https://cloud.yandex.com/en/docs/overview/security/domains/checklist
       - [Vulnerability detection in CI/CD (Free license)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar/free_secure_ci_cd)
       - [Security in Gtilab instance check-list](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar/gitlab_instance_sec_checklist)
 
+##
+<a href="https://kubernetes.io/">
+    <img src="https://ih1.redbubble.net/image.1599940690.1956/st,small,507x507-pad,600x600,f8f8f8.jpg"
+         alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
+</a></br>
+
+- Terraform security
+  - [Scan tf manifests with checkov](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/terraform-sec/checkov-yc)
+  - [Terraform state in Yandex.Cloud using Object Storage](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/terraform-sec/remote-backend)
+    
 #
 <a href="https://kubernetes.io/">
     <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Telegram_2019_Logo.svg/1200px-Telegram_2019_Logo.svg.png"
