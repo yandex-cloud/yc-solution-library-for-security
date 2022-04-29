@@ -57,7 +57,7 @@ You can find all checks in [source code](https://github.com/bridgecrewio/checkov
 ## Examples of use in Managed Service for GitLab
 
 <a href="https://kubernetes.io/">
-    <img src="https://logowik.com/content/uploads/images/gitlab8368.jpg"
+    <img src="https://user-images.githubusercontent.com/85429798/165978612-b1ee5f96-be71-4c2b-87a6-02333a46c857.png"
          alt="Kubernetes logo" title="Kubernetes" height="50" width="50" />
 </a></br>
 
