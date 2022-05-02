@@ -96,11 +96,3 @@ tf-apply:
     - terraform init
     - terraform plan # change to apply in prod
 
-    
-    
-    
-    
-    
-    # Use `script` to emulate `tty` for colored output.
-    - script -q -c 'checkov -d . ; echo $? > CKVEXIT'
-    - exit $(cat CKVEXIT)
