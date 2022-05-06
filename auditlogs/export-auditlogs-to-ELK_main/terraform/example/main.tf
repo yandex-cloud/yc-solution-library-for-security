@@ -65,24 +65,24 @@ resource "yandex_storage_bucket" "trail-bucket" {
 }
 
 # Добавление правила для HTTPS-доступа в default security group
-resource "yandex_vpc_security_group_rule" "elk-https" {
-  security_group_binding = yandex_vpc_network.vpc-elk.default_security_group_id
-  direction              = "ingress"
-  description            = "incoming-https"
-  v4_cidr_blocks         = ["0.0.0.0/0"]
-  port                   = 443
-  protocol               = "TCP"
-}
+#resource "yandex_vpc_security_group_rule" "elk-https" {
+ # security_group_binding = yandex_vpc_network.vpc-elk.default_security_group_id
+ # direction              = "ingress"
+ # description            = "incoming-https"
+ # v4_cidr_blocks         = ["0.0.0.0/0"]
+ # port                   = 443
+ # protocol               = "TCP"
+#}
 
 # Добавление правила для HTTPS-доступа в default security group
-resource "yandex_vpc_security_group_rule" "elk-9002" {
-  security_group_binding = yandex_vpc_network.vpc-elk.default_security_group_id
-  direction              = "ingress"
-  description            = "incoming-9002"
-  v4_cidr_blocks         = ["0.0.0.0/0"]
-  port                   = 9200
-  protocol               = "TCP"
-}
+#resource "yandex_vpc_security_group_rule" "elk-9002" {
+#  security_group_binding = yandex_vpc_network.vpc-elk.default_security_group_id
+#  direction              = "ingress"
+#  description            = "incoming-9002"
+#  v4_cidr_blocks         = ["0.0.0.0/0"]
+#  port                   = 9200
+#  protocol               = "TCP"
+#}
 
 # Обязательно включить AuditTrail в UI на созданный bucket
 # Обязательно включить Egress NAT для подсети COI в UI на созданный bucket
