@@ -94,8 +94,8 @@ module "yc-managed-elk" {
     subnet_ids              = yandex_vpc_subnet.elk-subnet[*].id  # subnets в 3-х зонах доступности для развертывания ELK
     network_id              = yandex_vpc_network.vpc-elk.id # network id в которой будет развернут ELK
     elk_edition             = "gold"
-    elk_datanode_preset     = "s2.medium"
-    elk_datanode_disk_size  = 1000
+    elk_datanode_preset     = var.var_elk_node_preset
+    elk_datanode_disk_size  = var.var_elk_node_disk_size
     elk_public_ip           = true
     elk_name                = "elk-${random_string.random.result}"
 }
