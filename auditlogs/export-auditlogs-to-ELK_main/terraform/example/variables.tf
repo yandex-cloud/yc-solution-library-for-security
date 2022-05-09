@@ -29,3 +29,13 @@ variable "app_cidrs" {
   type        = list(string)
   default     = ["192.168.1.0/24", "192.168.50.0/24", "192.168.70.0/24"]
 }
+
+variable "var_elk_node_preset" {
+  type        = list(string)
+  default     = "s2.micro"
+}
+
+variable "var_elk_node_disk_size" {
+  type        = list(string)
+  default     = "60"
+}
