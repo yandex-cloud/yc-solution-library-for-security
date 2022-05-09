@@ -31,11 +31,9 @@ variable "app_cidrs" {
 }
 
 variable "var_elk_node_preset" {
-  type        = list(string)
   default     = "s2.micro"
 }
 
 variable "var_elk_node_disk_size" {
-  type        = list(string)
   default     = "60"
 }
