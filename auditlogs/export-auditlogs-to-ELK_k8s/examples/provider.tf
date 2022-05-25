@@ -15,7 +15,8 @@ terraform {
 
 provider "yandex" {
   folder_id = var.folder_id
-  token     = "example"
+  #token     = "example"
+  service_account_key_file = "./key.json"
 }
 
 provider "helm" {
