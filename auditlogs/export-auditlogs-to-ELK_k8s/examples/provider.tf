@@ -19,8 +19,4 @@ provider "yandex" {
   service_account_key_file = "./key.json"
 }
 
-provider "helm" {
-  kubernetes {
-    config_path = "~/.kube/config"
-  }
-}
+
