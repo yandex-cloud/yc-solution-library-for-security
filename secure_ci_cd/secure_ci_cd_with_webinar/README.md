@@ -15,5 +15,5 @@
 ## Обнаружение уязвимостей в CI/CD (Free лицензия)
 [Обнаружение уязвимостей в CI/CD (Free лицензия)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar/free_secure_ci_cd)
 
-## Security in Gtilab instance check-list
-[Security in Gtilab instance check-list](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar/gitlab_instance_sec_checklist)
+## Security in Gitlab instance check-list
+[Security in Gitlab instance check-list](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar/gitlab_instance_sec_checklist)
