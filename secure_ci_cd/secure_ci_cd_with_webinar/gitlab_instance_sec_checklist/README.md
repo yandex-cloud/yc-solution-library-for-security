@@ -1,4 +1,4 @@
-# Security in Gtilab instance check-list
+# Security in Gitlab instance check-list
 
 - Общие рекомендации по безопасности. Пройдите по общему [чеклисту по безопасности от Gitlab](https://docs.gitlab.com/ee/security/). Там описаны ограничения: ssh ключей, webhooks, раннеров и др.
 - Работа с Docker изнутри Gitlab:
