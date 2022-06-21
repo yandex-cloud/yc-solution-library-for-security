@@ -3,10 +3,11 @@
 
 
 ## Ссылка на сам вебинар:
-TBD:здесь будет ссылка на youtube видео с вебинара
+[![image](https://user-images.githubusercontent.com/85429798/174777736-29c67432-214a-486e-8a09-fece25dc049b.png)](https://www.youtube.com/watch?v=ub5QRrwXJno)
+
 
 ## Ссылка на презентацию:
-TBD:здесь будет ссылка на презентацию с вебинара
+[PDF версия презентации](https://www.youtube.com/watch?v=ub5QRrwXJno)
 
 ## Обнаружение уязвимостей в CI/CD (Ultimate лицензия)
 [Обнаружение уязвимостей в CI/CD (Ultimate лицензия)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar/ultimate_secure_ci_cd)
