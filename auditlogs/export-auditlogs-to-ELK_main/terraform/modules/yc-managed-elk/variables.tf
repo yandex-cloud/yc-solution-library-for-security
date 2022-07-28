@@ -21,7 +21,7 @@ variable "network_id" {
 
 variable "elk_edition" {
   description = "Редакция установки ELK (basic, gold, platinum)"
-  default     =  "gold"
+  default     =  "basic"
 }
 
 variable "elk_datanode_preset" {
