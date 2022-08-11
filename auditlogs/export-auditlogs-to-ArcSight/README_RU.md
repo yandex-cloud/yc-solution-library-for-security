@@ -18,7 +18,7 @@
 
 
 ## Описание решения
-Актуальная версия Security Content находится в [репозитории](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex) сервис партнёр по поддержке ООО «АТБ»
+Актуальная версия Security Content находится [здесь](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ArcSight/arcsight_content) сервис партнёр по поддержке ООО «АТБ»
 Решение позволяет собирать, мониторить и анализировать аудит логи в Yandex.Cloud со следующих источников:
 
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
@@ -50,7 +50,7 @@
 ## Security Content
 Security Content - объекты ArcSight, которые загружаются по инструкции. Весь контент разработан совместно с командой партнером ООО «АТБ» с учетом многолетнего опыта Security команды Yandex.Cloud и на основе опыта Клиентов облака.
 
-Актуальная версия Security Content находится в [репозитории](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex) 
+Актуальная версия Security Content находится [здесь](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ArcSight/arcsight_content) 
 
 Содержит следующий Security Content:
 - Parsing file (+map file)
@@ -59,7 +59,7 @@ Security Content - объекты ArcSight, которые загружаютс�
 - Набор Правил корреляции (Rules). [Подробное описание списка правил корреляции](./Use-cases.docx) (Клиенту самостоятельно необходимо указать назначение уведомлений)
 - Все интересные поля событий преобразованы в формат [Common Event Format](https://community.microfocus.com/cyberres/productdocs/w/connector-documentation/38809/arcsight-common-event-format-cef-implementation-standard)
 
-Подробное описание мапинга полей в файле [Поля ArcSight_JSON.docx](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex/blob/master/Поля%20ArcSight_JSON.docx)
+Подробное описание мапинга полей в файле [Поля ArcSight_JSON.docx](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ArcSight/arcsight_content)
 
 
 ## Долгосрочное хранение логов в S3
@@ -86,7 +86,7 @@ Security Content - объекты ArcSight, которые загружаютс�
 
 5) Завершите установку connector 
 
-6) Скачайте все файлы Security Content из [репозитория](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex)
+6) Скачайте все файлы Security Content [здесь](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ArcSight/arcsight_content)
 
 7) Скопируйте файл `yc.jsonparser.properties` в `<папку установки агента>/current/user/agent/flexagent`
 
