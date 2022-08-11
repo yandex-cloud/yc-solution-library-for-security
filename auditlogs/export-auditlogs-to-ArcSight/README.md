@@ -18,7 +18,7 @@
 
 
 ## Solution description
-The current version of Security Content is available in the [repository](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex). Our support partner is ATB.
+The current version of Security Content is available [here]([https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ArcSight/arcsight_content)). Our support partner is ATB.
 The solution lets you collect, monitor, and analyze audit logs in Yandex.Cloud from the following sources:
 
 - [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
