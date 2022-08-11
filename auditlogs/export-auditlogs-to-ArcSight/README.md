@@ -50,7 +50,7 @@ Description:
 ## Security Content
 Security Content - ArcSight objects that are loaded according to the instructions. All the content has been developed together with our partner ATB, leveraging the long-term expertise of the Yandex.Cloud Security team and our cloud customers.
 
-The current version of Security Content is available in the [repository](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex).
+The current version of Security Content is available [here](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ArcSight/arcsight_content).
 
 The solution contains the following Security Content:
 - Parsing file (and map file).
@@ -86,7 +86,7 @@ For this you need to create two Audit Trails in different S3 buckets:
 
 5) Complete the connector installation. 
 
-6) Download all Security Content files from the [repository](https://gitlab.ast-security.ru:14855/rodion/yandexcloudflex).
+6) Download all Security Content files from [here](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ArcSight/arcsight_content).
 
 7) Copy the yc.jsonparser.properties file to the `<agent installation folder >/current/user/agent/flexagent`.
 
