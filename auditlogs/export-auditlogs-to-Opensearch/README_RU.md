@@ -1,6 +1,6 @@
 # Сбор, мониторинг и анализ аудит логов Yandex Cloud в Opensearch
 
-Картинка с дашбордом------
+![image](https://user-images.githubusercontent.com/85429798/184665197-01f0cbca-78f3-4b32-90f1-ee6a4fa71d8e.png)
 
 ## Version
 
