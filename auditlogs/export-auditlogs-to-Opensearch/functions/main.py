@@ -232,7 +232,7 @@ def configure_kibana():
     data_file = {
         'file': open('/app/include/audit-trail/dashboard.ndjson', 'rb')
     }
-    request_suffix = '/api/saved_objects/_import'
+    request_suffix = '/api/saved_objects/_import?overwrite=true'
     response = requests.post(kibana_server+request_suffix, files=data_file, verify=fals, auth=(elastic_auth_user, elastic_auth_pw), headers={"osd-xsrf":"true", "securitytenant":"at-tenant"})
     if(response.status_code == 200):
         print('Dashboard -- IMPORTED')
