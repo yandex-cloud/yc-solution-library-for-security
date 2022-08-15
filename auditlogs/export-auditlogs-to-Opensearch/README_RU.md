@@ -1,9 +1,55 @@
+# Сбор, мониторинг и анализ аудит логов Yandex Cloud в Opensearch
 
+Картинка с дашбордом------
+
+# Version
+
+**Version-1.1**
+- Changelog:
+- Docker images:
+    - `cr.yandex/sol/s3-opensearch-importer:1.1`
+
+## Описание решения
+Решение позволяет собирать, мониторить и анализировать аудит логи Yandex.Cloud в Opensearch из следующих источников:
+- [Yandex Audit Trails](https://cloud.yandex.ru/docs/audit-trails/)
+
+> Решение является постоянно обновляемым и поддерживаемым Security-командой Yandex.Cloud.
+
+> Важно! По умолчанию данная конструкция предлагает удалять файлы после вычитывания из бакета, но вы можете одновременно хранить аудит логи Audit Trails в S3 на долгосрочной основе и отсылать в Elastic. Для этого необходимо создать два Audit Trails в разных S3 бакетах:
+- Первый бакет будет использоваться только для хранения
+- Второй бакет будет использоваться для интеграции с ArcSight
+
+## Что делает решение
+- ☑️ Разворачивает в инфраструктуре Yandex.Cloud кластер Managed ELK (через Terraform) (в default конфигурации см. п. Terraform)(рассчитать необходимую конфигурацию для вашей инфраструктуры необходимо совместно с Cloud Архитектором)
+- ☑️ Разворачивает COI Instance с контейнером на базе образа s3-elk-importer (`cr.yandex/sol/s3-opensearch-importer:latest`)
+- ☑️ Загружает Security Content в Opensearch (Dashboards, Detection Rules (с alerts), etc.)
+- ☑️ Обеспечивает непрерывную доставку json файлов с аудит логами из Yandex Object Storage в Opensearch
+- ☑️ Создает индексы в двух репликах, настраивает базовую политику rollover (создания новых индексов каждые тридцать дней или по достижению 50ГБ), для дальнейшей настройки в части высокой доступности данных и для настройки снимков данных в S3 - см. [рекомендации](./CONFIGURE-HA.md). 
+
+## Схема решения
+Тут вставить схему решения
+
+## Security Content
+**Security Content** — объекты Opensearch, которые автоматически загружаются решением. Весь контент разработан с учетом опыта Security команды Yandex.Cloud и на основе опыта Клиентов облака.
+
+Содержит следующий Security Content:
+- Dashboard, на котором отражены все use cases и полезная статистика
+- Набор Saved Queries для удобного поиска Security событий
+- Пример Alert на которые настроены оповещения (Клиенту самостоятельно необходимо указать назначение уведомлений)
+- Все интересные поля событий преобразованы в формат [Elastic Common Schema (ECS)](https://www.elastic.co/guide/en/ecs/current/index.html), полная табличка маппинга в файле [Описание объектов](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Описание%20объектов.pdf)
+
+Подробное описание в файле [ECS-mapping.docx](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/ECS-mapping_new.pdf)
+
+## Процесс обновления контента
+Скоро..к следующей версии
 
 # Установка решения с помощью Terraform
 
+По результатам выполнения tf скрипта и ручных действий указанных ниже, в указанный вами opensearch будут загружаться события audit trails из облака и будет загружен security content (dashboard, filters, mapping etc.)
 
+По итогу установки у вас создастся tenant "at-tenant", в котором находятся все объекты
 
+Для установки с помощью terraform перейдите в раздел ---
 
 # Настройка Alerts и Destination
 Алертинг и правила реагирования в Opensearch выполняется с помощью механизма Alerting https://opensearch.org/docs/latest/monitoring-plugins/alerting/index/
@@ -22,3 +68,7 @@
 Здесь представлены мои тестовые примеры файлов для установки: ссылка на папку с docker compose и os dashboard
 
 p.s: не забудьте предоставить необходимые права доступа на файлы с сертификатом и ключем
+
+## Рекомендации по настройке retention, rollover и snapshots:
+
+[Рекомендации по настройке retention, rollover и snapshots](./CONFIGURE-HA.md)

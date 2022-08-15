@@ -2,7 +2,7 @@
 
 По результатам выполнения tf скрипта и ручных действий указанных ниже, в указанный вами opensearch будут загружаться события audit trails из облака и будет загружен security content (dashboard, filters, mapping etc.)
 
-1) Заполните файл `variables.tf` значениями для: opensearch_pass, opensearch_user, opensearch_address, folder_id, cloud_id, token
+1) Заполните файл `variables.tf` значениями для: opensearch_pass, opensearch_user, opensearch_address, folder_id, cloud_id, token. Для установки в существующую подсеть укажите ее id в файле main.tf в переменную coi_subnet_id (по умолчанию создается новая сеть)
 2) Для заполнения поля token создайте [ключ](https://cloud.yandex.ru/docs/iam/operations/authorized-key/create) для сервисного аккаунта для аутентификации в terraform либо используйте ваш OAuth токен yc
 3) Запустите:
 
