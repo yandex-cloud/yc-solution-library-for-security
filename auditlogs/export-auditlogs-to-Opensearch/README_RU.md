@@ -3,7 +3,7 @@
 # Установка решения с помощью Terraform
 
 
-p.s: не забудьте поменять пароль у учетной записи Opensearch, которая была использована для загрузки файлов
+
 
 # Настройка Alerts и Destination
 Алертинг и правила реагирования в Opensearch выполняется с помощью механизма Alerting https://opensearch.org/docs/latest/monitoring-plugins/alerting/index/

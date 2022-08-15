@@ -101,7 +101,7 @@ resource "yandex_storage_bucket" "trail-bucket" {
 # }
 
 module "yc-opensearch-trail" {
-    source                  = "../modules/yc-opensearch-trail/" # path to module yc-elastic-trail
+    source                  = "./modules/yc-opensearch-trail/" # path to module yc-elastic-trail
     folder_id               = var.folder_id
     opensearch_pass         = var.opensearch_pass
     opensearch_address      = var.opensearch_address
