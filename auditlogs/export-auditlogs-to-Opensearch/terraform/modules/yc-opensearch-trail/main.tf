@@ -22,7 +22,7 @@ resource "local_file" "private_key" {
 }
 
 data "template_file" "cloud_init_lin" {
-  template  = file("./modules/yc-elastic-trail/cloud-init_lin.tpl.yaml")
+  template  = file("./modules/yc-opensearch-trail/cloud-init_lin.tpl.yaml")
   vars      =  {
     ssh_key = "${chomp(tls_private_key.ssh.public_key_openssh)}"
   }
@@ -30,7 +30,7 @@ data "template_file" "cloud_init_lin" {
 
 # Создаем docker-declaration
 data "template_file" "docker-declaration" {
-  template  = file("./modules/yc-elastic-trail/docker-declaration.yaml")
+  template  = file("./modules/yc-opensearch-trail/docker-declaration.yaml")
   vars      =  {
     ELASTIC_SERVER      = "${var.opensearch_address}:9200"
     KIBANA_SERVER       = "${var.opensearch_address}:5601"
