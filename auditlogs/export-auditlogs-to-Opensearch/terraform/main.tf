@@ -104,6 +104,7 @@ module "yc-opensearch-trail" {
     source                  = "./modules/yc-opensearch-trail/" # path to module yc-elastic-trail
     folder_id               = var.folder_id
     opensearch_pass         = var.opensearch_pass
+    opensearch_user         = var.opensearch_user
     opensearch_address      = var.opensearch_address
     bucket_name             = yandex_storage_bucket.trail-bucket.bucket
     bucket_folder           = "" # указать название префикса куда trails пишет логи в бакет, например "prefix-trails", если в корень то оставить по умолчанию пустым
