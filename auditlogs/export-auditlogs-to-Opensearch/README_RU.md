@@ -44,16 +44,16 @@
 
 ## Установка решения с помощью Terraform
 
-По результатам выполнения tf скрипта и ручных действий указанных ниже, в указанный вами opensearch будут загружаться события audit trails из облака и будет загружен security content (dashboard, filters, mapping etc.)
+Для установки с помощью terraform перейдите в раздел [terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/add-opensearch-solution/auditlogs/export-auditlogs-to-Opensearch/terraform)
 
-По итогу установки у вас создастся tenant "at-tenant", в котором находятся все объекты
+По результатам выполнения tf скрипта и ручных действий указанных ниже, в указанный вами opensearch будут загружаться события audit trails из облака и будет загружен security content (dashboard, filters, mapping etc.) для работы с ними
 
-Для установки с помощью terraform перейдите в раздел ---
+По итогу установки у вас будет создал tenant "at-tenant", в котором находятся все объекты
 
 ## Настройка Alerts и Destination
 Алертинг и правила реагирования в Opensearch выполняется с помощью механизма Alerting https://opensearch.org/docs/latest/monitoring-plugins/alerting/index/
 
-Наше решение уже загружает пример monitor, вы можете взять его как пример для старта. Перейдите во вкладку Alerting - Monitors и найдите там "test". Нажмите кнопку edit, промотайте вниз и раскройте вкладку triggers и в ней укажите action. Выберите там заранее созданный канал нотификации - https://opensearch.org/docs/latest/notifications-plugin/index/
+Наше решение уже загружает пример monitor, вы можете взять его как пример для старта и сделать алерты по аналогии. Перейдите во вкладку Alerting - Monitors и найдите там "test". Нажмите кнопку edit, промотайте вниз и раскройте вкладку triggers и в ней укажите action. Выберите там заранее созданный канал нотификации (например slack) - https://opensearch.org/docs/latest/notifications-plugin/index/
 
 
 ## Установка Openasearch 
@@ -64,7 +64,7 @@
 Для генерации самоподпсанного SSL сертификата используйте инстуркцию - https://opensearch.org/docs/2.1/security-plugin/configuration/generate-certificates/
 Либо загружите ваш собственный сертификат
 
-Здесь представлены мои тестовые примеры файлов для установки: ссылка на папку с docker compose и os dashboard
+Здесь представлены тестовые примеры файлов для установки opensearch в разделе [deploy-of-opensearch](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/add-opensearch-solution/auditlogs/export-auditlogs-to-Opensearch/deploy-of-opensearch)
 
 p.s: не забудьте предоставить необходимые права доступа на файлы с сертификатом и ключем
 
