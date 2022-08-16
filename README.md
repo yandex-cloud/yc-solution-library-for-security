@@ -30,6 +30,7 @@ https://cloud.yandex.com/en/docs/overview/security/domains/checklist
   - [Encrypting secrets with KMS when transferring the keys to the COI VM container Yandex.Cloud: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/encrypt_and_keys/terraform%2BKMS%2BCOI)
   - [Encrypting a VM disk in the cloud using YC KMS](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/encrypt_and_keys/encrypt_disk_VM)
 - 🔎 Collecting, monitoring, and analyzing audit logs
+  - [Collection, monitoring and analysis of Yandex Cloud audit logs in Opensearch](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-Opensearch )
   - [Collecting, monitoring and analyzing audit logs in Yandex Managed Service for Elasticsearch (ELK)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_main)
   - [Collecting, monitoring, and analyzing audit logs in an external SIEM ArcSight](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ArcSight)
   - [Collecting, monitoring, and analyzing audit logs in an external Splunk](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-Splunk)
