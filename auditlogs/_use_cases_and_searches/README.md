@@ -7,7 +7,7 @@ You can ship audit logs from the service [Audit Trails](https://cloud.yandex.ru/
 
 ## Syntax of file
 Event analysis expressions are prepared in KQL (ElsticSearch) and CloudLogging to choose
-![image](https://user-images.githubusercontent.com/85429798/154081374-843f5c6d-a881-404a-b618-3693f1d3a11b.png)
+![image](https://user-images.githubusercontent.com/85429798/185589916-ffe26b9b-fec4-489c-ae18-72835bfd5b91.png)
 
 ## Example Analysis of Events in Cloud Logging
 ![Screen Shot 2022-02-15 at 17 11 06](https://user-images.githubusercontent.com/85429798/154079879-db576283-3afb-4bc5-a1d7-4e7de9dcb987.png)
