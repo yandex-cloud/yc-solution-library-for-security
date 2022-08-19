@@ -14,3 +14,6 @@ Event analysis expressions are prepared in KQL (ElsticSearch) and CloudLogging t
 
 ## An example of event analysis in ELK
 ![image](https://user-images.githubusercontent.com/85429798/154079995-10c9d330-3e2e-4b7e-bc97-31a8b71611db.png)
+
+## An example of event analysis in YQ
+![image](https://user-images.githubusercontent.com/85429798/185590295-e556e9b9-721b-419f-a864-179b0c2d42ad.png)
