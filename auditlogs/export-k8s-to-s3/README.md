@@ -1,8 +1,6 @@
 ## Export of kubernetes audit logs to s3/object storage
 
 ![image](https://user-images.githubusercontent.com/85429798/186873514-06d204c4-06e8-4239-93be-39817a197f4b.png)
-![image](https://user-images.githubusercontent.com/85429798/186873527-740825c7-337b-410e-93e6-b0f92cb57b52.png)
-
 
 
 Prerequisites:
