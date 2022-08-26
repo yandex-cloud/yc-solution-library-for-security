@@ -1,6 +1,6 @@
 ## Export of kubernetes audit logs to Yandex Data Streams/Kinesis Data Streams
 
-<вставить картинку>
+![image](https://user-images.githubusercontent.com/85429798/186873675-1769f228-d965-406f-b917-165959755333.png)
 
 
 Prerequisites:
