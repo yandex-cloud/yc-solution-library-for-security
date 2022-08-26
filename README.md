@@ -50,6 +50,8 @@ https://cloud.yandex.com/en/docs/overview/security/domains/checklist
   - Collecting, monitoring, and analyzing audit logs:
     - [Analyzing K8s security logs in ELK: audit logs, Policy Engine, Falco](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_k8s)
     - [Exporting Cilium Flow Logs to Object Storage (S3)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/cilium-s3)
+    - [Export of kubernetes audit logs to s3/object storage](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-k8s-to-s3)
+    - [Export of kubernetes audit logs to Yandex Data Streams/Kinesis Data Streams](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-k8s-to-yds)
   - Data encryption and key/secret management in Managed Kubernetes
     - [Secret Management with Secret Manager (Lockbox, Vault)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/encrypt_and_keys/secret-management)
   - Secure configuration of Managed Kubernetes:
