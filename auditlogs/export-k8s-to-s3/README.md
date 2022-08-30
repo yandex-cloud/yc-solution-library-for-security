@@ -6,7 +6,7 @@
 Prerequisites:
 - ✅ Cluster of Managed K8s.
 - ✅ Terraform
-- ✅ Ask cloud support for an alpha flag "LOGS_ALPHA"
+- ✅ Ask cloud support or your architect for an alpha flag "TRIGGERS_CLOUD_LOGS_ALPHA"
 
 ##
 1) If you doing this from Russia just create the file and fill it out like this to use yandex network mirror:
