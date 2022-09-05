@@ -1,0 +1,8 @@
+keycloak_name       = "kc01"
+domain_fqdn         = "yp-lab.edu"
+ws_name             = "ws"
+kc_realm            = "labs"
+kc_ver              = "18.0.0"
+kc_port             = "8443"
+kc_adm_user         = "admin"
+pg_db_user          = "dbuser"

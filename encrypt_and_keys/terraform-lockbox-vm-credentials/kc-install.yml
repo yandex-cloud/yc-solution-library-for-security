@@ -1,0 +1,486 @@
+#cloud-config
+
+datasource:
+  Ec2:
+    strict_id: false
+  my-data:
+    DomainFQDN: ${DomainFQDN}
+    KC_REALM: ${KC_REALM}
+    KC_VER: ${KC_VER}
+    KC_PORT: ${KC_PORT}
+    PG_DB_HOST: ${PG_DB_HOST}
+    PG_DB_NAME: ${PG_DB_NAME}
+    SA_NAME: ${SA_NAME}
+    CLOUD_ID: ${CLOUD_ID}
+    FOLDER_ID: ${FOLDER_ID}
+    SECRET_NAME: ${SECRET_NAME}
+ssh_pwauth: yes
+users:
+  - name: ubuntu
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh-authorized-keys:
+      - "${ssh_key}"
+packages:
+  - unzip
+write_files:
+  - content: |
+      #!/bin/bash
+      apt-get update
+      apt-get install -y bind9
+      apt-get install -y dnsutils
+      apt-get install -y unzip
+
+      # Getting secrets from Lockbox
+
+      # Installing yc cli
+      sudo curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh -o /root/install.sh
+      sudo chmod 777 /root/install.sh
+      sudo /root/install.sh -s -a
+
+      # Installing jq
+      sudo apt-get -y install jq
+      ls
+    path: "/root/get_tools.sh"
+    permissions: "0740"
+  - content: |
+      #!/bin/bash
+      sleep 30
+      hname=$(hostname)
+      hostnamectl set-hostname $(hostname).${DomainFQDN}
+
+      source /root/.bashrc
+
+      # Configuring yc
+      sudo /root/yandex-cloud/bin/yc config profile create kc-profile
+      sudo /root/yandex-cloud/bin/yc config set cloud-id ${CLOUD_ID}
+      sudo /root/yandex-cloud/bin/yc config set folder-id ${FOLDER_ID}
+
+      # Getting IAM-token
+      
+      export IAM_TOKEN=$(sudo /root/yandex-cloud/bin/yc iam create-token)
+
+      function parse_yaml {
+        local prefix=$2
+        local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
+        sed -ne "s|^\($s\):|\1|" \
+            -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
+            -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
+        awk -F$fs '{
+          indent = length($1)/2;
+          vname[indent] = $2;
+          for (i in vname) {if (i > indent) {delete vname[i]}}
+          if (length($3) > 0) {
+            vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
+            printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
+          }
+        }'
+      }
+
+      sudo /root/yandex-cloud/bin/yc lockbox secret get --name ${SECRET_NAME} --format yaml > /root/secrets.yaml
+
+      eval $(parse_yaml /root/secrets.yaml)
+      
+      sudo curl -X GET -H "Authorization: Bearer $${IAM_TOKEN}" \
+      https://payload.lockbox.api.cloud.yandex.net/lockbox/v1/secrets/$id/payload > /root/secrets.json
+
+      # Getting secrets from json
+      sudo echo "export KC_ADM_USER=$(cat /root/secrets.json | jq '.entries[0].key')" > /root/secrets.sh
+      sudo echo "export KC_ADM_PASS=$(cat /root/secrets.json | jq '.entries[0].textValue')" >> /root/secrets.sh 
+      sudo echo "export PG_DB_USER=$(cat /root/secrets.json | jq '.entries[1].key')" >> /root/secrets.sh
+      sudo echo "export PG_DB_PASS=$(cat /root/secrets.json | jq '.entries[1].textValue')" >> /root/secrets.sh
+      
+      chmod 755 /root/secrets.sh
+      source /root/secrets.sh
+
+      # Getting IP Address
+      ip4=$(/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1)
+      fwd=$(echo $ip4 | awk '{split($1,p,"."); $1=p[1]"."p[2]"."p[3]"."} 1')"2"
+      DomainName=$(echo ${DomainFQDN} | cut -f1 -d".")
+
+      # Adding x.x.x.2 forwarder
+      sudo chmod 777 /etc/bind/named.conf.options
+      sudo cat <<EOF > /etc/bind/named.conf.options
+        options {
+                directory "/var/cache/bind";
+                // If there is a firewall between you and nameservers you want
+                // to talk to, you may need to fix the firewall to allow multiple
+                // ports to talk.  See http://www.kb.cert.org/vuls/id/800113
+                // If your ISP provided one or more IP addresses for stable
+                // nameservers, you probably want to use them as forwarders.
+                // Uncomment the following block, and insert the addresses replacing
+                // the all-0's placeholder.
+                forwarders {
+                $fwd;
+                };
+                //========================================================================
+                // If BIND logs error messages about the root key being expired,
+                // you will need to update your keys.  See https://www.isc.org/bind-keys
+                //========================================================================
+                dnssec-validation auto;
+                listen-on-v6 { any; };
+      };
+      EOF
+      sudo chmod 644 /etc/bind/named.conf.options
+
+      # Adding DNS Zones
+      chmod 777 /etc/bind/named.conf.local
+
+      cat <<EOF >> /etc/bind/named.conf.local
+      zone "${DomainFQDN}" {
+        type master;
+        file "/etc/bind/db.${DomainFQDN}";
+      };
+      zone "10.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.10";
+      };
+      zone "192.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.192";
+      };
+      zone "172.in-addr.arpa" {
+        type master;
+        file "/etc/bind/db.172";
+      };
+      EOF
+      chmod 644 /etc/bind/named.conf.local
+
+      # Configuring DNS Primary zone
+      cp /etc/bind/db.local /etc/bind/db.${DomainFQDN}
+
+      chmod 777 /etc/bind/db.${DomainFQDN}
+      cat <<EOF > /etc/bind/db.${DomainFQDN}
+      ;
+      ; BIND data file for ${DomainFQDN}
+      ;
+      \$TTL    604800
+      @       IN      SOA     $DomainName. root.${DomainFQDN}. (
+                                    2         ; Serial
+                              604800         ; Refresh
+                                86400         ; Retry
+                              2419200         ; Expire
+                              604800 )       ; Negative Cache TTL
+      ;
+      @       IN      NS      ns.${DomainFQDN}.
+      @       IN      A       $ip4
+      @       IN      AAAA    ::1
+      ns      IN      A       $ip4
+      $hname  IN      A       $ip4
+      keycloak IN     A       $ip4
+      crl     IN     A       $ip4
+      EOF
+      chmod 644 /etc/bind/db.${DomainFQDN}
+
+      # Configuring DNS Reverse Zones
+      cp /etc/bind/db.127 /etc/bind/db.10
+      chmod 777 /etc/bind/db.10
+      cat <<EOF > /etc/bind/db.10
+      ;
+      ; BIND reverse data file for 10.x.x.x net
+      ;
+      \$TTL    604800
+      @       IN      SOA     $DomainName. root.${DomainFQDN}. (
+                                    1         ; Serial
+                              604800         ; Refresh
+                                86400         ; Retry
+                              2419200         ; Expire
+                              604800 )       ; Negative Cache TTL
+      ;
+      @       IN      NS      ns.
+      10   IN      PTR     ns.${DomainFQDN}.
+      EOF
+      chmod 644 /etc/bind/db.10
+
+      cp /etc/bind/db.127 /etc/bind/db.192
+      chmod 777 /etc/bind/db.192
+      cat <<EOF > /etc/bind/db.192
+      ;
+      ; BIND reverse data file for 192.x.x.x net
+      ;
+      \$TTL    604800
+      @       IN      SOA     $DomainName. root.${DomainFQDN}. (
+                                    1         ; Serial
+                              604800         ; Refresh
+                                86400         ; Retry
+                              2419200         ; Expire
+                              604800 )       ; Negative Cache TTL
+      ;
+      @       IN      NS      ns.
+      192   IN      PTR     ns.${DomainFQDN}.
+      EOF
+      chmod 644 /etc/bind/db.192
+
+      cp /etc/bind/db.127 /etc/bind/db.172
+      chmod 777 /etc/bind/db.172
+      cat <<EOF > /etc/bind/db.172
+      ;
+      ; BIND reverse data file for 172.x.x.x net
+      ;
+      \$TTL    604800
+      @       IN      SOA     $DomainName. root.${DomainFQDN}. (
+                                    1         ; Serial
+                              604800         ; Refresh
+                                86400         ; Retry
+                              2419200         ; Expire
+                              604800 )       ; Negative Cache TTL
+      ;
+      @       IN      NS      ns.
+      172   IN      PTR     ns.${DomainFQDN}.
+      EOF
+      chmod 644 /etc/bind/db.172
+
+      # Restarting bind
+      systemctl restart bind9
+
+      chmod 777 /etc/netplan/01-netcfg.yaml
+      sudo cat <<EOF >> /etc/netplan/01-netcfg.yaml
+            nameservers:
+                addresses: [$ip4]
+      EOF
+      chmod 644 /etc/netplan/01-netcfg.yaml
+      netplan apply
+
+      # Installing pre-requisites
+      apt-get install -y wget
+      apt-get install -y ca-certificates
+      apt-get install -y apache2
+
+      # Creating catalogs
+      mkdir /opt/ca
+      cd /opt/ca
+      chmod 777 /opt/ca
+      mkdir certs crl newcerts private
+      touch index.txt
+      echo 1000 > serial
+      echo 20 > /opt/ca/crlnumber
+      chmod 755 /opt/ca
+      chmod 700 private
+
+      # Downloading OpenSSL config fo root ca
+      wget https://raw.githubusercontent.com/Sayanaro/YandexCloud-Security-Course-KeyCloackVersion/master/init/openssl.cnf
+
+      # Creating self-signed Root CA certificate with 10 years lifetime
+      openssl req -new -x509 -newkey rsa:4096 -days 3650 -config openssl.cnf -sha256 -extensions v3_ca -nodes -x509 \
+          -subj "/C=RU/ST=Moscow/L=Moscow/O=Yandex Pacticum/OU=Lab/CN=LAB CLASS1 Root CA" \
+          -keyout /opt/ca/private/ca.key.pem -out /opt/ca/certs/ca.cert.pem
+
+      echo "crlDistributionPoints = URI:http://crl.${DomainFQDN}/rootca.crl" >> /opt/ca/openssl.cnf
+      echo "authorityInfoAccess = caIssuers;URI:http://crl.${DomainFQDN}/ca.crt" >> /opt/ca/openssl.cnf
+
+      openssl ca -config /opt/ca/openssl.cnf \
+            -gencrl -out /opt/ca/crl/rootca.crl.pem
+
+      # Making ca cert trustable
+      cp /opt/ca/certs/ca.cert.pem /usr/local/share/ca-certificates/ca.cert.crt
+      update-ca-certificates
+
+      # Creating Intermediate Issuing CA
+      mkdir /opt/ca/intermediate
+
+      cd /opt/ca/intermediate
+      mkdir certs crl csr newcerts private
+      chmod 777 /opt/ca/intermediate
+      touch index.txt
+      echo 1000 > serial
+      echo 1000 > /opt/ca/intermediate/crlnumber
+      wget https://raw.githubusercontent.com/Sayanaro/YandexCloud-Security-Course-KeyCloackVersion/master/init/intermediate/openssl.cnf
+
+      chmod 755 /opt/ca/intermediate
+      chmod 700 private
+
+      cd /opt/ca
+      # Creating Intermediate CA PKCS#10 request
+      openssl req -new -newkey rsa:4096 -config /opt/ca/intermediate/openssl.cnf -sha256 -nodes \
+          -subj "/C=RU/ST=Moscow/L=Moscow/O=Yandex Pacticum/OU=Lab/CN=LAB Issuing CA" \
+          -keyout /opt/ca/intermediate/private/intermediate.key.pem -out /opt/ca/intermediate/csr/intermediate.csr.pem
+
+      chmod 400 /opt/ca/intermediate/private/intermediate.key.pem
+
+      # Signing Intermediate CA Request
+      openssl ca -batch -config openssl.cnf -extensions v3_intermediate_ca \
+            -days 1825 -notext -md sha256 \
+            -in /opt/ca/intermediate/csr/intermediate.csr.pem \
+            -out /opt/ca/intermediate/certs/intermediate.cert.pem
+
+      chmod 444 intermediate/certs/intermediate.cert.pem
+
+      # Creating chain
+      cat /opt/ca/intermediate/certs/intermediate.cert.pem \
+            /opt/ca/certs/ca.cert.pem > /opt/ca/intermediate/certs/ca-chain.cert.pem
+
+      # Adding CDP and AIA extensions
+      echo "crlDistributionPoints = URI:http://crl.${DomainFQDN}/intermediate.crl" >> /opt/ca/intermediate/openssl.cnf
+      echo "authorityInfoAccess = caIssuers;URI:http://crl.${DomainFQDN}/intermediate.crt" >> /opt/ca/intermediate/openssl.cnf
+
+      # Creating Intermediate CA CRL
+      openssl ca -config /opt/ca/intermediate/openssl.cnf \
+            -gencrl -out /opt/ca/intermediate/crl/intermediate.crl.pem
+
+      cp /opt/ca/intermediate/certs/intermediate.cert.pem /usr/local/share/ca-certificates/intermediate.cert.crt
+      update-ca-certificates
+
+      # Configuring Apache2
+      sudo chmod 777 /etc/apache2/sites-available/000-default.conf
+
+      cat <<EOF > /etc/apache2/sites-available/000-default.conf
+      <VirtualHost *:80>
+              # Basic server information
+              ServerAdmin user@yantoso.com
+              ServerName crl.${DomainFQDN}
+
+              # Set-up serving directory
+              DocumentRoot /var/www/crl.${DomainFQDN}
+              <Directory /var/www/crl.${DomainFQDN}/>
+                      Options Indexes
+                      AllowOverride None
+              </Directory>
+
+              # Setup logs
+              LogLevel warn
+              ErrorLog /var/log/apache2/crl.${DomainFQDN}/error.log
+              CustomLog /var/log/apache2/crl.${DomainFQDN}/access.log combined
+      </VirtualHost>
+      EOF
+
+      sudo chmod 644 /etc/apache2/sites-available/000-default.conf
+
+      mkdir /var/www/crl.${DomainFQDN}/
+      mkdir /var/log/apache2/crl.${DomainFQDN}/
+      chown root.adm /var/log/apache2/crl.${DomainFQDN}/
+      chmod 750 /var/log/apache2/crl.${DomainFQDN}/
+
+      # Copying CRL and certificates to Apache folder
+      cp /opt/ca/intermediate/crl/intermediate.crl.pem /var/www/crl.${DomainFQDN}/intermediate.crl
+      cp /opt/ca/intermediate/certs/intermediate.cert.pem /var/www/crl.${DomainFQDN}/intermediate.crt
+      cp /opt/ca/crl/rootca.crl.pem /var/www/crl.${DomainFQDN}/rootca.crl
+      cp /opt/ca/certs/ca.cert.pem /var/www/crl.${DomainFQDN}/ca.crt
+      cp /opt/ca/intermediate/certs/ca-chain.cert.pem /var/www/crl.${DomainFQDN}/
+      systemctl restart apache2
+
+      cd /opt/ca
+
+      # Creating certificate for KeyCloak
+      echo "subjectAltName = DNS:$(hostname)" >> /opt/ca/intermediate/openssl.cnf
+
+      openssl req -new -sha256 -newkey rsa:2048 -config /opt/ca/intermediate/openssl.cnf -nodes \
+          -subj "/C=RU/ST=Moscow/L=Moscow/O=Yandex Pacticum/OU=Lab/CN=$(hostname)" \
+          -addext "subjectAltName = DNS:$(hostname)" \
+          -keyout /opt/ca/intermediate/private/$(hostname).key.pem  -out /opt/ca/intermediate/csr/$(hostname).csr.pem
+
+      openssl ca -batch -config /opt/ca/intermediate/openssl.cnf \
+            -extensions server_cert -days 365 -notext -md sha256 \
+            -in /opt/ca/intermediate/csr/$(hostname).csr.pem \
+            -out /opt/ca/intermediate/certs/$(hostname).cert.pem
+      chmod 777 /opt/ca/intermediate/certs/$(hostname).cert.pem
+
+      sed -i '$ d' /opt/ca/intermediate/openssl.cnf
+
+      # Adding chan to cert
+      cat /opt/ca/intermediate/certs/$(hostname).cert.pem \
+            /opt/ca/intermediate/certs/intermediate.cert.pem \
+            /opt/ca/certs/ca.cert.pem > /opt/ca/intermediate/certs/ca-chain-cert.pem
+
+      cp /opt/ca/intermediate/certs/ca-chain-cert.pem /var/www/crl.${DomainFQDN}/
+      systemctl restart apache2
+
+      # KeyCloak installation script by Alex Kitaev
+
+      # Include variables
+      source kc-data.sh
+
+      while [ ! -f /opt/ca/intermediate/certs/$(hostname).cert.pem ]
+      do
+        sleep 2 # or less like 0.2
+      done
+
+      # Change Timezone
+      timedatectl set-timezone Europe/Moscow
+
+      # Install Packages
+      apt-get install -y unzip openjdk-17-jre
+
+      # This lab emulates secured enterprise environment.
+      # So we use local 2-tier PKI.
+      # All paths are hardcoded.
+      # ATEENTION!
+      # NEVER DEPLOY CAs AND IDP IN ONE SERVER!!!
+
+      # Get Keycloak distro and put files to the right place
+      curl -sLO https://github.com/keycloak/keycloak/releases/download/${KC_VER}/keycloak-${KC_VER}.zip
+      unzip -q keycloak-${KC_VER}.zip
+      rm -f keycloak-${KC_VER}/bin/*.bat
+      mkdir -p /opt/keycloak
+      cp -R keycloak-${KC_VER}/* /opt/keycloak
+      rm -rf keycloak-${KC_VER}/ keycloak-${KC_VER}.zip 
+
+      # Import configuration from realm config file
+      export PATH=$PATH:/opt/keycloak/bin
+      kc.sh build
+      cp /opt/ca/intermediate/certs/$(hostname).cert.pem /opt/keycloak
+      cp /opt/ca/intermediate/private/$(hostname).key.pem /opt/keycloak
+
+      # Prepare systemd things
+      groupadd keycloak
+      useradd -r -g keycloak -d /opt/keycloak -s /sbin/nologin keycloak
+      chown -R keycloak:keycloak /opt/keycloak
+      chmod o+x /opt/keycloak/bin/
+
+      cat <<EOF > /lib/systemd/system/keycloak.service
+      [Unit]
+      Description=Keycloak Service
+      After=network.target
+
+      [Service]
+      User=keycloak
+      Group=keycloak
+      PIDFile=/var/run/keycloak/keycloak.pid
+      WorkingDirectory=/opt/keycloak
+      Environment="KEYCLOAK_ADMIN=$KC_ADM_USER"
+      Environment="KEYCLOAK_ADMIN_PASSWORD=$KC_ADM_PASS"
+      ExecStart=/opt/keycloak/bin/kc.sh start \\
+        --hostname=$(hostname) \\
+        --https-certificate-file=/opt/keycloak/$(hostname).cert.pem \\
+        --https-certificate-key-file=/opt/keycloak/$(hostname).key.pem \\
+        --db-url-database=${PG_DB_NAME} \\
+        --db-url-host=${PG_DB_HOST} \\
+        --db-username=$PG_DB_USER \\
+        --db-password=$PG_DB_PASS \\
+        --hostname-strict=true \\
+        --http-enabled=false \\
+        --https-protocols=TLSv1.3,TLSv1.2 \\
+        --https-port=${KC_PORT} \\
+        --log-level=INFO
+
+      [Install]
+      WantedBy=multi-user.target
+      EOF
+
+      # Start Keycloak via systemd
+      systemctl daemon-reload
+      sleep 3
+      systemctl start keycloak
+      systemctl enable keycloak
+
+      # Waiting until KC has been started
+      while :; do
+        curl -sf "https://$(hostname):${KC_PORT}" -o /dev/null && break
+        sleep 10
+      done
+
+      # Removing SA with bindings, yc profile and all temp files with secrets.
+      export IAM_TOKEN=$(sudo /root/yandex-cloud/bin/yc iam create-token)
+      sudo /root/yandex-cloud/bin/yc iam service-account delete --name ${SA_NAME}
+      sudo rm -rf /root/*
+      ls 
+      
+    path: "/root/guest_prep.sh"
+    permissions: "0740"
+runcmd:
+  - sleep 30
+  - sudo -i
+  - /root/get_tools.sh
+  - sudo -i
+  - source "/root/.bashrc"
+  - sudo -i
+  - /root/guest_prep.sh
