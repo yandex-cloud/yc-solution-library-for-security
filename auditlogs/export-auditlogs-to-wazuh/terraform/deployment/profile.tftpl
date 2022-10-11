@@ -1,0 +1,23 @@
+#cloud-config
+users:
+  - name: ${username}
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - ${public_key}
+write_files:
+  - path: /etc/profile.d/wazuh.sh
+    permissions: "0755"
+    content: |
+        export YANDEX_TRAIL_BUCKET="${bucket_name}"
+        export YANDEX_TRAIL_BUCKET_PATH="${bucket_path}"
+        export AWS_ACCESS_KEY_ID="${aws_key_id}"
+        export AWS_SECRET_ACCESS_KEY="${aws_secret_access_key}"
+        export AWS_DEFAULT_REGION="ru-central1"
+        export DEBUG=0
+runcmd:
+  - "chmod +x /etc/profile.d/wazuh.sh"
+  - echo ". /etc/profile.d/wazuh.sh" >> /etc/environment
+package_update: true
+package_upgrade: true

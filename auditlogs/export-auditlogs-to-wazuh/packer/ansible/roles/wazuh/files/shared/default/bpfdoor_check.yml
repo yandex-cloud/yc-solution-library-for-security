@@ -1,0 +1,23 @@
+policy:
+  id: "bpfdoor_check"
+  file: "bpfdoor_check.yml"
+  name: "BPFDoor backdoor malware check"
+  description: "Checking BPFDoor malware infection for Unix/Linux based systems."
+
+requirements:
+  title: "Checking for BPFDoor observables on Unix/Linux based systems."
+  description: "Check that system is Unix/Linux based."
+  condition: any
+  rules:
+    - 'f:/etc/passwd'
+
+checks:
+  - id: 19900
+    title: "Check for BPFDoor malware observables in the \"/var/run/\" directory"
+    description: "Check for BPFdoor artifacts on Unix/Linux based systems."
+    condition: none
+    rules:
+     - 'c:find /var/run/ -name "haldrund.pid" -> r:/var/run/haldrund.pid$'
+     - 'c:find /var/run/ -name "kdevrund.pid" -> r:/var/run/kdevrund.pid$'
+     - 'c:find /var/run/ -name "xinetd.lock" -> r:/var/run/xinetd.lock$'
+     - 'c:find /var/run/ -name "syslogd.reboot" -> r:/var/run/syslogd.reboot$'
