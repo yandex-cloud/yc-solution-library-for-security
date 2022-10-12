@@ -34,6 +34,7 @@ https://cloud.yandex.com/en/docs/overview/security/domains/checklist
   - [Collecting, monitoring and analyzing audit logs in Yandex Managed Service for Elasticsearch (ELK)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_main)
   - [Collecting, monitoring, and analyzing audit logs in an external SIEM ArcSight](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ArcSight)
   - [Collecting, monitoring, and analyzing audit logs in an external Splunk](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-Splunk)
+  - [Collecting, monitoring, and analyzing audit logs in an external Wazuh](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-wazuh/README.md)
   - [Use cases and important security events in audit logs](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/_use_cases_and_searches)
   - [Trails-function-detector: Alerts and response to Information Security events in Audit Trails using Cloud Logging and Cloud Functions + Telegram](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/trails-function-detector)
   - [Monitoring Audit Trails and events in Yandex Cloud Monitoring](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/trail_monitoring)
