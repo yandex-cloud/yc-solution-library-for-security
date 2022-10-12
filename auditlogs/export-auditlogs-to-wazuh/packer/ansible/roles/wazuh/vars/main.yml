@@ -1,0 +1,35 @@
+packages_to_install:
+    - python3-pip
+    - awscli
+    - apt-transport-https
+    - curl
+    - lsb-release
+    - unzip
+    - wget
+    - libcap2-bin
+    - software-properties-common
+    - gnupg2
+    - net-tools
+    - htop
+    - acl
+pip_packages_to_install:
+    - docker==4.2.0
+    - boto3
+    - yandexcloud
+
+wazuh_pip_packages:
+    - clamd
+    - yandexcloud
+
+clamav_packages:
+    - clamav-daemon
+    - clamav-freshclam
+    - clamav
+
+wazuh_version: "4.3"
+yandex_wazuh_app_url: "https://artifacts.comcloud.xyz/wazuh-1.2.0.zip"
+yandex_wodle_url: "https://artifacts.comcloud.xyz/yandex.py"
+local_mirror: true
+local_mirror_url: "clamav.comcloud.xyz"
+use_clamav: true
+allow_world_readable_tmpfiles: true

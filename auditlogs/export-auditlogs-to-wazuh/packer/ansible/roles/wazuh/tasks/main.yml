@@ -1,0 +1,226 @@
+---
+- name: "Update Package Cache"
+  apt:
+    update_cache: true
+
+- name: "Install missing packages"
+  ansible.builtin.package:
+    state: "present"
+    name: "{{ item }}"
+  with_items: "{{ packages_to_install }}"
+
+- name: "Install pip missing packages"
+  ansible.builtin.pip:
+    name: "{{ item }}"
+  with_items: "{{ pip_packages_to_install }}"
+
+- name: "Download Wazuh all in one installer"
+  ansible.builtin.get_url:
+    url: "https://packages.wazuh.com/{{ wazuh_version }}/wazuh-install.sh"
+    dest: "/var/wazuh-install.sh"
+    mode: "0777"
+
+- name: "Install Wazuh all in one"
+  ansible.builtin.shell: "/var/wazuh-install.sh -a"
+  args:
+    chdir: "/var"
+
+- name: "Backup installations archive from remote to local"
+  ansible.builtin.fetch:
+    src: "/var/wazuh-install-files.tar"
+    dest: "."
+
+- name: "Copy ossec config"
+  ansible.builtin.template:
+    src: "ossec.j2"
+    dest: "/var/ossec/etc/ossec.conf"
+    owner: "root"
+    group: "wazuh"
+    backup: true
+
+- name: "Copy local_decoder.xml"
+  ansible.builtin.copy:
+    src: "decoders/local_decoder.xml"
+    dest: "/var/ossec/etc/decoders/local_decoder.xml"
+    owner: "root"
+    group: "wazuh"
+    backup: true
+
+- name: "Copy Wazuh rules files"
+  ansible.builtin.copy:
+    src: 'rules'
+    dest: '/var/ossec/etc'
+    owner: "root"
+    group: "wazuh"
+    backup: true
+    mode: 0644
+
+- name: "Copy shared local_internal_options"
+  ansible.builtin.copy:
+    src: "shared"
+    dest: "/var/ossec/etc"
+    owner: "root"
+    group: "wazuh"
+    backup: true
+
+- name: "Copy yandex wodle"
+  ansible.builtin.copy:
+    src: "wodle/yandex"
+    dest: "/var/ossec/wodles"
+    owner: "root"
+    group: "wazuh"
+    backup: true
+    mode: u+rwx,g+rwx,o-rwx
+
+- name: "Copy yandex clamav wodle"
+  ansible.builtin.copy:
+    src: "wodle/yandex-clamav"
+    dest: "/var/ossec/wodles"
+    owner: "root"
+    group: "wazuh"
+    backup: true
+    mode: u+rwx,g+rwx,o-rwx
+
+- name: "Download yandex woodle"
+  ansible.builtin.get_url:
+    url: "{{ yandex_wodle_url }}"
+    dest: "/var/ossec/wodles/yandex/yandex.py"
+    group: "wazuh"
+    owner: "wazuh"
+    mode: u+rwx,g+rwx,o-rwx
+
+- name: "Backup wazuh-install-files to /var/ossec/"
+  ansible.builtin.copy:
+    src: "/var/wazuh-install-files.tar"
+    dest: "/var/ossec/wazuh-install-files.tar"
+    remote_src: true
+
+- name: "State for wazuh-install-files.tar"
+  stat:
+    path: "/var/wazuh-install-files.tar"
+  register: wazuh_install_files
+
+- name: "Clean wazuh-install-files.tar"
+  file:
+    path: "/var/{{ item }}"
+    state: absent
+  when: wazuh_install_files.stat.exists
+  loop:
+    - wazuh-install-files.tar
+    - wazuh-install.sh
+
+- name: "Install ClamAV packages"
+  ansible.builtin.package:
+    state: "present"
+    name: "{{ item }}"
+  with_items: "{{ clamav_packages }}"
+  when: use_clamav | bool
+
+- name: "Install pip packages for internal Wazuh python"
+  ansible.builtin.pip:
+    name: "{{ item }}"
+    executable: "/var/ossec/framework/python/bin/pip3"
+  with_items: "{{ wazuh_pip_packages }}"
+  when: use_clamav | bool
+
+- name: "Start and Enable clamav-freshclam"
+  systemd:
+    name: clamav-freshclam
+    state: started
+    enabled: true
+    daemon-reload: true
+  when: use_clamav | bool
+
+- name: "Start and Enable clamav-daemon"
+  systemd:
+    name: clamav-daemon
+    state: started
+    enabled: true
+    daemon-reload: true
+  when: use_clamav | bool
+
+- name: "Check freshclam.dat"
+  stat:
+    path: "/var/lib/clamav/freshclam.dat"
+  when: use_clamav | bool
+  register: freshclam
+
+- name: "Delete freshclam.dat"
+  file:
+    path: "/var/lib/clamav/freshclam.dat"
+    state: absent
+  when: freshclam.stat.exists and use_clamav | bool
+
+- name: "Copy freshclam config"
+  ansible.builtin.template:
+    src: "freshclam.j2"
+    dest: "/etc/clamav/freshclam.conf"
+    owner: "clamav"
+    group: "clamav"
+  when: use_clamav | bool
+  notify:
+    - "Restart clamav-freshclam"
+    - "Restart clamav-daemon"
+
+- name: "Stop clamav-freshclam"
+  systemd:
+    name: clamav-freshclam
+    state: stopped
+    enabled: true
+    daemon-reload: true
+  when: use_clamav | bool
+
+- name: "Update clamav"
+  ansible.builtin.shell: freshclam
+  when: use_clamav | bool
+  notify:
+    - "Restart clamav-freshclam"
+    - "Restart clamav-daemon"
+
+- name: "Creates a cron file under /etc/cron.d for wazuh-indexer"
+  ansible.builtin.cron:
+    name: "check_wazuh_indexer"
+    weekday: "*"
+    minute: "5"
+    hour: "*"
+    user: root
+    job: "/usr/bin/systemctl is-active  --quiet wazuh-indexer.service || /usr/bin/systemctl start wazuh-indexer.service"
+    cron_file: check_wazuh_idexer
+
+- name: "Remove old Wazuh plugin"
+  become: true
+  become_method: su
+  become_exe: sudo su -
+  become_flags: '-s /bin/bash'
+  become_user: wazuh-dashboard
+  ansible.builtin.shell: "/usr/share/wazuh-dashboard/bin/opensearch-dashboards-plugin remove wazuh"
+  args:
+    chdir: "/tmp"
+  when: yandex_wazuh_app_url is defined
+
+- name: "Install Yandex Wazuh plugin"
+  become: true
+  become_exe: sudo su -
+  become_user: wazuh-dashboard
+  become_method: su
+  become_flags: '-s /bin/bash'
+  ansible.builtin.shell: "/usr/share/wazuh-dashboard/bin/opensearch-dashboards-plugin install {{ yandex_wazuh_app_url }}"
+  args:
+    chdir: "/tmp"
+  when: yandex_wazuh_app_url is defined
+  notify:
+    - "Restart wazuh-dashboard"
+
+- name: "Analyzing home directory"
+  find:
+    paths: "/home/ubuntu"
+    patterns: "~*"
+    use_regex: true
+    file_type: directory
+  register: for_delete
+
+- name: "Cleanup home directory"
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ for_delete.files }}"

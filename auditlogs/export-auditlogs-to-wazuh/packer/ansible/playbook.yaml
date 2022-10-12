@@ -1,0 +1,7 @@
+---
+# playbook.yml
+- name: 'Provision Image'
+  hosts: default
+  become: true
+  roles:
+      - role: "roles/wazuh"

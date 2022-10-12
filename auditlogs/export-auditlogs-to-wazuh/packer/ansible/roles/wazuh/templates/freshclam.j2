@@ -1,0 +1,29 @@
+DatabaseOwner clamav
+UpdateLogFile /var/log/clamav/freshclam.log
+LogVerbose false
+LogSyslog false
+LogFacility LOG_LOCAL6
+LogFileMaxSize 0
+LogRotate true
+LogTime true
+Foreground false
+Debug false
+MaxAttempts 5
+DatabaseDirectory /var/lib/clamav
+ConnectTimeout 30
+ReceiveTimeout 0
+TestDatabases yes
+ScriptedUpdates yes
+CompressLocalDatabase no
+Bytecode true
+NotifyClamd /etc/clamav/clamd.conf
+# Check for new database 24 times a day
+Checks 24
+{% if local_mirror_url is defined and local_mirror | bool %}
+DatabaseMirror {{ local_mirror_url }}
+{% else %}
+DatabaseMirror db.local.clamav.net
+DatabaseMirror database.clamav.net
+DNSDatabaseInfo current.cvd.clamav.net
+{% endif %}
+

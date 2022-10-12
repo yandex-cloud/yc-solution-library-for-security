@@ -51,3 +51,8 @@ operations/variable-scripts/variable.template.json
 operations/variable-scripts/variable.json
 
 *.kubeconfig*
+.idea/
+default/var/wazuh-install-files.tar
+default/var/wazuh-install-files
+rules/
+!shared/default/
