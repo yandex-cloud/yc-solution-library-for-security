@@ -101,7 +101,7 @@ export YC_TOKEN=$(yc iam create-token)
 export YC_FOLDER_ID=$(yc config get folder-id)
 
 ```
-После этого запускаем сборку образа(запускаем в папке `packer`)
+После этого перейдите обратно в директорию packer и запускаем сборку образа(запускаем в папке `packer`)
 ```shell
 packer build .
 ```
