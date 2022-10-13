@@ -139,6 +139,11 @@ terraform apply
 ## Логины и пароли
 Все логины и пароли хранятся локально на  сервере в архиве `/var/ossec/wazuh-install-files.tar`
 Подключитесь по ssh к серверу, перейдите в папку /var/ossec/ и распакуйте архив.
+
+```shell
+ssh ubuntu@<ip address>
+```
+
 ## Схема 
 
 ![Yandex Trail](./img/wazuh_yandex.png)
