@@ -1,6 +1,3 @@
-output "lb_ip" {
-  value = module.lb.listener
-}
 output "public_ip" {
   value = module.vm.vm_public_ip
 }
