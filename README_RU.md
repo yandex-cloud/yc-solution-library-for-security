@@ -20,6 +20,7 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
   - [Пример создания site-to-site VPN соединения с Yandex Cloud: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/network-sec/vpn/README_RU.md)
 - 🔑 Аутентификация и управление доступом
   - [IAM модуль (с примерами использования)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auth_and_access/iam#identity-and-access-management-iam-terraform-module-for-yandexcloud)
+  - [Скрипт синхронизации пользователей и групп LDAP]()
 - 🦠 Защита от вредоносного кода
   - [Развертывание Kaspersky Antivirus в Yandex.Cloud (Compute Instance, COI)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/malware-defense/kaspersy-install-in-yc/README_RU.md)
 - 🐞 Управление уязвимостями
