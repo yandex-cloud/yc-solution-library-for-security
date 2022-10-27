@@ -46,7 +46,7 @@ data "yandex_organizationmanager_saml_federation_user_account" fed_user {
 # }
 
 locals {
-  users = flatten([for s in split("\n",("${file("${var.kc_user_file}")}")) : regex("(.*):",s) if s != ""])
+  users = flatten([for s in split("\n",("${file("${path.module}/kc-users.lst")}")) : regex("(.*):",s) if s != ""])
 }
 
 /*

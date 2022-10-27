@@ -2,9 +2,14 @@
 # Keycloak VM Resources
 # =====================
 
+resource "time_sleep" "wait_60_seconds" {
+  create_duration = "60s"
+}
+
 resource "yandex_vpc_network" "default" {
   name = "default-vpc"
   folder_id = var.folder_id
+  depends_on = [time_sleep.wait_60_seconds]
 }
 
 resource "yandex_vpc_subnet" "vm_subnet" {
@@ -122,32 +127,32 @@ resource "yandex_compute_instance" "vm_instance" {
 
   # KC provisioning script body
   provisioner "file" {
-    source = "./module_keycloak/kc-setup.sh"
+    source = "${path.module}/kc-setup.sh"
     destination = "kc-setup.sh"
   }
 
   # KC LE certificate (public keys chain )
   provisioner "file" {
-    source = var.le_cert_pub_key
+    source = "${path.module}/${var.le_cert_pub_key}"
     destination = "cert-pub-chain.pem"
   }
 
   # KC LE certificate (private key)
   provisioner "file" {
-    source = var.le_cert_priv_key
+    source = "${path.module}/${var.le_cert_priv_key}"
     destination = "cert-priv-key.pem"
   }
 
   # KC User accounts file
   provisioner "file" {
-    source = var.kc_user_file
+    source = "${path.module}/${var.kc_user_file}"
     destination = "kc-users.lst"
   }
 
   # KC realm configuration for the import
   provisioner "file" {
     destination = "realm.json"
-    content = templatefile("./module_keycloak/realm.json", {
+    content = templatefile("${path.module}/realm.json", {
       realm_name = "${var.kc_realm}"
       federation_id = "${yandex_organizationmanager_saml_federation.federation.id}"
     })

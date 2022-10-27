@@ -28,7 +28,7 @@ if [ $? != 0 ]
   then
     exit 1;
 fi
-sleep 8
+sleep 10
 
 # Taking an DNS Challenge from certificate for domain ownership validation.
 # DNS Challenge validation can be TXT or CNAME type.
@@ -46,8 +46,8 @@ do
   sleep 60
 done
 
-#echo "Remove DNS Challenge record from Cloud DNS"
-#yc dns zone delete-records --folder-id=$DNS_FOLDER_ID --name=$DNS_ZONE_NAME --record="_acme-challenge.$KC_HOST 200 $DNS_CH_TYPE $DNS_CHALLENGE"
+echo "Remove DNS Challenge record from Cloud DNS"
+yc dns zone delete-records --folder-id=$DNS_FOLDER_ID --name=$DNS_ZONE_NAME --record="_acme-challenge.$KC_HOST 200 $DNS_CH_TYPE $DNS_CHALLENGE"
 
 echo "Download Let's encrypt certificates from Certificate Manager"
 yc cm certificate content --name=$LE_CERT_NAME --chain=$LE_CERT_PUB_KEY_FN --key=$LE_CERT_PRIV_KEY_FN > /dev/null

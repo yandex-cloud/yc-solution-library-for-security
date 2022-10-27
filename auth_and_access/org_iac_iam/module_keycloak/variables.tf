@@ -11,7 +11,7 @@ variable "cloud_id" {
 variable "folder_id" {
   description = "YC folder-id"
   type = string
-  default = "b1gj4mjguosvvm1pm6ue"
+  default = "b1g1ed753v5gkvaoivnd"
 }
 
 variable "org_id" {
@@ -52,7 +52,7 @@ variable "kc_fqdn" {
 variable "dns_zone_name" {
   description = "DNS zone name - not equal domain name! "
   type = string
-  default = "mirttest-net"
+  default = "mirttest"
 }
 
 variable "kc_realm" {
@@ -124,19 +124,19 @@ variable "le_cert_descr" {
 variable "le_cert_pub_key" {
   description = "Let's Encrypt certificate public key chain filename"
   type = string
-  default = "./module_keycloak/cert-pub-chain.pem"
+  default = "cert-pub-chain.pem"
 }
 
 variable "le_cert_priv_key" {
   description = "Let's Encrypt certificate private key filename"
   type = string
-  default = "./module_keycloak/cert-priv-key.pem"
+  default = "cert-priv-key.pem"
 }
 
 variable "kc_user_file" {
   description = "Keycloak users file name"
   type = string
-  default = "./module_keycloak/kc-users.lst"
+  default = "kc-users.lst"
 }
 
 variable "kc_user_count" {
