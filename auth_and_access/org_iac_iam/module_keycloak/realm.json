@@ -1,0 +1,148 @@
+{
+  "realm": "${realm_name}",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "registrationEmailAsUsername": false,
+  "rememberMe": false,
+  "verifyEmail": false,
+  "resetPasswordAllowed": false,
+  "requiredCredentials": [
+    "password"
+  ],
+  "clients": [
+    {
+      "clientId": "https://console.cloud.yandex.ru/federations/${federation_id}",
+      "baseUrl": "https://console.cloud.yandex.ru/federations/${federation_id}",
+      "enabled": true,
+      "redirectUris": [
+        "https://console.cloud.yandex.ru/federations/${federation_id}"
+      ],
+      "webOrigins": [
+        "https://console.cloud.yandex.ru"
+      ],
+      "bearerOnly": false,
+      "consentRequired": false,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "publicClient": false,
+      "frontchannelLogout": true,
+      "protocol": "saml",
+      "attributes": {
+        "saml_idp_initiated_sso_relay_state": "https://console.cloud.yandex.ru/federations/${federation_id}",
+        "saml.force.post.binding": "true",
+        "saml.multivalued.roles": "false",
+        "frontchannel.logout.session.required": "false",
+        "oauth2.device.authorization.grant.enabled": "false",
+        "backchannel.logout.revoke.offline.tokens": "false",
+        "saml.server.signature.keyinfo.ext": "false",
+        "use.refresh.tokens": "true",
+        "saml.signing.certificate": "MIIDjzCCAnegAwIBAgIUF3bSIPKEcz0+93czW8h814WWGl8wDQYJKoZIhvcNAQELBQAwVzELMAkGA1UEBhMCUlUxDzANBgNVBAgMBk1vc2NvdzEPMA0GA1UECgwGWWFuZGV4MRUwEwYDVQQLDAxZYW5kZXguQ2xvdWQxDzANBgNVBAMMBllhbmRleDAeFw0yMDAyMTIwODI2NTVaFw0yNTAyMTIwODI2NTVaMFcxCzAJBgNVBAYTAlJVMQ8wDQYDVQQIDAZNb3Njb3cxDzANBgNVBAoMBllhbmRleDEVMBMGA1UECwwMWWFuZGV4LkNsb3VkMQ8wDQYDVQQDDAZZYW5kZXgwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDYVcxqC0Ienc85C2oD93GvYB172VSPYuy7umjHa/8Xy8KUGmAjO1pJA2Qvgrs0AmymueM6d6Uw0C7MsDY/Z3eOid9ZRnbmJtfx2MzmyA91Y0ZvcIxYXWa4kloEiLUMGs94ixgBat+erKN836NVF4mFOtLUsueMOkQkdFw6RPlw9NccEmWxb/XfzA2fceCjWFeJt1RQSAMPxmsd+s9NmsaZ7dFsn1Vx/ACLdlzxhyCjf7A5FIRZUxEHQF5UOP7z2bKkErDivFj19XhZ2whHmHNKy2pvrzZ0ufoy2+isW5HzEn1+DO3hwX8pKOOvjtKi5vqtsdjteGDmF2+lm+RxrkL/AgMBAAGjUzBRMB0GA1UdDgQWBBRVWZqkoCfZHnN6vDN6d5l2tQGp7jAfBgNVHSMEGDAWgBRVWZqkoCfZHnN6vDN6d5l2tQGp7jAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQA4/gJ1/dawiBYa4hYpCFsnWIgoJ9iLgG6mOZ6q0xT8X/zAPkA9EeB75OdFPFruAydRlihdiVfrjbdOYoEgrTbF1jtWAAK+YQpLohrLp070h5PzXMMvso8Tkg4phxLEGhtsHg+SMFipvg0uTG1CWttgnHy8tWfrjbrF2MPA846ibHu7nPjhwoQxdd5kILPYLTANc3YzwaiN96f6flZgedkVDUHMT2AVMpFvbYb1jNqULQ9Xyl5ebdTqLVzJ1WWDN7rUGdv2qDrHOlHeBMU32S6djwOizttFSwkj2q0FXAH8UFBTDS63gjSwJVzoSHaeFXo+6iT1b1eKj8sdxcbE3rA+",
+        "oidc.ciba.grant.enabled": "false",
+        "backchannel.logout.session.required": "false",
+        "client_credentials.use_refresh_token": "false",
+        "saml.signature.algorithm": "RSA_SHA256",
+        "require.pushed.authorization.requests": "false",
+        "saml.client.signature": "true",
+        "saml.allow.ecp.flow": "false",
+        "saml.server.signature.keyinfo.xmlSigKeyInfoKeyNameTransformer": "CERT_SUBJECT",
+        "id.token.as.detached.signature": "false",
+        "saml.assertion.signature": "true",
+        "saml.encrypt": "true",
+        "saml.server.signature": "true",
+        "exclude.session.state.from.auth.response": "false",
+        "saml.artifact.binding": "false",
+        "saml_force_name_id_format": "false",
+        "acr.loa.map": "{}",
+        "saml.encryption.certificate": "MIIDjzCCAnegAwIBAgIUF3bSIPKEcz0+93czW8h814WWGl8wDQYJKoZIhvcNAQELBQAwVzELMAkGA1UEBhMCUlUxDzANBgNVBAgMBk1vc2NvdzEPMA0GA1UECgwGWWFuZGV4MRUwEwYDVQQLDAxZYW5kZXguQ2xvdWQxDzANBgNVBAMMBllhbmRleDAeFw0yMDAyMTIwODI2NTVaFw0yNTAyMTIwODI2NTVaMFcxCzAJBgNVBAYTAlJVMQ8wDQYDVQQIDAZNb3Njb3cxDzANBgNVBAoMBllhbmRleDEVMBMGA1UECwwMWWFuZGV4LkNsb3VkMQ8wDQYDVQQDDAZZYW5kZXgwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDYVcxqC0Ienc85C2oD93GvYB172VSPYuy7umjHa/8Xy8KUGmAjO1pJA2Qvgrs0AmymueM6d6Uw0C7MsDY/Z3eOid9ZRnbmJtfx2MzmyA91Y0ZvcIxYXWa4kloEiLUMGs94ixgBat+erKN836NVF4mFOtLUsueMOkQkdFw6RPlw9NccEmWxb/XfzA2fceCjWFeJt1RQSAMPxmsd+s9NmsaZ7dFsn1Vx/ACLdlzxhyCjf7A5FIRZUxEHQF5UOP7z2bKkErDivFj19XhZ2whHmHNKy2pvrzZ0ufoy2+isW5HzEn1+DO3hwX8pKOOvjtKi5vqtsdjteGDmF2+lm+RxrkL/AgMBAAGjUzBRMB0GA1UdDgQWBBRVWZqkoCfZHnN6vDN6d5l2tQGp7jAfBgNVHSMEGDAWgBRVWZqkoCfZHnN6vDN6d5l2tQGp7jAPBgNVHRMBAf8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQA4/gJ1/dawiBYa4hYpCFsnWIgoJ9iLgG6mOZ6q0xT8X/zAPkA9EeB75OdFPFruAydRlihdiVfrjbdOYoEgrTbF1jtWAAK+YQpLohrLp070h5PzXMMvso8Tkg4phxLEGhtsHg+SMFipvg0uTG1CWttgnHy8tWfrjbrF2MPA846ibHu7nPjhwoQxdd5kILPYLTANc3YzwaiN96f6flZgedkVDUHMT2AVMpFvbYb1jNqULQ9Xyl5ebdTqLVzJ1WWDN7rUGdv2qDrHOlHeBMU32S6djwOizttFSwkj2q0FXAH8UFBTDS63gjSwJVzoSHaeFXo+6iT1b1eKj8sdxcbE3rA+",
+        "tls.client.certificate.bound.access.tokens": "false",
+        "saml.authnstatement": "true",
+        "display.on.consent.screen": "false",
+        "saml_name_id_format": "username",
+        "token.response.type.bearer.lower-case": "false",
+        "saml.onetimeuse.condition": "false",
+        "saml_signature_canonicalization_method": "http://www.w3.org/2001/10/xml-exc-c14n#"
+      },
+      "authenticationFlowBindingOverrides": {},
+      "fullScopeAllowed": true,
+      "nodeReRegistrationTimeout": -1,
+      "protocolMappers": [
+        {
+          "name": "role list",
+          "protocol": "saml",
+          "protocolMapper": "saml-role-list-mapper",
+          "consentRequired": false,
+          "config": {
+            "single": "true",
+            "attribute.nameformat": "Basic",
+            "attribute.name": "Role"
+          }
+        },
+        {
+          "name": "X500 email",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "attribute.nameformat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+            "user.attribute": "email",
+            "friendly.name": "email",
+            "attribute.name": "urn:oid:1.2.840.113549.1.9.1"
+          }
+        },
+        {
+          "name": "X500 givenName",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "attribute.nameformat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+            "user.attribute": "firstName",
+            "friendly.name": "givenName",
+            "attribute.name": "urn:oid:2.5.4.42"
+          }
+        },
+        {
+          "name": "X500 surname",
+          "protocol": "saml",
+          "protocolMapper": "saml-user-property-mapper",
+          "consentRequired": false,
+          "config": {
+            "attribute.nameformat": "urn:oasis:names:tc:SAML:2.0:attrname-format:uri",
+            "user.attribute": "lastName",
+            "friendly.name": "surname",
+            "attribute.name": "urn:oid:2.5.4.4"
+          }
+        }
+      ],
+      "defaultClientScopes": [
+        "role_list"
+      ],
+      "optionalClientScopes": []
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "role_list",
+      "description": "SAML role list",
+      "protocol": "saml",
+      "protocolMappers": [
+        {
+          "name": "role list",
+          "protocol": "saml",
+          "protocolMapper": "saml-role-list-mapper",
+          "consentRequired": false,
+          "config": {
+            "single": "true",
+            "attribute.nameformat": "Basic",
+            "attribute.name": "Role"
+          }
+        }
+      ]
+    }
+  ],
+  "internationalizationEnabled": false,
+  "supportedLocales": []
+}
