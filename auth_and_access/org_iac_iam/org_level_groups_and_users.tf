@@ -148,6 +148,79 @@ resource "yandex_organizationmanager_group" cloud-web-app-project-group-dev-devo
   organization_id = var.ORG_ID
 }
 
+#add to all group for related clouds
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-01" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role     = "resource-manager.viewer"
+  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-network-viewer.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-02" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role     = "resource-manager.viewer"
+  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-gitlab-admin.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-03" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role     = "resource-manager.viewer"
+  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-prod-devops.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-04" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role     = "resource-manager.viewer"
+  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-prod-sre.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-05" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role     = "resource-manager.viewer"
+  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-prod-sa-app.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-06" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role     = "resource-manager.viewer"
+  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-prod-dba.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-07" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role     = "resource-manager.viewer"
+  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-devops.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-08" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role     = "resource-manager.viewer"
+  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-sre.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-09" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role     = "resource-manager.viewer"
+  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-sa-app.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-10" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role     = "resource-manager.viewer"
+  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-dba.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-11" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role     = "resource-manager.viewer"
+  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-dev-network-ad.id}"
+}
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-12" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role     = "resource-manager.viewer"
+  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-dev-devops.id}"
+}
+
 
 
 #Add users to cloud groups----------
