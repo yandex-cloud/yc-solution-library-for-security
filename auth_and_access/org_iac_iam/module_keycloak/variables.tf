@@ -11,7 +11,7 @@ variable "cloud_id" {
 variable "folder_id" {
   description = "YC folder-id"
   type = string
-  default = "b1g1ed753v5gkvaoivnd"
+  default = "b1g075j6vem2radjttgi"
 }
 
 variable "org_id" {
@@ -46,13 +46,13 @@ variable "vm_subnet" {
 variable "kc_fqdn" {
   description = "Keycloak VM FQDN / DNS Name"
   type = string
-  default = "kc.mirttest.net"
+  default = "kc.lavre.link"
 }
 
 variable "dns_zone_name" {
   description = "DNS zone name - not equal domain name! "
   type = string
-  default = "mirttest"
+  default = "lavre-link"
 }
 
 variable "kc_realm" {

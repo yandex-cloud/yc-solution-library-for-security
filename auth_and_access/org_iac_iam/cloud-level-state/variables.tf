@@ -1,9 +1,11 @@
 variable "CLOUD_ID" {
+  description = "cloud_id of your cloud"
   type    = string
   default = ""
 }
 
 variable "FOLDER_ID" {
+  description = "folder id of first folder"
   type    = string
   default = ""
 }
@@ -36,6 +38,7 @@ variable "app_cidrs3" {
 }
 
 variable "org_id" {
+  description = "organization_id"
   type        = string
   default     = ""
 }
