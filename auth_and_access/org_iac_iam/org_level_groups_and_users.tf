@@ -148,7 +148,27 @@ resource "yandex_organizationmanager_group" cloud-web-app-project-group-dev-devo
   organization_id = var.ORG_ID
 }
 
-
+#add to all group for related clouds
+resource "yandex_resourcemanager_cloud_iam_binding" "view-at-cloud-level" {
+  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+  role = "resource-manager.viewer"
+  members = [
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-network-viewer.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-gitlab-admin.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-prod-devops.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-prod-sre.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-prod-sa-app.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-prod-dba.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-devops.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-sre.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-sa-app.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-dba.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-dev-network-ad.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-dev-devops.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-dba.id}",
+    "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-dba.id}",
+  ]
+}
 
 #Add users to cloud groups----------
 
