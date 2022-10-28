@@ -155,6 +155,12 @@ resource "yandex_resourcemanager_folder_iam_member" "gitlab-admin" {
   member = "group:${data.yandex_organizationmanager_group.gitlab-admin.id}"
 }
 
+resource "yandex_resourcemanager_folder_iam_member" "gitlab-vpcuser" {
+  folder_id = data.yandex_resourcemanager_folder.network-folder.id
+  role = "vpc.user"
+  member = "group:${data.yandex_organizationmanager_group.gitlab-admin.id}"
+}
+
 #Prod folder------------------------------------------------------------------
 #prod-devops
 resource "yandex_resourcemanager_folder_iam_member" "prod-devops1" {
@@ -327,6 +333,12 @@ resource "yandex_resourcemanager_folder_iam_member" "dev-devops4" {
 resource "yandex_resourcemanager_folder_iam_member" "dev-devops5" {
   folder_id = yandex_resourcemanager_folder.dev-folder.id
   role = "vpc.user"
+  member = "group:${data.yandex_organizationmanager_group.dev-devops.id}"
+}
+
+resource "yandex_resourcemanager_folder_iam_member" "dev-devops6" {
+  folder_id = yandex_resourcemanager_folder.dev-folder.id
+  role = "iam.serviceAccounts.user"
   member = "group:${data.yandex_organizationmanager_group.dev-devops.id}"
 }
 
