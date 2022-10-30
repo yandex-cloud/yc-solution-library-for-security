@@ -1,10 +1,10 @@
-ORG_ID       = "bpf4c0lctf2t734l95ui" #example bpfi6o0mvliepdcf1610
-BA_ID        = "dn2e7pm53k51qv6jb0th" #example fsddn24jqt9dfb2gu8d9j
+ORG_ID       = "" #example bpfi6o0mvliepdcf1610
+BA_ID        = "" #example fsddn24jqt9dfb2gu8d9j
 KEYCLOAK     = "true"
-ORG_ADMIN_FOLDER_ID = "b1g075j6vem2radjttgi" #example b1g1ed753v5gkvaoivs23
-ORG_ADMIN_CLOUD_ID = "b1gshmqjd29l7j80iio5" #example 234b1g45th6hthg77e0n
-DNS_ZONE_NAME = "lavre-link" #example mirt2est
-KC_FQDN = "kc.lavre.link" #example kc.mirt2est.net
+ORG_ADMIN_FOLDER_ID = "" #example b1g1ed753v5gkvaoivs23
+ORG_ADMIN_CLOUD_ID = "" #example 234b1g45th6hthg77e0n
+DNS_ZONE_NAME = "" #example mirt2est
+KC_FQDN = "" #example kc.mirt2est.net
 
 #List of cloud that you want to create
 CLOUD-LIST = [
