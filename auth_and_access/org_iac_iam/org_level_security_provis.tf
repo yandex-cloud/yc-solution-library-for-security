@@ -2,9 +2,9 @@ resource "time_sleep" "wait_60_seconds" {
   create_duration = "60s"
 }
 
-#Create folder
+#Create folder in security
 resource "yandex_resourcemanager_folder" "cloud_admin" {
-  cloud_id = yandex_resourcemanager_cloud.sec-cloud.id
+  cloud_id = yandex_resourcemanager_cloud.create-clouds[2].id
   name = "cloud-admin"
   depends_on = [time_sleep.wait_60_seconds]
 }

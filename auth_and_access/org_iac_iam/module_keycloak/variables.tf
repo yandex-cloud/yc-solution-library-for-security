@@ -46,13 +46,13 @@ variable "vm_subnet" {
 variable "kc_fqdn" {
   description = "Keycloak VM FQDN / DNS Name"
   type = string
-  default = "kc.lavre.link"
+  default = "kc.dsad.link"
 }
 
 variable "dns_zone_name" {
   description = "DNS zone name - not equal domain name! "
   type = string
-  default = "lavre-link"
+  default = "gdfgf-link"
 }
 
 variable "kc_realm" {

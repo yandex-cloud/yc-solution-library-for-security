@@ -7,11 +7,11 @@
 #   name = "cloud-003"
 # }
 
-data "yandex_organizationmanager_saml_federation_user_account" fed_user {
-  count = length(local.users)
-  federation_id = "${yandex_organizationmanager_saml_federation.federation.id}"
-  name_id = local.users[count.index]
-}
+# data "yandex_organizationmanager_saml_federation_user_account" fed_user {
+#   count = length(local.users)
+#   federation_id = "${yandex_organizationmanager_saml_federation.federation.id}"
+#   name_id = local.users[count.index]
+# }
 
 # resource "yandex_resourcemanager_cloud_iam_member" "cloud_member" {
 #   count = length(local.users)
@@ -45,9 +45,9 @@ data "yandex_organizationmanager_saml_federation_user_account" fed_user {
 #   ]
 # }
 
-locals {
-  users = flatten([for s in split("\n",("${file("${path.module}/kc-users.lst")}")) : regex("(.*):",s) if s != ""])
-}
+# locals {
+#   users = flatten([for s in split("\n",("${file("${path.module}/kc-users.lst")}")) : regex("(.*):",s) if s != ""])
+# }
 
 /*
 output "kc_users" {

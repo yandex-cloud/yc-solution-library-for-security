@@ -7,7 +7,7 @@ resource "yandex_vpc_network" "vpc-web-app" {
 
 # Создание подсетей в prod folder
 resource "yandex_vpc_subnet" "prod-subnet" {
-  folder_id           = yandex_resourcemanager_folder.prod-folder.id
+  folder_id           = data.yandex_resourcemanager_folder.prod-folder.id
   count               = 3
   name                = "prod-${element(var.network_names, count.index)}"
   zone                = element(var.zones, count.index)
@@ -17,7 +17,7 @@ resource "yandex_vpc_subnet" "prod-subnet" {
 
 # Создание подсетей в non-prod folder
 resource "yandex_vpc_subnet" "non-prod-subnet" {
-  folder_id           = yandex_resourcemanager_folder.non-prod-folder.id
+  folder_id           = data.yandex_resourcemanager_folder.nonprod-folder.id
   count               = 3
   name                = "non-prod-${element(var.network_names, count.index)}"
   zone                = element(var.zones, count.index)

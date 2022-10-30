@@ -1,57 +1,13 @@
-variable "BA_ID" {
-  description = "billing account id"
-  type = string
-  default = ""
-}
+ORG_ID       = "bpf4c0lctf2t734l95ui" #example bpfi6o0mvliepdcf1610
+BA_ID        = "dn2e7pm53k51qv6jb0th" #example fsddn24jqt9dfb2gu8d9j
+KEYCLOAK     = "true"
+ORG_ADMIN_FOLDER_ID = "b1g075j6vem2radjttgi" #example b1g1ed753v5gkvaoivs23
+ORG_ADMIN_CLOUD_ID = "b1gshmqjd29l7j80iio5" #example 234b1g45th6hthg77e0n
+DNS_ZONE_NAME = "lavre-link" #example mirt2est
+KC_FQDN = "kc.lavre.link" #example kc.mirt2est.net
 
-variable "ORG_ID" {
-  description = "organization id"
-  type    = string
-  default = ""
-}
-
-variable "KEYCLOAK" {
-  description = "install keycloak or no"
-  type    = string
-  default = ""
-}
-
-variable "ORG_ADMIN_FOLDER_ID" {
-  description = "folder_id of first folder in org cloud"
-  type    = string
-  default = ""
-}
-
-variable "ORG_ADMIN_CLOUD_ID" {
-  description = "cloud_id of first cloud"
-  type    = string
-  default = ""
-}
-
-variable "DNS_ZONE_NAME" {
-  description = "name of dns zone in yandex cloud, not dns name"
-  type    = string
-  default = ""
-}
-
-variable "KC_FQDN" {
-  description = "dns name of keycloak"
-  type    = string
-  default = ""
-}
-
-
-variable "CLOUD-LIST" {
-  description = "List of Organization-level groups with their Roles"
-  type = list(object(
-    {
-      name = string,
-      descr = string,
-      admin = string,
-      folders = list(string)
-    }
-  ))
-  default = [
+#List of cloud that you want to create
+CLOUD-LIST = [
     { 
         name = "web-app",
         descr = "web-app cloud",
@@ -71,18 +27,9 @@ variable "CLOUD-LIST" {
         folders = [""]
     }
 ]
-}
 
-variable "NETWORK-CLOUD_GROUPS" {
-  description = "List of Groups that you want to pre-create for your clouds"
-  type = list(object(
-    {
-      name = string,
-      descr = string,
-      roles = list(string)
-    }
-  ))
-  default = [
+#List of Groups that you want to pre-create for your clouds
+NETWORK-CLOUD_GROUPS = [
     { 
         name = "network-viewer",
         descr = "admin who can view and monitor network",
@@ -94,18 +41,8 @@ variable "NETWORK-CLOUD_GROUPS" {
         roles = ["gitlab.admin"]
     }
 ]
-}
 
-variable "PROD-CLOUD_GROUPS" {
-  description = "List of Groups that you want to pre-create for your clouds"
-  type = list(object(
-    {
-      name = string,
-      descr = string,
-      roles = list(string)
-    }
-  ))
-  default = [
+PROD-CLOUD_GROUPS = [
     { 
         name = "prod-devops",
         descr = "devops prod",
@@ -122,18 +59,8 @@ variable "PROD-CLOUD_GROUPS" {
         roles = ["mdb.viewer", "ydb.viewer"]
     }
 ]
-}
 
-variable "NONPROD-CLOUD_GROUPS" {
-  description = "List of Groups that you want to pre-create for your clouds"
-  type = list(object(
-    {
-      name = string,
-      descr = string,
-      roles = list(string)
-    }
-  ))
-  default = [
+NONPROD-CLOUD_GROUPS = [
     { 
         name = "nonprod-devops",
         descr = "devops nonprod",
@@ -150,18 +77,8 @@ variable "NONPROD-CLOUD_GROUPS" {
         roles = ["mdb.admin", "ydb.editor"]
     }
 ]
-}
 
-variable "DEV-CLOUD_GROUPS" {
-  description = "List of Groups that you want to pre-create for your clouds"
-  type = list(object(
-    {
-      name = string,
-      descr = string,
-      roles = list(string)
-    }
-  ))
-  default = [
+DEV-CLOUD_GROUPS = [
     { 
         name = "dev-network",
         descr = "network dev",
@@ -173,4 +90,3 @@ variable "DEV-CLOUD_GROUPS" {
         roles = ["k8s.admin", "container-registry.admin", "alb.admin", "k8s.cluster-api.cluster-admin", "vpc.user", "iam.serviceAccounts.user"]
     }
 ]
-}

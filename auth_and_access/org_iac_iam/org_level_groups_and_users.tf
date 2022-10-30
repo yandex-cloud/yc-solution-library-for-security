@@ -1,235 +1,133 @@
 #Create org groups
-resource "yandex_organizationmanager_group" web-admin-group {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-admins"
+
+resource "yandex_organizationmanager_group" cloud-admins-group {
+  count = length(var.CLOUD-LIST)
+  name = "${var.CLOUD-LIST[count.index].name}-cloud-admins"
   organization_id = var.ORG_ID
 }
 
-resource "yandex_organizationmanager_group" mobile-admin-group {
-  name            = "cloud-${var.CLOUD-2-NAME}-group-admins"
-  organization_id = var.ORG_ID
-}
-
-resource "yandex_organizationmanager_group" sec-admin-group {
-  name            = "cloud-security-group-admins"
-  organization_id = var.ORG_ID
-}
 
 
 #Add users
-data "yandex_organizationmanager_saml_federation_user_account" user1 {
+
+data "yandex_organizationmanager_saml_federation_user_account" user {
+  count = length(var.CLOUD-LIST)
   federation_id = module.keycloak[0].federation_id
-  name_id       = "user1"
+  name_id       = var.CLOUD-LIST[count.index].admin
 }
 
-data "yandex_organizationmanager_saml_federation_user_account" user2 {
-  federation_id = module.keycloak[0].federation_id
-  name_id       = "user2"
-}
 
-data "yandex_organizationmanager_saml_federation_user_account" user3 {
-  federation_id = module.keycloak[0].federation_id
-  name_id       = "user3"
-}
 
-#Add users to org groups
-resource "yandex_organizationmanager_group_membership" web-admin-group-members {
-  group_id = yandex_organizationmanager_group.web-admin-group.id
+resource "yandex_organizationmanager_group_membership" admin-group-members {
+  count = length(var.CLOUD-LIST)
+  group_id = yandex_organizationmanager_group.cloud-admins-group[count.index].id
   members  = [
-    "${data.yandex_organizationmanager_saml_federation_user_account.user1.id}"
-  ]
-}
-
-resource "yandex_organizationmanager_group_membership" mobile-admin-group-members {
-  group_id = yandex_organizationmanager_group.mobile-admin-group.id
-  members  = [
-    "${data.yandex_organizationmanager_saml_federation_user_account.user2.id}"
-  ]
-}
-
-resource "yandex_organizationmanager_group_membership" sec-admin-group-members {
-  group_id = yandex_organizationmanager_group.sec-admin-group.id
-  members  = [
-    "${data.yandex_organizationmanager_saml_federation_user_account.user3.id}"
+    "${data.yandex_organizationmanager_saml_federation_user_account.user[count.index].id}"
   ]
 }
 
 #Assign bindings on clouds to groups
 
-resource "yandex_resourcemanager_cloud_iam_binding" "web-admin-binding" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
-  role = "admin"
-  members = [
-    "group:${yandex_organizationmanager_group.web-admin-group.id}",
-  ]
-}
 
-resource "yandex_resourcemanager_cloud_iam_binding" "mobile-admin-binding" {
-  cloud_id = yandex_resourcemanager_cloud.mobile-app-project.id
-  role = "admin"
-  members = [
-    "group:${yandex_organizationmanager_group.mobile-admin-group.id}",
-  ]
-}
 
-resource "yandex_resourcemanager_cloud_iam_binding" "sec-admin-binding" {
-  cloud_id = yandex_resourcemanager_cloud.sec-cloud.id
-  role = "admin"
-  members = [
-    "group:${yandex_organizationmanager_group.sec-admin-group.id}",
-  ]
+resource "yandex_resourcemanager_cloud_iam_member" "admin-binding" {
+  count = length(var.CLOUD-LIST)
+  cloud_id = yandex_resourcemanager_cloud.create-clouds[count.index].id
+  role     = "admin"
+  member   = "group:${yandex_organizationmanager_group.cloud-admins-group[count.index].id}"
 }
 
 
 # Create cloud groups
 
 #Network folder groups------------------------------------------------------------
-resource "yandex_organizationmanager_group" cloud-web-app-project-group-network-viewer {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-network-viewer"
+
+
+resource "yandex_organizationmanager_group" network-folder-groups-cloud1 {
+  count = length(var.NETWORK-CLOUD_GROUPS)
+  name = "${yandex_resourcemanager_cloud.create-clouds[0].name}-${var.NETWORK-CLOUD_GROUPS[count.index].name}"
   organization_id = var.ORG_ID
 }
 
-resource "yandex_organizationmanager_group" cloud-web-app-project-group-gitlab-admin {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-gitlab-admin"
+resource "yandex_organizationmanager_group" network-folder-groups-cloud2 {
+  count = length(var.NETWORK-CLOUD_GROUPS)
+  name = "${yandex_resourcemanager_cloud.create-clouds[1].name}-${var.NETWORK-CLOUD_GROUPS[count.index].name}"
   organization_id = var.ORG_ID
 }
+
 
 #Prod groups---------------------------------------------------------------------
-resource "yandex_organizationmanager_group" cloud-web-app-project-group-prod-devops {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-prod-devops"
+
+
+resource "yandex_organizationmanager_group" prod-folder-groups-cloud1 {
+  count = length(var.PROD-CLOUD_GROUPS)
+  name = "${yandex_resourcemanager_cloud.create-clouds[0].name}-${var.PROD-CLOUD_GROUPS[count.index].name}"
   organization_id = var.ORG_ID
 }
 
-resource "yandex_organizationmanager_group" cloud-web-app-project-group-prod-sre {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-prod-sre"
-  organization_id = var.ORG_ID
-}
-
-resource "yandex_organizationmanager_group" cloud-web-app-project-group-prod-sa-app {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-prod-sa-app"
-  organization_id = var.ORG_ID
-}
-
-resource "yandex_organizationmanager_group" cloud-web-app-project-group-prod-dba {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-prod-dba"
+resource "yandex_organizationmanager_group" prod-folder-groups-cloud2 {
+  count = length(var.PROD-CLOUD_GROUPS)
+  name = "${yandex_resourcemanager_cloud.create-clouds[1].name}-${var.PROD-CLOUD_GROUPS[count.index].name}"
   organization_id = var.ORG_ID
 }
 
 # Non-prod groups---------------------------------------------------------------------
-resource "yandex_organizationmanager_group" cloud-web-app-project-group-non-prod-devops {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-non-prod-devops"
+
+
+resource "yandex_organizationmanager_group" nonprod-folder-groups-cloud1 {
+  count = length(var.NONPROD-CLOUD_GROUPS)
+  name = "${yandex_resourcemanager_cloud.create-clouds[0].name}-${var.NONPROD-CLOUD_GROUPS[count.index].name}"
   organization_id = var.ORG_ID
 }
 
-resource "yandex_organizationmanager_group" cloud-web-app-project-group-non-prod-sre {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-non-prod-sre"
+resource "yandex_organizationmanager_group" nonprod-folder-groups-cloud2 {
+  count = length(var.NONPROD-CLOUD_GROUPS)
+  name = "${yandex_resourcemanager_cloud.create-clouds[1].name}-${var.NONPROD-CLOUD_GROUPS[count.index].name}"
   organization_id = var.ORG_ID
 }
-
-resource "yandex_organizationmanager_group" cloud-web-app-project-group-non-prod-sa-app {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-non-prod-sa-app"
-  organization_id = var.ORG_ID
-}
-
-resource "yandex_organizationmanager_group" cloud-web-app-project-group-non-prod-dba {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-non-prod-dba"
-  organization_id = var.ORG_ID
-}
-
-
 
 #Dev groups---------------------------------------------------------------------
-resource "yandex_organizationmanager_group" cloud-web-app-project-group-dev-network-ad {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-dev-network-ad"
+
+
+resource "yandex_organizationmanager_group" dev-folder-groups-cloud1 {
+  count = length(var.DEV-CLOUD_GROUPS)
+  name = "${yandex_resourcemanager_cloud.create-clouds[0].name}-${var.DEV-CLOUD_GROUPS[count.index].name}"
   organization_id = var.ORG_ID
 }
 
-resource "yandex_organizationmanager_group" cloud-web-app-project-group-dev-devops {
-  name            = "cloud-${var.CLOUD-1-NAME}-group-dev-devops"
+resource "yandex_organizationmanager_group" dev-folder-groups-cloud2 {
+  count = length(var.DEV-CLOUD_GROUPS)
+  name = "${yandex_resourcemanager_cloud.create-clouds[1].name}-${var.DEV-CLOUD_GROUPS[count.index].name}"
   organization_id = var.ORG_ID
 }
 
 #add to all group for related clouds
-resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-01" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
+
+resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer" {
+  count = length(yandex_resourcemanager_cloud.create-clouds)
+  cloud_id = yandex_resourcemanager_cloud.create-clouds[count.index].id
   role     = "resource-manager.viewer"
-  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-network-viewer.id}"
+  member   = "group:${yandex_organizationmanager_group.cloud-admins-group[count.index].id}"
 }
 
-resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-02" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
-  role     = "resource-manager.viewer"
-  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-gitlab-admin.id}"
-}
 
-resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-03" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
-  role     = "resource-manager.viewer"
-  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-prod-devops.id}"
-}
 
-resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-04" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
-  role     = "resource-manager.viewer"
-  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-prod-sre.id}"
-}
-
-resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-05" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
-  role     = "resource-manager.viewer"
-  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-prod-sa-app.id}"
-}
-
-resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-06" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
-  role     = "resource-manager.viewer"
-  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-prod-dba.id}"
-}
-
-resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-07" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
-  role     = "resource-manager.viewer"
-  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-devops.id}"
-}
-
-resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-08" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
-  role     = "resource-manager.viewer"
-  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-sre.id}"
-}
-
-resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-09" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
-  role     = "resource-manager.viewer"
-  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-sa-app.id}"
-}
-
-resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-10" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
-  role     = "resource-manager.viewer"
-  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-non-prod-dba.id}"
-}
-
-resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-11" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
-  role     = "resource-manager.viewer"
-  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-dev-network-ad.id}"
-}
-
-resource "yandex_resourcemanager_cloud_iam_member" "cloud-viewer-12" {
-  cloud_id = yandex_resourcemanager_cloud.web-app-project.id
-  role     = "resource-manager.viewer"
-  member   = "group:${yandex_organizationmanager_group.cloud-web-app-project-group-dev-devops.id}"
-}
 
 
 
 #Add users to cloud groups----------
 
 
+# data "yandex_organizationmanager_saml_federation_user_account" user1 {
+#   federation_id = module.keycloak[0].federation_id
+#   name_id       = "user1@example.com"
+# }
+
 # resource "yandex_organizationmanager_group_membership" network-viewer-group-members {
-#   group_id = yandex_organizationmanager_group.cloud-web-app-project-group-network-viewer.id
+#   group_id = yandex_organizationmanager_group.network-folder-groups-cloud1[0].id
 #   members  = [
-#     "${data.yandex_organizationmanager_saml_federation_user_account.user2.id}"
+#     "${data.yandex_organizationmanager_saml_federation_user_account.user1.id}"
 #   ]
 # }
 
+ 

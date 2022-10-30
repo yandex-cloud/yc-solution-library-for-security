@@ -2,41 +2,14 @@
 set up yc cli before
 */
 
+
 #Create clouds
-
-#Create cloud web-app-project
-resource "yandex_resourcemanager_cloud" "web-app-project" {
+resource "yandex_resourcemanager_cloud" "create-clouds" {
+  count = length(var.CLOUD-LIST)
+  
   organization_id = var.ORG_ID
-  name = var.CLOUD-1-NAME
-
-
-  # Bind created cloud to the BA
-  # https://cloud.yandex.ru/docs/billing/api-ref/BillingAccount/bindBillableObject
-  provisioner "local-exec" {
-    command = <<-CMD
-    curl -s -d '{ "billableObject": { "id": "${self.id}", "type": "cloud" }}' -H "Authorization: Bearer $(yc iam create-token)" -X POST https://billing.api.cloud.yandex.net/billing/v1/billingAccounts/${var.BA_ID}/billableObjectBindings 
-    CMD
-  }
-}
-
-#Create cloud mobile-app-project
-resource "yandex_resourcemanager_cloud" "mobile-app-project" {
-  organization_id = var.ORG_ID
-  name = var.CLOUD-2-NAME
-
-  # Bind created cloud to the BA
-  # https://cloud.yandex.ru/docs/billing/api-ref/BillingAccount/bindBillableObject
-  provisioner "local-exec" {
-    command = <<-CMD
-    curl -s -d '{ "billableObject": { "id": "${self.id}", "type": "cloud" }}' -H "Authorization: Bearer $(yc iam create-token)" -X POST https://billing.api.cloud.yandex.net/billing/v1/billingAccounts/${var.BA_ID}/billableObjectBindings 
-    CMD
-  }
-}
-
-#Create cloud security
-resource "yandex_resourcemanager_cloud" "sec-cloud" {
-  organization_id = var.ORG_ID
-  name = "security"
+  name = var.CLOUD-LIST[count.index].name
+  description = var.CLOUD-LIST[count.index].descr
 
   # Bind created cloud to the BA
   # https://cloud.yandex.ru/docs/billing/api-ref/BillingAccount/bindBillableObject
@@ -49,12 +22,6 @@ resource "yandex_resourcemanager_cloud" "sec-cloud" {
 
 #---------------------------------------------
 
-#Generate passwords
-resource "random_password" "passwords" {
-  count   = 1
-  length  = 20
-  special = true
-}
 
 #Install Keycloak
 module "keycloak" {
@@ -65,6 +32,7 @@ module "keycloak" {
   folder_id = var.ORG_ADMIN_FOLDER_ID
   dns_zone_name = var.DNS_ZONE_NAME
   kc_fqdn = var.KC_FQDN
+  depends_on = [local_file.kc-users-lst]
 }
 
 output "federation_link" {
