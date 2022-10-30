@@ -19,6 +19,7 @@ https://cloud.yandex.com/en/docs/overview/security/domains/checklist
   - [Example of installing two NGFW Check Point VMs: **Active-Passive**](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/network-sec/checkpoint-2VM_active-passive/README.md)
   - [An example of creating a site-to-site VPN connection to Yandex.Cloud: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/network-sec/vpn)
 - 🔑 Authentication and access control
+  - [Развертывание и управление организацией и правами доступа через IaC terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auth_and_access/org_iac_iam)
   - [IAM module with usage examples](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auth_and_access/iam#identity-and-access-management-iam-terraform-module-for-yandexcloud)
   - [LDAP user and group synchronization script](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auth_and_access/ad-sync)
 - 🦠 Protection against malicious code
