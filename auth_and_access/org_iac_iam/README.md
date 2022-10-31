@@ -18,9 +18,10 @@
 - Все управление tf происходит через git подход. Каждое изменение (PR) должны проверять ответственные за tf соответствующего уровня
 
 # Схема и скриншот результата
-![iam_iac-IaC1 drawio](https://user-images.githubusercontent.com/85429798/197990571-07edcc7b-83ee-441b-9bc3-2c839d72c37c.png)
 
-![iam_iac-Multifolder VPC drilldown drawio](https://user-images.githubusercontent.com/85429798/197990607-34cd21ef-fbf0-457e-8e1e-4e9e285a93ff.png)
+<img width="1264" alt="image" src="https://user-images.githubusercontent.com/85429798/198960106-ae3663a0-0054-4504-93da-3fbe1682ebc5.png">
+
+<img width="1919" alt="image" src="https://user-images.githubusercontent.com/85429798/198960141-f0dec470-590c-4ae8-8661-9ef448dc39eb.png">
 
 <img width="1049" alt="скрин" src="https://user-images.githubusercontent.com/85429798/197990620-6f99b158-eece-477c-8d22-3fa0e015ed96.png">
 
