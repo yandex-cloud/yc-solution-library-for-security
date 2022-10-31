@@ -1,8 +1,6 @@
-# Скрипт синхронизации пользователей и групп LDAP
+# Yandex Cloud синхронизация пользователей и групп.
 
-**MVP - на стадии тестирования**
-
-## Описание
+## Synopsis
 Сценарий получает список пользователей в указанных группах LDAP-каталога, проверяет наличе группы. Если группа не существует - сценарий создаст ее. Далее проверяется наличе федеративных пользователей. Если пользователя не существует - сценарий его создаст, указав в качестве NameID либо UserPrincipalName, либо Mail (в зависимости от маппинга со стороны IdP). После чего, контроллируется члество в группе. Если пользователь был исключен из группы в LDAP-каталоге, сценарий исключит его из группы в облаке.
 Контроль членства идет по пользователям конкретной федерации. В случае исключения пользователя, аккаунты других федераций и аккаунты Yandex Passport затронуты не будут.
 
@@ -11,7 +9,6 @@
 * Имена групп должны использовать символы латиницы и символ "-". Другие символы в т.ч. пробелы не допускаются
 * Запуск скрипта должен выполняться в контексте Domain User LDAP-каталога (пользователь должен быть членом домена)
 * Создание групп только при наличии привелегии organization.Admin
-* Скрипт работает только на ОС Windows
 
 # Описание ключей
 - `GroupNames` - массив имен групп LDAP-каталога. Задается через @() или ""
@@ -21,6 +18,7 @@
 - `LoginType` - атрибут учетной записи пользоваться, которая будет маппиться в NameID. Возможные значения: `UPN` и `Mail`. Значение по умолчанию: `UPN`.
 - `LogDirectory` - путь к каталогу для логов. По умолчанию используется текущий каталог, где расположен скрипт.
 
+<{ 
 # Настройка окружения
 
 Предполагаем, что у вас уже есть доступ в Yandex Cloud, вы знаете идентификатор своей организации (`organization-id`) и имя федерации, где будут создаваться пользователи.
@@ -64,27 +62,13 @@ yc config set token $env:YC_TOKEN
   yc config set cloud-id <cloud-id>
   yc config set folder-id <folder-id>
   yc config set federation-id <federation-id>
+  yc config set organization-id <federation-id>
   ```
   где вместо \<cloud-id\> нужно указать идентификатор своего облака, например, `b1g8d7gjpvedf23hg3sv`, вместо \<folder-id\> нужно указать идентификатор каталога в облаке, например, `b1guv7crr32qfgiimxwp`, а вместо \<federation-id\> нужно указать идентификатор федерации, например, `yc.your-org-name.federation`. Идентификаторы можно получить из консоли облака через веб интерфейс в разделе сервиса Organizations.}>
 
 # Запуск сценария
 
 Для начала зададим переменные окружения:
- 
-### Еслим вы используете учетную запись Яндекс ID:
-
-#### Windows:
- 
-* Запустите консоль PowerShell
-* Выполните:
-```PowerShell
-yc config profile activate security
-$env:YC_TOKEN = "ваш OAuth токен"
-$env:YC_CLOUD_ID=$(yc config get cloud-id)
-$env:YC_FOLDER_ID=$(yc config get folder-id)
-```
-
-### Еслим вы используете федеративную учетную запись:
 
 #### Windows:
  
@@ -93,13 +77,15 @@ $env:YC_FOLDER_ID=$(yc config get folder-id)
 ```PowerShell
 yc config profile activate iam
 $env:YC_TOKEN = $(yc iam create token)
-$env:YCOrgID = <id организации>
+$env:YC_CLOUD_ID=$(yc config get cloud-id)
+$env:YC_FOLDER_ID=$(yc config get folder-id)
+$env:YC_ORG=$(yc config get organization-id)
 ```
 
 ## Пример 1
 
 ```PowerSHell
-> .\Sync-YCLDAPUsers.ps1 -GroupNames @("group1","Group2") -YC_TOKEN $env:YC_TOKEN -YCOrgID $env:YCOrgID FederationName = "dev-federation" -LoginType UPN
+> .\Sync-YCLDAPUsers.ps1 -GroupNames @("group1","Group2") -YC_TOKEN $env:YC_TOKEN -YCOrgID $env:YC_ORG FederationName = "dev-federation" -LoginType UPN
 ```
 
 Команда создает и синхронизирует членов группы group1 and Group2 в указанной организации и федерации, используя в качестве NameID атрибут UserPrincipalName.
@@ -110,7 +96,7 @@ $env:YCOrgID = <id организации>
 $Params = @{
         GroupNames = @("group1","Group2")
         YC_TOKEN = $env:YC_TOKEN
-        YCOrgID = $env:YCOrgID
+        YCOrgID = $env:YC_ORG
         FederationName = "dev-federation"
         LoginType = "Mail"
     }  
