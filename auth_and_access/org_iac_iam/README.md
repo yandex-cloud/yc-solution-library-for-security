@@ -26,7 +26,7 @@
 <img width="1049" alt="скрин" src="https://user-images.githubusercontent.com/85429798/197990620-6f99b158-eece-477c-8d22-3fa0e015ed96.png">
 
 
-# Инстуркция:
+# Инструкция:
 **Пререквизиты**:
 - Платежный аккаунт yandex cloud
 - Созданная организация
