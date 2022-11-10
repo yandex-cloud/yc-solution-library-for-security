@@ -1,0 +1,7 @@
+opensearch_pass = "password"
+opensearch_user = "admin"
+opensearch_dashboard_address = "https://c-xxx.rw.mdb.yandexcloud.net"
+opensearch_node_address = "https://rc1a-xxx.mdb.yandexcloud.net"
+folder_id = "XXXXX"
+cloud_id = "XXXXX"
+subnet_id = "XXXXX"

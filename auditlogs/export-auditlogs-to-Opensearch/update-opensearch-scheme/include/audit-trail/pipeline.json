@@ -1,0 +1,272 @@
+{
+"description": "Audit Trails Ingest Pipeline",
+"processors": [
+  {
+    "rename": {
+      "field": "authentication.subject_name",
+      "target_field": "user.name",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "details.instance_id",
+      "target_field": "cloud.instance.id",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "details.instance_zone_id",
+      "target_field": "cloud.availability_zone",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "details.platform_id",
+      "target_field": "cloud.machine.type",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "details.instance_name",
+      "target_field": "cloud.instance.name",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "event_type",
+      "target_field": "event.action",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "event_source",
+      "target_field": "event.module",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "event_status",
+      "target_field": "event.status",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "event_id",
+      "target_field": "event.id",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "authentication.subject_id",
+      "target_field": "user.id",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "authentication.subject_name",
+      "target_field": "user.name",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "authentication.subject_type",
+      "target_field": "user.type",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "authorization.authorized",
+      "target_field": "user.authorization",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "authentication.authenticated",
+      "target_field": "user.authenticated",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "request_metadata.user_agent",
+      "target_field": "user_agent.original",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "details.security_group_id",
+      "target_field": "security_group.id",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "details.security_group_id",
+      "target_field": "security_group.id",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "details.image_name",
+      "target_field": "cloud.image.name",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "details.image_id",
+      "target_field": "cloud.image.id",
+      "ignore_failure": true
+    }
+  },
+  {
+  "urldecode": {
+    "field": "details.source_uri",
+     "ignore_failure": true
+  }
+},
+  {
+    "rename": {
+      "field": "details.source_uri",
+      "target_field": "cloud.image.source_uri",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "details.bucket_id",
+      "target_field": "object_storage.id",
+      "ignore_failure": true
+    }
+  },
+  {
+    "rename": {
+      "field": "details.access_binding_deltas.access_binding.role_id",
+      "target_field": "cloud.binding.role_id",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "event.kind",
+      "value": "event",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "cloud.org.name",
+      "value": "{{{resource_metadata.path.0.resource_name}}}",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "cloud.cloud.name",
+      "value": "{{{resource_metadata.path.1.resource_name}}}",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "cloud.folder.name",
+      "value": "{{{resource_metadata.path.2.resource_name}}}",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "cloud.org.id",
+      "value": "{{{resource_metadata.path.0.resource_id}}}",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "cloud.cloud.id",
+      "value": "{{{resource_metadata.path.1.resource_id}}}",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "cloud.folder.id",
+      "value": "{{{resource_metadata.path.2.resource_id}}}",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "event.category",
+      "value": ["configuration", "iam"],
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "if": "ctx.event.status == 'DONE'",
+      "field": "event.outcome",
+      "value": "success",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "event.dataset",
+      "value": "yandexcloud.audittrail",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "field": "cloud.provider",
+      "value": "yandexcloud",
+      "ignore_failure": true
+    }
+  },
+  {
+    "set": {
+      "if": "ctx.request_metadata.remote_address != 'cloud.yandex'",
+      "field": "source.ip",
+      "value": "{{{request_metadata.remote_address}}}",
+      "ignore_failure": true
+    }
+  },
+    {
+      "geoip" : {
+        "field" : "source.ip",
+        "ignore_failure": true
+      }
+    },
+    {
+      "set": {
+        "field": "@timestamp",
+        "value": "{{{event_time}}}",
+        "ignore_failure": true
+      }
+    },
+  
+  {
+    "set": {
+      "field": "cloud.service.name",
+      "value": "audittrail",
+      "ignore_failure": true
+    }
+  }
+]
+}

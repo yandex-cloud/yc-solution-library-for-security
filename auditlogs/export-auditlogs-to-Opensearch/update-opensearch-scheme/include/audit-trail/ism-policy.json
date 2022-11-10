@@ -1,0 +1,25 @@
+{
+    "policy": {
+      "description": "hot warm delete workflow",
+      "default_state": "hot",
+      "schema_version": 1,
+      "states": [
+        {
+          "name": "hot",
+          "actions": [
+            {
+              "rollover": {
+                "min_index_age": "30d",
+                "min_primary_shard_size": "50gb"
+              }
+            }
+          ],
+          "transitions": []
+        }
+      ],
+      "ism_template": {
+        "index_patterns": ["audit-trails-index*"],
+        "priority": 100
+      }
+    }
+  }

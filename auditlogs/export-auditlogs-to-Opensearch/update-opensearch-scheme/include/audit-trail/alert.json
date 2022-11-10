@@ -1,0 +1,61 @@
+{
+    "name": "test",
+    "type": "monitor",
+    "monitor_type": "query_level_monitor",
+    "enabled": true,
+    "schedule": {
+       "period": {
+          "unit": "MINUTES",
+          "interval": 1
+       }
+    },
+    "inputs": [
+       {
+          "search": {
+             "indices": [
+                "audit-trails-index"
+             ],
+             "query": {
+                "size": 0,
+                "aggregations": {},
+                "query": {
+                   "bool": {
+                      "filter": [
+                         {
+                            "range": {
+                               "@timestamp": {
+                                  "gte": "{{period_end}}||-1h",
+                                  "lte": "{{period_end}}",
+                                  "format": "epoch_millis"
+                               }
+                            }
+                         },
+                         {
+                            "match_phrase": {
+                               "event.action": "yandex.cloud.audit.iam.CreateAccessKey"
+                            }
+                         }
+                      ]
+                   }
+                }
+             }
+          }
+       }
+    ],
+    "triggers": [
+       {
+          "query_level_trigger": {
+             "id": "4-GknIIBRFYBrLZDkWVh",
+             "name": "test",
+             "severity": "1",
+             "condition": {
+                "script": {
+                   "source": "ctx.results[0].hits.total.value > 0",
+                   "lang": "painless"
+                }
+             }
+          }
+       }
+    ]
+    
+ }

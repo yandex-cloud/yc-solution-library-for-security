@@ -1,0 +1,54 @@
+version: '3'
+services:
+  opensearch-node1:
+    #image: opensearchproject/opensearch:2.0.1
+    image: opensearchproject/opensearch:2.1.0
+    container_name: opensearch-node1
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node1
+      - bootstrap.memory_lock=true # along with the memlock settings below, disables swapping
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m" # minimum and maximum Java heap size, recommend setting both to 50% of system RAM
+      - "DISABLE_INSTALL_DEMO_CONFIG=false" # disables execution of install_demo_configuration.sh bundled with security plugin, which installs demo certificates and security configurations to OpenSearch
+      - "DISABLE_SECURITY_PLUGIN=false" # disables security plugin entirely in OpenSearch by setting plugins.security.disabled: true in opensearch.yml
+      - "discovery.type=single-node" # disables bootstrap checks that are enabled when network.host is set to a non-loopback address
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536 # maximum number of open files for the OpenSearch user, set to at least 65536 on modern systems
+        hard: 65536
+    volumes:
+      - opensearch-data1:/usr/share/opensearch/data
+    ports:
+      - 9200:9200
+      - 9600:9600 # required for Performance Analyzer
+    networks:
+      - opensearch-net
+
+  opensearch-dashboards:
+    volumes:
+      - /usr/share/opensearch-dashboards/config/opensearch_dashboards.yml:/usr/share/opensearch-dashboards/config/opensearch_dashboards.yml #add config
+      - /usr/share/opensearch-dashboards/config/client-cert.pem:/usr/share/opensearch-dashboards/config/client-cert.pem
+      - /usr/share/opensearch-dashboards/config/client-cert-key.pem:/usr/share/opensearch-dashboards/config/client-cert-key.pem
+      - /usr/share/opensearch-dashboards/config/root-ca.pem:/usr/share/opensearch-dashboards/config/root-ca.pem
+    #image: opensearchproject/opensearch-dashboards:2.0.1
+    image: opensearchproject/opensearch-dashboards:2.1.0
+    container_name: opensearch-dashboards
+    ports:
+      - 5601:5601
+    expose:
+      - "5601"
+    environment:
+      #- 'OPENSEARCH_HOSTS=["https://opensearch-node1:9200"]'
+      - "DISABLE_SECURITY_DASHBOARDS_PLUGIN=false" # disables security dashboards plugin in OpenSearch Dashboards
+    networks:
+      - opensearch-net
+    
+
+volumes:
+  opensearch-data1:
+
+networks:
+  opensearch-net:

@@ -1,0 +1,34 @@
+spec:
+  containers:
+  - env:
+    - name: ELASTIC_SERVER
+      value: ${ELASTIC_SERVER}
+    - name: KIBANA_SERVER
+      value: ${KIBANA_SERVER}
+    - name: ELASTIC_AUTH_USER
+      value: ${ELASTIC_AUTH_USER}
+    - name: ELASTIC_INDEX_NAME
+      value: ${ELASTIC_INDEX_NAME}
+    - name: S3_BUCKET
+      value: ${S3_BUCKET}
+    - name: S3_FOLDER
+      value: ${S3_FOLDER}
+    - name: SLEEP_TIME
+      value: ${SLEEP_TIME}
+    - name: PYTHONUNBUFFERED
+      value: 1
+    - name: ELK_PASS_ENCR
+      value: ${ELK_PASS_ENCR}
+    - name: S3_KEY_ENCR
+      value: ${S3_KEY_ENCR}
+    - name: S3_SECRET_ENCR
+      value: ${S3_SECRET_ENCR}
+    - name: KMS_KEY_ID
+      value: ${KMS_KEY_ID}
+    image: cr.yandex/crpjfmfou6gflobbfvfv/s3-opensearch-importer:latest
+    name: audittrails-worker
+    securityContext:
+      privileged: false
+    stdin: false
+    tty: false
+  restartPolicy: Always
