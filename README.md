@@ -65,7 +65,7 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
   - CVE mitigations:
     - [CVE-2022-0185](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/cve-quickfix/CVE-2022-0185)
     - [CVE-2021-4034](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/cve-quickfix/CVE-2021-4034)
-  - [Таблица сравениня функций решений по безопасности k8s](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/choice_of_solutions/README_RU.md)
+  - [Таблица сравениня функций решений по безопасности k8s](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/kubernetes-security/choice_of_solutions/Сравнение_функций_k8s_security.pdf)
   - [Интеграция Starboard с Yandex Cloud Container Registry с целью сканирования запущенных образов](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/starboard_and_yc-cr/README_RU.md)
 
 ##
