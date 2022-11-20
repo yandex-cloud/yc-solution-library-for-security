@@ -55,8 +55,8 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
     - [Пример настройки ролевых моделей и политик в Managed Service for Kubernetes](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/auth_and_access/role-model-example/README_RU.md)
   - Сбор, мониторинг и анализ аудит логов:
     - [Анализ логов безопасности k8s в ELK: аудит-логи, policy engine, falco](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_k8s)
-    - [Экспорт Cilium Flow Logs в Object Storage(s3)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/cilium-s3/README_RU.md)
-    - [Экспорт k8s аудит логов в s3/object storage](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-k8s-to-s3)
+    - [Экспорт Cilium Flow Logs в Object Storage(s3)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/cilium-s3)
+    - [Экспорт k8s аудит логов в s3/object storage](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-k8s-to-s3/README.md)
     - [Экспорт k8s аудит логов в Yandex Data Streams/Kinesis Data Streams](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-k8s-to-yds)
   - Шифрование данных и управление ключами/секретами Managed Kubernetes
     - [Управление секретами c SecretManager(Lockbox,Vault)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/encrypt_and_keys/secret-management/README_RU.md)
