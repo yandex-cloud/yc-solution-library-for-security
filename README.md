@@ -54,7 +54,7 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
   - Аутентификация и управление доступом Managed Kubernetes:
     - [Пример настройки ролевых моделей и политик в Managed Service for Kubernetes](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/kubernetes-security/auth_and_access/role-model-example/README_RU.md)
   - Сбор, мониторинг и анализ аудит логов:
-    - [Анализ логов безопасности k8s в ELK: аудит-логи, policy engine, falco](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_k8s/README_RU.md)
+    - [Анализ логов безопасности k8s в ELK: аудит-логи, policy engine, falco](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-auditlogs-to-ELK_k8s)
     - [Экспорт Cilium Flow Logs в Object Storage(s3)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/cilium-s3/README_RU.md)
     - [Экспорт k8s аудит логов в s3/object storage](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-k8s-to-s3)
     - [Экспорт k8s аудит логов в Yandex Data Streams/Kinesis Data Streams](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auditlogs/export-k8s-to-yds)
