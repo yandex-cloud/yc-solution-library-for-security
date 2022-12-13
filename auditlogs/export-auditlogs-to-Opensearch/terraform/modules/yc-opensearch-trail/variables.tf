@@ -14,6 +14,16 @@ variable "opensearch_user" {
   default     = ""
 }
 
+variable "opensearch_dashboard_address" { 
+  description = "FQDN-адрес инсталляции Opensearch вида https://c-xxx.rw.mdb.yandexcloud.net" 
+  default     = "" 
+} 
+ 
+variable "opensearch_node_address" { 
+  description = "FQDN-адрес инсталляции Opensearch вида https://rc1a-xxx.mdb.yandexcloud.net" 
+  default     = "" 
+}
+
 variable "opensearch_address" {
   description = "FQDN-адрес инсталляции ElasticSearch вида https://c-xxx.rw.mdb.yandexcloud.net"
   default     = ""
