@@ -1,6 +1,6 @@
 # Развертывание и управление организацией и правами доступа через IaC terraform 
 
-**Version:1.1**
+**Version:1.0**
 
 # Описание
 Задача: Полное управление организацией через terraform. На каждый проект должно выделяться одно облако с назначенной группой ответственных администраторов за облако. Должно быть отдельное облако security со своей ответственной группой админов. В каждом облаке отдельное управление через TF. Нарезаются dev, non-prod, prod каталоги с разными правами. Управление уровнем организации должно происходить в одном tf state через git, а управление уровнем облаков в своих собственных state также через git.
@@ -18,15 +18,14 @@
 - Все управление tf происходит через git подход. Каждое изменение (PR) должны проверять ответственные за tf соответствующего уровня
 
 # Схема и скриншот результата
+![iam_iac-IaC1 drawio](https://user-images.githubusercontent.com/85429798/197990571-07edcc7b-83ee-441b-9bc3-2c839d72c37c.png)
 
-<img width="1264" alt="image" src="https://user-images.githubusercontent.com/85429798/198960106-ae3663a0-0054-4504-93da-3fbe1682ebc5.png">
-
-<img width="1919" alt="image" src="https://user-images.githubusercontent.com/85429798/198960141-f0dec470-590c-4ae8-8661-9ef448dc39eb.png">
+![iam_iac-Multifolder VPC drilldown drawio](https://user-images.githubusercontent.com/85429798/197990607-34cd21ef-fbf0-457e-8e1e-4e9e285a93ff.png)
 
 <img width="1049" alt="скрин" src="https://user-images.githubusercontent.com/85429798/197990620-6f99b158-eece-477c-8d22-3fa0e015ed96.png">
 
 
-# Инструкция:
+# Инстуркция:
 **Пререквизиты**:
 - Платежный аккаунт yandex cloud
 - Созданная организация
@@ -53,7 +52,8 @@ yc resource-manager folder create --name org-admin
 yc iam service-account create --name sa-org-admin --folder-name org-admin
 ```
 6) Убедиться, что в сервисе Cloud DNS папки org-admin уже [создана публичная DNS-зона](https://cloud.yandex.ru/docs/dns/operations/zone-create-public) с которой будем работать дальше. Имя этой зоны далее указывается в переменной DNS_ZONE_NAME
-8) Перейдите в папку ./module_keycloak. Укажите переменные dns_zone_name, folder_id и kc_fqdn согласно вашим значениям в файле module_keycloak/variables.tf . Это необходимо для генерации сертификата.
+7) Перейдите в папку ./module_keycloak . Запускаем kc-users-gen.sh - получаем файл со списком учетных записей пользователей федерации с автогенерированными паролями. Имя файла в переменной kc_user_file.
+8) Укажите переменные dns_zone_name, folder_id и kc_fqdn согласно вашим значениям в файле module_keycloak/variables.tf . Это необходимо для генерации сертификата.
 9) Запускаем kc-le-cert.sh - получаем Let's Encrypt сертификаты для нужного домена в виде пары .pem файлов. Имена файлов в переменных le_cert_pub_key и le_cert_priv_key соответственно из папки module_keycloak/variables.tf 
 10) Вернитесь в исходную общую папку. Заполните файл terraform.tfvars !не забудьте поменять имя файла на terrafrom.tfvars
 11) Выдать права sa на оргу через cli (пока не поддержана возможность выдачи через UI)
@@ -94,25 +94,18 @@ yc iam key create --service-account-name sa-org-admin --output sa-key.json
 
 17) Также строго рекомендуется поместить tf конфиг в защищенный git репозиторий и управлять выкаткой изменений в state с помощью PR и согласования
 
-18) Сгенерированные логины и пароли администраторов находятся в файле ./moudle_keycloak/kc-users.lst . Не забудьте настроить keycloak, чтобы он требовал смену пароля при первом входе.
-
 18) Передайте ответственному администратору за облако "web-app-project" его логин/пароль и ссылку на вход в федерацию из output вида "https://console.cloud.yandex.ru/federations/bpf3pc05joidt9it7l0m" . Ответственный администратор назначается в группе "web-admin-group-members" в файле org_level_groups_and_users.tf
-
-19) Пример output:
-```Python
-Outputs:
-
-federation_id = "bpfi9ahu438i1171r654"
-federation_link = "https://console.cloud.yandex.ru/federations/bpfi9ahu438i1171r654"
-keycloak_links = "https://kc.lavre.link:8443"
-```
 
 **Уровень облаков**
 1)  Войдите в UI консоль под ответственным администратором за облако "web-app-project" с помощью ссылки в output, например https://console.cloud.yandex.ru/federations/bpf3pc05joidt9it7l0m
 2) Настройте yc cli под федеративным пользователем, которого вам выдали согласно [инстуркции](https://cloud.yandex.ru/docs/cli/operations/authentication/federated-user)
+3) Создайте новый каталог "network-folder" (уберите галочку создать сеть по умолчанию)
+```Python
+yc resource-manager folder create --name network-folder
+```
 4) Создайте в нем сервисный аккаунт "sa-web-app-tf" 
 ```Python
-yc iam service-account create --name sa-web-app-tf --folder-name network
+yc iam service-account create --name sa-web-app-tf --folder-name network-folder
 ```
 5) Выдайте ему права "resource-manager.admin" и "viewer" **именно на облако web-app-project**, а не на каталог
 ```Python
@@ -127,122 +120,16 @@ yc resource-manager cloud add-access-binding \
   --service-account-name sa-web-app-tf 
 
 ```
-
-6) Скачайте репозиторий по аналогии с п. 0 организационного уровня выше. Перейдите в папку "/cloud-level-state"
-7) Создайте авторизованный ключ
+6) В основном каталоге данного решения и раскомментируйте строки в файле org_level_grant_viewer.tf (начиная со строки номер 3). Затем запустите еще раз terrafrom plan, terraform apply. Этим вы предоставите сервисной учетной записи sa-web-app-tf роль organization-manager.viewer (необходимо для доступа к данным по группам).
+7) Скачайте репозиторий по аналогии с п. 0 организационного уровня выше. Перейдите в папку "/cloud-level-state"
+8) Создайте авторизованный ключ
 ```Python
 yc iam key create --service-account-name sa-web-app-tf --output sa-key.json  
 ```
-8) Заполните файл terraform.tfvars своими значениями 
-9) Добавляйте при необходимости обьекты tf 
+9) Вернитесь в каталог /cloud-level-state. Заполните файл terraform.tfvars своими значениями 
 10) Запустите terraform init, terraform plan, terrafrom apply
-11) Установите managed gitlab в каталоге network-folder и поместите туда terrafrom config и credentials от sa sa-web-app-tf, чтобы управлять IaC
+11) Установите managed gitlab в каталоге network-folder и поместите туда terrafrom config и credentials от sa sa-web-app-tf
 
 
----
-# Документация "terraform-docs" org_level
 
 
-<!-- BEGIN_TF_DOCS -->
-## Requirements
-
-| Name | Version |
-|------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.13 |
-
-## Providers
-
-| Name | Version |
-|------|---------|
-| <a name="provider_local"></a> [local](#provider\_local) | 2.2.3 |
-| <a name="provider_random"></a> [random](#provider\_random) | 3.4.3 |
-| <a name="provider_time"></a> [time](#provider\_time) | 0.9.0 |
-| <a name="provider_yandex"></a> [yandex](#provider\_yandex) | 0.81.0 |
-
-## Modules
-
-| Name | Source | Version |
-|------|--------|---------|
-| <a name="module_keycloak"></a> [keycloak](#module\_keycloak) | ./module_keycloak | n/a |
-
-## Resources
-
-| Name | Type |
-|------|------|
-| [local_file.kc-users-lst](https://registry.terraform.io/providers/hashicorp/local/latest/docs/resources/file) | resource |
-| [random_password.passwords](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
-| [time_sleep.wait_60_seconds](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
-| [time_sleep.wait_60_seconds2](https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep) | resource |
-| [yandex_iam_service_account.sec-sa-trail](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/iam_service_account) | resource |
-| [yandex_organizationmanager_group.cloud-admins-group](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/organizationmanager_group) | resource |
-| [yandex_organizationmanager_group.dev-folder-groups-cloud1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/organizationmanager_group) | resource |
-| [yandex_organizationmanager_group.dev-folder-groups-cloud2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/organizationmanager_group) | resource |
-| [yandex_organizationmanager_group.network-folder-groups-cloud1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/organizationmanager_group) | resource |
-| [yandex_organizationmanager_group.network-folder-groups-cloud2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/organizationmanager_group) | resource |
-| [yandex_organizationmanager_group.nonprod-folder-groups-cloud1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/organizationmanager_group) | resource |
-| [yandex_organizationmanager_group.nonprod-folder-groups-cloud2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/organizationmanager_group) | resource |
-| [yandex_organizationmanager_group.prod-folder-groups-cloud1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/organizationmanager_group) | resource |
-| [yandex_organizationmanager_group.prod-folder-groups-cloud2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/organizationmanager_group) | resource |
-| [yandex_organizationmanager_group_membership.admin-group-members](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/organizationmanager_group_membership) | resource |
-| [yandex_organizationmanager_organization_iam_member.trails-bind-sa](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/organizationmanager_organization_iam_member) | resource |
-| [yandex_resourcemanager_cloud.create-clouds](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_cloud) | resource |
-| [yandex_resourcemanager_cloud_iam_member.admin-binding](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_cloud_iam_member) | resource |
-| [yandex_resourcemanager_cloud_iam_member.cloud-viewer](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_cloud_iam_member) | resource |
-| [yandex_resourcemanager_cloud_iam_member.compute-admin](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_cloud_iam_member) | resource |
-| [yandex_resourcemanager_cloud_iam_member.dns-admin](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_cloud_iam_member) | resource |
-| [yandex_resourcemanager_cloud_iam_member.mdb-admin](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_cloud_iam_member) | resource |
-| [yandex_resourcemanager_cloud_iam_member.storageadmin](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_cloud_iam_member) | resource |
-| [yandex_resourcemanager_cloud_iam_member.viewer](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_cloud_iam_member) | resource |
-| [yandex_resourcemanager_cloud_iam_member.vpc-admin](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_cloud_iam_member) | resource |
-| [yandex_resourcemanager_folder.cloud_admin](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder) | resource |
-| [yandex_resourcemanager_folder.first-folders](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder) | resource |
-| [yandex_resourcemanager_folder.second-folders](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder) | resource |
-| [yandex_resourcemanager_folder_iam_member.dev1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.dev1-1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.dev1-2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.dev2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.network1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.network1-1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.network2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.network2-2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.nonprod1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.nonprod1-1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.nonprod1-2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.nonprod1-3](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.nonprod2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.nonprod3](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.prod1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.prod1-1](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.prod1-2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.prod1-3](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.prod2](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_resourcemanager_folder_iam_member.prod3](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/resources/resourcemanager_folder_iam_member) | resource |
-| [yandex_iam_service_account.sa-org-admin](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/data-sources/iam_service_account) | data source |
-| [yandex_organizationmanager_saml_federation_user_account.user](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/data-sources/organizationmanager_saml_federation_user_account) | data source |
-| [yandex_resourcemanager_cloud.cloud-org-admin](https://registry.terraform.io/providers/yandex-cloud/yandex/latest/docs/data-sources/resourcemanager_cloud) | data source |
-
-## Inputs
-
-| Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
-| <a name="input_BA_ID"></a> [BA\_ID](#input\_BA\_ID) | billing account id | `string` | `""` | no |
-| <a name="input_CLOUD-LIST"></a> [CLOUD-LIST](#input\_CLOUD-LIST) | List of Organization-level groups with their Roles | <pre>list(object(<br>    {<br>      name = string,<br>      descr = string,<br>      admin = string,<br>      folders = list(string)<br>    }<br>  ))</pre> | <pre>[<br>  {<br>    "admin": "user1@example.com",<br>    "descr": "web-app cloud",<br>    "folders": [<br>      "network",<br>      "prod",<br>      "nonprod",<br>      "dev"<br>    ],<br>    "name": "web-app"<br>  },<br>  {<br>    "admin": "user2@example.com",<br>    "descr": "mobile-app cloud",<br>    "folders": [<br>      "network",<br>      "prod",<br>      "nonprod",<br>      "dev"<br>    ],<br>    "name": "mobile-app"<br>  },<br>  {<br>    "admin": "user3@example.com",<br>    "descr": "security cloud",<br>    "folders": [<br>      ""<br>    ],<br>    "name": "security"<br>  }<br>]</pre> | no |
-| <a name="input_DEV-CLOUD_GROUPS"></a> [DEV-CLOUD\_GROUPS](#input\_DEV-CLOUD\_GROUPS) | List of Groups that you want to pre-create for your clouds | <pre>list(object(<br>    {<br>      name = string,<br>      descr = string,<br>      roles = list(string)<br>    }<br>  ))</pre> | <pre>[<br>  {<br>    "descr": "network dev",<br>    "name": "dev-network",<br>    "roles": [<br>      "vpc.admin",<br>      "monitoring.admin"<br>    ]<br>  },<br>  {<br>    "descr": "dev devops",<br>    "name": "dev-devops",<br>    "roles": [<br>      "k8s.admin",<br>      "container-registry.admin",<br>      "alb.admin",<br>      "k8s.cluster-api.cluster-admin",<br>      "vpc.user",<br>      "iam.serviceAccounts.user"<br>    ]<br>  }<br>]</pre> | no |
-| <a name="input_DNS_ZONE_NAME"></a> [DNS\_ZONE\_NAME](#input\_DNS\_ZONE\_NAME) | name of dns zone in yandex cloud, not dns name | `string` | `""` | no |
-| <a name="input_KC_FQDN"></a> [KC\_FQDN](#input\_KC\_FQDN) | dns name of keycloak | `string` | `""` | no |
-| <a name="input_KEYCLOAK"></a> [KEYCLOAK](#input\_KEYCLOAK) | install keycloak or no | `string` | `""` | no |
-| <a name="input_NETWORK-CLOUD_GROUPS"></a> [NETWORK-CLOUD\_GROUPS](#input\_NETWORK-CLOUD\_GROUPS) | List of Groups that you want to pre-create for your clouds | <pre>list(object(<br>    {<br>      name = string,<br>      descr = string,<br>      roles = list(string)<br>    }<br>  ))</pre> | <pre>[<br>  {<br>    "descr": "admin who can view and monitor network",<br>    "name": "network-viewer",<br>    "roles": [<br>      "vpc.viewer",<br>      "monitoring.admin"<br>    ]<br>  },<br>  {<br>    "descr": "admin who can administrate gitlab",<br>    "name": "gitlab-admin",<br>    "roles": [<br>      "gitlab.admin"<br>    ]<br>  }<br>]</pre> | no |
-| <a name="input_NONPROD-CLOUD_GROUPS"></a> [NONPROD-CLOUD\_GROUPS](#input\_NONPROD-CLOUD\_GROUPS) | List of Groups that you want to pre-create for your clouds | <pre>list(object(<br>    {<br>      name = string,<br>      descr = string,<br>      roles = list(string)<br>    }<br>  ))</pre> | <pre>[<br>  {<br>    "descr": "devops nonprod",<br>    "name": "nonprod-devops",<br>    "roles": [<br>      "k8s.editor",<br>      "container-registry.editor",<br>      "alb.editor",<br>      "k8s.cluster-api.editor",<br>      "vpc.user",<br>      "load-balancer.admin"<br>    ]<br>  },<br>  {<br>    "descr": "sre nonprod",<br>    "name": "nonprod-sre",<br>    "roles": [<br>      "compute.operator",<br>      "loadtesting.editor",<br>      "storage.editor",<br>      "alb.editor"<br>    ]<br>  },<br>  {<br>    "descr": "dba nonprod",<br>    "name": "nonprod-dba",<br>    "roles": [<br>      "mdb.admin",<br>      "ydb.editor"<br>    ]<br>  }<br>]</pre> | no |
-| <a name="input_ORG_ADMIN_CLOUD_ID"></a> [ORG\_ADMIN\_CLOUD\_ID](#input\_ORG\_ADMIN\_CLOUD\_ID) | cloud\_id of first cloud | `string` | `""` | no |
-| <a name="input_ORG_ADMIN_FOLDER_ID"></a> [ORG\_ADMIN\_FOLDER\_ID](#input\_ORG\_ADMIN\_FOLDER\_ID) | folder\_id of first folder in org cloud | `string` | `""` | no |
-| <a name="input_ORG_ID"></a> [ORG\_ID](#input\_ORG\_ID) | organization id | `string` | `""` | no |
-| <a name="input_PROD-CLOUD_GROUPS"></a> [PROD-CLOUD\_GROUPS](#input\_PROD-CLOUD\_GROUPS) | List of Groups that you want to pre-create for your clouds | <pre>list(object(<br>    {<br>      name = string,<br>      descr = string,<br>      roles = list(string)<br>    }<br>  ))</pre> | <pre>[<br>  {<br>    "descr": "devops prod",<br>    "name": "prod-devops",<br>    "roles": [<br>      "k8s.viewer",<br>      "container-registry.viewer",<br>      "alb.viewer",<br>      "k8s.cluster-api.viewer",<br>      "vpc.user",<br>      "load-balancer.viewer"<br>    ]<br>  },<br>  {<br>    "descr": "sre prod",<br>    "name": "prod-sre",<br>    "roles": [<br>      "compute.viewer",<br>      "loadtesting.viewer",<br>      "storage.configViewer",<br>      "alb.viewer"<br>    ]<br>  },<br>  {<br>    "descr": "dba prod",<br>    "name": "prod-dba",<br>    "roles": [<br>      "mdb.viewer",<br>      "ydb.viewer"<br>    ]<br>  }<br>]</pre> | no |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| <a name="output_federation_id"></a> [federation\_id](#output\_federation\_id) | n/a |
-| <a name="output_federation_link"></a> [federation\_link](#output\_federation\_link) | n/a |
-| <a name="output_keycloak_links"></a> [keycloak\_links](#output\_keycloak\_links) | n/a |
-<!-- END_TF_DOCS -->
