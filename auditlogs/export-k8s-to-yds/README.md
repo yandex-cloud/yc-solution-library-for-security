@@ -9,7 +9,7 @@ Prerequisites:
 - ✅ Ask cloud support for an alpha flag "LOGS_ALPHA"
 - ✅ [Existing Yandex Data Streams](https://cloud.yandex.ru/services/data-streams)
 - ✅ To get the **yds_id** parameter, go to the deployed YDS and copy it from the endpoint tab, for example
-https://yds.serverless.yandexcloud.net/ru-central1/**b1g3o4minpkuh10pd2rj**/etnrmbadnrson5algn3s . Parameter b1g3o4minpkuh10pd2rj is yds id
+https://yds.serverless.yandexcloud.net/ru-central1/b1g3o4minpkuh10pd2rj/**etnrmbadnrson5algn3s**/stream-for-k8s-audit . Parameter etnrmbadnrson5algn3s is yds id
 
 ##
 1) If you doing this from Russia just create the file and fill it out like this to use yandex network mirror:

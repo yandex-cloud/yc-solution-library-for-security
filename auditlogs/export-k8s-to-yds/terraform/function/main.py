@@ -29,24 +29,15 @@ client = boto3.client(
     )
 
 def handler(event, context):
-
+    yds_name = os.environ.get('YDS_NAME')
+    yds_id = os.environ.get('YDS_ID')
+    yds_ydb_id = os.environ.get('YDS_YDB_ID')
+    folder_name = os.environ.get('CLOUD_ID')
+    push_to_kinesis = []
     for log_data in event['messages']:
-
-        full_log = []
         for log_entry in  log_data['details']['messages']:
-            kubernetes_log = json.loads(log_entry['message'])
-            full_log.append(json.dumps(kubernetes_log))
-
-        yds_name = os.environ.get('YDS_NAME')
-        yds_id = os.environ.get('YDS_ID')
-        yds_ydb_id = os.environ.get('YDS_YDB_ID')
-        folder_name = os.environ.get('FOLDER_ID')
-        partition_key = "1"
-
-       # object_key = os.environ.get('LOG_PREFIX')+'/'+datetime.now().strftime('%Y-%m-%d-%H:%M:%S')+'-'+get_random_alphanumeric_string(5)
-        #object_key = 'AUDIT/'+os.environ.get('CLUSTER_ID')+'/'+datetime.now().strftime('%Y-%m-%d-%H:%M:%S')+'-'+get_random_alphanumeric_string(5)
-        object_value = '\n'.join(full_log)
-        # client.put_object(Bucket=bucket_name, Key=object_key, Body=object_value, StorageClass='COLD')
-        # print(object_value)
-        #client.put_record(StreamName="/ru-central1/{folder}/{database}/{stream}".format(folder=folder_name, database=yds_ydb_name, stream=yds_name), Data=object_value, PartitionKey=object_value)
-        client.put_record(StreamName="/ru-central1/{yds_id_past}/{database}/{stream}".format(yds_id_past=yds_id, database=yds_ydb_id, stream=yds_name), Data=object_value, PartitionKey=partition_key)
+            push_to_kinesis.append({'Data': log_entry['message'],'PartitionKey': str(get_random_alphanumeric_string(5))} )
+            response = client.put_records(StreamName="/ru-central1/{folder}/{database}/{stream}".format(folder=folder_name, database=yds_ydb_id, stream=yds_name), Records=push_to_kinesis)
+    num_of_records = len(push_to_kinesis)
+    print(f'Records count - {num_of_records}')
+    print(f'Response from YDS - {response}')
