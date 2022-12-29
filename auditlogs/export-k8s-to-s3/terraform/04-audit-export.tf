@@ -6,7 +6,7 @@ data "archive_file" "function_export" {
 
 resource "yandex_function" "k8s_log_exporter" {
   folder_id          = var.folder_id
-  name               = "k8s-log-exporter-s3-${data.yandex_kubernetes_cluster.my_cluster.name}"
+  name               = "k8s-log-exporter-${data.yandex_kubernetes_cluster.my_cluster.name}"
   runtime            = "python38"
   entrypoint         = "main.handler"
   memory             = "128"
@@ -30,7 +30,7 @@ resource "yandex_function" "k8s_log_exporter" {
 
 resource "yandex_function_trigger" "logs-trigger" {
   depends_on = [yandex_function.k8s_log_exporter]
-  name       = "k8s-log-trigger-s3-${data.yandex_kubernetes_cluster.my_cluster.name}"
+  name       = "k8s-log-trigger-${data.yandex_kubernetes_cluster.my_cluster.name}"
   folder_id  = var.folder_id
   function {
     id                 = yandex_function.k8s_log_exporter.id

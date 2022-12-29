@@ -9,7 +9,7 @@ resource "random_string" "random" {
 # Create SA for creation bucket
 resource "yandex_iam_service_account" "sa-writer" {
   folder_id = var.folder_id
-  name      = "sa-for-k8s-export-s3"
+  name      = "sa-for-k8s-export"
 }
 
 # Grant permissions send logs to bucket
@@ -45,7 +45,7 @@ resource "yandex_storage_bucket" "es-bucket" {
 # Create SA for read/write bucket
 resource "yandex_iam_service_account" "sa-writer-to-bucket" {
   folder_id = var.folder_id
-  name      = "sa-for-writing-k8s-for-export-s3"
+  name      = "sa-for-writing-k8s-for-export"
 }
 
 # Grant permissions send logs to bucket
