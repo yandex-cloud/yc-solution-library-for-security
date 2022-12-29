@@ -27,6 +27,7 @@ yc iam key create --service-account-name my-sa --output key.json
 - token (тут указать путь до файла ключа sa , по умолчанию key.json)
 - subnet_id (указать айди подсети в которой надо развернуть вм перекладчика, должна иметь доступ к opensearch)
 
+!!Переименуйте файл, чтобы он назывался **"terrafrom.tfvars"**
 
 4) Для заполнения поля token создайте [ключ](https://cloud.yandex.ru/docs/iam/operations/authorized-key/create) для сервисного аккаунта для аутентификации в terraform либо используйте ваш OAuth токен yc
 5) Запустите:
