@@ -43,7 +43,7 @@ resource "yandex_function_trigger" "logs-trigger" {
     log_group_ids = [
       data.yandex_kubernetes_cluster.my_cluster.log_group_id,
     ]
-    batch_cutoff = 1
-    batch_size   = 1
+    batch_cutoff = 10
+    batch_size   = 100
   }
 }
