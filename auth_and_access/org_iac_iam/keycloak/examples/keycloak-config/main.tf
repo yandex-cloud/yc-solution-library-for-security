@@ -23,8 +23,7 @@ terraform {
 # Call keycloak-config module
 # ===========================
 module "keycloak-config" {
-  source = "../../keycloak-config"
-  #source = "https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auth_and_access/keycloak/keycloak-config/"
+  source = "https://github.com/nettworker/yc-solution-library-for-security/tree/master/auth_and_access/keycloak/keycloak-config/"
   labels = { tag = "keycloak-config" }
 
   # =====================

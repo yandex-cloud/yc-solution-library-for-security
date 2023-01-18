@@ -96,12 +96,12 @@
 
 1. Загрузить решение из репозитория на [github.com](https://github.com/yandex-cloud/yc-solution-library-for-security):
     ```bash
-    curl https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auth_and_access/org_iac_iam/keycloak/examples/install.sh | bash
+    curl -s https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auth_and_access/org_iac_iam/keycloak/examples/install.sh | bash
     ```
 
 2. Перейти в папку с примером развёртывания модуля [keycloak-deploy](./examples/keycloak-deploy/):
     ```bash
-    cd keycloak/examples/keycloak-deploy
+    cd keycloak/keycloak-deploy
     pwd
     ```
 
@@ -132,7 +132,7 @@
     ```
 9. Выполнить синхронизацию параметров между TF модулями:
     ```bash
-    ./sync.sh
+    bash sync.sh
     ```
 10. Проверить значения переменных в файле [main.tf](./examples/keycloak-config/main.tf) и скорректировать их при необходимости.
 
