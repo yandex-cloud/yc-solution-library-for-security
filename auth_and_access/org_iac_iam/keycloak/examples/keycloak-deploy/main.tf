@@ -14,7 +14,7 @@ terraform {
 # Call keycloak-deploy module
 # ===========================
 module "keycloak-deploy" {
-  source = "git::https://github.com/nettworker/yc-solution-library-for-security.git//auth_and_access/org_iac_iam/keycloak/keycloak-deploy"
+  source = "git::https://github.com/yandex-cloud/yc-solution-library-for-security.git//auth_and_access/org_iac_iam/keycloak/keycloak-deploy"
   cloud_id = var.YC_CLOUD_ID
   labels = { tag = "keycloak-deploy" }
 
