@@ -1,6 +1,6 @@
 #!/bin/bash
 
-REPO="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auth_and_access/org_iac_iam/keycloak"
+REPO="https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auth_and_access/keycloak"
 
 mkdir -p keycloak/keycloak-deploy
 mkdir -p keycloak/keycloak-config

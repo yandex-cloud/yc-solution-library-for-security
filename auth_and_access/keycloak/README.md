@@ -96,7 +96,7 @@
 
 1. Загрузить решение из репозитория на [github.com](https://github.com/yandex-cloud/yc-solution-library-for-security):
     ```bash
-    curl -s https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auth_and_access/org_iac_iam/keycloak/examples/install.sh | bash
+    curl -s https://raw.githubusercontent.com/yandex-cloud/yc-solution-library-for-security/master/auth_and_access/keycloak/examples/install.sh | bash
     ```
 
 2. Перейти в папку с примером развёртывания модуля [keycloak-deploy](./examples/keycloak-deploy/):
