@@ -43,10 +43,10 @@ resource "yandex_function_trigger" "cloud-log" {
   description    = "cloud-log-s3-${random_string.suffix.result}"
   
   logging {
-    resource_types = ["k8s.cluster"]
-    resource_ids = [var.cluster_id]
+    resource_types = ["k8s.cluster"] # should be at least one, that's why it's here
+    resource_ids = [var.cluster_id] # should be at least one, that's why it's here
     group_id     = var.logging_group_id
-    levels       = ["INFO"]
+    levels       = ["INFO"] # should be specified, that's why it's here
     batch_cutoff = "30"
     batch_size   = "100"
 

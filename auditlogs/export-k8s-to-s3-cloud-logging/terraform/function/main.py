@@ -30,7 +30,15 @@ def handler(event, context):
 
         full_log = []
         for log_entry in log_data['details']['messages']:
-            full_log.append(json.dumps(log_entry))
+            # Temporary filter
+            try:
+                if (log_entry['json_payload']['apiVersion'] == "audit.k8s.io/v1"):
+                    full_log.append(json.dumps(log_entry))
+                else:
+                    print("wrong apiVersion key")
+            except KeyError:
+                print("no apiVersion key")
+            # Temporary filter end
 
         object_key = 'AUDIT/'+config['cluster_id']+'/'+datetime.now().strftime('%Y-%m-%d-%H:%M:%S')+'-'+get_random_alphanumeric_string(5)
         object_value = '\n'.join(full_log)
