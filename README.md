@@ -6,10 +6,10 @@
 [![image](https://user-images.githubusercontent.com/85429798/146542425-b250c494-9a3c-4744-897d-5f65849355d5.png)](https://www.youtube.com/watch?v=WZOB9ow0WrA)
 
 
-#### ☑️ Yandex.Cloud Security Checklist
+#### ☑️ Стандарт по защите облачной инфраструктуры Yandex Cloud 1.0
 Чеклист по безопасности в облачной инфраструкутре Yandex Cloud
 
-https://cloud.yandex.ru/docs/overview/security/domains/checklist
+https://cloud.yandex.ru/docs/security/standard/all
 
 # Список решений
 - 🕸 Сетевая безопасность
