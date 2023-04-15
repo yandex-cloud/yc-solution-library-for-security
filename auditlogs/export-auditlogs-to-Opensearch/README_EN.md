@@ -35,7 +35,7 @@ Contains the following Security Content:
 - Dashboard showing all use cases and useful statistics
 - A set of Saved Queries for easy search of Security events
 - An example of Alert for which alerts are configured (The client himself needs to specify the purpose of notifications)
-- All interesting event fields are converted to the [Elastic Common Schema (ECS)] format (https://www.elastic.co/guide/en/ecs/current/index.html), full mapping table in the [Object description] file ( https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Description%20objects.pdf)
+- All interesting event fields are converted to the [Elastic Common Schema (ECS)] format (https://www.elastic.co/guide/en/ecs/current/index.html), full mapping table in the [Object description] file (https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Описание%20объектов%20eng.docx) 
 
 Detailed description in the file [ECS-mapping.docx](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/ ECS-mapping_new.pdf)
 
