@@ -41,7 +41,7 @@ Start-Transcript -Path "$ENV:SystemDrive\provision2.txt" -IncludeInvocationHeade
 # and assign service account with roles lockbox.payloadViewer and kms.key.encryptorDecryptor to VM
 
 # HERE'S ENTER YOUR SECRET'S ID OF IMPORT FROM TERRAFORM VARIABLE:
-$SecretID = ""<YOUR_LOCBOX_SECRET_ID>"
+$SecretID = "<YOUR_LOCBOX_SECRET_ID>"
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $SecretURL = "https://payload.lockbox.api.cloud.yandex.net/lockbox/v1/secrets/$SecretID/payload"
