@@ -1,7 +1,7 @@
 # YC Windows VM Безопасная передача паролей в скрипт инициализации
 ## Проблема
 С тех пор как в UI появилось возможность просматривать метаданные ВМ - любой администратор облака или каталога может узнать пароль от гостевой операционной системы. При этом, администраторы облачных контейнеров не обязательно должны иметь доступ к гостевой ОС. Пример:
-![Plain tex example](.img/1-plaintext.png)
+![Plain text example](.img/1-plaintext.png)
 
 В связи с этим, [скрипт инициализации](https://cloud.yandex.ru/docs/tutorials/infrastructure-management/terraform-quickstart#users) предлагается расширить с использованием сервиса Lockbox параллельно автоматизировав создание пользователей.
 
@@ -101,9 +101,9 @@ yc compute instance create --name <vm_name> --hostname <guest os name> --zone ru
 
 **Создание ВМ (UI):**
 В UI можно передать в user-data скрипт инициализации. Для этого в поле `key` нужно написать `user-data`, а в поле `Value` вставить скрипт инициализации
-![Creating Windows VM via UI](.img/6-ui.png)
+![Creating Windows VM via UI](.img/6-UI.png)
 
-====5. Проверка====
+### 5. Проверка
 Теперь в метаданных ВМ чувствительные данные отсутствуют:
 ![Secured Metadata](.img/7-secured-metadata.png)
 
