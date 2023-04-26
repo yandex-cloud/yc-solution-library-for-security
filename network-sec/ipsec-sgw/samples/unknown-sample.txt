@@ -1,0 +1,20 @@
+# =====================================
+# IPSEC attributes for Remote IPSEC SGW
+# =====================================
+
+yc-ipsec:
+  mode: IPSEC Tunnel mode
+  ike-version: IKEv2
+
+  ike-proposal: aes128gcm16-prfsha256-ecp256
+  esp-proposal: aes128gcm16
+  psk: OcsIc-321
+
+  local-sgw-ip: 51.250.13.97
+  # Yandex Cloud Security Gateway - yc-sgw
+  yc-sgw-ip: 51.250.90.9
+#
+
+YC-prefixes: 
+  10.128.0.0/24
+  10.129.0.0/24
