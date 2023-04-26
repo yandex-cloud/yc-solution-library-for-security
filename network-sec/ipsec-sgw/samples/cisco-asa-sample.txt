@@ -1,0 +1,51 @@
+
+! Cisco ASA with Routed mode (Tunnel) <-- IPSEC --> strongSwan Instance
+! 
+! Tested with Cisco ASAv v9.15(1)10
+!
+! Should be work with Cisco ASA/ASAv families 
+!
+
+!
+crypto ikev2 enable outside
+!
+crypto ikev2 policy 1
+
+ encryption aes-gcm  
+ integrity null
+ group 19
+ prf sha256
+!
+crypto ipsec ikev2 ipsec-proposal IKE2-PROPOSAL
+
+ protocol esp encryption aes-gcm   protocol esp integrity null
+!
+crypto ipsec profile IKE2-PROFILE
+ set ikev2 ipsec-proposal IKE2-PROPOSAL
+ set security-association lifetime kilobytes unlimited
+ set security-association lifetime seconds 50000
+!
+group-policy IKE2-POLICY internal
+group-policy IKE2-POLICY attributes
+ vpn-tunnel-protocol ikev2
+!
+tunnel-group 158.160.45.51 type ipsec-l2l
+tunnel-group 158.160.45.51 general-attributes
+ default-group-policy IKE2-POLICY
+!
+tunnel-group 158.160.45.51 ipsec-attributes
+ ikev2 remote-authentication pre-shared-key OcsIc-321
+ ikev2 local-authentication pre-shared-key OcsIc-321
+!
+interface Tunnel10
+ nameif vti
+ ip address 169.254.254.1 255.255.255.252
+ tunnel source interface outside
+ tunnel destination 158.160.45.51
+ tunnel mode ipsec ipv4
+ tunnel protection ipsec profile IKE2-PROFILE
+!
+
+! Route YC prefixes via IPsec Tunnel interface
+route vti 10.128.0.0 255.255.255.0 169.254.254.2 1
+route vti 10.129.0.0 255.255.255.0 169.254.254.2 1

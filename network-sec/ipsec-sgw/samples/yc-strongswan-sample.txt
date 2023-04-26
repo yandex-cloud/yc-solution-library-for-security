@@ -1,0 +1,38 @@
+connections {
+  yc-ipsec {
+    remote_addrs = 51.250.13.97
+    local {
+      auth = psk
+    }
+    remote {
+      auth = psk
+    }
+    version = 2 # IKEv2
+    mobike = no
+    proposals = aes128gcm16-prfsha256-ecp256, default
+    dpd_delay = 10s
+    children {
+      yc-ipsec {
+        # Local IPv4 subnets
+        local_ts = 0.0.0.0/0
+
+        # Remote IPv4 subnets
+        remote_ts = 0.0.0.0/0
+
+        start_action = start
+        esp_proposals = aes128gcm16
+        dpd_action = clear
+
+        if_id_in = 48
+        if_id_out = 48
+      }
+    }
+  }
+}
+
+# Pre-shared key (PSK) for IPSEC connection
+secrets {
+  ike-yc-ipsec {
+    secret = OcsIc-321
+  }
+}
