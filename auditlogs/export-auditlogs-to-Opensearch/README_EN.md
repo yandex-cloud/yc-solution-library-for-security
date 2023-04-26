@@ -35,7 +35,7 @@ Contains the following Security Content:
 - Dashboard showing all use cases and useful statistics
 - A set of Saved Queries for easy search of Security events
 - An example of Alert for which alerts are configured (The client himself needs to specify the purpose of notifications)
-- All interesting event fields are converted to the [Elastic Common Schema (ECS)] format (https://www.elastic.co/guide/en/ecs/current/index.html), full mapping table in the [Object description] file ( https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Description%20objects.pdf)
+- All interesting event fields are converted to the [Elastic Common Schema (ECS)] format (https://www.elastic.co/guide/en/ecs/current/index.html), full mapping table in the [Object description](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/Описание%20объектов%20eng.docx) 
 
 Detailed description in the file [ECS-mapping.docx](https://github.com/yandex-cloud/yc-solution-library-for-security/blob/master/auditlogs/export-auditlogs-to-ELK_main/papers/ ECS-mapping_new.pdf)
 
@@ -51,7 +51,7 @@ Based on the results of executing the tf script and the manual actions indicated
 As a result of the installation, you will have a tenant "at-tenant", in which all objects are located
 
 ## Set up Alerts and Destination
-Alerting and response rules in Opensearch is done using the [Alerting] mechanism(https://opensearch.org/docs/latest/monitoring-plugins/alerting/index/)
+Alerting and response rules in Opensearch is done using the [Alerting mechanism](https://opensearch.org/docs/latest/monitoring-plugins/alerting/index/)
 
 Our solution already loads the monitor example, you can take it as an example to start and make alerts by analogy. Go to the Alerting - Monitors tab and find "test" there. Press the edit button, scroll down and expand the triggers tab and enter an action in it. Select a pre-created [notification] channel there (https://opensearch.org/docs/latest/notifications-plugin/index/) (for example, slack)
 

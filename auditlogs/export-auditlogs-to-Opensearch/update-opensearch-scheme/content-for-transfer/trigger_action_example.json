@@ -1,0 +1,7 @@
+Monitor {{ctx.monitor.name}} just entered alert status. Please investigate the issue.
+  - Trigger: {{ctx.trigger.name}}
+  - Severity: {{ctx.trigger.severity}}
+  - Period start: {{ctx.periodStart}}
+  - Period end: {{ctx.periodEnd}}
+  - Action: {{ctx.results.0.hits.hits.0._source.event.action}}
+  - Source ip : {{ctx.results.0.hits.hits.0._source.source.ip}}

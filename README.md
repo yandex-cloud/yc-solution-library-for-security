@@ -6,10 +6,10 @@
 [![image](https://user-images.githubusercontent.com/85429798/146542425-b250c494-9a3c-4744-897d-5f65849355d5.png)](https://www.youtube.com/watch?v=WZOB9ow0WrA)
 
 
-#### ☑️ Yandex.Cloud Security Checklist
+#### ☑️ Стандарт по защите облачной инфраструктуры Yandex Cloud 1.0
 Чеклист по безопасности в облачной инфраструкутре Yandex Cloud
 
-https://cloud.yandex.ru/docs/overview/security/domains/checklist
+https://cloud.yandex.ru/docs/security/standard/all
 
 # Список решений
 - 🕸 Сетевая безопасность
@@ -20,6 +20,7 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
   - [Пример создания site-to-site VPN соединения с Yandex Cloud: Terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/network-sec/vpn/README_RU.md)
 - 🔑 Аутентификация и управление доступом
   - [Развертывание и управление организацией и правами доступа через IaC terraform](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auth_and_access/org_iac_iam)
+  - [Развёртывание федерации удостоверений в Yandex Cloud на базе решения Keycloak](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auth_and_access/keycloak)
   - [IAM модуль (с примерами использования)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auth_and_access/iam#identity-and-access-management-iam-terraform-module-for-yandexcloud)
   - [Скрипт синхронизации пользователей и групп LDAP](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/auth_and_access/ad-sync)
 - 🦠 Защита от вредоносного кода
@@ -76,9 +77,9 @@ https://cloud.yandex.ru/docs/overview/security/domains/checklist
 
 - CI/CD Security
   - Secure CI/CD на базе Managed GitLab:
-    - [Вебинар+материалы:Обнаружение Log4shell и др. уязвимостей в CI/CD на базе Managed GitLab](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webina/README_RU.mdr):
-      - [Обнаружение уязвимостей в CI/CD (Ultimate лицензия)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar/ultimate_secure_ci_cd/README_RU.md)
-      - [Обнаружение уязвимостей в CI/CD (Free лицензия)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar/free_secure_ci_cd/README_RU.md)
+    - [Вебинар+материалы:Обнаружение Log4shell и др. уязвимостей в CI/CD на базе Managed GitLab](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar):
+      - [Обнаружение уязвимостей в CI/CD (Ultimate лицензия)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar)
+      - [Обнаружение уязвимостей в CI/CD (Free лицензия)](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar)
       - [Security in Gtilab instance check-list](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/secure_ci_cd_with_webinar/gitlab_instance_sec_checklist/README_RU.md)
   - [Выступление про комплаенс и devsecops](https://github.com/yandex-cloud/yc-solution-library-for-security/tree/master/secure_ci_cd/devsecops-scale/README.md) 
 
