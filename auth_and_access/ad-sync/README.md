@@ -39,7 +39,7 @@
 
 #### Windows:
 ```PowerShell
-$env:$YCToken="<ваш OAuth Token>"
+$env:YCToken="<ваш OAuth Token>"
 ```
 
 Создадим профиль в yc для работы с облаком
@@ -49,7 +49,7 @@ $env:$YCToken="<ваш OAuth Token>"
 yc config profile create lockbox
 yc config set cloud-id <cloud-id>
 yc config set folder-id <folder-id>
-yc config set token $env:$YCToken
+yc config set token $env:YCToken
 ```
 
 где вместо `<cloud-id>` нужно указать идентификатор своего облака, а вместо `<folder-id>` нужно указать идентификатор каталога в облаке. Идентификаторы можно получить из консоли облака через веб интерфейс.
@@ -76,7 +76,7 @@ yc config set token $env:$YCToken
 * Выполните:
 ```PowerShell
 yc config profile activate iam
-$env:$YCToken= $(yc iam create token)
+$env:YCToken= $(yc iam create token)
 $env:YC_CLOUD_ID=$(yc config get cloud-id)
 $env:YC_FOLDER_ID=$(yc config get folder-id)
 $env:YC_ORG=$(yc config get organization-id)
@@ -85,7 +85,7 @@ $env:YC_ORG=$(yc config get organization-id)
 ## Пример 1
 
 ```PowerSHell
-> .\Sync-YCLDAPUsers.ps1 -GroupNames @("group1","Group2") -YCToken $env:$YCToken -YCOrgID $env:YC_ORG FederationName = "dev-federation" -LoginType UPN
+> .\Sync-YCLDAPUsers.ps1 -GroupNames @("group1","Group2") -YCToken $env:YCToken -YCOrgID $env:YC_ORG FederationName = "dev-federation" -LoginType UPN
 ```
 
 Команда создает и синхронизирует членов группы group1 and Group2 в указанной организации и федерации, используя в качестве NameID атрибут UserPrincipalName.
@@ -95,7 +95,7 @@ $env:YC_ORG=$(yc config get organization-id)
 ```PowerShell
 $Params = @{
         GroupNames = @("group1","Group2")
-        YCToken = $env:$YCToken
+        YCToken = $env:YCToken
         YCOrgID = $env:YC_ORG
         FederationName = "dev-federation"
         LoginType = "Mail"
