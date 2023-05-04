@@ -641,10 +641,21 @@ foreach ($GroupName in $GroupNames){
         $YCGroupMembers = Get-YcIAMGroupMember -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.ToLower()
         foreach($YCGroupMember in $YCGroupMembers.members) {
             $NameID = (Get-YcOrgFederatedUser -YCToken $YCToken -YCOrgID $YCOrgID -FederationName $FederationName | where {$_.id -eq $YCGroupMember.subjectId}).samlUserAccount.nameId
-            if($NameID -and !($LDAPUsers.Properties.userprincipalname -match $NameID)) {
-                WriteLog -message "User $NameID been excluded from LDAP group $GroupName excluding from YC Group $($GroupName.ToLower())" -EventType Info -filename $filename
-                $outNull = Remove-YCOrgFederatedUsersFromGroup -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.ToLower() -FederatedUsers @("$NameID") -FederationName $FederationName
-                WriteLog -message "User $NameID has been removed from group $($GroupName.ToLower())" -EventType Info -filename $filename
+            
+            if($LoginType -eq "Mail") {
+                if($NameID -and !($LDAPUsers.Properties.mail -match $NameID)) {
+                    WriteLog -message "User $NameID been excluded from LDAP group $GroupName excluding from YC Group $($GroupName.ToLower())" -EventType Info -filename $filename
+                    $outNull = Remove-YCOrgFederatedUsersFromGroup -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.ToLower() -FederatedUsers @("$NameID") -FederationName $FederationName
+                    WriteLog -message "User $NameID has been removed from group $($GroupName.ToLower())" -EventType Info -filename $filename
+                }
+            }
+
+            if($LoginType -eq "UPN") {
+                if($NameID -and !($LDAPUsers.Properties.userprincipalname -match $NameID)) {
+                    WriteLog -message "User $NameID been excluded from LDAP group $GroupName excluding from YC Group $($GroupName.ToLower())" -EventType Info -filename $filename
+                    $outNull = Remove-YCOrgFederatedUsersFromGroup -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.ToLower() -FederatedUsers @("$NameID") -FederationName $FederationName
+                    WriteLog -message "User $NameID has been removed from group $($GroupName.ToLower())" -EventType Info -filename $filename
+                }
             }
         }
     }
