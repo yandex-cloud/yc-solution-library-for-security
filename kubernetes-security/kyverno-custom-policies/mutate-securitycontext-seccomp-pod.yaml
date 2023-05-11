@@ -1,0 +1,29 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: mutate-securitycontext-seccomp-pod
+  annotations:
+    policies.kyverno.io/title: mutate-securitycontext-seccomp-pod
+    policies.kyverno.io/category: Sample
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: >-
+      mutate-securitycontext-seccomp-pod   
+spec:
+  rules:
+  - name: add-default-securitycontext
+    match:
+      resources:
+        kinds:
+        - Pod
+    mutate:
+      patchStrategicMerge:
+        spec:
+          securityContext:
+            # +(runAsNonRoot): true
+            # +(runAsUser): 1000
+            # +(runAsGroup): 3000
+            # +(fsGroup): 2000
+            +(seccompProfile): 
+                type: RuntimeDefault
+
+

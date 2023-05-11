@@ -1,0 +1,38 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: allow-actions-with-policys-only-silo-sa
+  annotations:
+    policies.kyverno.io/title: allow-actions-with-policys-only-silo-sa
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/minversion: 1.3.0
+    policies.kyverno.io/description: >-
+      Allow actions with clusterpolicy only for silo-sa    
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: allow-actions-with-policys-only-silo-sa
+    match:
+      resources:
+        kinds:
+        - ClusterPolicy
+    preconditions:
+      any:
+      - key: "{{serviceAccountName}}"
+        operator: NotEquals
+        value: "<your-name>"
+    validate:
+      message: "Only silo-sa can delete/update clusterpolicys"
+      deny:
+        conditions:
+          any:
+          - key: "{{request.operation}}"
+            operator: AnyIn
+            value: 
+            - DELETE
+            - UPDATE
+            - PATCH
+            - CREATE
+
+

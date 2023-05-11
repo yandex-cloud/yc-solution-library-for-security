@@ -1,0 +1,31 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: mutate-securitycontext-seccomp-deployment
+  annotations:
+    policies.kyverno.io/title: mutate-securitycontext-seccomp-deployment
+    policies.kyverno.io/category: Sample
+    policies.kyverno.io/subject: Deployment
+    policies.kyverno.io/description: >-
+      mutate-securitycontext-seccomp-deployment   
+spec:
+  rules:
+  - name: add-default-securitycontext
+    match:
+      resources:
+        kinds:
+        - Deployment
+    mutate:
+      patchStrategicMerge:
+        spec:
+          template:
+            spec:
+              securityContext:
+                # +(runAsNonRoot): true
+                # +(runAsUser): 1000
+                # +(runAsGroup): 3000
+                # +(fsGroup): 2000
+                +(seccompProfile): 
+                    type: RuntimeDefault
+
+
