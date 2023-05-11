@@ -4,14 +4,25 @@
 Сценарий получает список пользователей в указанных группах LDAP-каталога, проверяет наличе группы. Если группа не существует - сценарий создаст ее. Далее проверяется наличе федеративных пользователей. Если пользователя не существует - сценарий его создаст, указав в качестве NameID либо UserPrincipalName, либо Mail (в зависимости от маппинга со стороны IdP). После чего, контроллируется члество в группе. Если пользователь был исключен из группы в LDAP-каталоге, сценарий исключит его из группы в облаке.
 Контроль членства идет по пользователям конкретной федерации. В случае исключения пользователя, аккаунты других федераций и аккаунты Yandex Passport затронуты не будут.
 
-# v.0.1
-## Органичения:
-* Имена групп должны использовать символы латиницы и символ "-". Другие символы в т.ч. пробелы не допускаются
+# v.0.2
+## Общие органичения:
 * Запуск скрипта должен выполняться в контексте Domain User LDAP-каталога (пользователь должен быть членом домена)
+
+## Ограничения режима Bootstrap:
+* Имена групп должны использовать символы латиницы и символ "-". Другие символы в т.ч. пробелы не допускаются
 * Создание групп только при наличии привелегии organization.Admin
 
 # Описание ключей
-- `GroupNames` - массив имен групп LDAP-каталога. Задается через @() или ""
+- `Bootstrap` - режим провиженинга и синхронизации групп. Имена групп в LDAP-каталоге должны соответствовать правилам именования групп Yandex Cloud. Несовместим с ключами `Mapping` и `CSV`
+- `Mapping` - режим маппинга групп LDAP-каталога в произвольном именовании в соответствующие группы Yandex CLoud через CSV-файл. Несовместим с режимом `Bootstrap` и ключом `GroupNames`
+- `CSV` - путь к CSV-файлу с маппингом LDAP-групп в облачные. Формат файла:
+```
+"DomainGroup","CloudGroup"
+"Domain Group 1","cloud-group-1"
+"Domain Group 2","cloud-group-2"
+```
+Несовместим с режимом `Bootstrap` и ключом `GroupNames`
+- `GroupNames` - массив имен групп LDAP-каталога. Задается через @() или "" Несовместим с ключами `Mapping` и `CSV`.
 - `YCToken` - [уникальная последовательность символов, которая выдается пользователю после прохождения аутентификации. С помощью этого токена пользователь авторизуется в API Yandex Cloud и выполняет операции с ресурсами.](https://cloud.yandex.ru/docs/iam/concepts/authorization/iam-token)
 - `YCOrgID` - идентификатор организации Yandex Cloud.
 - `FederationName` - имя федерации в организации Yandex Cloud.
@@ -85,7 +96,7 @@ $env:YC_ORG=$(yc config get organization-id)
 ## Пример 1
 
 ```PowerSHell
-> .\Sync-YCLDAPUsers.ps1 -GroupNames @("group1","Group2") -YCToken $env:$YCToken -YCOrgID $env:YC_ORG FederationName = "dev-federation" -LoginType UPN
+> .\Sync-YCLDAPUsers.ps1 -Bootstrap -GroupNames @("group1","Group2") -YCToken $env:$YCToken -YCOrgID $env:YC_ORG FederationName = "dev-federation" -LoginType UPN
 ```
 
 Команда создает и синхронизирует членов группы group1 and Group2 в указанной организации и федерации, используя в качестве NameID атрибут UserPrincipalName.
@@ -94,6 +105,7 @@ $env:YC_ORG=$(yc config get organization-id)
 
 ```PowerShell
 $Params = @{
+        Bootstrap = $true
         GroupNames = @("group1","Group2")
         YCToken = $env:$YCToken
         YCOrgID = $env:YC_ORG
@@ -105,3 +117,22 @@ $Params = @{
 ```
 
 Команда создает и синхронизирует членов группы group1 and Group2 в указанной организации и федерации, используя в качестве NameID атрибут Mail.
+
+## Пример 3
+
+```PowerShell
+    # Getting IAM token
+    $env:YC_TOKEN = $(yc iam create-token)
+
+    # Setting up organization ID
+    $env:YCOrgID = "bpf..."
+
+    # Synchronizing groups and users
+    .\Sync-YCLDAPUsers.ps1 -Mapping -CSV "C:\work\mygroups.csv" -YCToken $env:YC_TOKEN -YCOrgID $env:YCOrgID FederationName = "dev-federation" -LoginType UPN
+
+    This command will sync groups matched in CSV file.
+    in specific organization and federation and using UPN as login.
+
+```
+
+Команда синхронизирует членов групп из файла `mygroups.csv` в указанной организации и федерации, используя в качестве NameID атрибут UPN.
