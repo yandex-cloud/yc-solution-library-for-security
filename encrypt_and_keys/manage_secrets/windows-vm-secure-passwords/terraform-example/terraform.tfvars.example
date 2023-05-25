@@ -1,0 +1,28 @@
+#===== VM variables =====
+vm_name             = "<VM_NAME>"
+host_name           = "<HOSTNAME>>"
+#image_id            = "<IMAGE_ID>"
+windows_admin       = "Administrator"
+platform_id         = "standard-v3"
+cores               = 2
+memory              = 4
+disk_size           = 50
+disk_type           = "network-nvme"
+
+# ===== Access zone parameter =====
+zone                = "ru-central1-a"
+
+# ===== Service account ======
+sa_name             = "kc-sa"
+
+# ===== Network variables =====
+vpc_name            = "network"
+net_cidr     = [
+    { name = "subnet-a", zone = "ru-central1-a", prefix = "10.130.1.0/24" },
+    { name = "subnet-b", zone = "ru-central1-b", prefix = "10.131.1.0/24" },
+    { name = "subnet-c", zone = "ru-central1-c", prefix = "10.132.1.0/24" },
+  ]
+
+# ===== Secret and keys parameters =====
+secret_name         = "kc-secrets"
+kms_key_name        = "kc-key"

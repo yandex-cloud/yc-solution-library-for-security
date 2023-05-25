@@ -33,22 +33,14 @@ resource "yandex_compute_instance" "keycloak" {
     {
       ssh_key = "${chomp(tls_private_key.ssh.public_key_openssh)}"
       DomainFQDN = var.domain_fqdn
-      KC_REALM = var.kc_realm
       KC_VER = var.kc_ver
       KC_PORT = var.kc_port
       PG_DB_HOST = yandex_mdb_postgresql_cluster.pg_cluster.host.0.fqdn
       PG_DB_NAME = var.pg_db_name
       SA_NAME = yandex_iam_service_account.kc-sa.name
-      CLOUD_ID = var.CLOUDID
-      FOLDER_ID = var.FOLDERID
-      SECRET_NAME = var.secret_name
+      SECRET_ID = yandex_lockbox_secret.password_secret.id
     }
     )
-  }
-
-  timeouts {
-    create = var.timeout_create
-    delete = var.timeout_delete
   }
 
   depends_on = [
@@ -57,7 +49,8 @@ resource "yandex_compute_instance" "keycloak" {
     yandex_mdb_postgresql_database.pg_db,
     yandex_kms_symmetric_key.kc-key,
     yandex_iam_service_account.kc-sa,
-    null_resource.lockbox_secrets
+    yandex_lockbox_secret.password_secret,
+    null_resource.lockbox_secrets_access_binding
   ]
 }
 

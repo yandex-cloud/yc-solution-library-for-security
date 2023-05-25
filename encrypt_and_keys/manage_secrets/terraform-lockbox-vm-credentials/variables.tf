@@ -1,7 +1,6 @@
 variable "vpc_name" {
   description = "VPC Name"
   type = string
-  default = "kc-network"
 }
 
 variable "net_cidr" {
@@ -12,12 +11,6 @@ variable "net_cidr" {
     prefix = string
   }))
 
-  default = [
-    { name = "kc-subnet-a", zone = "ru-central1-a", prefix = "10.160.1.0/24" },
-    { name = "kc-subnet-b", zone = "ru-central1-b", prefix = "10.161.1.0/24" },
-    { name = "kc-subnet-c", zone = "ru-central1-c", prefix = "10.162.1.0/24" },
-  ]
-
   validation {
     condition = length(var.net_cidr) >= 1
     error_message = "At least one Subnet/Zone should be used."
@@ -26,7 +19,6 @@ variable "net_cidr" {
 
 variable "zone" {
   type    = string
-  default = "ru-central1-a"
 }
 
 variable "nat" {
@@ -36,45 +28,30 @@ variable "nat" {
 
 variable "image_family" {
   type    = string
-  default = "ubuntu-2004-lts"
-}
-
-variable "image_id" {
-  type    = string
-  default = "fd8aic46uv4b9nc3pqt7"
 }
 
 variable "platform_id" {
   type    = string
-  default = "standard-v3"
 }
 
 variable "keycloak_name" {
   type    = string
 }
 
-variable "ws_name" {
-  type    = string
-}
-
 variable "cores" {
   type    = number
-  default = 2
 }
 
 variable "memory" {
   type    = number
-  default = 4
 }
 
 variable "disk_size" {
   type    = number
-  default = 50
 }
 
 variable "disk_type" {
   type    = string
-  default = "network-nvme"
 }
 
 variable "timeout_create" {
@@ -86,18 +63,9 @@ variable "timeout_delete" {
 }
 
 #-----------------------------------------
-variable "opencart_image_id" {
-  type    = string
-  default = "fd80od21rjl4r3enr4sk"
-}
 
 variable "domain_fqdn" {
   type    = string
-}
-
-variable "kc_realm" {
-  description = "Keycloak Realm name"
-  type = string
 }
 
 variable "kc_ver" {
@@ -123,7 +91,6 @@ variable "kc_adm_pass" {
 variable "pg_db_name" {
   description = "PostgeSQL cluster and database name"
   type = string
-  default = "kc-sql"
 }
 
 variable "pg_db_user" {
@@ -138,23 +105,12 @@ variable "pg_db_pass" {
 
 variable "secret_name" {
   type = string
-  default = "kc-secrets"
 }
 
 variable "kms_key_name" {
   type = string
-  default = "kc-key"
 }
 
 variable "sa_name" {
-  type = string
-  default = "kc-sa"
-}
-
-variable "CLOUDID" {
-  type = string
-}
-
-variable "FOLDERID" {
   type = string
 }

@@ -1,0 +1,34 @@
+#===== KeyCloak Servise variables =====
+keycloak_name       = "kc-01"
+domain_fqdn         = "yp-lab.edu"
+pg_db_name          = "kc-sql"
+kc_ver              = "18.0.0"
+kc_port             = "8443"
+kc_adm_user         = "admin"
+pg_db_user          = "dbuser"
+
+# ===== Access zone parameter =====
+zone                = "ru-central1-a"
+
+# ===== Service account ======
+sa_name             = "kc-sa"
+
+# ===== Network variables =====
+vpc_name            = "kc-network"
+net_cidr     = [
+    { name = "kc-subnet-a", zone = "ru-central1-a", prefix = "10.130.1.0/24" },
+    { name = "kc-subnet-b", zone = "ru-central1-b", prefix = "10.131.1.0/24" },
+    { name = "kc-subnet-c", zone = "ru-central1-c", prefix = "10.132.1.0/24" },
+  ]
+
+# ===== KeyCloak VM parameters =====
+image_family        = "ubuntu-2004-lts"
+platform_id         = "standard-v3"
+cores               = 2
+memory              = 4
+disk_size           = 50
+disk_type           = "network-nvme"
+
+# ===== Secret and keys parameters =====
+secret_name         = "kc-secrets"
+kms_key_name        = "kc-key"

@@ -5,15 +5,12 @@ datasource:
     strict_id: false
   my-data:
     DomainFQDN: ${DomainFQDN}
-    KC_REALM: ${KC_REALM}
     KC_VER: ${KC_VER}
     KC_PORT: ${KC_PORT}
     PG_DB_HOST: ${PG_DB_HOST}
     PG_DB_NAME: ${PG_DB_NAME}
     SA_NAME: ${SA_NAME}
-    CLOUD_ID: ${CLOUD_ID}
-    FOLDER_ID: ${FOLDER_ID}
-    SECRET_NAME: ${SECRET_NAME}
+    SECRET_ID: ${SECRET_ID}
 ssh_pwauth: yes
 users:
   - name: ubuntu
@@ -31,13 +28,6 @@ write_files:
       apt-get install -y dnsutils
       apt-get install -y unzip
 
-      # Getting secrets from Lockbox
-
-      # Installing yc cli
-      sudo curl https://storage.yandexcloud.net/yandexcloud-yc/install.sh -o /root/install.sh
-      sudo chmod 777 /root/install.sh
-      sudo /root/install.sh -s -a
-
       # Installing jq
       sudo apt-get -y install jq
       ls
@@ -51,38 +41,13 @@ write_files:
 
       source /root/.bashrc
 
-      # Configuring yc
-      sudo /root/yandex-cloud/bin/yc config profile create kc-profile
-      sudo /root/yandex-cloud/bin/yc config set cloud-id ${CLOUD_ID}
-      sudo /root/yandex-cloud/bin/yc config set folder-id ${FOLDER_ID}
-
       # Getting IAM-token
       
-      export IAM_TOKEN=$(sudo /root/yandex-cloud/bin/yc iam create-token)
-
-      function parse_yaml {
-        local prefix=$2
-        local s='[[:space:]]*' w='[a-zA-Z0-9_]*' fs=$(echo @|tr @ '\034')
-        sed -ne "s|^\($s\):|\1|" \
-            -e "s|^\($s\)\($w\)$s:$s[\"']\(.*\)[\"']$s\$|\1$fs\2$fs\3|p" \
-            -e "s|^\($s\)\($w\)$s:$s\(.*\)$s\$|\1$fs\2$fs\3|p"  $1 |
-        awk -F$fs '{
-          indent = length($1)/2;
-          vname[indent] = $2;
-          for (i in vname) {if (i > indent) {delete vname[i]}}
-          if (length($3) > 0) {
-            vn=""; for (i=0; i<indent; i++) {vn=(vn)(vname[i])("_")}
-            printf("%s%s%s=\"%s\"\n", "'$prefix'",vn, $2, $3);
-          }
-        }'
-      }
-
-      sudo /root/yandex-cloud/bin/yc lockbox secret get --name ${SECRET_NAME} --format yaml > /root/secrets.yaml
-
-      eval $(parse_yaml /root/secrets.yaml)
+      export IAM_TOKEN=$(curl -H Metadata-Flavor:Google http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token | jq '.access_token' | sed 's/"//g')
       
-      sudo curl -X GET -H "Authorization: Bearer $${IAM_TOKEN}" \
-      https://payload.lockbox.api.cloud.yandex.net/lockbox/v1/secrets/$id/payload > /root/secrets.json
+      # Getting secrets from Lockbox
+      sudo curl -X GET -H "Authorization: Bearer $IAM_TOKEN" \
+      https://payload.lockbox.api.cloud.yandex.net/lockbox/v1/secrets/${SECRET_ID}/payload > /root/secrets.json
 
       # Getting secrets from json
       sudo echo "export KC_ADM_USER=$(cat /root/secrets.json | jq '.entries[0].key')" > /root/secrets.sh
@@ -468,10 +433,7 @@ write_files:
         sleep 10
       done
 
-      # Removing SA with bindings, yc profile and all temp files with secrets.
-      export IAM_TOKEN=$(sudo /root/yandex-cloud/bin/yc iam create-token)
-      sudo /root/yandex-cloud/bin/yc iam service-account delete --name ${SA_NAME}
-      sudo rm -rf /root/*
+      # sudo rm -rf /root/*
       ls 
       
     path: "/root/guest_prep.sh"
