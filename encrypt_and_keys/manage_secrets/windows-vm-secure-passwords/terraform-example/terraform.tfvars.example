@@ -13,7 +13,7 @@ disk_type           = "network-nvme"
 zone                = "ru-central1-a"
 
 # ===== Service account ======
-sa_name             = "kc-sa"
+sa_name             = "<sa_name>"
 
 # ===== Network variables =====
 vpc_name            = "network"
@@ -24,5 +24,5 @@ net_cidr     = [
   ]
 
 # ===== Secret and keys parameters =====
-secret_name         = "kc-secrets"
-kms_key_name        = "kc-key"
+secret_name         = "<secret_name>>"
+kms_key_name        = "<key_name>"
