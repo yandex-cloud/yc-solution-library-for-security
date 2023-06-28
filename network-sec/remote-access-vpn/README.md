@@ -21,10 +21,11 @@
 | Кластер баз данных | Сервис [Managed Service for PostgreSQL](https://cloud.yandex.ru/services/managed-postgresql) для работы Firezone ВМ и Keycloak ВМ | 
 | Keycloak ВМ | Open-source ПО [Keycloak](https://www.keycloak.org/) для Single Sign-On аутентификации пользователей в корпоративной федерации пользователей, например Active Directory |
 
-![Схема решения](images/hld.png)
+<img src="./images/hld.png" alt="Схема решения" width="700"/>
+
 
 ### Firezone
-Firezone - это open-source решение для организации удаленного доступа VPN, обладающее следующими основными возможностями:
+[Firezone](https://www.firezone.dev/) - это open-source решение для организации удаленного доступа VPN, обладающее следующими основными возможностями:
 - Поддержка современного протокола [WireGuard VPN](https://www.wireguard.com/) с [клиентами](https://www.wireguard.com/install/) для desktop и мобильных устройств
 - Аутентификация пользователей:
     - Локальная аутентификация по email и паролю
