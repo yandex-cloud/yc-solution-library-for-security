@@ -407,7 +407,7 @@ if __name__ == '__main__':
         elif opt in ("-o", "--outFile"):
             load_config()
             if len(sys.argv) > 2:
-                g_out_file = sys.argv[2]            ч
+                g_out_file = sys.argv[2]            
             save_to_file()
         elif opt in ("-m", "--migrate"):
             load_config()
