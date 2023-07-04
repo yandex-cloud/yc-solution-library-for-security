@@ -1,6 +1,11 @@
 # Vault-to-Lockbox Migrator
 
-Скрипт предназначен для миграции секретов из HashiCorp Vault в сервис Yandex Cloud Lockbox.
+<img width="149" alt="t4evRCKgxXWNvtg1F2KvY3orzjModCG0PAba6lYw" src="https://github.com/yandex-cloud/yc-solution-library-for-security/assets/85429798/c2897381-68e0-418d-87b2-bf0d02680b83"> ->
+<img width="100" alt="image" src="https://github.com/yandex-cloud/yc-solution-library-for-security/assets/85429798/5ee891a1-26b2-4e94-b28a-526d233b5f79">
+
+
+Скрипт предназначен для миграции секретов из HashiCorp Vault в сервис [Yandex Lockbox](https://cloud.yandex.ru/services/lockbox).
+Преимущества Lockbox описаны в [статье](https://cloud.yandex.ru/blog/posts/2023/04/lockbox-ga)
 
 ### Текущие ограничения.
  - Секреты должны находиться в KV Version 2 Secrets Engine.
