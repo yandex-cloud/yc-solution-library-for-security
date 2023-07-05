@@ -16,29 +16,10 @@
     3. After groups and users been created - validates group membership based on LDAP group membersip.
     4. Excludes or includes users based on LDAP group membersip.
 
-.PARAMETER Bootstrap
-    Mandatory
-    Runs script in Bootstrap mode. Bootstrap mode creates groups if it doesn't exist in cloud. Requires strong cloud naming convention in parameter GroupNames.
-    Incompatible with Mapping and CSV parameters.
-
 .PARAMETER GroupNames
     Mandatory.
-    Running only in Bootstrap mode.
     Array @() of LDAP group names. Group name must contains only latin characters and special character "-".
     All other characters such as white space, dot, underscore, etc are unsupported by YC Naming Convertion.
-
-.PARAMETER Mapping
-    Mandatory
-    Runs script in Mapping mode. Parameter maps LDAP groups to cloud. Requires CSV parameter.
-    Incompatible with Bootstrap and GroupNames parameters.
-
-.PARAMETER CSV
-    Mandatory.
-    Parameter running only in Mapping mode. Specifies path to CSV file with groups mapping. CSV has to be in UTF8 encoding and comma-separated.
-    CSV header Format:
-    "DomainGroup","CloudGroup"
-    "Domain Group 1","cloud-group-1"
-    "Domain Group 2","cloud-group-2"
 
 .PARAMETER YCToken
     Mandatory.
@@ -55,8 +36,11 @@
     Mandatory.
     Specifies Yandex Cloud Federation's name. 
 
-.PARAMETER LoginType
-    Setting user's attribute as login in Yandex Cloud federation. Valid values: UPN or Mail.
+.PARAMETER MailAsLogin
+    Setting user's attribute mail as login in Yandex Cloud federation. Incompatible with parameter UPNAsLogin.
+
+.PARAMETER UPNAsLogin
+    Setting user's attribute userprincipalname as login in Yandex Cloud federation. Incompatible with parameter MailAsLogin.
 
 .PARAMETER LogDirectory
     Specifies the directory where the log file should be generated.
@@ -70,16 +54,15 @@
     $env:YCOrgID = "bpf..."
 
     # Synchronizing groups and users
-    .\Sync-YCLDAPUsers.ps1 -Bootstrap -GroupNames @("group1","Group2") -YCToken $env:YC_TOKEN -YCOrgID $env:YCOrgID FederationName = "dev-federation" -LoginType UPN
+    .\Sync-YCLDAPUsers.ps1 -GroupNames @("group1","Group2") -YC_TOKEN $env:YC_TOKEN -YCOrgID $env:YCOrgID FederationName = "dev-federation" -LoginType UPN
 
     This command will create and sync groups group1 and Group2 
     in specifien organization and federation and using UPN as login.
 
 .EXAMPLE
     $Params = @{
-        Bootstrap
         GroupNames = @("group-allow","group-deny")
-        YCToken = $env:YC_TOKEN
+        YC_TOKEN = $env:YC_TOKEN
         YCOrgID = $env:YCOrgID
         FederationName = "dev-federation"
         LoginType = "Mail"
@@ -88,77 +71,12 @@
     .\Sync-YCLDAPUsers.ps1 @Params
 
     This command will create and sync groups group1 and Group2 
-    in specific organization and federation and using UPN as login.
-
-    .EXAMPLE
-    # Getting IAM token
-    $env:YC_TOKEN = $(yc iam create-token)
-
-    # Setting up organization ID
-    $env:YCOrgID = "bpf..."
-
-    # Synchronizing groups and users
-    .\Sync-YCLDAPUsers.ps1 -Mapping -CSV "C:\work\mygroups.csv" -YCToken $env:YC_TOKEN -YCOrgID $env:YCOrgID FederationName = "dev-federation" -LoginType UPN
-
-    This command will sync groups matched in CSV file.
-    in specific organization and federation and using UPN as login.
+    in specifien organization and federation and using UPN as login.
 
 .OUTPUTS
     System.IO.FileInfo
 #>
 
-param(
-    [Parameter(Mandatory = $true,ParameterSetName = 'Bootstrap', Position = 0)]
-    [switch]
-    $Bootstrap,
-
-    [Parameter(Mandatory = $true,ParameterSetName = 'Mapping',Position = 0)]
-    [switch]
-    $Mapping,
-
-    [Parameter(ValueFromPipeline=$true,ValueFromRemainingArguments=$true)]
-    [Parameter(ParameterSetName = 'Bootstrap')]
-    $GroupNames = @(),
-
-    [Parameter(ParameterSetName = 'Mapping')]
-    [string]
-    $CSV,
-
-    [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromRemainingArguments=$true)]
-    [Parameter(ParameterSetName = 'Bootstrap')]
-    [Parameter(ParameterSetName = 'Mapping')]
-    [ValidateNotNullOrEmpty()]
-    [string]
-    $YCToken = $env:YC_TOKEN,
-
-    [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromRemainingArguments=$true)]
-    [Parameter(ParameterSetName = 'Bootstrap')]
-    [Parameter(ParameterSetName = 'Mapping')]
-    [ValidateNotNullOrEmpty()]
-    [string]
-    $YCOrgID = "bpfncbpfnadtqjhoacqi",
-
-    [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromRemainingArguments=$true)]
-    [Parameter(ParameterSetName = 'Bootstrap')]
-    [Parameter(ParameterSetName = 'Mapping')]
-    [ValidateNotNullOrEmpty()]
-    [string]
-    $FederationName,
-
-    [Parameter(Mandatory=$true,ValueFromPipeline=$true,ValueFromRemainingArguments=$true)]
-    [Parameter(ParameterSetName = 'Bootstrap')]
-    [Parameter(ParameterSetName = 'Mapping')]
-    [ValidateNotNullOrEmpty()]
-    [ValidateSet("Mail", "UPN")]
-    [string]
-    $LoginType = "UPN",
-
-    [Parameter(ParameterSetName = 'Bootstrap')]
-    [Parameter(ParameterSetName = 'Mapping')]
-    [string]
-    $LogDirectory = "C:\work"
-)
-<#
 param (
     [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
@@ -182,7 +100,6 @@ param (
     $LoginType = "UPN",
     $LogDirectory = "C:\work"
 )
-#>
 
 #region helpers
 # API Endpoints
@@ -238,6 +155,7 @@ function Get-YCService {
     )
     $Headers = @{
         Authorization="Bearer $token"
+        pageSize = "1"
     }
 
     if($body) {
@@ -459,7 +377,12 @@ function Get-YcOrgFederatedUser {
 
     $Result = @()
     foreach($ID in $Ids) {
-        $Result += (Get-YCService -token $YCToken -service_uri "$($APIEndpoints.IAMFederations)/$ID`:listUserAccounts" -method "GET").userAccounts
+        #$Result += 
+        $Result += Get-YCService -token $YCToken -service_uri "$($APIEndpoints.IAMFederations)/$ID`:listUserAccounts?pageSize=1000" -method "GET"
+        if($Result.nextPageToken) {
+                $Result += Get-YCService -token $YCToken -service_uri "$($APIEndpoints.IAMFederations)/$ID`:listUserAccounts?pageSize=1000?pageToken=$($Result.nextPageToken)" -method "GET"
+        }
+        $Result = $Result.userAccounts
     }
 
     if($NameID) {
@@ -629,16 +552,6 @@ if(!$LogDirectory) {
     $LogDirectory = (Get-Location).Path
 }
 
-if($Mapping -and $CSV) {
-    if(!(Test-Path $CSV)) {
-        WriteLog -message "CSV been specified but path $CSV doesnt exist." -EventType Error -filename $filename
-        WriteLog -message "CSV been specified but path $CSV doesnt exist." -EventType Error -filename $errorlog
-        1: throw "CSV been specified but path $CSV doesnt exist."
-    }
-    else {
-        $GroupNames = Import-CSV $CSV
-    }
-}
 WriteLog -message "Getting RootDSE" -EventType Info -filename $filename
 try {
   $rootDSE = [adsi]"LDAP://rootDSE"
@@ -655,39 +568,28 @@ foreach ($GroupName in $GroupNames){
     WriteLog -message "Processing group $GroupName" -EventType Info -filename $filename
     if($rootDSE) {
         WriteLog -message "Getting LDAP users in group $GroupName" -EventType Info -filename $filename
+        $LDAPUsers = Get-LDAPUsersInGroup -GroupName $GroupName
 
-        if($CSV) {
-            $LDAPUsers = Get-LDAPUsersInGroup -GroupName $GroupName.DomainGroup
-            WriteLog -message "Getting YC Group $($GroupName.CloudGroup) in Cloud Organization $YCOrgID" -EventType Info -filename $filename
-            $YCGroup = Get-YCIAMGroup -YCToken $YCToken -YCOrgID $YCOrgID -Name $GroupName.CloudGroup
-            if(!$YCGroup) {
-                WriteLog -message "YC Group $($GroupName.CloudGroup) not found in Cloud Organization $YCOrgID. Please ask ypur organization administrator to create one and try again." -EventType Info -filename $filename
-                throw "YC Group $($GroupName.CloudGroup) not found in Cloud Organization $YCOrgID. Please ask ypur organization administrator to create one and try again."
+        WriteLog -message "Getting YC Group $GroupName in Cloud Organization $YCOrgID" -EventType Info -filename $filename
+        $YCGroup = Get-YCIAMGroup -YCToken $YCToken -YCOrgID $YCOrgID -Name $GroupName.ToLower()
+        
+        if(!$YCGroup) {
+            WriteLog -message "YC Group $GroupName not found in Cloud Organization $YCOrgID" -EventType Info -filename $filename
+            WriteLog -message "Creating YC Group $GroupName not found in Cloud Organization $YCOrgID" -EventType Info -filename $filename
+            try {
+                $outNull = Create-YcIAMGroup -YCToken $YCToken -YCOrgID $YCOrgID -Name $GroupName.ToLower() -ErrorAction stop
+                $YCGroup = Get-YCIAMGroup -YCToken $YCToken -YCOrgID $YCOrgID -Name $GroupName.ToLower()
+            }
+            catch {
+                WriteLog -message "Could not create group $GroupName in Cloud Organization $YCOrgID. Please check YC Groups naming convention and try again." -EventType Error -filename $filename
+                WriteLog -message "Could not create group $GroupName in Cloud Organization $YCOrgID. Please check YC Groups naming convention and try again." -EventType Error -filename $errorlog
+                throw "Could not create group $GroupName in Cloud Organization $YCOrgID. Please check YC Groups naming convention and try again."
             }
         }
         else {
-            $LDAPUsers = Get-LDAPUsersInGroup -GroupName $GroupName
-            WriteLog -message "Getting YC Group $GroupName in Cloud Organization $YCOrgID" -EventType Info -filename $filename
-            $YCGroup = Get-YCIAMGroup -YCToken $YCToken -YCOrgID $YCOrgID -Name $GroupName.ToLower()
-            
-            if(!$YCGroup) {
-                WriteLog -message "YC Group $GroupName not found in Cloud Organization $YCOrgID" -EventType Info -filename $filename
-                WriteLog -message "Creating YC Group $GroupName not found in Cloud Organization $YCOrgID" -EventType Info -filename $filename
-                try {
-                    $outNull = Create-YcIAMGroup -YCToken $YCToken -YCOrgID $YCOrgID -Name $GroupName.ToLower() -ErrorAction stop
-                    $YCGroup = Get-YCIAMGroup -YCToken $YCToken -YCOrgID $YCOrgID -Name $GroupName.ToLower()
-                }
-                catch {
-                    WriteLog -message "Could not create group $GroupName in Cloud Organization $YCOrgID. Please check YC Groups naming convention and try again." -EventType Error -filename $filename
-                    WriteLog -message "Could not create group $GroupName in Cloud Organization $YCOrgID. Please check YC Groups naming convention and try again." -EventType Error -filename $errorlog
-                    throw "Could not create group $GroupName in Cloud Organization $YCOrgID. Please check YC Groups naming convention and try again."
-                }
-            }
-            else {
-                WriteLog -message "Found YC Group group $($GroupName.ToLower())" -EventType Info -filename $filename
-            }
+            WriteLog -message "Found YC Group group $($GroupName.ToLower())" -EventType Info -filename $filename
         }
-        
+
         $UsersToAdd = @()
         foreach($LDAPUser in $LDAPUsers) {
             WriteLog -message "Processing user $($LDAPUser.Properties.userprincipalname)" -EventType Info -filename $filename
@@ -726,79 +628,29 @@ foreach ($GroupName in $GroupNames){
                     $outNull = Add-YcOrgFederatedUser -YCToken $YCToken -YCOrgID $YCOrgID -FederationName $FederationName -NameIDs @("$username")
                 }
                 
-                if($CSV) {
-                    WriteLog -message "Checking $username for membership in cloud group $($GroupName.CloudGroup)" -EventType Info -filename $filename
-                    $YCGroupMembership = Get-YcIAMGroupMember -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.CloudGroup.ToLower() -UserName $username -FederationName $FederationName
-                    if(!$YCGroupMembership) {
-                        WriteLog -message "User $username added for membership in group $($GroupName.CloudGroup)" -EventType Info -filename $filename
-                        $UsersToAdd += $username
-                    }
-                }
-                else {
-                    WriteLog -message "Checking $username for membership in group $GroupName" -EventType Info -filename $filename
-                    $YCGroupMembership = Get-YcIAMGroupMember -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.ToLower() -UserName $username -FederationName $FederationName
-                    if(!$YCGroupMembership) {
-                        WriteLog -message "User $username added for membership in group $GroupName" -EventType Info -filename $filename
-                        $UsersToAdd += $username
-                    }
+                WriteLog -message "Checking $username for membership in group $GroupName" -EventType Info -filename $filename
+                $YCGroupMembership = Get-YcIAMGroupMember -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.ToLower() -UserName $username -FederationName $FederationName
+                
+                if(!$YCGroupMembership) {
+                    WriteLog -message "User $username added for membership in group $GroupName" -EventType Info -filename $filename
+                    $UsersToAdd += $username
                 }
             }
         }
         
-        if($CSV) {
-            if($UsersToAdd) {
-                $outNull = Add-YCOrgFederatedUsersToGroup -YCToken $YCToken -YCOrgID $YCOrgID -GroupID $YCGroup.id -FederatedUsers $UsersToAdd -FederationName $FederationName
-                WriteLog -message "Users $UsersToAdd has been added to group $($GroupName.CloudGroup.ToLower())" -EventType Info -filename $filename
-            }
-    
-            WriteLog -message "Validating group membership in group $($GroupName.CloudGroup.ToLower())" -EventType Info -filename $filename
-            $YCGroupMembers = Get-YcIAMGroupMember -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.CloudGroup.ToLower()
-            foreach($YCGroupMember in $YCGroupMembers.members) {
-                $NameID = (Get-YcOrgFederatedUser -YCToken $YCToken -YCOrgID $YCOrgID -FederationName $FederationName | where {$_.id -eq $YCGroupMember.subjectId}).samlUserAccount.nameId
-                
-                if($LoginType -eq "Mail") {
-                    if($NameID -and !($LDAPUsers.Properties.mail -match $NameID)) {
-                        WriteLog -message "User $NameID been excluded from LDAP group $($GroupName.DomainGroup) excluding from YC Group $($GroupName.CloudGroup.ToLower())" -EventType Info -filename $filename
-                        $outNull = Remove-YCOrgFederatedUsersFromGroup -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.CloudGroup.ToLower() -FederatedUsers @("$NameID") -FederationName $FederationName
-                        WriteLog -message "User $NameID has been removed from group $($GroupName.CloudGroup.ToLower())" -EventType Info -filename $filename
-                    }
-                }
-    
-                if($LoginType -eq "UPN") {
-                    if($NameID -and !($LDAPUsers.Properties.userprincipalname -match $NameID)) {
-                        WriteLog -message "User $NameID been excluded from LDAP group $($GroupName.DomainGroup) excluding from YC Group $($GroupName.CloudGroup.ToLower())" -EventType Info -filename $filename
-                        $outNull = Remove-YCOrgFederatedUsersFromGroup -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.CloudGroup.ToLower() -FederatedUsers @("$NameID") -FederationName $FederationName
-                        WriteLog -message "User $NameID has been removed from group $($GroupName.CloudGroup.ToLower())" -EventType Info -filename $filename
-                    }
-                }
-            }
+        if($UsersToAdd) {
+            $outNull = Add-YCOrgFederatedUsersToGroup -YCToken $YCToken -YCOrgID $YCOrgID -GroupID $YCGroup.id -FederatedUsers $UsersToAdd -FederationName $FederationName
+            WriteLog -message "Users $UsersToAdd has been added to group $($GroupName.ToLower())" -EventType Info -filename $filename
         }
-        else {
-            if($UsersToAdd) {
-                $outNull = Add-YCOrgFederatedUsersToGroup -YCToken $YCToken -YCOrgID $YCOrgID -GroupID $YCGroup.id -FederatedUsers $UsersToAdd -FederationName $FederationName
-                WriteLog -message "Users $UsersToAdd has been added to group $($GroupName.ToLower())" -EventType Info -filename $filename
-            }
-    
-            WriteLog -message "Validating group membership in group $($GroupName.ToLower())" -EventType Info -filename $filename
-            $YCGroupMembers = Get-YcIAMGroupMember -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.ToLower()
-            foreach($YCGroupMember in $YCGroupMembers.members) {
-                $NameID = (Get-YcOrgFederatedUser -YCToken $YCToken -YCOrgID $YCOrgID -FederationName $FederationName | where {$_.id -eq $YCGroupMember.subjectId}).samlUserAccount.nameId
-                
-                if($LoginType -eq "Mail") {
-                    if($NameID -and !($LDAPUsers.Properties.mail -match $NameID)) {
-                        WriteLog -message "User $NameID been excluded from LDAP group $GroupName excluding from YC Group $($GroupName.ToLower())" -EventType Info -filename $filename
-                        $outNull = Remove-YCOrgFederatedUsersFromGroup -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.ToLower() -FederatedUsers @("$NameID") -FederationName $FederationName
-                        WriteLog -message "User $NameID has been removed from group $($GroupName.ToLower())" -EventType Info -filename $filename
-                    }
-                }
-    
-                if($LoginType -eq "UPN") {
-                    if($NameID -and !($LDAPUsers.Properties.userprincipalname -match $NameID)) {
-                        WriteLog -message "User $NameID been excluded from LDAP group $GroupName excluding from YC Group $($GroupName.ToLower())" -EventType Info -filename $filename
-                        $outNull = Remove-YCOrgFederatedUsersFromGroup -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.ToLower() -FederatedUsers @("$NameID") -FederationName $FederationName
-                        WriteLog -message "User $NameID has been removed from group $($GroupName.ToLower())" -EventType Info -filename $filename
-                    }
-                }
+
+        WriteLog -message "Validating group membership in group $($GroupName.ToLower())" -EventType Info -filename $filename
+        $YCGroupMembers = Get-YcIAMGroupMember -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.ToLower()
+        foreach($YCGroupMember in $YCGroupMembers.members) {
+            $NameID = (Get-YcOrgFederatedUser -YCToken $YCToken -YCOrgID $YCOrgID -FederationName $FederationName | where {$_.id -eq $YCGroupMember.subjectId}).samlUserAccount.nameId
+            if($NameID -and (!($LDAPUsers.Properties.userprincipalname -match $NameID) -or !($LDAPUsers.Properties.mail -match $NameID))) {
+                WriteLog -message "User $NameID been excluded from LDAP group $GroupName excluding from YC Group $($GroupName.ToLower())" -EventType Info -filename $filename
+                $outNull = Remove-YCOrgFederatedUsersFromGroup -YCToken $YCToken -YCOrgID $YCOrgID -GroupName $GroupName.ToLower() -FederatedUsers @("$NameID") -FederationName $FederationName
+                WriteLog -message "User $NameID has been removed from group $($GroupName.ToLower())" -EventType Info -filename $filename
             }
         }
     }
