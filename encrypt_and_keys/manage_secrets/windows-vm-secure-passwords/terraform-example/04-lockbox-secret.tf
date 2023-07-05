@@ -2,10 +2,10 @@
 
 resource "yandex_lockbox_secret" "password_secret" {
   name = var.secret_name
-  kms_key_id = yandex_kms_symmetric_key.kc-key.id
+  kms_key_id = yandex_kms_symmetric_key.win-key.id
   labels = {
-    "key_id" = "${yandex_kms_symmetric_key.kc-key.id}"
-    "service_account_id" = "${yandex_iam_service_account.kc-sa.id}"
+    "key_id" = "${yandex_kms_symmetric_key.win-key.id}"
+    "service_account_id" = "${yandex_iam_service_account.win-sa.id}"
   }
 }
 
@@ -23,18 +23,18 @@ resource "yandex_lockbox_secret_version" "secret_version" {
 resource "null_resource" "lockbox_secrets_access_binding" {
   provisioner "local-exec" {
   command     = <<-CMD
-    yc lockbox secret add-access-binding --id ${yandex_lockbox_secret.password_secret.id} --role lockbox.payloadViewer --service-account-id ${yandex_iam_service_account.kc-sa.id}
+    yc lockbox secret add-access-binding --id ${yandex_lockbox_secret.password_secret.id} --role lockbox.payloadViewer --service-account-id ${yandex_iam_service_account.win-sa.id}
     CMD
   }
   provisioner "local-exec" {
     when    = destroy
     command = <<-CMD
-    yc lockbox secret delete kc-secrets
+    yc lockbox secret delete --id ${yandex_lockbox_secret.password_secret.id}
     CMD
   }
   depends_on = [
-    yandex_kms_symmetric_key.kc-key,
-    yandex_iam_service_account.kc-sa
+    yandex_kms_symmetric_key.win-key,
+    yandex_iam_service_account.win-sa
   ]
 }
 

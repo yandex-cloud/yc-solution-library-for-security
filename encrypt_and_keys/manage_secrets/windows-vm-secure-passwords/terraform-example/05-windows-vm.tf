@@ -16,7 +16,7 @@ resource "yandex_compute_instance" "windows" {
   hostname = var.host_name
   zone     = var.zone
   platform_id = var.platform_id
-  service_account_id = yandex_iam_service_account.kc-sa.id
+  service_account_id = yandex_iam_service_account.win-sa.id
 
   resources {
     cores  = var.cores
@@ -32,7 +32,7 @@ resource "yandex_compute_instance" "windows" {
   }
 
   network_interface {
-    subnet_id = yandex_vpc_subnet.keycloaksubnet[0].id
+    subnet_id = yandex_vpc_subnet.win-subnet[0].id
     nat       = var.nat
   }
 
@@ -41,8 +41,8 @@ resource "yandex_compute_instance" "windows" {
   }
 
   depends_on = [
-    yandex_kms_symmetric_key.kc-key,
-    yandex_iam_service_account.kc-sa,
+    yandex_kms_symmetric_key.win-key,
+    yandex_iam_service_account.win-sa,
     yandex_lockbox_secret.password_secret,
     null_resource.lockbox_secrets_access_binding
   ]
