@@ -16,10 +16,29 @@
     3. After groups and users been created - validates group membership based on LDAP group membersip.
     4. Excludes or includes users based on LDAP group membersip.
 
+.PARAMETER Bootstrap
+    Mandatory
+    Runs script in Bootstrap mode. Bootstrap mode creates groups if it doesn't exist in cloud. Requires strong cloud naming convention in parameter GroupNames.
+    Incompatible with Mapping and CSV parameters.
+
 .PARAMETER GroupNames
     Mandatory.
+    Running only in Bootstrap mode.
     Array @() of LDAP group names. Group name must contains only latin characters and special character "-".
     All other characters such as white space, dot, underscore, etc are unsupported by YC Naming Convertion.
+
+.PARAMETER Mapping
+    Mandatory
+    Runs script in Mapping mode. Parameter maps LDAP groups to cloud. Requires CSV parameter.
+    Incompatible with Bootstrap and GroupNames parameters.
+
+.PARAMETER CSV
+    Mandatory.
+    Parameter running only in Mapping mode. Specifies path to CSV file with groups mapping. CSV has to be in UTF8 encoding and comma-separated.
+    CSV header Format:
+    "DomainGroup","CloudGroup"
+    "Domain Group 1","cloud-group-1"
+    "Domain Group 2","cloud-group-2"
 
 .PARAMETER YCToken
     Mandatory.
@@ -36,11 +55,8 @@
     Mandatory.
     Specifies Yandex Cloud Federation's name. 
 
-.PARAMETER MailAsLogin
-    Setting user's attribute mail as login in Yandex Cloud federation. Incompatible with parameter UPNAsLogin.
-
-.PARAMETER UPNAsLogin
-    Setting user's attribute userprincipalname as login in Yandex Cloud federation. Incompatible with parameter MailAsLogin.
+.PARAMETER LoginType
+    Setting user's attribute as login in Yandex Cloud federation. Valid values: UPN or Mail.
 
 .PARAMETER LogDirectory
     Specifies the directory where the log file should be generated.
@@ -54,15 +70,16 @@
     $env:YCOrgID = "bpf..."
 
     # Synchronizing groups and users
-    .\Sync-YCLDAPUsers.ps1 -GroupNames @("group1","Group2") -YC_TOKEN $env:YC_TOKEN -YCOrgID $env:YCOrgID FederationName = "dev-federation" -LoginType UPN
+    .\Sync-YCLDAPUsers.ps1 -Bootstrap -GroupNames @("group1","Group2") -YCToken $env:YC_TOKEN -YCOrgID $env:YCOrgID FederationName = "dev-federation" -LoginType UPN
 
     This command will create and sync groups group1 and Group2 
     in specifien organization and federation and using UPN as login.
 
 .EXAMPLE
     $Params = @{
+        Bootstrap
         GroupNames = @("group-allow","group-deny")
-        YC_TOKEN = $env:YC_TOKEN
+        YCToken = $env:YC_TOKEN
         YCOrgID = $env:YCOrgID
         FederationName = "dev-federation"
         LoginType = "Mail"
@@ -71,7 +88,20 @@
     .\Sync-YCLDAPUsers.ps1 @Params
 
     This command will create and sync groups group1 and Group2 
-    in specifien organization and federation and using UPN as login.
+    in specific organization and federation and using UPN as login.
+
+.EXAMPLE
+    # Getting IAM token
+    $env:YC_TOKEN = $(yc iam create-token)
+
+    # Setting up organization ID
+    $env:YCOrgID = "bpf..."
+
+    # Synchronizing groups and users
+    .\Sync-YCLDAPUsers.ps1 -Mapping -CSV "C:\work\mygroups.csv" -YCToken $env:YC_TOKEN -YCOrgID $env:YCOrgID FederationName = "dev-federation" -LoginType UPN
+
+    This command will sync groups matched in CSV file.
+    in specific organization and federation and using UPN as login.
 
 .OUTPUTS
     System.IO.FileInfo
