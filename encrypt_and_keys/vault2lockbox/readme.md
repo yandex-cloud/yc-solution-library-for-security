@@ -1,6 +1,6 @@
 # Vault-to-Lockbox Migrator
 
-Скрипт предназначен для миграции секретов из HashiCorp Vault в сервис [Yandex Cloud Lockbox](https://cloud.yandex.ru/services/lockbox).
+Скрипт предназначен для миграции секретов из [HashiCorp Vault](https://www.hashicorp.com/products/vault) в сервис [Yandex Cloud Lockbox](https://cloud.yandex.ru/services/lockbox).
 
 Подробнее о сервисе Lockbox можно узнать в [статье](https://cloud.yandex.ru/blog/posts/2023/04/lockbox-ga).
 
