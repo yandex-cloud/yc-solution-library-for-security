@@ -42,10 +42,9 @@ write_files:
               - |
                 cat <<EOF > /etc/caddy/Caddyfile && caddy run --config /etc/caddy/Caddyfile
 
-                https:// {
+                $${EXTERNAL_URL} {
                   log
                   reverse_proxy * 172.25.0.100:$${PHOENIX_PORT:-13000}
-                  $${TLS_OPTS:-}
                 }
                 EOF
             network_mode: "host"
@@ -109,7 +108,6 @@ write_files:
         sed -i.bak "s~EXTERNAL_URL=.*~EXTERNAL_URL=${firezone_url}~" "$installDir/.env"
         sed -i.bak "s/DEFAULT_ADMIN_PASSWORD=.*/DEFAULT_ADMIN_PASSWORD=${firezone_admin_password}/" "$installDir/.env"
         sed -i.bak "s/VERSION=.*/VERSION=${version}/" "$installDir/.env"
-        echo "TLS_OPTS=\"$tlsOpts\"" >> "$installDir/.env"
         echo "TELEMETRY_ENABLED=false" >> "$installDir/.env"
         echo "DATABASE_HOST=${db_host}" >> "$installDir/.env"
         echo "DATABASE_PORT=6432" >> "$installDir/.env"
@@ -131,5 +129,3 @@ runcmd:
   - sleep 1
   - sudo -i 
   - /home/${firezone_vm_username}/.firezone/init.sh
-
-
