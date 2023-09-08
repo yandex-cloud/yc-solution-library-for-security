@@ -1,0 +1,131 @@
+#cloud-config
+
+users:
+  - name: ${firezone_vm_username}
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    shell: /bin/bash
+    ssh-authorized-keys:
+      - "${firezone_ssh_key_pub}"
+
+write_files:    
+  - path: "/home/${firezone_vm_username}/.firezone/docker-compose.yml"
+    permissions: "0600"
+    content: |
+        # Example compose file for production deployment on Linux.
+        #
+        # Note: This file is meant to serve as a template. Please modify it
+        # according to your needs. Read more about Docker Compose:
+        #
+        # https://docs.docker.com/compose/compose-file/
+        #
+        #
+        x-deploy: &default-deploy
+          restart_policy:
+            condition: unless-stopped
+            delay: 5s
+            window: 120s
+          update_config:
+            order: start-first
+
+        version: '3.7'
+
+        services:
+          caddy:
+            image: caddy:2
+            volumes:
+              - $${FZ_INSTALL_DIR:-.}/caddy:/data/caddy
+            # See Caddy's documentation for customizing this line
+            # https://caddyserver.com/docs/quick-starts/reverse-proxy
+            command:
+              - /bin/sh
+              - -c
+              - |
+                cat <<EOF > /etc/caddy/Caddyfile && caddy run --config /etc/caddy/Caddyfile
+
+                $${EXTERNAL_URL} {
+                  log
+                  reverse_proxy * 172.25.0.100:$${PHOENIX_PORT:-13000}
+                }
+                EOF
+            network_mode: "host"
+            deploy:
+              <<: *default-deploy
+
+          firezone:
+            image: firezone/firezone:$${VERSION:-latest}
+            ports:
+              - $${WIREGUARD_PORT:-51820}:$${WIREGUARD_PORT:-51820}/udp
+            env_file:
+              # This should contain a list of env vars for configuring Firezone.
+              # See https://www.firezone.dev/docs/reference/env-vars for more info.
+              - $${FZ_INSTALL_DIR:-.}/.env
+            volumes:
+              # IMPORTANT: Persists WireGuard private key and other data. If
+              # /var/firezone/private_key exists when Firezone starts, it is
+              # used as the WireGuard private. Otherwise, one is generated.
+              - $${FZ_INSTALL_DIR:-.}/firezone:/var/firezone
+            cap_add:
+              # Needed for WireGuard and firewall support.
+              - NET_ADMIN
+              - SYS_MODULE
+            sysctls:
+              # Needed for masquerading and NAT.
+              - net.ipv6.conf.all.disable_ipv6=0
+              - net.ipv4.ip_forward=1
+              - net.ipv6.conf.all.forwarding=1
+            networks:
+              firezone-network:
+                ipv4_address: 172.25.0.100
+                ipv6_address: 2001:3990:3990::99
+
+            deploy:
+              <<: *default-deploy
+
+        networks:
+          firezone-network:
+            enable_ipv6: true
+            driver: bridge
+            ipam:
+              config:
+                - subnet: 172.25.0.0/16
+                - subnet: 2001:3990:3990::/64
+                  gateway: 2001:3990:3990::1
+  
+  - path: "/home/${firezone_vm_username}/.firezone/init.sh"
+    permissions: "0740"
+    content: |
+        #!/bin/bash
+
+        usermod -a -G docker ${firezone_vm_username}
+        installDir="/home/${firezone_vm_username}/.firezone"
+        dc="docker-compose"
+        export FZ_INSTALL_DIR=$installDir
+        tlsOpts="tls {
+                on_demand
+              }"
+        docker run --rm firezone/firezone bin/gen-env > "$installDir/.env"
+        sed -i.bak "s/DEFAULT_ADMIN_EMAIL=.*/DEFAULT_ADMIN_EMAIL=${firezone_admin_email}/" "$installDir/.env"
+        sed -i.bak "s~EXTERNAL_URL=.*~EXTERNAL_URL=${firezone_url}~" "$installDir/.env"
+        sed -i.bak "s/DEFAULT_ADMIN_PASSWORD=.*/DEFAULT_ADMIN_PASSWORD=${firezone_admin_password}/" "$installDir/.env"
+        sed -i.bak "s/VERSION=.*/VERSION=${version}/" "$installDir/.env"
+        echo "TELEMETRY_ENABLED=false" >> "$installDir/.env"
+        echo "DATABASE_HOST=${db_host}" >> "$installDir/.env"
+        echo "DATABASE_PORT=6432" >> "$installDir/.env"
+        echo "DATABASE_NAME=${db_name}" >> "$installDir/.env"
+        echo "DATABASE_USER=${db_user}" >> "$installDir/.env"
+        sed -i.bak "s/DATABASE_PASSWORD=.*/DATABASE_PASSWORD=${db_pass}/" "$installDir/.env"
+        echo "DATABASE_POOL_SIZE=10" >> "$installDir/.env"
+        echo "DATABASE_SSL_ENABLED=false" >> "$installDir/.env"
+        echo "WIREGUARD_PORT=${wg_port}" >> "$installDir/.env"
+
+        echo "Migrating DB..."
+        $dc -f $installDir/docker-compose.yml run -e --rm firezone bin/migrate
+        echo "Creating admin..."
+        $dc -f $installDir/docker-compose.yml run -e --rm firezone bin/create-or-reset-admin
+        echo "Upping firezone services..."
+        $dc -f $installDir/docker-compose.yml up -d firezone caddy
+    
+runcmd:
+  - sleep 1
+  - sudo -i 
+  - /home/${firezone_vm_username}/.firezone/init.sh
