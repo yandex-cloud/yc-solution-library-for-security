@@ -8,7 +8,6 @@ from datetime import datetime
 # Variables
 config = {
     'bucket_name'      : os.environ['BUCKET_NAME'],
-    'cluster_id'       : os.environ['CLUSTER_ID']
 }
 
 # Function - Random string
@@ -40,7 +39,7 @@ def handler(event, context):
                 print("no apiVersion key")
             # Temporary filter end
 
-        object_key = 'AUDIT/'+config['cluster_id']+'/'+datetime.now().strftime('%Y-%m-%d-%H:%M:%S')+'-'+get_random_alphanumeric_string(5)
+        object_key = 'AUDIT/'+datetime.now().strftime('%Y-%m-%d-%H:%M:%S')+'-'+get_random_alphanumeric_string(5)
         object_value = '\n'.join(full_log)
         client.put_object(Bucket=config['bucket_name'], Key=object_key, Body=object_value)
         print(object_value)

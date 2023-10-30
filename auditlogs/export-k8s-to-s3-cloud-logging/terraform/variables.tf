@@ -6,10 +6,6 @@ variable "cloud_id" {
     description = "Yandex Cloud cloud-id"
 }
 
-variable "cluster_id" {
-    description = "Kubernetes cluster ID"
-}
-
 variable "logging_group_id" {
     description = "Cloud Logging group ID"
 }
