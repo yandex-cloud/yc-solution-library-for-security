@@ -10,7 +10,7 @@
 - В организации есть первый bootstrap владелец с правами "organization-manager.organizations.owner" (после bootstrap он не используется)
 - Руками создается первое облако "cloud-org-admin"
 - В облаке создается каталог и сервисный аккаунт с правами "organization-manager.admin" и "resource-manager.admin" на уровне организации. 
-- Далее под этим сервисным аккаунтом создается 1-ый org-level terrafrom state
+- Далее под этим сервисным аккаунтом создается 1-ый org-level terraform state
 - Создаются организационные сущности: saml федерация, группы для администраторов облаков, облака и биндинги групп
 - В облаке "cloud-org-admin" также опционально создается IDP Keycloak и наполняется пользователями для входа через федерацию удостоверений
 - В облаке security создается sa и audit trails для мониторинга всех событий иб уровня облака с организации
@@ -25,11 +25,11 @@
 <img width="1049" alt="скрин" src="https://user-images.githubusercontent.com/85429798/197990620-6f99b158-eece-477c-8d22-3fa0e015ed96.png">
 
 
-# Инстуркция:
+# Инструкция:
 **Пререквизиты**:
 - Платежный аккаунт yandex cloud
 - Созданная организация
-- Если выбрана установка keycloaс то необходимо иметь публичную зону dns [делегированнную в yandex cloud](https://cloud.yandex.ru/docs/dns/operations/zone-create-public)
+- Если выбрана установка keycloak то необходимо иметь публичную зону dns [делегированнную в yandex cloud](https://cloud.yandex.ru/docs/dns/operations/zone-create-public)
 
 **Уровень организации**
 0) Скачайте репозиторий и перейдите в папку
@@ -55,7 +55,7 @@ yc iam service-account create --name sa-org-admin --folder-name org-admin
 7) Перейдите в папку ./module_keycloak . Запускаем kc-users-gen.sh - получаем файл со списком учетных записей пользователей федерации с автогенерированными паролями. Имя файла в переменной kc_user_file.
 8) Укажите переменные dns_zone_name, folder_id и kc_fqdn согласно вашим значениям в файле module_keycloak/variables.tf . Это необходимо для генерации сертификата.
 9) Запускаем kc-le-cert.sh - получаем Let's Encrypt сертификаты для нужного домена в виде пары .pem файлов. Имена файлов в переменных le_cert_pub_key и le_cert_priv_key соответственно из папки module_keycloak/variables.tf 
-10) Вернитесь в исходную общую папку. Заполните файл terraform.tfvars !не забудьте поменять имя файла на terrafrom.tfvars
+10) Вернитесь в исходную общую папку. Заполните файл terraform.tfvars !не забудьте поменять имя файла на terraform.tfvars
 11) Выдать права sa на оргу через cli (пока не поддержана возможность выдачи через UI)
 
 ```Python
@@ -84,7 +84,7 @@ yc iam key create --service-account-name sa-org-admin --output sa-key.json
 
 13) Заполните terraform.tfvars своими значениями
 
-14) Запустить terrafrom init, terrafrom plan, terraform apply
+14) Запустить terraform init, terraform plan, terraform apply
 
 15) Ссылка в консоль UI в созданную федерацию и на idp keycloak будет в output 
 
@@ -98,7 +98,7 @@ yc iam key create --service-account-name sa-org-admin --output sa-key.json
 
 **Уровень облаков**
 1)  Войдите в UI консоль под ответственным администратором за облако "web-app-project" с помощью ссылки в output, например https://console.cloud.yandex.ru/federations/bpf3pc05joidt9it7l0m
-2) Настройте yc cli под федеративным пользователем, которого вам выдали согласно [инстуркции](https://cloud.yandex.ru/docs/cli/operations/authentication/federated-user)
+2) Настройте yc cli под федеративным пользователем, которого вам выдали согласно [инструкции](https://cloud.yandex.ru/docs/cli/operations/authentication/federated-user)
 3) Создайте новый каталог "network-folder" (уберите галочку создать сеть по умолчанию)
 ```Python
 yc resource-manager folder create --name network-folder
@@ -120,15 +120,15 @@ yc resource-manager cloud add-access-binding \
   --service-account-name sa-web-app-tf 
 
 ```
-6) В основном каталоге данного решения и раскомментируйте строки в файле org_level_grant_viewer.tf (начиная со строки номер 3). Затем запустите еще раз terrafrom plan, terraform apply. Этим вы предоставите сервисной учетной записи sa-web-app-tf роль organization-manager.viewer (необходимо для доступа к данным по группам).
+6) В основном каталоге данного решения и раскомментируйте строки в файле org_level_grant_viewer.tf (начиная со строки номер 3). Затем запустите еще раз terraform plan, terraform apply. Этим вы предоставите сервисной учетной записи sa-web-app-tf роль organization-manager.viewer (необходимо для доступа к данным по группам).
 7) Скачайте репозиторий по аналогии с п. 0 организационного уровня выше. Перейдите в папку "/cloud-level-state"
 8) Создайте авторизованный ключ
 ```Python
 yc iam key create --service-account-name sa-web-app-tf --output sa-key.json  
 ```
 9) Вернитесь в каталог /cloud-level-state. Заполните файл terraform.tfvars своими значениями 
-10) Запустите terraform init, terraform plan, terrafrom apply
-11) Установите managed gitlab в каталоге network-folder и поместите туда terrafrom config и credentials от sa sa-web-app-tf
+10) Запустите terraform init, terraform plan, terraform apply
+11) Установите managed gitlab в каталоге network-folder и поместите туда terraform config и credentials от sa sa-web-app-tf
 
 
 
