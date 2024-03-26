@@ -21,31 +21,6 @@ resource "local_file" "private_key" {
   file_permission = "0600"
 }
 
-data "template_file" "cloud_init_lin" {
-  template  = file("../modules/yc-elastic-trail/cloud-init_lin.tpl.yaml")
-  vars      =  {
-    ssh_key = "${chomp(tls_private_key.ssh.public_key_openssh)}"
-  }
-}
-
-# Создаем docker-declaration
-data "template_file" "docker-declaration" {
-  template  = file("../modules/yc-elastic-trail/docker-declaration.yaml")
-  vars      =  {
-    ELASTIC_SERVER      = "${var.elk_address}:9200"
-    KIBANA_SERVER       = "${var.elk_address}"
-    ELASTIC_AUTH_USER   = "admin"
-    ELASTIC_INDEX_NAME  = "audit-trails-index"
-    S3_BUCKET           = "${var.bucket_name}"
-    S3_FOLDER           = "${var.bucket_folder}"
-    SLEEP_TIME          = "300"
-    ELK_PASS_ENCR       = "${yandex_kms_secret_ciphertext.encrypted_pass.ciphertext}"
-    S3_KEY_ENCR         = "${yandex_kms_secret_ciphertext.encrypted_s3_key.ciphertext}"
-    S3_SECRET_ENCR      = "${yandex_kms_secret_ciphertext.encrypted_s3_secret.ciphertext}"
-    KMS_KEY_ID          = "${yandex_kms_symmetric_key.key-elk.id}"
-  }
-}
-
 # Развертывание Container-Optimised Image
 data "yandex_compute_image" "container-optimized-image" {
   family = "container-optimized-image"
@@ -75,8 +50,26 @@ resource "yandex_compute_instance" "instance-based-on-coi" {
   }
 
   metadata  = {
-    user-data = "${data.template_file.cloud_init_lin.rendered}"
-    docker-container-declaration = "${data.template_file.docker-declaration.rendered}"
+    user-data = templatefile("../modules/yc-elastic-trail/cloud-init_lin.tpl.yaml", 
+    { 
+     ssh_key = "${chomp(tls_private_key.ssh.public_key_openssh)}"
+    } 
+    )
+    docker-container-declaration = templatefile("../modules/yc-elastic-trail/docker-declaration.yaml", 
+    {
+     ELASTIC_SERVER      = "${var.elk_address}:9200"
+     KIBANA_SERVER       = "${var.elk_address}"
+     ELASTIC_AUTH_USER   = "admin"
+     ELASTIC_INDEX_NAME  = "audit-trails-index"
+     S3_BUCKET           = "${var.bucket_name}"
+     S3_FOLDER           = "${var.bucket_folder}"
+     SLEEP_TIME          = "300"
+     ELK_PASS_ENCR       = "${yandex_kms_secret_ciphertext.encrypted_pass.ciphertext}"
+     S3_KEY_ENCR         = "${yandex_kms_secret_ciphertext.encrypted_s3_key.ciphertext}"
+     S3_SECRET_ENCR      = "${yandex_kms_secret_ciphertext.encrypted_s3_secret.ciphertext}"
+     KMS_KEY_ID          = "${yandex_kms_symmetric_key.key-elk.id}"
+    }
+    )
   }
 }
 
